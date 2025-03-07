@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@400;700&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #ED1C25;
+  --color-primary-hover: #F0484E;
+  --color-primary-active: #F4767B;
+  --color-secondary: #0b7077;
+  --color-secondary-hover: #0d858d;
+  --color-secondary-active: #095a5f;
+  --color-sidebar-background: #261E67;
+  --color-hover-sidebar-background: #261E7E;
+  
+  --primary-color: #ED1C25;
+  --secondary-color: #F0484E;
+  --alt-secondary-color: #F4767B;
+  --primary-heading-color: #ED1C25;
+  --secondary-heading-color: #000000;
+  --alt-secondary-text-color: #595959;
+  --optional-color: #01198D;
+}
+
+* {
+  font-family: 'Roboto', 'Poppins', sans-serif;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+.custom-scrollbar {
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari */
+}

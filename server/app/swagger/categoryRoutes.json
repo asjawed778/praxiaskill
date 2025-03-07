@@ -1,0 +1,261 @@
+{
+    "/course/category": {
+        "post": {
+            "summary": "Create Course Category",
+            "description": "Creates a new course category. Requires Super Admin access.",
+            "tags": [
+                "Category"
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of the course category",
+                                    "example": "Programming"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "Detailed description of the course category",
+                                    "example": "All programming related courses"
+                                }
+                            },
+                            "required": [
+                                "name",
+                                "description"
+                            ]
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "201": {
+                    "description": "Course category created successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Course category created successfully"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "409": {
+                    "description": "Course category already exists",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Course category already exists"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "get": {
+            "summary": "Get All Course Categories",
+            "description": "Retrieves all course categories.",
+            "tags": [
+                "Category"
+            ],
+            "responses": {
+                "200": {
+                    "description": "List of all course categories",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "example": "60d5ec49f30a3b001c8a4b34"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Programming"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "All programming related courses"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "/course/category/{categoryId}": {
+        "get": {
+            "summary": "Get Course Category by ID",
+            "description": "Retrieves a specific course category by ID.",
+            "tags": [
+                "Category"
+            ],
+            "parameters": [
+                {
+                    "name": "categoryId",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    },
+                    "description": "The ID of the course category to retrieve"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Course category details",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "example": "60d5ec49f30a3b001c8a4b34"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Programming"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "All programming related courses"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "Course category not found",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Course category not found"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "put": {
+            "summary": "Update Course Category",
+            "description": "Updates an existing course category. Requires Super Admin access.",
+            "tags": [
+                "Category"
+            ],
+            "parameters": [
+                {
+                    "name": "categoryId",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    },
+                    "description": "The ID of the course category to update"
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "example": "Updated Programming"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "example": "Updated description of the category"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Course category updated successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Course category updated successfully"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "delete": {
+            "summary": "Delete Course Category",
+            "description": "Deletes a course category. Requires Super Admin access.",
+            "tags": [
+                "Category"
+            ],
+            "parameters": [
+                {
+                    "name": "categoryId",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    },
+                    "description": "The ID of the course category to delete"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Course category deleted successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Course category deleted successfully"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

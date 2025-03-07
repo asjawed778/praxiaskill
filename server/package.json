@@ -1,0 +1,83 @@
+{
+  "name": "template",
+  "private": true,
+  "scripts": {
+    "local": "nodemon",
+    "start": "cross-env NODE_ENV=local ts-node ./index.ts",
+    "dev": "npm run build && cross-env NODE_ENV=development node ./dist/index.js",
+    "prod": "npm run build && cross-env NODE_ENV=production node ./dist/index.js",
+    "build": "npx tsc",
+    "lint": "eslint . --ext .ts,.js --max-warnings=0",
+    "lint:fix": "eslint --fix --ext .js,.ts .",
+    "format": "prettier . -w",
+    "format:check": "prettier . --check",
+    "postinstall": "husky install"
+  },
+  "lint-staged": {
+    "**/*.{js,ts}": [
+      "eslint . --ext .ts,.js --max-warnings=0",
+      "prettier . -w"
+    ],
+    "**/*.{json,css,scss,md,webmanifest}": [
+      "prettier . -w"
+    ]
+  },
+  "devDependencies": {
+    "@types/aws-sdk": "^0.0.42",
+    "@types/bcrypt": "^5.0.0",
+    "@types/body-parser": "^1.19.5",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.17",
+    "@types/express-fileupload": "^1.5.1",
+    "@types/http-errors": "^2.0.4",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/lodash": "^4.17.15",
+    "@types/morgan": "^1.9.4",
+    "@types/nodemailer": "^6.4.8",
+    "@types/otp-generator": "^4.0.2",
+    "@types/passport": "^1.0.12",
+    "@types/passport-jwt": "^3.0.9",
+    "@types/passport-local": "^1.0.35",
+    "@types/swagger-ui-express": "^4.1.7",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.2.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.2.3",
+    "prettier": "^3.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "*"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.750.0",
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "express-fileupload": "^1.5.1",
+    "express-rate-limit": "^7.5.0",
+    "express-validator": "^7.0.1",
+    "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^7.8.0",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.4",
+    "nodemon": "^3.0.1",
+    "otp-generator": "^4.0.1",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+    "pnpm": "^9.15.4",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
