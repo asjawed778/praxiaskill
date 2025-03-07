@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import Headline from "./Headline";
 import MorePosts from "../Blog/MorePosts";
-import img1 from "../../../public/imgs/blogs/img1.svg";
+import img1 from "/imgs/blogs/img1.svg";
 import SubscribeBox from "./SubscribeBox";
 import Socials from "./Socials";
 
