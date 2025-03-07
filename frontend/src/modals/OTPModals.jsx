@@ -7,7 +7,6 @@ import { toast } from "react-hot-toast";
 import ButtonLoading from "../components/Button/ButtonLoading";
 import { useVerifySignupOtpMutation } from "../services/auth.api";
 import { login as loginReducer } from "../store/reducers/authReducer";
-// import { verifySignupOTP } from "../services/operations/authApi";
 
 /**
  * OTPModal Component - Handles OTP verification for signup.

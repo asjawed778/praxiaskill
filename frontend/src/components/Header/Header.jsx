@@ -1,5 +1,4 @@
-// import logo from "../../../public/logo.svg";
-import logo from "../../../public/logopng.png";
+import logo from "/logopng.png";
 import { CiSearch } from "react-icons/ci";
 
 import { Link, useNavigate } from "react-router-dom";

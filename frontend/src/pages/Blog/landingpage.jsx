@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import img1 from "../../../public/imgs/blogs/img1.svg";
-import img2 from "../../../public/imgs/blogs/img2.svg";
-import img3 from "../../../public/imgs/blogs/img3.svg";
+import img1 from "/imgs/blogs/img1.svg";
+import img2 from "/imgs/blogs/img2.svg";
+import img3 from "/imgs/blogs/img3.svg";
 import BlogHeadline from "./BlogHeadline";
 import MorePosts from "./MorePosts";
 
