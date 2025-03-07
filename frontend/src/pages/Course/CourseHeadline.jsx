@@ -5,7 +5,7 @@ import { RiArrowRightWideLine } from "react-icons/ri";
 
 
 import Button from "../../components/Button/Button";
-import coder from "../../../public/imgs/slider/coder.jpg";
+import coder from "/imgs/slider/coder.jpg";
 
 export default function CourseHeadline({ specificCourse }) {
   return (

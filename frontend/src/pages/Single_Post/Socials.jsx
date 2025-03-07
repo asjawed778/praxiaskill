@@ -1,9 +1,9 @@
 import React from "react";
 import { LuSatellite } from "react-icons/lu";
-import fb from "../../../public/imgs/single_post/fb.svg";
-import threads from "../../../public/imgs/single_post/threads-icon.svg";
-import tiktok from "../../../public/imgs/single_post/tiktok.svg";
-import x from "../../../public/imgs/single_post/x.svg";
+import fb from "/imgs/single_post/fb.svg";
+import threads from "/imgs/single_post/threads-icon.svg";
+import tiktok from "/imgs/single_post/tiktok.svg";
+import x from "/imgs/single_post/x.svg";
 import { Link } from "react-router-dom";
 
 const Socials = () => {

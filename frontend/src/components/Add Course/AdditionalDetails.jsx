@@ -1,6 +1,6 @@
 import { CiSquarePlus } from "react-icons/ci";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import required from "../../../public/imgs/required.svg";
+import required from "/imgs/required.svg";
 
 import { useFieldArray, useForm, Controller } from "react-hook-form";
 
