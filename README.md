@@ -1,1 +1,1 @@
-Abilita Edge
+Praxia skill
