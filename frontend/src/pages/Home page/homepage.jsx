@@ -1,4 +1,4 @@
-import backgroundVideo from "../../../public/video/background_video.mp4"
+import backgroundVideo from "/video/background_video.mp4"
 import { useState } from "react";
 import { motion } from "framer-motion";
 import BookDemoClass from "../Course/BookDemoClass";
@@ -34,7 +34,7 @@ function HomePage() {
 
   return (
     <motion.div
-      className="h-auto flex flex-col items-center w-full font-sans overflow-x-hidden lg:overflow-x-auto"
+      className="h-auto flex flex-col items-center w-full font-sans lg:overflow-x-auto overflow-x-hidden"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -128,7 +128,7 @@ function HomePage() {
 
       {/* Courses Section */}
       <motion.div
-        className="flex items-center justify-center lg:w-[1000px]"
+        className="flex items-center justify-center lg:w-[1050px]"
         variants={itemVariants}
       >
         <Courses />

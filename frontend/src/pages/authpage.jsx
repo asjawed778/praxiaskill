@@ -1,6 +1,6 @@
-import logo from "../../public/logopng.png";
-import googleImage from "../../public/imgs/google.svg";
-import appleImage from "../../public/imgs/apple.svg";
+import logo from "/logopng.png";
+import googleImage from "/imgs/google.svg";
+import appleImage from "/imgs/apple.svg";
 import { FaArrowLeft } from "react-icons/fa6";
 
 

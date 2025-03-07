@@ -1,5 +1,5 @@
 import { FaPlus } from "react-icons/fa";
-import required from "../../../public/imgs/required.svg";
+import required from "/imgs/required.svg";
 
 import { useFieldArray, useForm } from "react-hook-form";
 import InputField from "../Input Field";

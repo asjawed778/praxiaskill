@@ -1,4 +1,4 @@
-import logo from "../../../public/logopng.png";
+import logo from "/logopng.png";
 
 const Footer = () => {
   return (
