@@ -1,7 +1,7 @@
 import backgroundVideo from "/video/background_video.mp4"
 import { useState } from "react";
 import { motion } from "framer-motion";
-import BookDemoClass from "../Course/BookDemoClass";
+import BookDemoClass from "../../components/BookDemo/BookDemoClass";
 import Courses from "../../components/Carousal";
 import Membership from "../../components/Membership";
 import { Link } from "react-router-dom";

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Button from "../../components/Button/Button";
-import BookDemoClass from "./BookDemoClass";
+import BookDemoClass from "../../components/BookDemo/BookDemoClass";
 import CourseHeadline from "./CourseHeadline";
 import Overview from "./Overview";
 import Curriculum from "./Curriculum";
