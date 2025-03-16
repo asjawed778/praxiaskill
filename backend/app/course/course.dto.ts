@@ -68,6 +68,7 @@ export interface IEnrollment extends BaseSchema {
 }
 
 export interface ICourseEnquiry extends BaseSchema {
+    ticketNo: string;
     name: string;
     email: string;
     phone: string;

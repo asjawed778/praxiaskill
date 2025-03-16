@@ -23,6 +23,7 @@ router
     .post("/terminate/:courseId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.terminateCourse, catchError, courseController.terminateCourse)
     .post("/draft/:courseId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.draftCourse, catchError, courseController.draftCourse)
     .get("/published/:categoryId", courseValidation.getPublishedCourseByCategory, courseController.getPublishedCourseByCategory)
+    .post("/enquiry", courseValidation.courseEnquiry,catchError, courseController.courseEnquiry)
     
 
 export default router;
