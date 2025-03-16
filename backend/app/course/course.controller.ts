@@ -236,3 +236,9 @@ export const courseEnquiry = asyncHandler(async(req: Request, res: Response) => 
 
     res.send(createResponse({}, "Course enquiry submitted successfully"));
 });
+
+export const getCourseEnquiry = asyncHandler(async(req: Request, res: Response) => {
+    const pageNo = parseInt(req.query.pageNo as string) || 1;
+    const result = await courseService.getCourseEnquiry(pageNo);
+    res.send(createResponse(result, "Course enquiry fetched successfully"));
+});
