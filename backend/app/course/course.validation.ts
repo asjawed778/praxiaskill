@@ -147,4 +147,11 @@ export const getPublishedCourseByCategory = [
         .isMongoId().withMessage('Invalid categoryId. Must be a valid MongoDB ObjectId'),
 ];
 
-
+export const courseEnquiry = [
+    body("name").notEmpty().withMessage("Name is required"),
+    body("email").isEmail().withMessage("Invalid email format"),
+    body("phone").isMobilePhone("any").withMessage("Invalid phone number"),
+    body("education").notEmpty().withMessage("Education is required"),
+    body("intrestedCourse").notEmpty().withMessage("Interested course is required"),
+    body("whatsAppOptIn").isBoolean().withMessage("WhatsApp Opt-in must be a boolean"),
+];

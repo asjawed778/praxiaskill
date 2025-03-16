@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
-import { ICourse, ISection, ISubSection } from "./course.dto";
+import { ICourse, ICourseEnquiry, ISection, ISubSection } from "./course.dto";
 import courseSchema from "./course.schema";
 import courseLifecycleSchema from "./courseLifecycle.schema";
 import sectionSchema from "./section.schema";
 import subSectionSchema from "./subSection.schema";
+import CourseEnquiryModel from "./course.enquiry";
+
 
 
 export const isCourseOwner = async (userId: string, courseId: string): Promise<boolean> => {
@@ -266,6 +268,11 @@ export const getPublishedCoursesByCategory = async (categoryId: string, pageNo =
     };
 };
 
+export const courseEnquiry = async (data: ICourseEnquiry) => {
+    const enquiry = new CourseEnquiryModel(data); // ✅ Sahi tarika
+    await enquiry.save();
+    return enquiry;
+};
 
 
 
