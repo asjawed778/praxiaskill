@@ -4,7 +4,7 @@ import courseSchema from "./course.schema";
 import courseLifecycleSchema from "./courseLifecycle.schema";
 import sectionSchema from "./section.schema";
 import subSectionSchema from "./subSection.schema";
-import CourseEnquiryModel from "./course.enquiry";
+import CourseEnquirySchema from "./course.enquiry";
 
 
 
@@ -269,10 +269,34 @@ export const getPublishedCoursesByCategory = async (categoryId: string, pageNo =
 };
 
 export const courseEnquiry = async (data: ICourseEnquiry) => {
-    const enquiry = new CourseEnquiryModel(data); // ✅ Sahi tarika
+    const enquiry = new CourseEnquirySchema(data);
     await enquiry.save();
     return enquiry;
 };
+
+export const getCourseEnquiry = async (pageNo = 1) => {
+    const pageSize = 10;
+    const skip = (pageNo - 1) * pageSize;
+
+    const totalResults = await CourseEnquirySchema.countDocuments();
+
+    const enquiries = await CourseEnquirySchema.find()
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(pageSize);
+
+    const startEntry = skip + 1;
+    const endEntry = Math.min(skip + pageSize, totalResults);
+
+    return {
+        enquiries,
+        startEntry,
+        endEntry,
+        currentPage: pageNo,
+        totalResults,
+    };
+};
+
 
 
 
