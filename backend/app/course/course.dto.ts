@@ -32,7 +32,6 @@ export interface ICourse extends BaseSchema {
     isDraft: boolean;
 }
 
-
 export interface ISection extends BaseSchema {
     title: string;
     description: string;
@@ -66,6 +65,17 @@ export interface IEnrollment extends BaseSchema {
     isCompleted: boolean;
     certificate?: string;
     status: CourseEnum.Status;
+}
+
+export interface ICourseEnquiry extends BaseSchema {
+    ticketNo: string;
+    name: string;
+    email: string;
+    phone: string;
+    education: string;
+    intrestedCourse: string;
+    status: CourseEnum.EnquiryStatus;
+    whatsAppOptIn: boolean;
 }
 
 export interface ICourseLifeCycle extends BaseSchema {

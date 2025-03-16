@@ -7,6 +7,8 @@ import * as AWSservice from '../common/services/AWS.service';
 import * as courseService from './course.service';
 import * as UserService from '../user/user.service';
 import * as CourseCategoryService from "../category/category.service";
+import { sendEmail } from '../common/services/email.service';
+import { courseEnquiryEmailTemplate } from '../common/template/courseEnquiry.template';
 
 
 export const uploadPublicFile = asyncHandler(async(req: Request, res: Response) => {
@@ -219,4 +221,24 @@ export const getFullCourseDetails = asyncHandler(async(req: Request, res: Respon
 export const getIntructorList = asyncHandler(async(req: Request, res: Response) => {
     const instructor = await UserService.getInstructorList();
     res.send(createResponse(instructor, "Instructor List fetched"));
+});
+
+export const courseEnquiry = asyncHandler(async(req: Request, res: Response) => {
+    const data = req.body;
+    const result = await courseService.courseEnquiry(data);
+
+    const emailContent = courseEnquiryEmailTemplate(result.ticketNo, data.name, data.email, data.phone, data.education, data.intrestedCourse);
+    await sendEmail({
+        to: data.email,
+        subject: `Course Enquiry Ticket No: ${result.ticketNo}`,
+        html: emailContent,
+    });
+
+    res.send(createResponse({}, "Course enquiry submitted successfully"));
+});
+
+export const getCourseEnquiry = asyncHandler(async(req: Request, res: Response) => {
+    const pageNo = parseInt(req.query.pageNo as string) || 1;
+    const result = await courseService.getCourseEnquiry(pageNo);
+    res.send(createResponse(result, "Course enquiry fetched successfully"));
 });
