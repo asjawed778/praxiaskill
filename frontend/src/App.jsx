@@ -94,7 +94,7 @@ const authRoutes = [
 
 const privateRoutes = [
   {
-    path: "admin",
+    path: "dashboard",
     element: (
       <LazyComponent>
         <PrivateRoute>
@@ -120,7 +120,7 @@ const privateRoutes = [
         )
       },
       {
-        path: "add-category",
+        path: "manage-category",
         element: (
           <LazyComponent>
             <CategoryManagement />

@@ -1,134 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { LuCheckCheck } from "react-icons/lu";
+import { useGetAllEnquiryQuery } from "../../../services/course.api";
 
 const CourseEnqueryManagement = () => {
-  const [enquiries, setEnquiries] = useState([
-    {
-      id: 1,
-      studentName: "Amit Ranjan",
-      contactNo: "8756879078",
-      status: "Pending",
-      createdAt: new Date("2025-02-28T09:30:00"),
-      details: {
-        email: "amit.ranjan@example.com",
-        course: "Web Development",
-        message:
-          "I would like to know more about the course curriculum and schedule.",
-      },
-    },
-    {
-      id: 2,
-      studentName: "Priya Sharma",
-      contactNo: "9876543210",
-      status: "Pending",
-      createdAt: new Date("2025-03-01T14:45:00"),
-      details: {
-        email: "priya.sharma@example.com",
-        course: "Data Science",
-        message:
-          "Interested in the Data Science bootcamp. Please share the details.",
-      },
-    },
-    {
-      id: 3,
-      studentName: "Rahul Kumar",
-      contactNo: "7865432109",
-      status: "Pending",
-      createdAt: new Date("2025-03-02T11:20:00"),
-      details: {
-        email: "rahul.kumar@example.com",
-        course: "Mobile App Development",
-        message: "I have questions about the prerequisites for this course.",
-      },
-    },
-    {
-      id: 4,
-      studentName: "Abinav wagh",
-      contactNo: "7865409921",
-      status: "Pending",
-      createdAt: new Date("2025-03-02T11:20:00"),
-      details: {
-        email: "abi.wag@example.com",
-        course: "Mobile App Development",
-        message: "I have questions about how to Practice for this course.",
-      },
-    },
-    {
-      id: 5,
-      studentName: "Awanti Singh",
-      contactNo: "9043267532",
-      status: "Completed",
-      createdAt: new Date("2025-03-02T11:20:00"),
-      details: {
-        email: "awanti12@example.com",
-        course: "Mobile App Development",
-        message: "I have questions about the prerequisites for this course.",
-      },
-    },
-    {
-      id: 6,
-      studentName: "Sanoj  Jaiswal",
-      contactNo: "9346893410",
-      status: "Completed",
-      createdAt: new Date("2025-03-02T11:20:00"),
-      details: {
-        email: "sanojjs1@example.com",
-        course: "Mobile App Development",
-        message: "I have questions about the prerequisites for this course.",
-      },
-    },
-    {
-      id: 7,
-      studentName: "Ajay Prakash",
-      contactNo: "8888341144",
-      status: "Completed",
-      createdAt: new Date("2025-03-02T11:20:00"),
-      details: {
-        email: "prakash12@example.com",
-        course: "Mobile App Development",
-        message: "I have questions about the prerequisites for this course.",
-      },
-    },
-    {
-      id: 8,
-      studentName: "Shersha Devangan",
-      contactNo: "7745322145",
-      status: "Completed",
-      createdAt: new Date("2025-03-02T11:20:00"),
-      details: {
-        email: "shrdev15@example.com",
-        course: "Mobile App Development",
-        message: "I have questions about the prerequisites for this course.",
-      },
-    },
-    {
-      id: 9,
-      studentName: "Sanjay Dungare",
-      contactNo: "8967452244",
-      status: "Completed",
-      createdAt: new Date("2025-03-02T11:20:00"),
-      details: {
-        email: "sanjaya00@example.com",
-        course: "Mobile App Development",
-        message: "I have questions about the prerequisites for this course.",
-      },
-    },
-    {
-      id: 10,
-      studentName: "Atharva Patel",
-      contactNo: "9112356346",
-      status: "Completed",
-      createdAt: new Date("2025-03-02T11:20:00"),
-      details: {
-        email: "patel111@example.com",
-        course: "Mobile App Development",
-        message: "I have questions about the prerequisites for this course.",
-      },
-    },
-  ]);
+  const {data, isLoading, error} = useGetAllEnquiryQuery()
+  const [enquiries, setEnquiries] = useState([]);
 
-  // Filter and sorting states
   const [statusFilter, setStatusFilter] = useState("");
   const [timeSort, setTimeSort] = useState("");
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
@@ -138,7 +16,39 @@ const CourseEnqueryManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 10;
-  const totalItems = 50;
+  const totalItems = data?.data?.enquiries?.length;
+
+  useEffect(() => {
+    if(data?.success)
+    {
+      const enquiries = data?.data.enquiries.map((enquiry) => {
+        return {id: enquiry._id,
+        studentName: enquiry.name,
+        contactNo: enquiry.phone,
+        status: enquiry.status,
+        createdAt: new Date(enquiry.createdAt),
+        details: {
+          email: enquiry.email,
+          course: enquiry.intrestedCourse,
+          message:
+            "I would like to know more about the course curriculum and schedule.",
+        }}
+      })
+
+     const paginationData = enquiries?.slice(
+        (currentPage-1) * itemsPerPage,
+        (currentPage) * itemsPerPage
+      );
+
+      if(!isLoading)
+      {
+        setEnquiries(paginationData)
+      }
+    }
+  }, [data, isLoading, currentPage])
+
+  // Filter and sorting states
+
 
   const getFilteredAndSortedEnquiries = () => {
     let result = [...enquiries];
@@ -219,7 +129,7 @@ const CourseEnqueryManagement = () => {
         <div className="flex gap-4 items-center">
           <button
             onClick={handleClearFilters}
-            className="px-4 py-2 bg-gray-500 hover:bg-gray-100 rounded-md"
+            className="px-4 py-2 text-white bg-primary hover:bg-primary-hover rounded-md"
           >
             Clear
           </button>
@@ -238,13 +148,13 @@ const CourseEnqueryManagement = () => {
               <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10">
                 <div
                   className="px-4 py-2 hover:bg-red-600  hover:text-white cursor-pointer"
-                  onClick={() => handleStatusSelect("pending")}
+                  onClick={() => handleStatusSelect("PENDING")}
                 >
                   pending
                 </div>
                 <div
                   className="px-4 py-2  hover:bg-green-800 hover:text-white cursor-pointer"
-                  onClick={() => handleStatusSelect("completed")}
+                  onClick={() => handleStatusSelect("COMPLETED")}
                 >
                   completed
                 </div>
@@ -289,45 +199,45 @@ const CourseEnqueryManagement = () => {
       <div className="border border-gray-300 rounded-md overflow-hidden">
         <table className="w-full ">
           <thead>
-            <tr className="bg-gray-200">
-              <th className="py-3 px-4 border-r border-b border-gray-300 text-left">
+            <tr className="bg-gray-50 text-sm text-neutral-500 font-semibold">
+              <th className="py-2 px-4 border-b border-gray-300 text-left">
                 Serial No
               </th>
-              <th className="py-3 px-4 border-r border-b border-gray-300 text-left">
+              <th className="py-2 px-4  border-b border-gray-300 text-left">
                 Student Name
               </th>
-              <th className="py-3 px-4 border-r border-b border-gray-300 text-left">
+              <th className="py-2 px-4  border-b border-gray-300 text-left">
                 Contact No
               </th>
-              <th className="py-3 px-4 border-r border-b border-gray-300 text-center">
+              <th className="py-2 px-4 border-b border-gray-300 text-center">
                 Action
               </th>
-              <th className="py-3 px-4 border-b border-gray-300 text-center">
+              <th className="py-2 px-4 border-gray-300 text-center">
                 Status
               </th>
             </tr>
           </thead>
           <tbody>
             {filteredEnquiries.map((enquiry, index) => (
-              <tr key={enquiry.id} className="border-b border-gray-300">
-                <td className="py-3 px-4 border-r border-gray-300">
+              <tr key={enquiry.id} className="border-b text-sm border-gray-300">
+                <td className="py-1 px-4">
                   {index + 1}
                 </td>
-                <td className="py-3 px-4 border-r border-gray-300">
+                <td className="py-1 px-4">
                   {enquiry.studentName}
                 </td>
-                <td className="py-3 px-4 border-r border-gray-300">
+                <td className="py-1 px-4">
                   {enquiry.contactNo}
                 </td>
-                <td className="py-3 px-4 border-r border-gray-300 text-center">
+                <td className="py-1 px-4 text-center">
                   <button
                     onClick={() => handleViewDetails(enquiry)}
-                    className="px-4 py-2 border border-gray-300 rounded-md bg-indigo-200 hover:bg-gray-100"
+                    className="px-4 py-1 cursor-pointer text-white border border-gray-300 rounded-md bg-indigo-500 hover:bg-indigo-600"
                   >
                     View Details
                   </button>
                 </td>
-                <td className="py-3 px-4 text-center">
+                <td className="py-1 px-4 text-center">
                   <div className="relative inline-block w-40">
                     <button
                       onClick={() => {
@@ -343,7 +253,7 @@ const CourseEnqueryManagement = () => {
                           )
                         );
                       }}
-                      className={`w-full px-4 py-2 border border-gray-300 rounded-md flex items-center justify-between ${
+                      className={`w-full px-4 py-1.5 border border-gray-300 rounded-md flex items-center justify-between ${
                         enquiry.status === "pending"
                           ? "text-yellow-600"
                           : "text-black"
@@ -402,7 +312,7 @@ const CourseEnqueryManagement = () => {
               </tr>
             ))}
             {/* Empty rows for design */}
-            {Array.from({
+            {/* {Array.from({
               length: Math.min(itemsPerPage - filteredEnquiries.length, 9),
             }).map((_, index) => (
               <tr key={`empty-${index}`} className="border-b border-gray-300">
@@ -412,13 +322,13 @@ const CourseEnqueryManagement = () => {
                 <td className="py-3 px-4 border-r border-gray-300">&nbsp;</td>
                 <td className="py-3 px-4">&nbsp;</td>
               </tr>
-            ))}
+            ))} */}
           </tbody>
         </table>
       </div>
 
       {/* Pagination */}
-      <div className="mt-4 flex justify-between items-center">
+      {data ? <div className="mt-4 flex justify-between items-center">
         <div>
           Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
           {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems}
@@ -426,7 +336,7 @@ const CourseEnqueryManagement = () => {
         <div className="flex gap-2">
           <button
             onClick={goToPrevPage}
-            className="p-2 border border-gray-300 rounded-md hover:bg-gray-100"
+            className="p-2 border border-gray-300 rounded-md hover:bg-gray-100 disabled:cursor-not-allowed"
             disabled={currentPage === 1}
           >
             ←
@@ -436,14 +346,13 @@ const CourseEnqueryManagement = () => {
           </button>
           <button
             onClick={goToNextPage}
-            className="p-2 border border-gray-300 rounded-md hover:bg-gray-100"
+            className="p-2 border border-gray-300 rounded-md hover:bg-gray-100 disabled:cursor-not-allowed"
             disabled={currentPage * itemsPerPage >= totalItems}
           >
             →
           </button>
         </div>
-              
-      </div>
+      </div>: null}
 
       {/* Details  */}
       {showDetails && selectedEnquiry && (

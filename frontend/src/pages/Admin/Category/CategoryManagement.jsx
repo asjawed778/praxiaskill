@@ -303,20 +303,20 @@ const Category = () => {
       <div className="border border-gray-300 rounded-lg overflow-hidden">
         <table className="w-full">
           <thead>
-            <tr className="bg-gray-100">
-              <th className="border-b border-r border-gray-300 p-3 text-left">Serial No</th>
-              <th className="border-b border-r border-gray-300 p-3 text-left">Category Name</th>
-              <th className="border-b border-r border-gray-300 p-3 text-left">No of Course</th>
-              <th className="border-b border-gray-300 p-3 text-center">Action</th>
+            <tr className="bg-gray-50 border-b border-gray-300 text-sm text-neutral-500">
+              <th className="px-4 py-2 text-left">Serial No</th>
+              <th className="px-4 py-2 text-left">Category Name</th>
+              <th className="px-4 py-2 text-center">No of Course</th>
+              <th className="px-4 py-2 text-center">Action</th>
             </tr>
           </thead>
           <tbody>
             {currentItems.map((category, index) => (
-              <tr key={category.id} className="border-b border-gray-300 last:border-b-0">
-                <td className="border-r border-gray-300 p-3">{indexOfFirstItem + index + 1}</td>
-                <td className="border-r border-gray-300 p-3">{category.name}</td>
-                <td className="border-r border-gray-300 p-3 text-center">{category.courses}</td>
-                <td className="p-3 flex justify-center gap-4">
+              <tr key={category.id} className="border-b text-sm border-gray-300 last:border-b-0">
+                <td className="px-4 py-1.5">{indexOfFirstItem + index + 1}</td>
+                <td className="px-4 py-1.5">{category.name}</td>
+                <td className="px-4 py-1.5 text-center">{category.courses}</td>
+                <td className="px-4 py-1.5 flex justify-center gap-4">
                   <button onClick={() => handleEditCategory(category)}>
                     <Pencil size={20} className='text-blue-600 cursor-pointer hover:text-blue-900' />
                   </button>
