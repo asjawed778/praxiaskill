@@ -89,7 +89,7 @@ function HomePage() {
           </motion.p>
 
           <Link
-            to="/course"
+            to="/courses"
             variants={itemVariants}
             
           >

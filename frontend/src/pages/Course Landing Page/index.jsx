@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Heading from "./Heading";
 import Button from "../../components/Button/Button";
 import CourseDetails from "./CourseDetails";
@@ -7,31 +7,51 @@ import { PiNewspaper } from "react-icons/pi";
 import { BiBell } from "react-icons/bi";
 import Curriculum from "./Curriculum";
 
-import { NAVS, ABOUT, SKILLS, specificCourse } from "./data";
+import { NAVS, ABOUT } from "./data";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { useGetFullCourseDetailsQuery } from "../../services/course.api";
+import { setSpecificCourse } from "../../store/reducers/coursesReducer";
 
 const Course = () => {
+  const dispatch = useDispatch()
+  const { id } = useParams();
+  const {data:courseDetails, isLoading} = useGetFullCourseDetailsQuery(id)
+
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    if(courseDetails?.success)
+    {
+      dispatch(setSpecificCourse(courseDetails?.data))
+    }
+  }, [courseDetails, isLoading])
+
+  const courses = useSelector((state) => state.courses);
+  const specificCourse = courses?.specificCourse;
+  console.log("specifiec", specificCourse)
   return (
     <div className="px-12">
       <div>
-        <Heading />
+        <Heading specificCourse={specificCourse} />
       </div>
       <div className="bg-[#FFF7ED] -mx-12 px-12 pt-8 lg:pb-20 mt-3 flex flex-col gap-10 relative mb-20">
         {/* <div>Logo</div> */}
         <div className="lg:w-3/5 md:w-4/5 w-full flex flex-col gap-3">
           <h1 className="text-4xl font-semibold text-neutral-800">
-            Praxia Skill Full-Stack Developer Professional Certificate
+            {specificCourse?.title}
           </h1>
           <p className="text-sm text-neutral-700">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
-            perspiciatis temporibus quos officiis cupiditate nesciunt laudantium
-            quod iste, tempora atque.
+            {specificCourse?.subtitle}
           </p>
           <div className="flex gap-3 items-center">
             {/* for instructor image */}
-            <div className="h-8 w-8 bg-neutral-700 rounded-full"></div>
+            <div className="h-8 w-8 bg-neutral-700 rounded-full">
+              <img src={specificCourse?.instructor?.profilePic} className="h-full w-full rounded-full" alt={specificCourse?.instructor?.name} />
+            </div>
             <div className="flex items-center gap-2 text-sm text-neutral-700">
               <span>Instrutor: </span>
-              <span>Praxia</span>
+              <span>{specificCourse?.instructor?.name}</span>
             </div>
           </div>
         </div>
@@ -80,8 +100,8 @@ const Course = () => {
         <div className="flex flex-col gap-4">
           <h2 className="font-semibold text-lg">Skills you'll gain</h2>
           <div className="flex flex-wrap gap-5 text-neutral-800">
-            {SKILLS.map((item, index) => (
-              <span key={index} className="py-1 px-2 bg-primary-hover cursor-pointer rounded text-white hover:underline">
+            {specificCourse?.tags?.map((item, index) => (
+              <span key={index} className="py-1 px-2 bg-primary-hover cursor-pointer rounded text-white hover:underline capitalize">
                 {item}
               </span>
             ))}
@@ -93,7 +113,7 @@ const Course = () => {
           <div className="flex gap-20">
             <div className="flex flex-col gap-3 border border-neutral-200 p-4 rounded-lg ">
               <PiNewspaper size={20} />
-              <span className="text-sm font-semibold">Taught in English</span>
+              <span className="text-sm font-semibold">Taught in {specificCourse?.language?.slice(0,1) + specificCourse?.language?.slice(1).toLowerCase()}</span>
             </div>
 
             <div className="flex flex-col gap-2 border border-neutral-200 p-4 rounded-lg">
