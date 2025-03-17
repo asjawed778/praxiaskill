@@ -32,7 +32,7 @@ const UserIcon = ({user, setShowUserMenu, showUserMenu, handleLogout}) => {
                     </div>
                   </div>
                   <div className='flex justify-end'>
-                    <span className='pr-3 text-neutral-600 hover:text-primary cursor-pointer text-sm'>Sign out</span>
+                    <span onClick={handleLogout} className='pr-3 text-neutral-600 hover:text-primary cursor-pointer text-sm'>Sign out</span>
                   </div>
                 </div>
               </div>
