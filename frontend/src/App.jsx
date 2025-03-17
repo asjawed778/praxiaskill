@@ -91,8 +91,7 @@ const authRoutes = [
   }
 ];
 
-
-const privateRoutes = [
+const adminRoutes = [
   {
     path: "dashboard",
     element: (
@@ -155,8 +154,31 @@ const privateRoutes = [
   }
 ];
 
+const userPrivateRoutes = [
+  {
+    path: "dashboard",
+    element: (
+      <LazyComponent>
+        <PrivateRoute>
+          <AdminLayout />
+        </PrivateRoute>
+      </LazyComponent>
+    ),
+    children: [
+      {
+        index: true,
+        element: (
+          <LazyComponent>
+            <AdminPage />
+          </LazyComponent>
+        )
+      },
+    ]
+  }
+];
+
 function App() {
-  const { accessToken } = useSelector((store) => store.auth);
+  const { accessToken, user } = useSelector((store) => store.auth);
 
   return (
     <BrowserRouter>
@@ -174,8 +196,8 @@ function App() {
           ))}
 
         {/* Private routes  */}
-          {accessToken ? (
-            privateRoutes.map((route, index) => (
+          {(accessToken && user?.role === "USER") ? (
+            userPrivateRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element}>
               {route.children?.map((child, childIndex) => (
                 <Route key={childIndex} {...child} />
@@ -183,7 +205,19 @@ function App() {
             </Route>
           ))
           ) : (
-            <Route path="/admin/*" element={<Navigate to="/auth" replace />} />
+            <Route path="/dashboard/*" element={<Navigate to="/" replace />} />
+            )}
+
+          {(accessToken && user?.role === "SUPER_ADMIN") ? (
+            adminRoutes.map((route, index) => (
+              <Route key={index} path={route.path} element={route.element}>
+              {route.children?.map((child, childIndex) => (
+                <Route key={childIndex} {...child} />
+                ))}
+            </Route>
+          ))
+          ) : (
+            <Route path="/dashboard/*" element={<Navigate to="/" replace />} />
             )}
         
         {/* if route does other than predefined endpoints will be redirected PageNotFound Page  */}
