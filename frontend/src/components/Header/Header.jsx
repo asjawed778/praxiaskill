@@ -7,10 +7,8 @@ import { toast } from "react-hot-toast";
 import { logout } from "../../store/reducers/authReducer";
 import HamNavbar from "./HamNavbar";
 import { useLogoutMutation } from "../../services/auth.api";
-import { RxCross2 } from "react-icons/rx";
-import { GiWaterDrop } from "react-icons/gi";
 import { useState } from "react";
-import { BiLogOut } from "react-icons/bi";
+import UserIcon from "./UserIcon";
 
 export default function Header() {
   const { accessToken, user } = useSelector((store) => store.auth);
@@ -99,25 +97,7 @@ export default function Header() {
               +91 91237 35554
             </a>
 
-            {accessToken ? <div className="h-9 w-9 rounded-full cursor-pointer relative" onClick={() => setShowUserMenu(true)}>
-              <img src={user?.profilePic} alt={user?.name} className="h-full w-full rounded-full" />
-              <div className={`${showUserMenu ? "" : "hidden"} w-[90px] bg-primary-hover cursor-default absolute right-0 top-12 z-50 p-1 rounded-md`}>
-                <div className="flex justify-end">
-                    <div className="text-primary-hover relative -top-3 -right-2">
-                      <GiWaterDrop />
-                    </div>
-                    <div className="text-white hover:bg-primary-active cursor-pointer rounded-full" onClick={(e) =>{e.stopPropagation(); setShowUserMenu(false)}}>
-                      <RxCross2 />
-                    </div>
-                </div>
-                <div className="mt-2 text-white cursor-pointer hover:border-b rounded-md">
-                  <div onClick={handleLogout} className="flex items-center justify-between pb-1 px-1.5">
-                    <BiLogOut size={18} />
-                    <span>Logout</span>
-                  </div>
-                </div>
-              </div>
-            </div> : null}
+            {accessToken ? <UserIcon user={user} setShowUserMenu={setShowUserMenu} showUserMenu={showUserMenu} handleLogout={handleLogout} /> : null}
           </div>
         </div>
       </div>
