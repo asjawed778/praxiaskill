@@ -8,15 +8,19 @@ import BasicLayout from "./layouts/Basic";
 import LazyComponent from "./components/LazyComponent";
 import PageNotFound from "./pages/pagenotfound";
 import AdminLayout from "./layouts/AdminLayout";
+import CategoryManagement from "./pages/Admin/Category/CategoryManagement"
 const ViewCategories = lazy(() =>
   import("./pages/Admin/Category/ViewCategories")
 );
+const CourseEnquiryManagement = lazy(() => import("./pages/Admin/Category/CourseEnquiryManagement"))
+const LearningPage = lazy(() => import("./pages/Learning/index"))
 const AddCategory = lazy(() => import("./pages/Admin/Category/AddCategory"));
 const AuthPage = lazy(() => import("./pages/authpage"));
 const HomePage = lazy(() => import("./pages/Home page/homepage"));
 const BlogPage = lazy(() => import("./pages/Blog/landingpage"));
 const AdminPage = lazy(() => import("./pages/Admin/adminpage"));
-const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
+const CourseLandingPage = lazy(() => import("./pages/Course Landing Page/index"));
+// const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
 const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
 const AddCourse = lazy(() => import("./pages/Admin/Course/index"));
 const ManageCourse = lazy(() => import("./pages/Admin/Course/ManageCourse"));
@@ -47,6 +51,14 @@ function App() {
             element={
               <LazyComponent>
                 <SinglePost />
+              </LazyComponent>
+            }
+          />
+          <Route
+            path="/courses"
+            element={
+              <LazyComponent>
+                <LearningPage />
               </LazyComponent>
             }
           />
@@ -93,7 +105,15 @@ function App() {
             path="add-category"
             element={
               <LazyComponent>
-                <AddCategory />
+                <CategoryManagement />
+              </LazyComponent>
+            }
+          />
+          <Route
+            path="course-enquiry"
+            element={
+              <LazyComponent>
+                <CourseEnquiryManagement />
               </LazyComponent>
             }
           />

@@ -20,7 +20,7 @@ const sections = [
       { url: "/admin/add-course", label: "Add Course", icon: <FiUpload /> },
       { url: "/admin/manage-course", label: "Courses", icon: <FaEye /> },
       { url: "/admin/add-category", label: "Category", icon: <BsFillPersonCheckFill /> },
-      { url: "/admin/", label: "Enquiry", icon: <FaQuestion /> },
+      { url: "/admin/course-enquiry", label: "Enquiry", icon: <FaQuestion /> },
     ],
   },
   // {

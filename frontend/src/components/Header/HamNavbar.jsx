@@ -82,18 +82,18 @@ export default function HamNavbar({ handleLogout }) {
           </div>
 
           <Link
-            to="/course"
+            to="/courses"
             className="text-center text-[var(--color-primary)] active:text-white active:bg-[var(--color-primary)] w-full px-5 py-3 duration-200"
           >
             Learning
           </Link>
 
-          <Link
+          {/* <Link
             to="/blog"
             className="text-center text-[var(--color-primary)] active:text-white active:bg-[var(--color-primary)] w-full px-5 py-3 duration-200"
           >
             Blog
-          </Link>
+          </Link> */}
 
           <Link
             to="/contact-us"

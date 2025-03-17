@@ -23,6 +23,9 @@ export default function Header() {
 
       const result = await logoutUser(accessToken);
       if (result?.error) {
+        localStorage.clear();
+        dispatch(logout())
+        navigate("/")
         throw new Error(JSON.stringify(result.error));
       }
       dispatch(logout());
@@ -67,9 +70,9 @@ export default function Header() {
         {/* Third Section */}
         <div className="flex items-center justify-between w-full  font-semibold text-[var(--primary-heading-color)] text-sm">
           <div className="flex items-center gap-5">
-            <Link to="/course">Learning</Link>
+            <Link to="/courses">Learning</Link>
 
-            <Link to="/blog">Blog</Link>
+            {/* <Link to="/blog">Blog</Link> */}
 
             <Link to="">Contact Us</Link>
           </div>
