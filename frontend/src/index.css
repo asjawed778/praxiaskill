@@ -23,6 +23,7 @@
 
 * {
   font-family: 'Roboto', 'Poppins', sans-serif;
+  scroll-behavior: smooth;
 }
 
 input[type="number"]::-webkit-outer-spin-button,

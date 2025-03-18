@@ -7,13 +7,17 @@ import { toast } from "react-hot-toast";
 import { logout } from "../../store/reducers/authReducer";
 import HamNavbar from "./HamNavbar";
 import { useLogoutMutation } from "../../services/auth.api";
+import { useState } from "react";
+import UserIcon from "./UserIcon";
 
 export default function Header() {
-  const { accessToken } = useSelector((store) => store.auth);
+  const { accessToken, user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [logoutUser, { isLoading, error }] = useLogoutMutation();
+
+  const [showUserMenu, setShowUserMenu] = useState(false)
 
   const handleLogout = async () => {
     try {
@@ -23,6 +27,9 @@ export default function Header() {
 
       const result = await logoutUser(accessToken);
       if (result?.error) {
+        localStorage.clear();
+        dispatch(logout())
+        navigate("/")
         throw new Error(JSON.stringify(result.error));
       }
       dispatch(logout());
@@ -67,18 +74,19 @@ export default function Header() {
         {/* Third Section */}
         <div className="flex items-center justify-between w-full  font-semibold text-[var(--primary-heading-color)] text-sm">
           <div className="flex items-center gap-5">
-            <Link to="/course">Learning</Link>
+            <Link to="/courses">Learning</Link>
 
-            <Link to="/blog">Blog</Link>
+            {/* <Link to="/blog">Blog</Link> */}
 
             <Link to="">Contact Us</Link>
           </div>
 
           <div className="flex items-center gap-5">
             {accessToken ? (
-              <button onClick={handleLogout} className="cursor-pointer">
-                Logout
-              </button>
+              // <button onClick={handleLogout} className="cursor-pointer">
+              //   Logout
+              // </button>
+              ""
             ) : (
               <Link to="/auth" className="cursor-pointer">
                 Login/Signup
@@ -88,6 +96,8 @@ export default function Header() {
             <a href="tel:+919123735554" className="cursor-pointer">
               +91 91237 35554
             </a>
+
+            {accessToken ? <UserIcon user={user} setShowUserMenu={setShowUserMenu} showUserMenu={showUserMenu} handleLogout={handleLogout} /> : null}
           </div>
         </div>
       </div>

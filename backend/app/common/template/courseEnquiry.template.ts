@@ -1,10 +1,10 @@
-const otpTemplate = (otp: string) => `
+export const courseEnquiryEmailTemplate = (ticketNo: string, name: string, email: string, phone: string, education: string, intrestedCourse: string): string => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OTP Verification - Praxia Skill</title>
+  <title>Course Enquiry Confirmation - Praxia Skill</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -44,18 +44,17 @@ const otpTemplate = (otp: string) => `
       line-height: 1.6;
       font-size: 16px;
       color: #444;
-      text-align: center;
     }
-    .otp-box {
+    .content p {
+      margin: 10px 0;
+    }
+    .info-box {
       background-color: #F0484E;
       padding: 15px;
       border-radius: 5px;
-      margin: 20px 0;
-      font-size: 24px;
-      font-weight: bold;
+      margin: 15px 0;
+      font-size: 14px;
       color: #ffffff;
-      letter-spacing: 8px;
-      display: inline-block;
     }
     .footer {
       text-align: center;
@@ -88,17 +87,23 @@ const otpTemplate = (otp: string) => `
   <div class="container">
     <div class="header">
       <img src="https://praxiaskills.s3.ap-south-1.amazonaws.com/public/course/thumbnail/1742302019691_logopngpng" alt="Praxia Skill Logo">
-      <h1>OTP Verification</h1>
+      <h1>Course Enquiry Confirmation</h1>
     </div>
     <div class="content">
-      <p>Hi,</p>
-      <p>Use the OTP below to verify your email and complete your sign-up.</p>
-      <div class="otp-box">${otp}</div>
-      <p>This OTP is valid for the next 10 minutes. Please do not share it with anyone.</p>
-      <p>If you didn’t request this OTP, please ignore this email or contact support.</p>
+      <p>Hi ${name},</p>
+      <p>Thank you for your interest in our courses. We have received your enquiry, and our team will get in touch with you shortly.</p>
+      <div class="info-box">
+        <p><strong>Ticket Number:</strong> ${ticketNo}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Education:</strong> ${education}</p>
+        <p><strong>Interested Course:</strong> ${intrestedCourse}</p>
+      </div>
+      <p>If you have any questions, feel free to contact us.</p>
+      <p>Best regards,<br>The Praxia Skill Team</p>
     </div>
     <div class="footer">
-      <p>Need help? Contact us at <a href="mailto:support@praxiaskill.com">support@praxiaskill.com</a></p>
+      <p>Visit our website: <a href="https://praxiaskill.com">praxiaskill.com</a></p>
       <div class="social-links">
         <a href="https://m.facebook.com/praxiaskill/" target="_blank">
           <i class="fa-brands fa-facebook"></i>
@@ -110,11 +115,7 @@ const otpTemplate = (otp: string) => `
           <i class="fa-brands fa-linkedin"></i>
         </a>
       </div>
-      <p style="font-size: 12px; color: #999999;">© 2024 Praxia Skill. All rights reserved.</p>
     </div>
   </div>
 </body>
-</html>
-`;
-
-export default otpTemplate;
+</html>`;

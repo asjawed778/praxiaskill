@@ -16,3 +16,8 @@ export enum Status {
     EXPIRED = "EXPIRED",
     CANCELLED = "CANCELLED",
 }
+
+export enum EnquiryStatus {
+    PENDING = "PENDING",
+    CLOSED = "CLOSED",
+}

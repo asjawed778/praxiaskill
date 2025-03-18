@@ -200,8 +200,6 @@ export const updatePassword = asyncHandler(async (req: Request, res: Response) =
   }
 );
 
-
-
 export const forgotPasswordSendToken = asyncHandler(async (req: Request, res: Response) => {
     const { email } = req.body;
 
@@ -219,6 +217,7 @@ export const forgotPasswordSendToken = asyncHandler(async (req: Request, res: Re
     const emailContent = resetPasswordEmailTemplate(resetLink);
 
     await sendEmail({
+      from: process.env.MAIL_USER,
       to: email,
       subject: "Password reset Link",
       html: emailContent,

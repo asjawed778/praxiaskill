@@ -103,7 +103,7 @@ export default function Carousal() {
         <hr className="border-gray-200" />
         {coursesAll?.length !== 0 && (
           <Link
-            to="/course"
+            to="/courses"
             className="absolute right-0 -top-3 font-bold text-xs text-[var(--color-primary)] bg-white mx-auto"
           >
             View More
