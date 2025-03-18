@@ -228,7 +228,8 @@ export const courseEnquiry = asyncHandler(async(req: Request, res: Response) => 
     const result = await courseService.courseEnquiry(data);
 
     const emailContent = courseEnquiryEmailTemplate(result.ticketNo, data.name, data.email, data.phone, data.education, data.intrestedCourse);
-    await sendEmail({
+    await sendEmail({ 
+        from: process.env.MAIL_USER,
         to: data.email,
         subject: `Course Enquiry Ticket No: ${result.ticketNo}`,
         html: emailContent,
