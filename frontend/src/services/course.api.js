@@ -99,6 +99,19 @@ export const apiCourse = createApi({
         body: data,
       }),
     }),
+    sendEnquiry: builder.mutation({
+      query: (data) => ({
+        url: "course/enquiry",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    getAllEnquiry: builder.query({
+      query: () => ({
+        url: `course/enquiry`,
+        method: "GET",
+      }),
+    }),
     getAllCourse: builder.query({
       query: () => ({
         url: `course/get-all-course`,
@@ -132,6 +145,8 @@ export const {
   useGetAllCategoryQuery,
   useAddCategoryMutation,
   useAddCourseMutation,
+  useSendEnquiryMutation,
+  useGetAllEnquiryQuery,
   useGetAllCourseQuery,
   useGetCategoryCourseQuery,
   useGetFullCourseDetailsQuery,

@@ -17,10 +17,10 @@ const sections = [
     name: "courses",
     icon: <HiOutlineDesktopComputer />,
     links: [
-      { url: "/admin/add-course", label: "Add Course", icon: <FiUpload /> },
-      { url: "/admin/manage-course", label: "Courses", icon: <FaEye /> },
-      { url: "/admin/add-category", label: "Category", icon: <BsFillPersonCheckFill /> },
-      { url: "/admin/", label: "Enquiry", icon: <FaQuestion /> },
+      { url: "/dashboard/add-course", label: "Add Course", icon: <FiUpload /> },
+      { url: "/dashboard/manage-course", label: "Courses", icon: <FaEye /> },
+      { url: "/dashboard/manage-category", label: "Category", icon: <BsFillPersonCheckFill /> },
+      { url: "/dashboard/course-enquiry", label: "Enquiry", icon: <FaQuestion /> },
     ],
   },
   // {
@@ -72,7 +72,7 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
           <RxCross2 className="hover:bg-hover-sidebar-background cursor-pointer" />
         </p>
 
-        <Link to="/admin">
+        <Link to="/dashboard">
           <div className="flex gap-4 items-center text-sm p-2 text-neutral-700 hover:bg-neutral-200 ">
             <FiHome />
             <h2>Dashboard</h2>

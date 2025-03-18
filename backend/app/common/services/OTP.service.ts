@@ -1,8 +1,10 @@
 import { IOTP } from "../dto/otp.dto";
+import { loadConfig } from "../helper/config.hepler";
 import { generateOTP } from "../helper/OTP.helper";
 import OTPSchema from "../schema/OTPSchema"
 import otpTemplate from "../template/OTP.template";
 import { sendEmail } from "./email.service"
+loadConfig();
 
 export const sendOTP = async (email: string, subject: string = "Your OTP code") => {
     const otp = generateOTP();
@@ -14,6 +16,7 @@ export const sendOTP = async (email: string, subject: string = "Your OTP code") 
     await OTPSchema.create(otpData);
     const emailContent = otpTemplate(otp);
     await sendEmail({
+        from: process.env.MAIL_USER,
         to: email,
         subject: `${subject}`,
         html: emailContent,
