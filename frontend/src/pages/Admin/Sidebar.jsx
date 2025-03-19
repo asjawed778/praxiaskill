@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiHome } from "react-icons/fi";
 import { HiOutlineDesktopComputer } from "react-icons/hi";
 import { MdOutlineDashboard } from "react-icons/md";
@@ -11,10 +11,12 @@ import { IoMdArrowForward } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
 import { FaQuestion } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const sections = [
   {
     name: "courses",
+    accessRole: "SUPER_ADMIN",
     icon: <HiOutlineDesktopComputer />,
     links: [
       { url: "/dashboard/add-course", label: "Add Course", icon: <FiUpload /> },
@@ -23,15 +25,6 @@ const sections = [
       { url: "/dashboard/course-enquiry", label: "Enquiry", icon: <FaQuestion /> },
     ],
   },
-  // {
-  //   name: "category",
-  //   icon: <MdOutlineDashboard />,
-  //   links: [
-  //     { url: "/admin/add-category", label: "Add Category", icon: <FiUpload /> },
-  //     { url: "/admin/manage-categories", label: "Manage Categories", icon: <BsFillPersonCheckFill /> },
-  //     { url: "/admin/view-categories", label: "View Categories", icon: <FaEye /> },
-  //   ],
-  // },
 ];
 
 
@@ -39,9 +32,21 @@ const sections = [
 export default function Sidebar({ isOpen, setIsOpen, location }) {
   const [drawer, setDrawer] = useState({});
 
+  const { user: {role: userRole} } = useSelector((state) => state.auth);
+
   const toggleDropdown = (section) => {
     setDrawer((prev) => ({ ...prev, [section]: !prev[section] }));
   };
+
+  useEffect(() => {
+    // On refreshing the page it will open the drawer
+    sections.forEach((section) => {
+      const isActive = section.links.some((link) => link.url === location.pathname);
+      if (isActive) {
+        setDrawer((prev) => ({ ...prev, [section.name]: true }));
+      }
+    });
+  }, [location.pathname]);
 
   return (
     <>
@@ -73,14 +78,14 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
         </p>
 
         <Link to="/dashboard">
-          <div className="flex gap-4 items-center text-sm p-2 text-neutral-700 hover:bg-neutral-200 ">
+          <div className={`flex gap-4 items-center text-sm p-2 text-neutral-700 hover:bg-neutral-200 mb-0.5 rounded-md ${location.pathname === "/dashboard" && "bg-neutral-200 text-primary"}`}>
             <FiHome />
             <h2>Dashboard</h2>
           </div>
         </Link>
 
-        {sections.map(({ icon, name, links }, index) => (
-          <div key={index}>
+        {sections.map(({ icon, name, links, accessRole }, index) => (
+          userRole === accessRole ? <div key={index}>
             <div
               onClick={() => toggleDropdown(name)}
               className="flex items-center justify-between py-2 rounded-md cursor-pointer hover:bg-neutral-200"
@@ -108,22 +113,16 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
             </div>
 
             {drawer[name] && (
-              <div className="mt-2 rounded-md">
+              <div className="mt-2 rounded-md space-y-0.5">
                 {links.map(({ url, label, icon }, index) => (
                   <Link
                     key={index}
                     to={url}
-                    className={`block px-8 py-2 text-sm hover:bg-neutral-200 ${
-                      index === 0
-                        ? "rounded-t-md"
-                        : index === links.length - 1
-                        ? "rounded-b-md"
-                        : ""
-                    }`}
+                    className={`block px-8 py-1.5 text-sm hover:bg-neutral-200 rounded-md ${location.pathname === url && "bg-neutral-200"}`}
                   >
-                    <div className={`flex items-center text-xs gap-2 text-neutral-700 hover:bg-neutral-200 ${location.pathname === url && "text-primary"}`}>
+                    <div className={`flex items-center text-xs gap-2 text-neutral-700 ${location.pathname === url && "text-primary"}`}>
                       {location.pathname === url ? (
-                        <IoMdArrowForward className="mr-2 text-xl" />
+                        <IoMdArrowForward className="mr-2" />
                       ) : (
                         <IoIosArrowForward className="mr-2" />
                       )}
@@ -134,7 +133,7 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
                 ))}
               </div>
             )}
-          </div>
+          </div> : null
         ))}
       </div>
     </>

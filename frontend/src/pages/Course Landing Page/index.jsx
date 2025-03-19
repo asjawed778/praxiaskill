@@ -29,7 +29,6 @@ const Course = () => {
 
   const courses = useSelector((state) => state.courses);
   const specificCourse = courses?.specificCourse;
-  console.log("specifiec", specificCourse)
   return (
     <div className="px-12">
       <div>
@@ -113,7 +112,7 @@ const Course = () => {
           <div className="flex gap-20">
             <div className="flex flex-col gap-3 border border-neutral-200 p-4 rounded-lg ">
               <PiNewspaper size={20} />
-              <span className="text-sm font-semibold">Taught in {specificCourse?.language?.slice(0,1) + specificCourse?.language?.slice(1).toLowerCase()}</span>
+              <span className="text-sm font-semibold">Taught in {specificCourse?.language === "ENGLISH_HINDI" ? "Bilingual" : specificCourse?.language?.slice(0,1) + specificCourse?.language?.slice(1).toLowerCase()}</span>
             </div>
 
             <div className="flex flex-col gap-2 border border-neutral-200 p-4 rounded-lg">
