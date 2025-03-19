@@ -16,7 +16,7 @@ export const ccfsEvent = asyncHandler(async (req: Request, res: Response) => {
     res.setHeader("Content-Disposition", 'attachment; filename="event.pdf"');
     const mailOptions = {
         from: process.env.MAIL_USER,
-        to: data.email,
+        to: process.env.MAIL_USER,
         subject: "Event created successfully",
         text: "CCFS | Startovation 2025, Registration successful",
         attachments: [
@@ -29,6 +29,6 @@ export const ccfsEvent = asyncHandler(async (req: Request, res: Response) => {
     }
     await sendEmail(mailOptions);
 
-    // res.send(createResponse(pdfBuffer, "Event created successfully"));
-    res.send(pdfBuffer);
+    res.send(createResponse({}, "Event created successfully"));
+    // res.send(pdfBuffer);
 });
