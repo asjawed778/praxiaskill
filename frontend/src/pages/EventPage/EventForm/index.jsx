@@ -11,6 +11,7 @@ import OtherDetails from "./OtherDetails";
 import { useCcfsEventMutation } from "../../../services/auth.api";
 import toast from "react-hot-toast";
 import ButtonLoading from "../../../components/Button/ButtonLoading";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
   {
@@ -47,6 +48,7 @@ const steps = [
 
 const MultiStepForm = () => {
   const [step, setStep] = useState(0);
+  const navigate = useNavigate();
 
   const methods = useForm({
     resolver: steps[step].validation ? yupResolver(steps[step].validation) : undefined,
@@ -66,6 +68,7 @@ const MultiStepForm = () => {
     } else {
       try {
         await ccfsEvent(data);
+        navigate("/ccfs");
         toast.success("Form submitted successfully");
       } catch (error) {
         toast.error("Failed to submit the form");
