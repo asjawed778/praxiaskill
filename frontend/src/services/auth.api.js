@@ -60,6 +60,14 @@ export const apiAuth = createApi({
         body: data,
       }),
     }),
+    ccfsEvent: builder.mutation({
+      query: (data) => ({
+        url: "event/ccfs",
+        method: "POST",
+        body: data,
+        // credentials: "include"
+      }),
+    }),
   }),
 });
 
@@ -72,4 +80,5 @@ export const {
   useSendForgotPasswordOtpMutation,
   useLoginMutation,
   useSendSignupOtpMutation,
+  useCcfsEventMutation,
 } = apiAuth;

@@ -27,6 +27,8 @@ const CourseLandingPage = lazy(() =>
 const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
 const AddCourse = lazy(() => import("./pages/Admin/Course/index"));
 const ManageCourse = lazy(() => import("./pages/Admin/Course/ManageCourse"));
+const EventPage = lazy(() => import("./pages/EventPage"));
+const EventForm = lazy(() => import("./pages/EventPage/EventForm"));
 
 const publicRoutes = [
   {
@@ -69,6 +71,22 @@ const publicRoutes = [
       </LazyComponent>
     ),
   },
+  {
+    path: "/ccfs",
+    element: (
+      <LazyComponent>
+        <EventPage />
+      </LazyComponent>
+    ),
+  },
+  {
+    path: "eventForm",
+    element: (
+      <LazyComponent>
+        <EventForm />
+      </LazyComponent>
+    ),
+  }
 ];
 
 const authRoutes = [
