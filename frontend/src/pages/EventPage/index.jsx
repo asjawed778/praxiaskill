@@ -1,5 +1,5 @@
 import { eventData } from "./eventData";
-import ccfs from "./ccfs.png"
+import ccfs from "./CCFS.png";
 import Timeline from "./TimeLine";
 import { useNavigate } from "react-router-dom";
 const EventPage = () => {
