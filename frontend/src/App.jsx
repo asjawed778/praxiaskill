@@ -6,24 +6,29 @@ import BasicLayout from "./layouts/Basic";
 import LazyComponent from "./components/LazyComponent";
 import PageNotFound from "./pages/pagenotfound";
 import AdminLayout from "./layouts/AdminLayout";
-import CategoryManagement from "./pages/Admin/Category/CategoryManagement"
+import CategoryManagement from "./pages/Admin/Category/CategoryManagement";
 import { useSelector } from "react-redux";
 const ViewCategories = lazy(() =>
   import("./pages/Admin/Category/ViewCategories")
 );
-const CourseEnquiryManagement = lazy(() => import("./pages/Admin/Category/CourseEnquiryManagement"))
-const LearningPage = lazy(() => import("./pages/Learning/index"))
+const CourseEnquiryManagement = lazy(() =>
+  import("./pages/Admin/Category/CourseEnquiryManagement")
+);
+const LearningPage = lazy(() => import("./pages/Learning/index"));
 const AddCategory = lazy(() => import("./pages/Admin/Category/AddCategory"));
 const AuthPage = lazy(() => import("./pages/authpage"));
 const HomePage = lazy(() => import("./pages/Home page/homepage"));
 const BlogPage = lazy(() => import("./pages/Blog/landingpage"));
 const AdminPage = lazy(() => import("./pages/Admin/adminpage"));
-const CourseLandingPage = lazy(() => import("./pages/Course Landing Page/index"));
+const CourseLandingPage = lazy(() =>
+  import("./pages/Course Landing Page/index")
+);
 // const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
 const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
 const AddCourse = lazy(() => import("./pages/Admin/Course/index"));
 const ManageCourse = lazy(() => import("./pages/Admin/Course/ManageCourse"));
-
+const EventPage = lazy(() => import("./pages/EventPage"));
+const EventForm = lazy(() => import("./pages/EventPage/EventForm"));
 
 const publicRoutes = [
   {
@@ -32,7 +37,7 @@ const publicRoutes = [
       <LazyComponent>
         <HomePage />
       </LazyComponent>
-    )
+    ),
   },
   {
     path: "blog",
@@ -40,7 +45,7 @@ const publicRoutes = [
       <LazyComponent>
         <BlogPage />
       </LazyComponent>
-    )
+    ),
   },
   {
     path: "blog/:id",
@@ -48,7 +53,7 @@ const publicRoutes = [
       <LazyComponent>
         <SinglePost />
       </LazyComponent>
-    )
+    ),
   },
   {
     path: "courses",
@@ -56,7 +61,7 @@ const publicRoutes = [
       <LazyComponent>
         <LearningPage />
       </LazyComponent>
-    )
+    ),
   },
   {
     path: "course/:id",
@@ -64,7 +69,23 @@ const publicRoutes = [
       <LazyComponent>
         <CourseLandingPage />
       </LazyComponent>
-    )
+    ),
+  },
+  {
+    path: "/ccfs",
+    element: (
+      <LazyComponent>
+        <EventPage />
+      </LazyComponent>
+    ),
+  },
+  {
+    path: "eventForm",
+    element: (
+      <LazyComponent>
+        <EventForm />
+      </LazyComponent>
+    ),
   }
 ];
 
@@ -77,7 +98,7 @@ const authRoutes = [
           <AuthPage />
         </PublicRoute>
       </LazyComponent>
-    )
+    ),
   },
   {
     path: "/reset-password/:token",
@@ -87,8 +108,8 @@ const authRoutes = [
           <AuthPage reset={true} />
         </PublicRoute>
       </LazyComponent>
-    )
-  }
+    ),
+  },
 ];
 
 const adminRoutes = [
@@ -108,7 +129,7 @@ const adminRoutes = [
           <LazyComponent>
             <AdminPage />
           </LazyComponent>
-        )
+        ),
       },
       {
         path: "view-categories",
@@ -116,7 +137,7 @@ const adminRoutes = [
           <LazyComponent>
             <ViewCategories />
           </LazyComponent>
-        )
+        ),
       },
       {
         path: "manage-category",
@@ -124,7 +145,7 @@ const adminRoutes = [
           <LazyComponent>
             <CategoryManagement />
           </LazyComponent>
-        )
+        ),
       },
       {
         path: "course-enquiry",
@@ -132,7 +153,7 @@ const adminRoutes = [
           <LazyComponent>
             <CourseEnquiryManagement />
           </LazyComponent>
-        )
+        ),
       },
       {
         path: "add-course",
@@ -140,7 +161,7 @@ const adminRoutes = [
           <LazyComponent>
             <AddCourse />
           </LazyComponent>
-        )
+        ),
       },
       {
         path: "manage-course",
@@ -148,10 +169,10 @@ const adminRoutes = [
           <LazyComponent>
             <ManageCourse />
           </LazyComponent>
-        )
-      }
-    ]
-  }
+        ),
+      },
+    ],
+  },
 ];
 
 const userPrivateRoutes = [
@@ -171,10 +192,10 @@ const userPrivateRoutes = [
           <LazyComponent>
             <AdminPage />
           </LazyComponent>
-        )
+        ),
       },
-    ]
-  }
+    ],
+  },
 ];
 
 function App() {
@@ -193,33 +214,41 @@ function App() {
         {/* Auth routes */}
         {authRoutes.map((route, index) => (
           <Route key={index} path={route.path} element={route.element} />
-          ))}
+        ))}
+
+        {/* if user is not logged in then user will redirected to auth page if they try to access dashboard  */}
+        {!accessToken && (
+          <Route
+            path="/dashboard/*"
+            element={<Navigate to="/auth" replace />}
+          />
+        )}
 
         {/* Private routes  */}
-          {(accessToken && user?.role === "USER") ? (
-            userPrivateRoutes.map((route, index) => (
-              <Route key={index} path={route.path} element={route.element}>
+        {accessToken && user?.role === "USER" ? (
+          userPrivateRoutes.map((route, index) => (
+            <Route key={index} path={route.path} element={route.element}>
               {route.children?.map((child, childIndex) => (
                 <Route key={childIndex} {...child} />
-                ))}
+              ))}
             </Route>
           ))
-          ) : (
-            <Route path="/dashboard/*" element={<Navigate to="/" replace />} />
-            )}
+        ) : (
+          <Route path="/dashboard/*" element={<Navigate to="/" replace />} />
+        )}
 
-          {(accessToken && user?.role === "SUPER_ADMIN") ? (
-            adminRoutes.map((route, index) => (
-              <Route key={index} path={route.path} element={route.element}>
+        {accessToken && user?.role === "SUPER_ADMIN" ? (
+          adminRoutes.map((route, index) => (
+            <Route key={index} path={route.path} element={route.element}>
               {route.children?.map((child, childIndex) => (
                 <Route key={childIndex} {...child} />
-                ))}
+              ))}
             </Route>
           ))
-          ) : (
-            <Route path="/dashboard/*" element={<Navigate to="/" replace />} />
-            )}
-        
+        ) : (
+          <Route path="/dashboard/*" element={<Navigate to="/" replace />} />
+        )}
+
         {/* if route does other than predefined endpoints will be redirected PageNotFound Page  */}
         <Route path="*" element={<PageNotFound />} />
       </Routes>

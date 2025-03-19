@@ -39,6 +39,7 @@
     "@types/passport": "^1.0.12",
     "@types/passport-jwt": "^3.0.9",
     "@types/passport-local": "^1.0.35",
+    "@types/pdfkit": "^0.13.9",
     "@types/swagger-ui-express": "^4.1.7",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "cross-env": "^7.0.3",
@@ -77,6 +78,7 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
+    "pdfkit": "^0.16.0",
     "pnpm": "^9.15.4",
     "swagger-ui-express": "^5.0.1"
   }
