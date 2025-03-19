@@ -196,7 +196,7 @@ const CourseEnqueryManagement = () => {
       </div>
 
       {/* Enquiries Table */}
-      <div className="border border-gray-300 rounded-md overflow-hidden">
+      {!isLoading ? <div className="border border-gray-300 rounded-md overflow-hidden">
         <table className="w-full ">
           <thead>
             <tr className="bg-gray-50 text-sm text-neutral-500 font-semibold">
@@ -311,21 +311,13 @@ const CourseEnqueryManagement = () => {
                 </td>
               </tr>
             ))}
-            {/* Empty rows for design */}
-            {/* {Array.from({
-              length: Math.min(itemsPerPage - filteredEnquiries.length, 9),
-            }).map((_, index) => (
-              <tr key={`empty-${index}`} className="border-b border-gray-300">
-                <td className="py-3 px-4 border-r border-gray-300">&nbsp;</td>
-                <td className="py-3 px-4 border-r border-gray-300">&nbsp;</td>
-                <td className="py-3 px-4 border-r border-gray-300">&nbsp;</td>
-                <td className="py-3 px-4 border-r border-gray-300">&nbsp;</td>
-                <td className="py-3 px-4">&nbsp;</td>
-              </tr>
-            ))} */}
           </tbody>
         </table>
+      </div> :
+        <div className="h-30 flex justify-center items-center">
+        Loading...
       </div>
+      }
 
       {/* Pagination */}
       {data ? <div className="mt-4 flex justify-between items-center">
