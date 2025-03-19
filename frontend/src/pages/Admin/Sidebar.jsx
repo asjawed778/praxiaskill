@@ -64,7 +64,7 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
 
       {/* Sidebar */}
       <div
-        className={`fixed z-50 inset-y-0 left-0 w-64 border-r bg-white border-neutral-300 max-h-full p-4 transition-transform duration-300 ease-in-out 
+        className={`fixed z-50 inset-y-0 left-0 w-64 border-r overflow-y-auto bg-white border-neutral-300 max-h-full p-4 transition-transform duration-300 ease-in-out 
       ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       } lg:translate-x-0 lg:static  lg:h-screen`}
@@ -78,7 +78,7 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
         </p>
 
         <Link to="/dashboard">
-          <div className={`flex gap-4 items-center text-sm p-2 text-neutral-700 hover:bg-neutral-200 mb-0.5 rounded-md ${location.pathname === "/dashboard" && "bg-neutral-200 text-primary"}`}>
+          <div className={`flex gap-4 items-center mt-4 text-sm p-2 text-neutral-700 hover:bg-neutral-200 mb-0.5 rounded-md ${location.pathname === "/dashboard" && "bg-neutral-200 text-primary"}`}>
             <FiHome />
             <h2>Dashboard</h2>
           </div>
