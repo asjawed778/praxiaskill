@@ -48,6 +48,7 @@ function LoginModal({
   const navigate = useNavigate();
 
   const [login, { isLoading, error }] = useLoginMutation();
+  console.log("leading", isLoading)
 
   // const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);

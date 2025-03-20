@@ -44,12 +44,12 @@ const CourseTable = ({ data }) => {
 
   return (
     <div className="w-full flex flex-col gap-2 relative">
-      <div className="w-full flex gap-4 text-sm">
+      <div className="w-full flex gap-4 text-sm flex-wrap">
         <div className="flex items-center gap-2 border border-neutral-300 px-1 rounded-lg text-neutral-500 flex-1">
           <IoSearch />
           <input
             type="text"
-            className="outline-0 flex-1 px-2"
+            className="outline-0 flex-1 px-2 py-2"
             placeholder="Search Courses..."
           />
         </div>

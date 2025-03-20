@@ -53,7 +53,7 @@ const ManageCourse = () => {
   const [filter, setFilter] = useState(1)
   return (
     <div className="w-full px-4">
-      <div className="w-[95%] border border-neutral-300 rounded-lg text-md flex justify-between items-center mx-auto mb-2">
+      <div className="w-[95%] border border-neutral-300 rounded-lg text-sm md:text-md flex justify-between items-center mx-auto mb-2">
         <div
           onClick={() => setFilter(1)}
           className={`${
