@@ -107,8 +107,8 @@ export const apiCourse = createApi({
       }),
     }),
     getAllEnquiry: builder.query({
-      query: () => ({
-        url: `course/enquiry`,
+      query: (page) => ({
+        url: `course/enquiry?pageNo=${page}`,
         method: "GET",
       }),
     }),
