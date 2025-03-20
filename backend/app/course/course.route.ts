@@ -25,6 +25,7 @@ router
     .get("/published/:categoryId", courseValidation.getPublishedCourseByCategory, courseController.getPublishedCourseByCategory)
     .post("/enquiry", courseValidation.courseEnquiry,catchError, courseController.courseEnquiry)
     .get("/enquiry",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseController.getCourseEnquiry)
-    
+    .post("/enquiry-status/:enquiryId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.changeEnquiryStatus, catchError, courseController.changeEnquiryStatus)
+    .get("/published", courseController.getPublishedCourses)
 
 export default router;
