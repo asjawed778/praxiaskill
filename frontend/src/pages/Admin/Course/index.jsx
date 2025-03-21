@@ -29,15 +29,6 @@ const AddCourse = () => {
     console.log("Form data: ", data);
   };
 
-  //   const handleFileChange = (e) => {
-  //     const file = e.target.files[0];
-  //     if (file) {
-  //       setFileName(file.name);
-  //     } else {
-  //       setFileName("");
-  //     }
-  //   };
-
   const handleNext = async () => {
     const isValid = await trigger();
     if (isValid) {
@@ -50,8 +41,8 @@ const AddCourse = () => {
   };
 
   return (
-    <div className="p-4 w-full flex flex-col gap-6">
-      <div className="bg-[#D0DAF1] rounded-lg text-md flex justify-between items-center pr-3">
+    <div className=" py-4 md:p-4 md:w-full w-[97vw] mx-auto flex flex-col gap-6">
+      <div className="bg-[#D0DAF1] rounded-lg text-xs md:text-md flex justify-between items-center pr-3">
         <div
           className={`${
             currentStep == 1 &&

@@ -7,18 +7,15 @@ import Dropdown from "../../../components/Dropdown/Dropdown";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
 
-const CourseTable = ({ data }) => {
+const CourseTable = ({ data:publishedCourse, currentPage, setCurrentPage }) => {
   const [openMenu, setOpenMenu] = useState(null);
   const [menuStyles, setMenuStyles] = useState({});
   const buttonRefs = useRef([]);
-
-  const [currentPage, setCurrentPage] = useState(0);
+  
   const itemsPerPage = 10;
+  const totalItems = publishedCourse?.data?.totalItems
 
-  const courses = data?.slice(
-    currentPage * itemsPerPage,
-    (currentPage + 1) * itemsPerPage
-  );
+  const courses = publishedCourse?.data?.courses
 
   useEffect(() => {
     if (openMenu !== null) {
@@ -44,12 +41,12 @@ const CourseTable = ({ data }) => {
 
   return (
     <div className="w-full flex flex-col gap-2 relative">
-      <div className="w-full flex gap-4 text-sm">
+      <div className="w-full flex gap-4 text-sm flex-wrap">
         <div className="flex items-center gap-2 border border-neutral-300 px-1 rounded-lg text-neutral-500 flex-1">
           <IoSearch />
           <input
             type="text"
-            className="outline-0 flex-1 px-2"
+            className="outline-0 flex-1 px-2 py-2"
             placeholder="Search Courses..."
           />
         </div>
@@ -79,15 +76,15 @@ const CourseTable = ({ data }) => {
             </tr>
           </thead>
           <tbody>
-            {courses.map((course, index) => (
+            {courses?.map((course, index) => (
               <tr
-                key={course.serialNo}
+                key={course._id}
                 className="hover:bg-gray-50 text-sm border-b border-neutral-300 relative"
               >
-                <td className="px-4 py-1">{course.serialNo}</td>
-                <td className="px-4 py-1">{course.courseTitle}</td>
-                <td className="px-4 py-1">{course.instructorName}</td>
-                <td className="px-4 py-1">{course.category}</td>
+                <td className="px-4 py-1">{(currentPage)*10 + 1 + index}</td>
+                <td className="px-4 py-1">{course.title}</td>
+                <td className="px-4 py-1">{course.instructor}</td>
+                <td className="px-4 py-1">{course.category || "Category"}</td>
                 <td className="px-4 py-1 relative">
                   <button
                     ref={(el) => (buttonRefs.current[index] = el)}
@@ -112,13 +109,13 @@ const CourseTable = ({ data }) => {
         <div className="text-sm">
           <p>
             <span>Showing </span>
-            <span className="font-semibold">{courses[0]?.serialNo} </span>
+            <span className="font-semibold">{currentPage*10 + 1} </span>
             <span> to </span>
             <span className="font-semibold">
-              {courses[courses?.length - 1]?.serialNo}{" "}
+            {Math.min((currentPage + 1) * itemsPerPage, totalItems)}{" "}
             </span>
             <span>of </span>
-            <span className="font-semibold">{data?.length}</span>
+            <span className="font-semibold">{totalItems}</span>
           </p>
         </div>
       )}
@@ -138,13 +135,11 @@ const CourseTable = ({ data }) => {
             {currentPage}
           </span>
           <button
-            onClick={() =>
-              setCurrentPage(currentPage + 1)
-            }
-            disabled={currentPage >= Math.ceil(data.length / itemsPerPage) - 1}
+            onClick={() => setCurrentPage(currentPage + 1)}
+            disabled={currentPage >= Math.ceil(courses?.length / itemsPerPage) - 1}
             type="button"
             className={`p-2 bg-neutral-100 hover:bg-neutral-200 rounded-full text-xl ${
-              currentPage >= Math.ceil(data.length / itemsPerPage) - 1
+              currentPage >= Math.ceil(courses?.length / itemsPerPage) - 1
                 ? "opacity-50 cursor-not-allowed"
                 : ""
             }`}

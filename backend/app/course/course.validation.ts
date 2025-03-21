@@ -1,6 +1,6 @@
 import { body, param } from "express-validator";
 import createHttpError from "http-errors";
-import { Language, CourseMode } from "./course.enum";
+import { Language, CourseMode, EnquiryStatus } from "./course.enum";
 
 export const courseDetails = [
     param('courseId')
@@ -155,3 +155,16 @@ export const courseEnquiry = [
     body("intrestedCourse").notEmpty().withMessage("Interested course is required"),
     body("whatsAppOptIn").isBoolean().withMessage("WhatsApp Opt-in must be a boolean"),
 ];
+
+
+export const changeEnquiryStatus = [
+    param('enquiryId')
+        .notEmpty().withMessage('enquiryId is required')
+        .isMongoId().withMessage('Invalid enquiryId. Must be a valid MongoDB ObjectId'),
+
+    body('status')
+        .notEmpty().withMessage('Status is required')
+        .isIn(Object.values(EnquiryStatus))
+        .withMessage(`Status must be one of: ${Object.values(EnquiryStatus).join(', ')}`)
+];
+
