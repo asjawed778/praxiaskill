@@ -3,7 +3,7 @@ import { useGetAllPublishedCourseQuery } from "../../services/course.api";
 import { useState } from "react";
 
 const CourseCard = () => {
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const { data: publishedCourses, isLoading } = useGetAllPublishedCourseQuery(currentPage);
   console.log("data", publishedCourses)
   const courses = publishedCourses?.data?.courses
