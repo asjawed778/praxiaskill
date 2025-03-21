@@ -1,56 +1,60 @@
 import React, { useState } from "react";
 import CourseTable from "./CourseTable";
+import { useGetAllPublishedCourseQuery } from "../../../services/course.api";
 
 const COURSES = [
-  { serialNo: 1, courseTitle: "React for Beginners", instructorName: "John Doe", category: "Web Development" },
-  { serialNo: 2, courseTitle: "Advanced Node.js", instructorName: "Jane Smith", category: "Backend Development" },
-  { serialNo: 3, courseTitle: "Machine Learning Basics", instructorName: "Alice Johnson", category: "AI/ML" },
-  { serialNo: 4, courseTitle: "Cybersecurity Fundamentals", instructorName: "Bob Brown", category: "Cybersecurity" },
-  { serialNo: 5, courseTitle: "Cloud Computing with AWS", instructorName: "Charlie Davis", category: "Cloud Computing" },
-  { serialNo: 6, courseTitle: "Python for Data Science", instructorName: "David Wilson", category: "Data Science" },
-  { serialNo: 7, courseTitle: "Full Stack JavaScript", instructorName: "Eva Adams", category: "Web Development" },
-  { serialNo: 8, courseTitle: "Deep Learning with TensorFlow", instructorName: "Frank White", category: "AI/ML" },
-  { serialNo: 9, courseTitle: "DevOps Essentials", instructorName: "Grace Miller", category: "DevOps" },
-  { serialNo: 10, courseTitle: "Django & REST API", instructorName: "Hannah Lee", category: "Backend Development" },
-  { serialNo: 11, courseTitle: "Linux Administration", instructorName: "Ian Scott", category: "Cybersecurity" },
-  { serialNo: 12, courseTitle: "Big Data with Hadoop", instructorName: "Jack Turner", category: "Data Science" },
-  { serialNo: 13, courseTitle: "Vue.js Crash Course", instructorName: "Karen Evans", category: "Web Development" },
-  { serialNo: 14, courseTitle: "Kubernetes for Beginners", instructorName: "Liam Wright", category: "DevOps" },
-  { serialNo: 15, courseTitle: "Ethical Hacking Basics", instructorName: "Mia Carter", category: "Cybersecurity" },
-  { serialNo: 16, courseTitle: "Java Spring Boot", instructorName: "Nathan Bell", category: "Backend Development" },
-  { serialNo: 17, courseTitle: "C++ for Competitive Programming", instructorName: "Olivia Sanchez", category: "Programming" },
-  { serialNo: 18, courseTitle: "Blockchain Development", instructorName: "Paul Nelson", category: "Blockchain" },
-  { serialNo: 19, courseTitle: "Flutter & Dart", instructorName: "Quinn Baker", category: "Mobile Development" },
-  { serialNo: 20, courseTitle: "PostgreSQL for Developers", instructorName: "Rachel Green", category: "Databases" },
-  { serialNo: 21, courseTitle: "Angular & TypeScript", instructorName: "Samuel Perez", category: "Web Development" },
-  { serialNo: 22, courseTitle: "Golang Microservices", instructorName: "Tina Roberts", category: "Backend Development" },
-  { serialNo: 23, courseTitle: "Unity Game Development", instructorName: "Umar Patel", category: "Game Development" },
-  { serialNo: 24, courseTitle: "Power BI for Business Analytics", instructorName: "Victoria King", category: "Data Science" },
-  { serialNo: 25, courseTitle: "Docker from Scratch", instructorName: "William Ford", category: "DevOps" },
-  { serialNo: 26, courseTitle: "Artificial Intelligence with Python", instructorName: "Xander Lopez", category: "AI/ML" },
-  { serialNo: 27, courseTitle: "Swift for iOS Development", instructorName: "Yasmin Hill", category: "Mobile Development" },
-  { serialNo: 28, courseTitle: "Web3 & Smart Contracts", instructorName: "Zane Cooper", category: "Blockchain" },
-  { serialNo: 29, courseTitle: "MongoDB & NoSQL Databases", instructorName: "Aaron Fisher", category: "Databases" },
-  { serialNo: 30, courseTitle: "ASP.NET Core for Beginners", instructorName: "Bella Jenkins", category: "Backend Development" },
-  { serialNo: 31, courseTitle: "R for Data Science", instructorName: "Caleb Morris", category: "Data Science" },
-  { serialNo: 32, courseTitle: "Ruby on Rails Fundamentals", instructorName: "Diana Brooks", category: "Web Development" },
-  { serialNo: 33, courseTitle: "CI/CD with Jenkins", instructorName: "Ethan Barnes", category: "DevOps" },
-  { serialNo: 34, courseTitle: "Android Development with Kotlin", instructorName: "Fiona Hayes", category: "Mobile Development" },
-  { serialNo: 35, courseTitle: "3D Game Design with Unreal Engine", instructorName: "George Reed", category: "Game Development" },
-  { serialNo: 36, courseTitle: "Penetration Testing", instructorName: "Hailey Carter", category: "Cybersecurity" },
-  { serialNo: 37, courseTitle: "Microsoft Azure Fundamentals", instructorName: "Isaac Mitchell", category: "Cloud Computing" },
-  { serialNo: 38, courseTitle: "GraphQL & Apollo", instructorName: "Jennifer Clark", category: "Web Development" },
-  { serialNo: 39, courseTitle: "Terraform Infrastructure as Code", instructorName: "Kyle Anderson", category: "DevOps" },
-  { serialNo: 40, courseTitle: "Elixir & Phoenix Framework", instructorName: "Laura Scott", category: "Backend Development" },
-  { serialNo: 41, courseTitle: "Cyber Threat Intelligence", instructorName: "Mason Turner", category: "Cybersecurity" },
-  { serialNo: 42, courseTitle: "Excel for Data Analysis", instructorName: "Natalie Adams", category: "Data Science" },
-  { serialNo: 43, courseTitle: "Rust for System Programming", instructorName: "Oscar Johnson", category: "Programming" },
-  { serialNo: 44, courseTitle: "Google Cloud Platform", instructorName: "Penelope White", category: "Cloud Computing" },
-  { serialNo: 45, courseTitle: "C# & Unity Game Development", instructorName: "Quincy Harris", category: "Game Development" },
+  { serialNo: 1, title: "React for Beginners", instructor: "John Doe", category: "Web Development" },
+  { serialNo: 2, title: "Advanced Node.js", instructor: "Jane Smith", category: "Backend Development" },
+  { serialNo: 3, title: "Machine Learning Basics", instructor: "Alice Johnson", category: "AI/ML" },
+  { serialNo: 4, title: "Cybersecurity Fundamentals", instructor: "Bob Brown", category: "Cybersecurity" },
+  { serialNo: 5, title: "Cloud Computing with AWS", instructor: "Charlie Davis", category: "Cloud Computing" },
+  { serialNo: 6, title: "Python for Data Science", instructor: "David Wilson", category: "Data Science" },
+  { serialNo: 7, title: "Full Stack JavaScript", instructor: "Eva Adams", category: "Web Development" },
+  { serialNo: 8, title: "Deep Learning with TensorFlow", instructor: "Frank White", category: "AI/ML" },
+  { serialNo: 9, title: "DevOps Essentials", instructor: "Grace Miller", category: "DevOps" },
+  { serialNo: 10, title: "Django & REST API", instructor: "Hannah Lee", category: "Backend Development" },
+  { serialNo: 11, title: "Linux Administration", instructor: "Ian Scott", category: "Cybersecurity" },
+  { serialNo: 12, title: "Big Data with Hadoop", instructor: "Jack Turner", category: "Data Science" },
+  { serialNo: 13, title: "Vue.js Crash Course", instructor: "Karen Evans", category: "Web Development" },
+  { serialNo: 14, title: "Kubernetes for Beginners", instructor: "Liam Wright", category: "DevOps" },
+  { serialNo: 15, title: "Ethical Hacking Basics", instructor: "Mia Carter", category: "Cybersecurity" },
+  { serialNo: 16, title: "Java Spring Boot", instructor: "Nathan Bell", category: "Backend Development" },
+  { serialNo: 17, title: "C++ for Competitive Programming", instructor: "Olivia Sanchez", category: "Programming" },
+  { serialNo: 18, title: "Blockchain Development", instructor: "Paul Nelson", category: "Blockchain" },
+  { serialNo: 19, title: "Flutter & Dart", instructor: "Quinn Baker", category: "Mobile Development" },
+  { serialNo: 20, title: "PostgreSQL for Developers", instructor: "Rachel Green", category: "Databases" },
+  { serialNo: 21, title: "Angular & TypeScript", instructor: "Samuel Perez", category: "Web Development" },
+  { serialNo: 22, title: "Golang Microservices", instructor: "Tina Roberts", category: "Backend Development" },
+  { serialNo: 23, title: "Unity Game Development", instructor: "Umar Patel", category: "Game Development" },
+  { serialNo: 24, title: "Power BI for Business Analytics", instructor: "Victoria King", category: "Data Science" },
+  { serialNo: 25, title: "Docker from Scratch", instructor: "William Ford", category: "DevOps" },
+  { serialNo: 26, title: "Artificial Intelligence with Python", instructor: "Xander Lopez", category: "AI/ML" },
+  { serialNo: 27, title: "Swift for iOS Development", instructor: "Yasmin Hill", category: "Mobile Development" },
+  { serialNo: 28, title: "Web3 & Smart Contracts", instructor: "Zane Cooper", category: "Blockchain" },
+  { serialNo: 29, title: "MongoDB & NoSQL Databases", instructor: "Aaron Fisher", category: "Databases" },
+  { serialNo: 30, title: "ASP.NET Core for Beginners", instructor: "Bella Jenkins", category: "Backend Development" },
+  { serialNo: 31, title: "R for Data Science", instructor: "Caleb Morris", category: "Data Science" },
+  { serialNo: 32, title: "Ruby on Rails Fundamentals", instructor: "Diana Brooks", category: "Web Development" },
+  { serialNo: 33, title: "CI/CD with Jenkins", instructor: "Ethan Barnes", category: "DevOps" },
+  { serialNo: 34, title: "Android Development with Kotlin", instructor: "Fiona Hayes", category: "Mobile Development" },
+  { serialNo: 35, title: "3D Game Design with Unreal Engine", instructor: "George Reed", category: "Game Development" },
+  { serialNo: 36, title: "Penetration Testing", instructor: "Hailey Carter", category: "Cybersecurity" },
+  { serialNo: 37, title: "Microsoft Azure Fundamentals", instructor: "Isaac Mitchell", category: "Cloud Computing" },
+  { serialNo: 38, title: "GraphQL & Apollo", instructor: "Jennifer Clark", category: "Web Development" },
+  { serialNo: 39, title: "Terraform Infrastructure as Code", instructor: "Kyle Anderson", category: "DevOps" },
+  { serialNo: 40, title: "Elixir & Phoenix Framework", instructor: "Laura Scott", category: "Backend Development" },
+  { serialNo: 41, title: "Cyber Threat Intelligence", instructor: "Mason Turner", category: "Cybersecurity" },
+  { serialNo: 42, title: "Excel for Data Analysis", instructor: "Natalie Adams", category: "Data Science" },
+  { serialNo: 43, title: "Rust for System Programming", instructor: "Oscar Johnson", category: "Programming" },
+  { serialNo: 44, title: "Google Cloud Platform", instructor: "Penelope White", category: "Cloud Computing" },
+  { serialNo: 45, title: "C# & Unity Game Development", instructor: "Quincy Harris", category: "Game Development" },
 ];
 
 const ManageCourse = () => {
-  const [filter, setFilter] = useState(1)
+  const [currentPage, setCurrentPage] = useState(0);
+  const { data: publishedCourses, isLoading } = useGetAllPublishedCourseQuery(currentPage);
+
+  const [filter, setFilter] = useState(2)
   return (
     <div className="w-full px-4">
       <div className="w-[95%] border border-neutral-300 rounded-lg text-sm md:text-md flex justify-between items-center mx-auto mb-2">
@@ -92,7 +96,7 @@ const ManageCourse = () => {
         </div>
       </div>
       <div className="w-[95%] mx-auto">
-        <CourseTable data={COURSES} />
+        <CourseTable data={publishedCourses} currentPage={currentPage} setCurrentPage={setCurrentPage} />
       </div>
     </div>
   );
