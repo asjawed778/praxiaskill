@@ -36,7 +36,7 @@ const ManageCourse = () => {
             "bg-[var(--color-primary)] text-white rounded-lg"
           } px-4 py-2 cursor-pointer`}
         >
-          Unpublished Course
+          Draft Course
         </div>
         <div
         onClick={() => setFilter(4)}
@@ -45,7 +45,7 @@ const ManageCourse = () => {
             "bg-[var(--color-primary)] text-white rounded-lg"
           } px-4 py-2 cursor-pointer`}
         >
-          Draft Course
+          Terminated Course
         </div>
       </div>
       <div className="w-[95%] mx-auto">
