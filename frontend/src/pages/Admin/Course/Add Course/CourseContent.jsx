@@ -2,23 +2,14 @@ import { FaPlus } from "react-icons/fa";
 import required from "/imgs/required.svg";
 
 import { useFieldArray, useForm } from "react-hook-form";
-import InputField from "../Input Field";
+import InputField from "../../../../components/Input Field";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { thirdStepValidationSchema } from "./Schema/thirdStepValidationSchema";
-import SubSectionFields from "./Course Structure/SubSectionFields";
-import Button from "../Button/Button";
-import { useUploadCourseStructureMutation } from "../../services/course.api";
-import ButtonLoading from "../Button/ButtonLoading";
+import { fourthStepValidationSchema } from "./Schema/fourthStepValidationSchema";
+import SubSectionFields from "./Course Content/SubSectionFields";
+import Button from "../../../../components/Button/Button";
 
-export default function CourseStructure({
-  currentStep,
-  handleNext,
-  handlePrev,
-  courseId
-}) {
-  const [uploadCourseStructure, { isLoading, isError, error: uploadError }] =
-    useUploadCourseStructureMutation();
+export default function CourseContent({ currentStep, handleNext, handlePrev }) {
   // React Hook Form
   const {
     control,
@@ -27,13 +18,12 @@ export default function CourseStructure({
     watch,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(thirdStepValidationSchema),
+    resolver: yupResolver(fourthStepValidationSchema),
     defaultValues: {
       sections: [
         {
           title: "",
-          description: "",
-          subSections: [{ title: "" }],
+          subsections: [{ title: "", description: "" }],
         },
       ],
     },
@@ -48,23 +38,13 @@ export default function CourseStructure({
     name: "sections",
   });
 
-  const onSubmit = async(data) => {
-    try {
-      console.log("submitted data", data) 
-      const id = `${courseId}`;
-      const result = await uploadCourseStructure({data, id});
-      console.log("Result after submitting Third Step:", result);
-      if (result?.error) {   
-        throw new Error(result.error.data.message);
-      }
-      handleNext();
-    } catch (err) {
-      console.log("Third Step form Error:", err);
-    }
+  const onSubmit = (data) => {
+    console.log("Submitted Data:", data);
+    handleNext();
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-5">
       <h1 className="relative w-fit">
         <span>Section</span>
 
@@ -86,7 +66,7 @@ export default function CourseStructure({
             <div>
               {/* Section Title */}
               <InputField
-                id="step3-title"
+                id="step4-title"
                 {...register(`sections.${sectionIndex}.title`)}
                 placeholder="Title"
               >
@@ -101,11 +81,11 @@ export default function CourseStructure({
                 )}
             </div>
 
-            {/* Section Description */}
             <div>
-              <label htmlFor="step3-description">Description :</label>
+              {/* Section Description */}
+              <label htmlFor="step4-description">Description :</label>
               <textarea
-                id="step3-description"
+                id="step4-description"
                 {...register(`sections.${sectionIndex}.description`)}
                 placeholder="Description"
                 className="bg-white w-full p-2 mt-2 border border-gray-300 rounded outline-none"
@@ -136,7 +116,6 @@ export default function CourseStructure({
                 Remove Section
               </button>
             )}
-
           </div>
         ))}
 
@@ -147,7 +126,7 @@ export default function CourseStructure({
             appendSection({
               title: "",
               description: "",
-              subSections: [{ title: "", description: "" }],
+              subsections: [{ title: "", description: "" }],
             })
           }
           className="flex items-center gap-2"
@@ -160,14 +139,8 @@ export default function CourseStructure({
           <Button onClick={handlePrev}>Previous</Button>
 
           {/* Submit Button */}
-          <Button
-            type="submit"
-            className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${
-              isLoading && "cursor-not-allowed"
-            }`}
-          >
-            {isLoading ? <ButtonLoading /> : <p>Save and Next</p>}
-          </Button>
+          {/* <Button type="submit">Save and Next</Button> */}
+          <Button onClick={handleNext}>Skip</Button>
         </div>
       </form>
     </div>

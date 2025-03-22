@@ -70,7 +70,7 @@ export default function Carousal() {
           All the skills you need in one place
         </h2>
         <p className="text-gray-600 font-sans">
-          From critical skills to technical topics, AbilitaEdge supports your
+          From critical skills to technical topics, Praxia Skill supports your
           professional development.
         </p>
       </div>

@@ -1,11 +1,11 @@
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "../../../components/Button/Button";
-import CourseDetails from "../../../components/Add Course/AdditionalDetails";
-import CourseFirstStep from "../../../components/Add Course/CourseFirstStep";
-import CourseStructure from "../../../components/Add Course/CourseStructure";
-import CourseContent from "../../../components/Add Course/CourseContent";
-import Pricing from "../../../components/Add Course/Pricing";
+import CourseDetails from "./Add Course/AdditionalDetails";
+import CourseFirstStep from "./Add Course/CourseFirstStep";
+import CourseStructure from "./Add Course/CourseStructure";
+import CourseContent from "./Add Course/CourseContent";
+import Pricing from "./Add Course/Pricing";
 
 const AddCourse = () => {
   const [courseId, setCourseId] = useState(null);
@@ -42,44 +42,48 @@ const AddCourse = () => {
 
   return (
     <div className=" py-4 md:p-4 md:w-full w-[97vw] mx-auto flex flex-col gap-6">
-      <div className="bg-[#D0DAF1] rounded-lg text-xs md:text-md flex justify-between items-center pr-3">
+      <div className="bg-[#D0DAF1] rounded-lg text-xs md:text-sm flex justify-between items-center pr-3">
         <div
+        onClick={() => setCurrentStep(1)}
           className={`${
             currentStep == 1 &&
-            "cursor-pointer bg-[var(--color-primary)] text-white rounded-lg"
-          } px-4 py-2`}
+            "bg-[var(--color-primary)] text-white rounded-lg"
+          } px-4 py-2 cursor-pointer`}
         >
           Course Details
         </div>
         <div
+          onClick={() => setCurrentStep(2)}
           className={`${
             currentStep == 2 &&
-            "cursor-pointer bg-[var(--color-primary)] text-white rounded-lg"
-          } px-4 py-2`}
+            " bg-[var(--color-primary)] text-white rounded-lg"
+          } px-4 py-2 cursor-pointer`}
         >
           Additional Details
         </div>
         <div
+        onClick={() => setCurrentStep(3)}
           className={`${
             currentStep == 3 &&
-            "cursor-pointer bg-[var(--color-primary)] text-white rounded-lg"
-          } px-4 py-2`}
+            "bg-[var(--color-primary)] text-white rounded-lg"
+          } px-4 py-2 cursor-pointer`}
         >
           Course Structure
         </div>
-        <div
+        {/* <div
           className={`${
             currentStep == 4 &&
             "cursor-pointer bg-[var(--color-primary)] text-white rounded-lg"
           } px-4 py-2`}
         >
           Course Content
-        </div>
+        </div> */}
         <div
+        onClick={() => setCurrentStep(4)}
           className={`${
-            currentStep == 5 &&
-            "cursor-pointer bg-[var(--color-primary)] text-white rounded-lg"
-          } px-4 py-2`}
+            currentStep == 4 &&
+            " bg-[var(--color-primary)] text-white rounded-lg"
+          } px-4 py-2 cursor-pointer`}
         >
           Pricing & Publish
         </div>
@@ -112,14 +116,14 @@ const AddCourse = () => {
             courseId={courseId}
           />
         )}
-        {currentStep === 4 && (
+        {/* {currentStep === 4 && (
           <CourseContent
             currentStep={currentStep}
             handleNext={handleNext}
             handlePrev={handlePrev}
           />
-        )}
-        {currentStep === 5 && (
+        )} */}
+        {currentStep === 4 && (
           <Pricing
             currentStep={currentStep}
             handleNext={handleNext}

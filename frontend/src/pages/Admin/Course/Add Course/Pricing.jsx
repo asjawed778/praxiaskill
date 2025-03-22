@@ -3,9 +3,9 @@ import fifthStepValidationSchema from "./Schema/fifthStepValidationSchema";
 import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Button from "../Button/Button";
-import { usePublishCourseMutation } from "../../services/course.api";
-import ButtonLoading from "../Button/ButtonLoading";
+import Button from "../../../../components/Button/Button";
+import { usePublishCourseMutation } from "../../../../services/course.api";
+import ButtonLoading from "../../../../components/Button/ButtonLoading";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
