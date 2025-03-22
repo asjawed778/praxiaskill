@@ -90,7 +90,7 @@ const courseSchema = new mongoose.Schema<ICourse>({
     courseStatus: {
         type: String,
         enum: Object.values(CourseEnum.CourseStatus),
-        default: CourseEnum.CourseStatus.DRAFT
+        default: CourseEnum.CourseStatus.PUBLISHED
     },
 }, { timestamps: true });
 

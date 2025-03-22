@@ -5,4 +5,5 @@ export interface ICourseCategory extends BaseSchema {
     name: string;
     description: string;
     courses?: mongoose.Types.ObjectId[];
+    isDeleted: boolean;
 }

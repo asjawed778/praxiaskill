@@ -35,24 +35,10 @@ export const uploadPublicFile = asyncHandler(async(req: Request, res: Response) 
     res.send(createResponse(result, `${fileKey} uploaded successfully to AWS`));
 });
 
-// new course creation function 
+
 export const createCourse = asyncHandler(async(req: Request, res: Response) => {
-    if (!req.user) {
-        throw createHttpError(401, "User not authenticated");
-    }
-    const userId = req.user._id;
-    const courseId = req.params.courseId;
+
     const data = req.body;
-    let previousCategoryId: string | null = null;
-
-    if(courseId) {
-        const course = await courseService.getCourseById(courseId);
-        if(!course) {
-            throw createHttpError(404, "Course id invalid, course not found")
-        }
-        previousCategoryId = course.category?.toString() || null;
-    }
-
     const { category, instructor } = data;
 
     const isInstrucotrExist = await UserService.getInstructorById(instructor?.toString());
@@ -64,179 +50,66 @@ export const createCourse = asyncHandler(async(req: Request, res: Response) => {
         throw createHttpError(404, "Category id is invalid, Not found");
     }
 
-    const result = await courseService.addCourseDetails(courseId, data);
+    const result = await courseService.createCourse(data);
 
     if (!result) {
-        throw createHttpError(500, "Error in creating/updating course");
+        throw createHttpError(500, "Error in creating course");
     }
 
-    if (previousCategoryId && previousCategoryId !== category?.toString()) {
-        await CourseCategoryService.removeCourseId(result._id?.toString(), previousCategoryId);
-    }
+    res.send(createResponse(result, "Course created successfully"));
 }); 
 
-
-export const addCourseDetails = asyncHandler(async(req: Request, res: Response) => {
-    if (!req.user) {
-        throw createHttpError(401, "User not authenticated");
-    }
-    const userId = req.user._id;
+export const getCourseContent = asyncHandler(async(req: Request, res: Response) => {
     const courseId = req.params.courseId;
-    const data = req.body;
-    let previousCategoryId: string | null = null;
-
-    if(courseId) {
-        const course = await courseService.getCourseById(courseId);
-        if(!course) {
-            throw createHttpError(404, "Course id invalid, course not found")
-        }
-        const isCourseOwner = await courseService.isCourseOwner(userId, courseId);
-        if(!isCourseOwner) {
-            throw createHttpError(401, "You are not authorized to update this course");
-        }
-        previousCategoryId = course.category?.toString() || null;
-    }
-
-    const { category, instructor } = data;
-
-    const isInstrucotrExist = await UserService.getInstructorById(instructor?.toString());
-    if(!isInstrucotrExist) {
-        throw createHttpError(404, "Instructor id is invalid, Not found");
-    }
-    const isCategoryExist = await CourseCategoryService.getCourseCategoryById(category?.toString());
-    if(!isCategoryExist) {
-        throw createHttpError(404, "Category id is invalid, Not found");
-    }
-
-    const result = await courseService.addCourseDetails(courseId, data);
-
-    if (!result) {
-        throw createHttpError(500, "Error in creating/updating course");
-    }
-
-    if (previousCategoryId && previousCategoryId !== category?.toString()) {
-        await CourseCategoryService.removeCourseId(result._id?.toString(), previousCategoryId);
-    }
-
-    await CourseCategoryService.addCourseId(result?._id?.toString(), category?.toString());
-
-    if(!courseId) {
-        await courseService.draftCourse(userId, result._id?.toString());
-    }
-    res.send(createResponse(result, "CourseDetails Added/Updated successfully"));
-});
-
-// Todo : complete this function -- this for course details step 1
-export const getCourseDetails = asyncHandler(async(req: Request, res: Response) => {
-    if (!req.user) {
-        throw createHttpError(401, "User not authenticated");
-    }
-    const userId = req.user._id;
-    const courseId = req.params.courseId;
-
-    const isCourseOwner = await courseService.isCourseOwner(userId, courseId);
-    if(!isCourseOwner) {
-        throw createHttpError(401, "You are not authorized to view this course");
-    }
-
-    
-});
-
-export const addAdditionalDetails = asyncHandler(async(req: Request, res: Response) => {
-    const courseId = req.params.courseId;
-    const data = req.body;
-
-    if(courseId) {
-        const course = await courseService.getCourseById(courseId);
-        if(!course) {
-            throw createHttpError(404, "Course id invalid, course not found")
-        }
-    }
-
-    const result = await courseService.addAdditionalDetails(courseId, data);
-    res.send(createResponse(result, "Additional details added successfully"));
-});
-
-export const addCourseStructure = asyncHandler(async(req: Request, res: Response) => {
-    const courseId = req.params.courseId;
-    const { sections } = req.body;
-
-    if(courseId) {
-        const course = await courseService.getCourseById(courseId);
-        if(!course) {
-            throw createHttpError(404, "Course id invalid, course not found")
-        }
-    }
-
-    const result = await courseService.addCourseStructure(courseId, sections);
-    res.send(createResponse({ course: result }, "Course structure added successfully"));
-    
-});
-
-export const getCoursePreview = asyncHandler(async(req: Request, res: Response) => {
-    const courseId = req.params.courseId;
-    const course = await courseService.getCoursePreview(courseId);
-    if(!course) {
-        throw createHttpError(404, "Course id invalid, course not found")
-    }
-    res.send(createResponse({course}, "Course fetched successfully"));
-});
-
-export const publishCourse = asyncHandler(async(req: Request, res: Response) => {
-    if (!req.user) {
-        throw createHttpError(401, "User not authenticated");
-    }
-    const userId = req.user._id;
-    const courseId = req.params.courseId;
-    const isCourseExist = await courseService.getCourseById(courseId);
+    const isCourseExist = await courseService.isCourseExist(courseId);
     if(!isCourseExist) {
         throw createHttpError(404, "Course id is invalid, Not found");
     }
-    await courseService.publishCourse(userId, courseId);
+    const courseContent = await courseService.getCourseContent(courseId);
+    res.send(createResponse(courseContent, "Course content fetched successfully")); 
+});
+
+
+
+// export const getCoursePreview = asyncHandler(async(req: Request, res: Response) => {
+//     const courseId = req.params.courseId;
+//     const course = await courseService.getCoursePreview(courseId);
+//     if(!course) {
+//         throw createHttpError(404, "Course id invalid, course not found")
+//     }
+//     res.send(createResponse({course}, "Course fetched successfully"));
+// });
+
+export const publishCourse = asyncHandler(async(req: Request, res: Response) => {
+    const courseId = req.params.courseId;
+    const isCourseExist = await courseService.isCourseExist(courseId);
+    if(!isCourseExist) {
+        throw createHttpError(404, "Course id is invalid, Not found");
+    }
+    await courseService.publishCourse(courseId);
     res.send(createResponse({}, "Course published successfully"));
 });
 
 export const draftCourse = asyncHandler(async(req: Request, res: Response) => {
-    if (!req.user) {
-        throw createHttpError(401, "User not authenticated");
-    }
-    const userId = req.user._id;
     const courseId = req.params.courseId;
-    const isCourseExist = await courseService.getCourseById(courseId);
+    const isCourseExist = await courseService.isCourseExist(courseId);
     if(!isCourseExist) {
         throw createHttpError(404, "Course id is invalid, Not found");
     }
-    await courseService.draftCourse(userId, courseId);
+    await courseService.draftCourse(courseId);
     res.send(createResponse({}, "Course drafted successfully"));
 });
 
 export const terminateCourse = asyncHandler(async(req: Request, res: Response) => {
-    if (!req.user) {
-        throw createHttpError(401, "User not authenticated");
-    }
-    const userId = req.user._id;
     const courseId = req.params.courseId;
-    const isCourseExist = await courseService.getCourseById(courseId);
+    const isCourseExist = await courseService.isCourseExist(courseId);
     if(!isCourseExist) {
         throw createHttpError(404, "Course id is invalid, Not found");
     }
-    await courseService.terminateCourse(userId, courseId);
+    await courseService.terminateCourse(courseId);
     res.send(createResponse({}, "Course terminated successfully"));
 });
 
-export const unpublishCourse = asyncHandler(async(req: Request, res: Response) => {
-    if (!req.user) {
-        throw createHttpError(401, "User not authenticated");
-    }
-    const userId = req.user._id;
-    const courseId = req.params.courseId;
-    const isCourseExist = await courseService.getCourseById(courseId);
-    if(!isCourseExist) {
-        throw createHttpError(404, "Course id is invalid, Not found");
-    }
-    await courseService.unpublishCourse(userId, courseId);
-    res.send(createResponse({}, "Course unpublished successfully"));
-});
 
 export const getPublishedCourseByCategory = asyncHandler(async(req: Request, res: Response) => {
     const categoryId = req.params.categoryId;
@@ -268,8 +141,8 @@ export const courseEnquiry = asyncHandler(async(req: Request, res: Response) => 
     const data = req.body;
     const result = await courseService.courseEnquiry(data);
 
-    const emailContent = courseEnquiryEmailTemplate(result.ticketNo, data.name, data.email, data.phone, data.education, data.intrestedCourse);
-    await sendEmail({ 
+    const emailContent = courseEnquiryEmailTemplate(result.ticketNo, data.name, data.email, data.phone, data.education, data.interestedCourse);
+    await sendEmail({
         from: process.env.MAIL_USER,
         to: data.email,
         subject: `Course Enquiry Ticket No: ${result.ticketNo}`,

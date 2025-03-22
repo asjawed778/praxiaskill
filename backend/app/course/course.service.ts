@@ -1,37 +1,15 @@
 import mongoose from "mongoose";
 import { ICourse, ICourseEnquiry, ISection, ISubSection } from "./course.dto";
 import courseSchema from "./course.schema";
-import courseLifecycleSchema from "./courseLifecycle.schema";
 import sectionSchema from "./section.schema";
 import subSectionSchema from "./subSection.schema";
 import CourseEnquirySchema from "./course.enquiry";
+import * as courseEnum from "./course.enum";
 
+export const createCourse = async (data: Omit<ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }) => {
 
-
-export const isCourseOwner = async (userId: string, courseId: string): Promise<boolean> => {
-    
-    const courseLifecycle = await courseLifecycleSchema.findOne({
-        userId: new mongoose.Types.ObjectId(userId),
-        allCourses: new mongoose.Types.ObjectId(courseId),
-    });
-
-    return !!courseLifecycle;
-};
-
-export const upsertCourse = async (
-    courseId: string | null,
-    data: Omit<ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }
-) => {
-    let course;
-
-    if (courseId) {
-        // Update existing course
-        course = await courseSchema.findByIdAndUpdate(courseId, { ...data }, { new: true });
-    } else {
-        // Create a new course
-        course = await courseSchema.create({ ...data });
-        courseId = course._id.toString();
-    }
+    const { sections, ...courseDetails } = data;
+    const course = await courseSchema.create(courseDetails);
 
     // Step 1: Check if sections exist and process them
     if (data.sections && data.sections.length > 0) {
@@ -54,79 +32,55 @@ export const upsertCourse = async (
         const sectionIds = await Promise.all(sectionPromises);
 
         // Step 3: Update Course with new section IDs
-        course = await courseSchema.findByIdAndUpdate(
-            courseId,
+        const result = await courseSchema.findByIdAndUpdate(
+            course._id,
             { $set: { sections: sectionIds } },
             { new: true }
         );
+        return result;
     }
-
-    return course;
-};
-
-
-export const addCourseDetails = async (courseId: string, data: ICourse) => {
-    let course;
-
-    if (courseId) {
-        course = await courseSchema.findByIdAndUpdate(courseId, { ...data });
-    } else {
-        course = await courseSchema.create({ ...data });
-    }
-
     return course as ICourse;
 };
 
-export const getCourseDetails = async (courseId: string) => {
-    const courseDetails = await courseSchema
-        .findById(courseId)
-        .select("title subtitle category language instructor courseMode thumbnail brouchure")
-        .lean();
-    return courseDetails;
-};
-
-export const addAdditionalDetails = async (courseId: string, data: ICourse) => {
-    const course = await courseSchema.findByIdAndUpdate(
-        courseId,
-        { $set: data },
-        { new: true }
-    );
-
-    return course as ICourse;
-};
-
-export const addCourseStructure = async (courseId: string, data: (ISection & { subSections: ISubSection[] })[]) => {
-    // Step 1: Create all subsections in parallel for each section
-    const sectionPromises = data.map(async (section) => {
-        const subsectionDocs = await subSectionSchema.insertMany(section.subSections);
-        const subsectionIds = subsectionDocs.map((sub) => sub._id);
-
-        // Step 2: Create section with subsection IDs
-        const savedSection = await sectionSchema.create({
-            title: section.title,
-            description: section.description,
-            subSections: subsectionIds,
+export const getCourseContent = async (courseId: string) => {
+    // console.log(courseId);
+    const coursesContent = await courseSchema.findById(courseId)
+    .select("_id title sections")
+        .populate({
+            path: "sections",
+            populate: {
+                path: "subSections",
+            },
         });
-
-        return savedSection._id;
-    });
-
-    // Execute all section insertions in parallel
-    const sectionIds = await Promise.all(sectionPromises);
-
-    // Step 3: Update Course with new sections
-    const updatedCourse = await courseSchema.findByIdAndUpdate(
-        courseId,
-        { $push: { sections: { $each: sectionIds } } },
-        { new: true }
-    );
-
-    return updatedCourse;
+    // const coursesContent = await courseSchema.findById(courseId);
+    return coursesContent;
 };
 
-export const getCourseById = async (courseId: string) => {
-    const course = await courseSchema.findById(courseId);
-    return course as ICourse;
+
+export const isCourseExist = async (courseId: string): Promise<boolean> => {
+    const courseExists = await courseSchema.exists({ _id: courseId });
+    return courseExists !== null;
+};
+
+
+
+
+export const draftCourse = async (courseId: string) => {
+    const result = await courseSchema.findByIdAndUpdate
+        (courseId, { courseStatus: "DRAFT" }, { new: true });
+    return result;
+};
+
+export const terminateCourse = async (courseId: string) => {
+    const result = await courseSchema.findByIdAndUpdate
+        (courseId, { courseStatus: "TERMINATED" }, { new: true });
+    return result;
+};
+
+export const publishCourse = async (courseId: string) => {
+    const result = await courseSchema.findByIdAndUpdate
+        (courseId, { courseStatus: "PUBLISHED" }, { new: true });
+    return result;
 };
 
 export const getCoursePreview = async (courseId: string) => {
@@ -140,107 +94,6 @@ export const getCoursePreview = async (courseId: string) => {
         });
 
     return course;
-};
-
-export const draftCourse = async (userId: string, courseId: string) => {
-    let lifeCycle = await courseLifecycleSchema.findOne({ userId });
-
-    if (!lifeCycle) {
-        lifeCycle = new courseLifecycleSchema({ userId, allCourses: [], DRAFT: [], PUBLISHED: [], UNPUBLISHED: [], TERMINATED: [] });
-    }
-
-    lifeCycle.PUBLISHED = lifeCycle.PUBLISHED.filter(id => id.toString() !== courseId);
-    lifeCycle.UNPUBLISHED = lifeCycle.UNPUBLISHED.filter(id => id.toString() !== courseId);
-    lifeCycle.TERMINATED = lifeCycle.TERMINATED.filter(id => id.toString() !== courseId);
-
-    if (!lifeCycle.DRAFT.some(id => id.toString() === courseId)) {
-        lifeCycle.DRAFT.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
-    }
-
-    if (!lifeCycle.allCourses.some(id => id.toString() === courseId)) {
-        lifeCycle.allCourses.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
-    }
-
-    await lifeCycle.save();
-    return lifeCycle;
-};
-
-// Todo : edge case verify is that user is owner of the course
-export const publishCourse = async (userId: string, courseId: string) => {
-    let lifeCycle = await courseLifecycleSchema.findOne({ userId });
-
-    if (!lifeCycle) {
-        lifeCycle = new courseLifecycleSchema({ userId, allCourses: [], DRAFT: [], PUBLISHED: [], UNPUBLISHED: [], TERMINATED: [] });
-    }
-
-    // Remove the course from all other status fields
-    lifeCycle.DRAFT = lifeCycle.DRAFT.filter(id => id.toString() !== courseId);
-    lifeCycle.UNPUBLISHED = lifeCycle.UNPUBLISHED.filter(id => id.toString() !== courseId);
-    lifeCycle.TERMINATED = lifeCycle.TERMINATED.filter(id => id.toString() !== courseId);
-
-    // Add the course to PUBLISHED if it's not already present
-    if (!lifeCycle.PUBLISHED.some(id => id.toString() === courseId)) {
-        lifeCycle.PUBLISHED.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
-    }
-
-    if (!lifeCycle.allCourses.some(id => id.toString() === courseId)) {
-        lifeCycle.allCourses.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
-    }
-
-    await lifeCycle.save();
-    return lifeCycle;
-};
-
-export const unpublishCourse = async (userId: string, courseId: string) => {
-    let lifeCycle = await courseLifecycleSchema.findOne({ userId });
-
-    if (!lifeCycle) {
-        lifeCycle = new courseLifecycleSchema({ userId, allCourses: [], DRAFT: [], PUBLISHED: [], UNPUBLISHED: [], TERMINATED: [] });
-    }
-
-    // Remove the course from all other status fields
-    lifeCycle.DRAFT = lifeCycle.DRAFT.filter(id => id.toString() !== courseId);
-    lifeCycle.PUBLISHED = lifeCycle.PUBLISHED.filter(id => id.toString() !== courseId);
-    lifeCycle.TERMINATED = lifeCycle.TERMINATED.filter(id => id.toString() !== courseId);
-
-    // Add the course to UNPUBLISHED if it's not already present
-    if (!lifeCycle.UNPUBLISHED.some(id => id.toString() === courseId)) {
-        lifeCycle.UNPUBLISHED.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
-    }
-
-    // ✅ Ensure course is in allCourses
-    if (!lifeCycle.allCourses.some(id => id.toString() === courseId)) {
-        lifeCycle.allCourses.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
-    }
-
-    await lifeCycle.save();
-    return lifeCycle;
-};
-
-export const terminateCourse = async (userId: string, courseId: string) => {
-    let lifeCycle = await courseLifecycleSchema.findOne({ userId });
-
-    if (!lifeCycle) {
-        lifeCycle = new courseLifecycleSchema({ userId, allCourses: [], DRAFT: [], PUBLISHED: [], UNPUBLISHED: [], TERMINATED: [] });
-    }
-
-    // Remove the course from all other status fields
-    lifeCycle.DRAFT = lifeCycle.DRAFT.filter(id => id.toString() !== courseId);
-    lifeCycle.PUBLISHED = lifeCycle.PUBLISHED.filter(id => id.toString() !== courseId);
-    lifeCycle.UNPUBLISHED = lifeCycle.UNPUBLISHED.filter(id => id.toString() !== courseId);
-
-    // Add the course to TERMINATED if it's not already present
-    if (!lifeCycle.TERMINATED.some(id => id.toString() === courseId)) {
-        lifeCycle.TERMINATED.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
-    }
-
-    // ✅ Ensure course is in allCourses
-    if (!lifeCycle.allCourses.some(id => id.toString() === courseId)) {
-        lifeCycle.allCourses.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
-    }
-
-    await lifeCycle.save();
-    return lifeCycle;
 };
 
 export const getFullCourseDetails = async (courseId: string) => {
@@ -263,46 +116,104 @@ export const getFullCourseDetails = async (courseId: string) => {
         });
 
     return course;
-        
+
 };
+
+// export const getPublishedCoursesByCategory = async (categoryId: string, pageNo = 1) => {
+//     const pageSize = 10; // Number of courses per page
+//     const skip = (pageNo - 1) * pageSize; // Calculate the number of documents to skip
+
+//     const result = await courseSchema.find({ category: categoryId, courseStatus: "PUBLISHED" })
+//         .select("_id title subtitle tags duration thumbnail lanugage courseMode totalLeactures")
+//         .populate({
+//             path: "instructor",
+//             select: "_id name profilePic",
+//         })
+//         .populate({
+//             path: "category",
+//             select: "_id name",
+//         })
+
+//     return {
+//         success: true,
+//         totalCourses: result.length,
+//         page: pageNo,
+//         pageSize,
+//         courses: result
+//     };
+// };
 
 export const getPublishedCoursesByCategory = async (categoryId: string, pageNo = 1) => {
     const pageSize = 10; // Number of courses per page
     const skip = (pageNo - 1) * pageSize; // Calculate the number of documents to skip
 
-    const result = await courseLifecycleSchema.aggregate([
+    const result = await courseSchema.aggregate([
         {
-            $match: { PUBLISHED: { $exists: true, $ne: [] } } // Ensure published courses exist
-        },
-        {
-            $unwind: "$PUBLISHED" // Unwind the published courses array
+            $match: { 
+                category: new mongoose.Types.ObjectId(categoryId), 
+                courseStatus: courseEnum.CourseStatus.PUBLISHED
+            }
         },
         {
             $lookup: {
-                from: "courses",
-                localField: "PUBLISHED",
-                foreignField: "_id",
-                as: "courseDetails"
+                from: "ratingandreviews",
+                localField: "_id",
+                foreignField: "courseId",
+                as: "ratingsData"
             }
         },
         {
-            $unwind: "$courseDetails" // Flatten course details
+            $lookup: {
+                from: "users",
+                localField: "instructor",
+                foreignField: "_id",
+                as: "instructorDetails"
+            }
         },
         {
-            $match: { "courseDetails.category": new mongoose.Types.ObjectId(categoryId) } // Filter by category
+            $lookup: {
+                from: "coursecategories",
+                localField: "category",
+                foreignField: "_id",
+                as: "categoryDetails"
+            }
+        },
+        {
+            $addFields: {
+                totalRatings: { $size: "$ratingsData" },
+                averageRating: {
+                    $cond: {
+                        if: { $eq: [{ $size: "$ratingsData" }, 0] },
+                        then: 0,
+                        else: { $avg: "$ratingsData.rating" }
+                    }
+                },
+                instructor: { $arrayElemAt: ["$instructorDetails", 0] },
+                category: { $arrayElemAt: ["$categoryDetails", 0] }
+            }
         },
         {
             $project: {
-                _id: "$courseDetails._id",
-                title: "$courseDetails.title",
-                subtitle: "$courseDetails.subtitle",
-                thumbnail: "$courseDetails.thumbnail",
-                language: "$courseDetails.language",
-                courseMode: "$courseDetails.courseMode"
+                _id: 1,
+                title: 1,
+                subtitle: 1,
+                tags: 1,
+                duration: 1,
+                thumbnail: 1,
+                language: 1,
+                courseMode: 1,
+                totalLectures: 1,
+                totalRatings: 1,
+                averageRating: 1,
+                "instructor._id": 1,
+                "instructor.name": 1,
+                "instructor.profilePic": 1,
+                "category._id": 1,
+                "category.name": 1
             }
         },
-        { $skip: skip }, // Skip previous pages
-        { $limit: pageSize } // Limit results per page
+        { $skip: skip },
+        { $limit: pageSize }
     ]);
 
     return {
@@ -313,6 +224,7 @@ export const getPublishedCoursesByCategory = async (categoryId: string, pageNo =
         courses: result
     };
 };
+
 
 export const courseEnquiry = async (data: ICourseEnquiry) => {
     const enquiry = new CourseEnquirySchema(data);
@@ -352,83 +264,79 @@ export const getPublishedCourses = async (pageNo = 1) => {
     const pageSize = 10; // Number of courses per page
     const skip = (pageNo - 1) * pageSize; // Calculate the number of documents to skip
 
-    // Get total count of published courses
-    const totalCountResult = await courseLifecycleSchema.aggregate([
+    const result = await courseSchema.aggregate([
         {
-            $match: { PUBLISHED: { $exists: true, $ne: [] } }
-        },
-        {
-            $unwind: "$PUBLISHED"
-        },
-        {
-            $count: "total"
-        }
-    ]);
-
-    const totalItems = totalCountResult.length > 0 ? totalCountResult[0].total : 0;
-    const totalPages = Math.ceil(totalItems / pageSize);
-
-    const result = await courseLifecycleSchema.aggregate([
-        {
-            $match: { PUBLISHED: { $exists: true, $ne: [] } }
-        },
-        {
-            $unwind: "$PUBLISHED"
-        },
-        {
-            $lookup: {
-                from: "courses",
-                localField: "PUBLISHED",
-                foreignField: "_id",
-                as: "courseDetails"
+            $match: { 
+                courseStatus: courseEnum.CourseStatus.PUBLISHED
             }
         },
         {
-            $unwind: "$courseDetails"
+            $lookup: {
+                from: "ratingandreviews",
+                localField: "_id",
+                foreignField: "courseId",
+                as: "ratingsData"
+            }
         },
         {
             $lookup: {
                 from: "users",
-                localField: "courseDetails.instructor",
+                localField: "instructor",
                 foreignField: "_id",
                 as: "instructorDetails"
             }
         },
         {
-            $unwind: "$instructorDetails"
+            $lookup: {
+                from: "coursecategories",
+                localField: "category",
+                foreignField: "_id",
+                as: "categoryDetails"
+            }
         },
         {
-            $lookup: {
-                from: "ratingandreviews",
-                localField: "courseDetails.ratingAndReviews",
-                foreignField: "_id",
-                as: "ratings"
+            $addFields: {
+                totalRatings: { $size: "$ratingsData" },
+                averageRating: {
+                    $cond: {
+                        if: { $eq: [{ $size: "$ratingsData" }, 0] },
+                        then: 0,
+                        else: { $avg: "$ratingsData.rating" }
+                    }
+                },
+                instructor: { $arrayElemAt: ["$instructorDetails", 0] },
+                category: { $arrayElemAt: ["$categoryDetails", 0] }
             }
         },
         {
             $project: {
-                _id: "$courseDetails._id",
-                title: "$courseDetails.title",
-                subtitle: "$courseDetails.subtitle",
-                tags: "$courseDetails.tags",
-                instructor: "$instructorDetails.name",
-                rating: { $avg: "$ratings.rating" },
-                reviews: { $size: "$ratings" },
-                duration: "$courseDetails.duration",
-                thumbnail: "$courseDetails.thumbnail"
+                _id: 1,
+                title: 1,
+                subtitle: 1,
+                tags: 1,
+                duration: 1,
+                thumbnail: 1,
+                language: 1,
+                courseMode: 1,
+                totalLectures: 1,
+                totalRatings: 1,
+                averageRating: 1,
+                "instructor._id": 1,
+                "instructor.name": 1,
+                "instructor.profilePic": 1,
+                "category._id": 1,
+                "category.name": 1
             }
         },
-        { $sort: { rating: -1 } },
         { $skip: skip },
         { $limit: pageSize }
     ]);
 
     return {
-        totalItems,
-        totalPages,
-        currentPage: pageNo,
-        from: skip + 1,
-        to: Math.min(skip + pageSize, totalItems),
+        success: true,
+        totalCourses: result.length,
+        page: pageNo,
+        pageSize,
         courses: result
     };
 };
