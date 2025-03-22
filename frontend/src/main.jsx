@@ -7,11 +7,14 @@ import { Toaster } from "react-hot-toast";
 import "./index.css";
 import { store } from "./store/store.js";
 import App from "./App.jsx";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-      <App />
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
       <Toaster />
     </Provider>
   </StrictMode>

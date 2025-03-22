@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import ErrorBoundary from "./ErrorBoundary";
 
 const LoadingBar = () => {
   return (
@@ -9,11 +8,7 @@ const LoadingBar = () => {
   );
 };
 const LazyComponent = ({ children }) => {
-  return (
-    <ErrorBoundary>
-      <Suspense fallback={<LoadingBar />}>{children}</Suspense>
-    </ErrorBoundary>
-  );
+  return <Suspense fallback={<LoadingBar />}>{children}</Suspense>;
 };
 
 export default LazyComponent;
