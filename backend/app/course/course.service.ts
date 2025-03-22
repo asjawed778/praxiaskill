@@ -18,6 +18,52 @@ export const isCourseOwner = async (userId: string, courseId: string): Promise<b
     return !!courseLifecycle;
 };
 
+export const upsertCourse = async (
+    courseId: string | null,
+    data: Omit<ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }
+) => {
+    let course;
+
+    if (courseId) {
+        // Update existing course
+        course = await courseSchema.findByIdAndUpdate(courseId, { ...data }, { new: true });
+    } else {
+        // Create a new course
+        course = await courseSchema.create({ ...data });
+        courseId = course._id.toString();
+    }
+
+    // Step 1: Check if sections exist and process them
+    if (data.sections && data.sections.length > 0) {
+        const sectionPromises = data.sections.map(async (section) => {
+            const subsectionDocs = await subSectionSchema.insertMany(section.subSections);
+            const subsectionIds = subsectionDocs.map((sub) => sub._id);
+
+            // Step 2: Create section with subsection IDs
+            const savedSection = await sectionSchema.create({
+                title: section.title,
+                description: section.description,
+                duration: section.duration,
+                subSections: subsectionIds,
+            });
+
+            return savedSection._id;
+        });
+
+        // Execute all section insertions in parallel
+        const sectionIds = await Promise.all(sectionPromises);
+
+        // Step 3: Update Course with new section IDs
+        course = await courseSchema.findByIdAndUpdate(
+            courseId,
+            { $set: { sections: sectionIds } },
+            { new: true }
+        );
+    }
+
+    return course;
+};
+
 
 export const addCourseDetails = async (courseId: string, data: ICourse) => {
     let course;

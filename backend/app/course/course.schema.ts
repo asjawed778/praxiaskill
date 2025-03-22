@@ -5,36 +5,40 @@ import * as CourseEnum from "./course.enum";
 const courseSchema = new mongoose.Schema<ICourse>({ 
     title: {
         type: String,
-        required: function(this: ICourse): boolean { return !this.isDraft; }
+        required: true
     },
     subtitle: {
         type: String,
-        required: function(this: ICourse) { return !this.isDraft; }
+        required: true
     },
     keypoints: [{
         type: String,
-        required: function(this: ICourse) { return !this.isDraft; }
+        required: true
     }],
     description: {
         type: String,
-        required: function(this: ICourse) { return !this.isDraft; }
+        required: true
     },
     tags: [{
         type: String,
-        required: function(this: ICourse): boolean { return !this.isDraft; }
+        required: true
+    }],
+    whatWillYouLearn: [{
+        type: String,
+        required: true
     }],
     brouchure: {
         type: String,
-        required: function(this: ICourse): boolean { return !this.isDraft; }
+        required: true
     },
     thumbnail: {
         type: String,
-        required: function(this: ICourse): boolean { return !this.isDraft; }
+        required: true
     },
     instructor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user",
-        required: function(this: ICourse): boolean { return !this.isDraft; }
+        required: true
     },
     ratingAndReviews: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -43,38 +47,38 @@ const courseSchema = new mongoose.Schema<ICourse>({
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "CourseCategory",
-        required: function(this: ICourse): boolean { return !this.isDraft; }
+        required: true
     },
     price: {
         actualPrice: {
             type: Number,
-            required: function(this: ICourse): boolean { return !this.isDraft; }
+            required: true
         },
         discountPercentage: {
             type: Number
         },
         finalPrice: {
             type: Number,
-            required: function(this: ICourse): boolean { return !this.isDraft; }
+            required: true
         }
     },
     language: {
         type: String,
         enum: Object.values(CourseEnum.Language),
-        required: function(this: ICourse): boolean { return !this.isDraft; }
+        required: true
     },
     duration: {
         type: String,
-        required: function(this: ICourse): boolean { return !this.isDraft; }
+        required: true
     },
     totalLectures: {
         type: Number,
-        required: function(this: ICourse): boolean { return !this.isDraft; }
+        required: true
     },
     courseMode: {
         type: String,
         enum: Object.values(CourseEnum.CourseMode),
-        required: function(this: ICourse): boolean { return !this.isDraft; }
+        required: true
     },
     trailerVideo: {
         type: String
@@ -83,10 +87,11 @@ const courseSchema = new mongoose.Schema<ICourse>({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Section"
     }],
-    isDraft: {
-        type: Boolean,
-        default: true
-    }
+    courseStatus: {
+        type: String,
+        enum: Object.values(CourseEnum.CourseStatus),
+        default: CourseEnum.CourseStatus.DRAFT
+    },
 }, { timestamps: true });
 
 export default mongoose.model<ICourse>("Course", courseSchema);
