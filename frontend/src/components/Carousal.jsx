@@ -22,9 +22,9 @@ export default function Carousal() {
 
   const [activeTab, setActiveTab] = useState(null);
 
-  const { data: allCategories, isLoading: allCategoriesLoader } =
+  const { data: allCategories, isFetching: allCategoriesLoader } =
     useGetAllCategoryQuery();
-  const { data: categoryCourse, isLoading: categoriesCourseLoader } =
+  const { data: categoryCourse, isFetching: categoriesCourseLoader } =
     useGetCategoryCourseQuery(activeTab, {
       skip: !activeTab,
     });
