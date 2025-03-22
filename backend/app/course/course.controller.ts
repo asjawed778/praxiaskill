@@ -35,6 +35,47 @@ export const uploadPublicFile = asyncHandler(async(req: Request, res: Response) 
     res.send(createResponse(result, `${fileKey} uploaded successfully to AWS`));
 });
 
+// new course creation function 
+export const createCourse = asyncHandler(async(req: Request, res: Response) => {
+    if (!req.user) {
+        throw createHttpError(401, "User not authenticated");
+    }
+    const userId = req.user._id;
+    const courseId = req.params.courseId;
+    const data = req.body;
+    let previousCategoryId: string | null = null;
+
+    if(courseId) {
+        const course = await courseService.getCourseById(courseId);
+        if(!course) {
+            throw createHttpError(404, "Course id invalid, course not found")
+        }
+        previousCategoryId = course.category?.toString() || null;
+    }
+
+    const { category, instructor } = data;
+
+    const isInstrucotrExist = await UserService.getInstructorById(instructor?.toString());
+    if(!isInstrucotrExist) {
+        throw createHttpError(404, "Instructor id is invalid, Not found");
+    }
+    const isCategoryExist = await CourseCategoryService.getCourseCategoryById(category?.toString());
+    if(!isCategoryExist) {
+        throw createHttpError(404, "Category id is invalid, Not found");
+    }
+
+    const result = await courseService.addCourseDetails(courseId, data);
+
+    if (!result) {
+        throw createHttpError(500, "Error in creating/updating course");
+    }
+
+    if (previousCategoryId && previousCategoryId !== category?.toString()) {
+        await CourseCategoryService.removeCourseId(result._id?.toString(), previousCategoryId);
+    }
+}); 
+
+
 export const addCourseDetails = asyncHandler(async(req: Request, res: Response) => {
     if (!req.user) {
         throw createHttpError(401, "User not authenticated");
