@@ -53,7 +53,7 @@ export const apiCourse = createApi({
       },
     }),
     uploadCourseStructure: builder.mutation({
-      query: ({ data, id }) => { // here id is courseId
+      query: ({ data, id }) => {
         return {
           url: `course/structure/${id}`,
           method: "PUT",
@@ -107,16 +107,16 @@ export const apiCourse = createApi({
       }),
     }),
     getAllEnquiry: builder.query({
-      query: (page) => ({
-        url: `course/enquiry?pageNo=${page}`,
+      query: () => ({
+        url: `course/enquiry`,
         method: "GET",
       }),
     }),
-    getAllPublishedCourse: builder.query({
-      query: ({pageNo, searchTerm}) =>({
-        url: `course/published?pageNo=${pageNo}&search=${searchTerm}`,
-        method: "GET"
-      })
+    getAllCourse: builder.query({
+      query: () => ({
+        url: `course/get-all-course`,
+        method: "GET",
+      }),
     }),
     getCategoryCourse: builder.query({
       query: (categoryId) => ({
@@ -147,7 +147,7 @@ export const {
   useAddCourseMutation,
   useSendEnquiryMutation,
   useGetAllEnquiryQuery,
-  useGetAllPublishedCourseQuery,
+  useGetAllCourseQuery,
   useGetCategoryCourseQuery,
   useGetFullCourseDetailsQuery,
 } = apiCourse;

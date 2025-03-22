@@ -6,7 +6,7 @@ export const categorySchema = yup.object().shape({
 
 export const teamSchema = yup.object().shape({
   title: yup.string().required("Title is required"),
-  institution: yup.string().required("Name of Institution is required"),
+  institution: yup.string().required("Institution is required"),
   teamMembers: yup
   .array()
   .of(
@@ -19,16 +19,11 @@ export const teamSchema = yup.object().shape({
   )
   .min(1, "At least one team member is required"),
   address: yup.string().required("Address is required"),
-  city: yup.string().required("City is required"),
-  district: yup.string().required("District is required"),
+  city: yup.string().required("Address is required"),
+  district: yup.string().required("Address is required"),
   email: yup.string().email("Invalid email").required("Email is required"),
-  state: yup.string().required("State is required"),
-  number: yup
-    .string()
-    .required("Contact number is required")
-    .matches(/^\d+$/, "Contact number must contain only digits")
-    .min(10, "Contact number must be at least 10 digits")
-    .max(10, "Contact number must not exceed 10 digits"),
+  state: yup.string().required("Address is required"),
+  number: yup.string().required("Contact number is required"),
 });
 
 export const companySchema = yup.object().shape({
@@ -58,11 +53,15 @@ export const ideaSchema = yup.object().shape({
 });
 
 export const investmentSchema = yup.object().shape({
-  investmentDetails: yup.string().required("Select atleast one Field"),
-  otherDetails: yup.string().required("This field is require"),
-  fundingReceived: yup.string().required("Select atleast one Field"),
-  fundingAmount: yup.string().required("This field is require"),
-  fundingSource: yup.string().required("Select atleast one Field"),
-  requirement2025: yup.string().required("This field is require"),
-  requirement2026: yup.string().required("This field is require"),
+  // investmentDetails: yup.string().required("Select atleast one Field"),
+  // otherDetails: yup.string().required("This field is require"),
+  // fundingReceived: yup.string().required("Select atleast one Field"),
+  // fundingAmount: yup.string().required("This field is require"),
+  // fundingSource: yup.string().required("Select atleast one Field"),
+  // requirement2025: yup.string().required("This field is require"),
+  // requirement2026: yup.string().required("This field is require"),
+});
+
+export const otherDetailsSchema =  yup.object().shape({
+
 });

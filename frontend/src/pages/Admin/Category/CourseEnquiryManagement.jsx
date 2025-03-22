@@ -4,9 +4,7 @@ import { LuCheckCheck } from "react-icons/lu";
 import { useGetAllEnquiryQuery } from "../../../services/course.api";
 
 const CourseEnqueryManagement = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const { data, isLoading, error } = useGetAllEnquiryQuery(currentPage);
+  const {data, isLoading, error} = useGetAllEnquiryQuery()
   const [enquiries, setEnquiries] = useState([]);
 
   const [statusFilter, setStatusFilter] = useState("");
@@ -15,32 +13,42 @@ const CourseEnqueryManagement = () => {
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [showTimeDropdown, setShowTimeDropdown] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 10;
-  const totalItems = data?.data?.totalResults;
+  const totalItems = data?.data?.enquiries?.length;
 
   useEffect(() => {
-    if (data?.success) {
+    if(data?.success)
+    {
       const enquiries = data?.data.enquiries.map((enquiry) => {
-        return {
-          id: enquiry._id,
-          studentName: enquiry.name,
-          contactNo: enquiry.phone,
-          status: enquiry.status,
-          createdAt: new Date(enquiry.createdAt),
-          details: {
-            email: enquiry.email,
-            course: enquiry.intrestedCourse,
-            message:
-              "I would like to know more about the course curriculum and schedule.",
-          },
-        };
-      });
-      setEnquiries(enquiries);
+        return {id: enquiry._id,
+        studentName: enquiry.name,
+        contactNo: enquiry.phone,
+        status: enquiry.status,
+        createdAt: new Date(enquiry.createdAt),
+        details: {
+          email: enquiry.email,
+          course: enquiry.intrestedCourse,
+          message:
+            "I would like to know more about the course curriculum and schedule.",
+        }}
+      })
+
+     const paginationData = enquiries?.slice(
+        (currentPage-1) * itemsPerPage,
+        (currentPage) * itemsPerPage
+      );
+
+      if(!isLoading)
+      {
+        setEnquiries(paginationData)
+      }
     }
-  }, [data, isLoading, currentPage, enquiries]);
+  }, [data, isLoading, currentPage])
 
   // Filter and sorting states
+
 
   const getFilteredAndSortedEnquiries = () => {
     let result = [...enquiries];
@@ -99,8 +107,9 @@ const CourseEnqueryManagement = () => {
   }
 
   function goToNextPage() {
-    setEnquiries([]);
-    setCurrentPage(currentPage + 1);
+    if (currentPage * itemsPerPage < totalItems) {
+      setCurrentPage(currentPage + 1);
+    }
   }
 
   function goToPrevPage() {
@@ -187,154 +196,155 @@ const CourseEnqueryManagement = () => {
       </div>
 
       {/* Enquiries Table */}
-      {!isLoading ? (
-        <div className="border border-gray-300 rounded-md overflow-hidden">
-          <table className="w-full ">
-            <thead>
-              <tr className="bg-gray-50 text-sm text-neutral-500 font-semibold">
-                <th className="py-2 px-4 border-b border-gray-300 text-left">
-                  Serial No
-                </th>
-                <th className="py-2 px-4  border-b border-gray-300 text-left">
-                  Student Name
-                </th>
-                <th className="py-2 px-4  border-b border-gray-300 text-left">
-                  Contact No
-                </th>
-                <th className="py-2 px-4 border-b border-gray-300 text-center">
-                  Action
-                </th>
-                <th className="py-2 px-4 border-gray-300 text-center">
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredEnquiries.map((enquiry, index) => (
-                <tr
-                  key={enquiry.id}
-                  className="border-b text-sm border-gray-300"
-                >
-                  <td className="py-1 px-4">{(currentPage - 1)*10 + 1 + index}</td>
-                  <td className="py-1 px-4">{enquiry.studentName}</td>
-                  <td className="py-1 px-4">{enquiry.contactNo}</td>
-                  <td className="py-1 px-4 text-center">
+      {!isLoading ? <div className="border border-gray-300 rounded-md overflow-hidden">
+        <table className="w-full ">
+          <thead>
+            <tr className="bg-gray-50 text-sm text-neutral-500 font-semibold">
+              <th className="py-2 px-4 border-b border-gray-300 text-left">
+                Serial No
+              </th>
+              <th className="py-2 px-4  border-b border-gray-300 text-left">
+                Student Name
+              </th>
+              <th className="py-2 px-4  border-b border-gray-300 text-left">
+                Contact No
+              </th>
+              <th className="py-2 px-4 border-b border-gray-300 text-center">
+                Action
+              </th>
+              <th className="py-2 px-4 border-gray-300 text-center">
+                Status
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredEnquiries.map((enquiry, index) => (
+              <tr key={enquiry.id} className="border-b text-sm border-gray-300">
+                <td className="py-1 px-4">
+                  {index + 1}
+                </td>
+                <td className="py-1 px-4">
+                  {enquiry.studentName}
+                </td>
+                <td className="py-1 px-4">
+                  {enquiry.contactNo}
+                </td>
+                <td className="py-1 px-4 text-center">
+                  <button
+                    onClick={() => handleViewDetails(enquiry)}
+                    className="px-4 py-1 cursor-pointer text-white border border-gray-300 rounded-md bg-indigo-500 hover:bg-indigo-600"
+                  >
+                    View Details
+                  </button>
+                </td>
+                <td className="py-1 px-4 text-center">
+                  <div className="relative inline-block w-40">
                     <button
-                      onClick={() => handleViewDetails(enquiry)}
-                      className="px-4 py-1 cursor-pointer text-white border border-gray-300 rounded-md bg-indigo-500 hover:bg-indigo-600"
+                      onClick={() => {
+                        // Toggle a local state to show/hide dropdown for this specific row
+                        setEnquiries(
+                          enquiries.map((e) =>
+                            e.id === enquiry.id
+                              ? {
+                                  ...e,
+                                  showStatusDropdown: !e.showStatusDropdown,
+                                }
+                              : { ...e, showStatusDropdown: false }
+                          )
+                        );
+                      }}
+                      className={`w-full px-4 py-1.5 border border-gray-300 rounded-md flex items-center justify-between ${
+                        enquiry.status === "pending"
+                          ? "text-yellow-600"
+                          : "text-black"
+                      }`}
                     >
-                      View Details
+                      {enquiry.status} <ChevronDown size={20} />
                     </button>
-                  </td>
-                  <td className="py-1 px-4 text-center">
-                    <div className="relative inline-block w-40">
-                      <button
-                        onClick={() => {
-                          // Toggle a local state to show/hide dropdown for this specific row
-                          setEnquiries(
-                            enquiries.map((e) =>
-                              e.id === enquiry.id
-                                ? {
-                                    ...e,
-                                    showStatusDropdown: !e.showStatusDropdown,
-                                  }
-                                : { ...e, showStatusDropdown: false }
-                            )
-                          );
-                        }}
-                        className={`w-full px-4 py-1.5 border border-gray-300 rounded-md flex items-center justify-between ${
-                          enquiry.status === "pending"
-                            ? "text-yellow-600"
-                            : "text-black"
-                        }`}
-                      >
-                        {enquiry.status} <ChevronDown size={20} />
-                      </button>
 
-                      {/* Status dropdown menu */}
-                      {enquiry.showStatusDropdown && (
-                        <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10">
-                          <div
-                            className={`px-4 py-2 hover:bg-gray-100 hover:text-red-700 cursor-pointer ${
-                              enquiry.status === "pending"
-                                ? "font-bold text-red-600"
-                                : ""
-                            }`}
-                            onClick={() => {
-                              handleChangeStatus(enquiry.id, "pending");
-                              // Hide dropdown after selection
-                              setEnquiries(
-                                enquiries.map((e) =>
-                                  e.id === enquiry.id
-                                    ? { ...e, showStatusDropdown: false }
-                                    : e
-                                )
-                              );
-                            }}
-                          >
-                            pending
-                          </div>
-                          <div
-                            className={`px-4 py-2 hover:bg-gray-100 hover:text-green-600 cursor-pointer ${
-                              enquiry.status === "completed"
-                                ? "font-bold text-green-500"
-                                : ""
-                            }`}
-                            onClick={() => {
-                              handleChangeStatus(enquiry.id, "completed");
-                              // Hide dropdown after selection
-                              setEnquiries(
-                                enquiries.map((e) =>
-                                  e.id === enquiry.id
-                                    ? { ...e, showStatusDropdown: false }
-                                    : e
-                                )
-                              );
-                            }}
-                          >
-                            completed
-                          </div>
+                    {/* Status dropdown menu */}
+                    {enquiry.showStatusDropdown && (
+                      <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10">
+                        <div
+                          className={`px-4 py-2 hover:bg-gray-100 hover:text-red-700 cursor-pointer ${
+                            enquiry.status === "pending"
+                              ? "font-bold text-red-600"
+                              : ""
+                          }`}
+                          onClick={() => {
+                            handleChangeStatus(enquiry.id, "pending");
+                            // Hide dropdown after selection
+                            setEnquiries(
+                              enquiries.map((e) =>
+                                e.id === enquiry.id
+                                  ? { ...e, showStatusDropdown: false }
+                                  : e
+                              )
+                            );
+                          }}
+                        >
+                          pending
                         </div>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div className="h-30 flex justify-center items-center">Loading...</div>
-      )}
+                        <div
+                          className={`px-4 py-2 hover:bg-gray-100 hover:text-green-600 cursor-pointer ${
+                            enquiry.status === "completed"
+                              ? "font-bold text-green-500"
+                              : ""
+                          }`}
+                          onClick={() => {
+                            handleChangeStatus(enquiry.id, "completed");
+                            // Hide dropdown after selection
+                            setEnquiries(
+                              enquiries.map((e) =>
+                                e.id === enquiry.id
+                                  ? { ...e, showStatusDropdown: false }
+                                  : e
+                              )
+                            );
+                          }}
+                        >
+                          completed
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div> :
+        <div className="h-30 flex justify-center items-center">
+        Loading...
+      </div>
+      }
 
       {/* Pagination */}
-      {data ? (
-        <div className="mt-4 flex justify-between items-center">
-          <div>
-            Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-            {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems}
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={goToPrevPage}
-              className="p-2 border border-gray-300 rounded-md hover:bg-gray-100 disabled:cursor-not-allowed"
-              disabled={currentPage === 1}
-            >
-              ←
-            </button>
-            <button className="px-4 py-2 border border-gray-300 rounded-md bg-gray-100">
-              {currentPage}
-            </button>
-            <button
-              onClick={goToNextPage}
-              className="p-2 border border-gray-300 rounded-md hover:bg-gray-100 disabled:cursor-not-allowed"
-              disabled={currentPage*itemsPerPage >= totalItems}
-            >
-              →
-            </button>
-          </div>
+      {data ? <div className="mt-4 flex justify-between items-center">
+        <div>
+          Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+          {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems}
         </div>
-      ) : null}
+        <div className="flex gap-2">
+          <button
+            onClick={goToPrevPage}
+            className="p-2 border border-gray-300 rounded-md hover:bg-gray-100 disabled:cursor-not-allowed"
+            disabled={currentPage === 1}
+          >
+            ←
+          </button>
+          <button className="px-4 py-2 border border-gray-300 rounded-md bg-gray-100">
+            {currentPage}
+          </button>
+          <button
+            onClick={goToNextPage}
+            className="p-2 border border-gray-300 rounded-md hover:bg-gray-100 disabled:cursor-not-allowed"
+            disabled={currentPage * itemsPerPage >= totalItems}
+          >
+            →
+          </button>
+        </div>
+      </div>: null}
 
       {/* Details  */}
       {showDetails && selectedEnquiry && (
