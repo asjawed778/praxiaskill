@@ -10,8 +10,8 @@ import InvestmentDetails from "./InvestmentDetails";
 import OtherDetails from "./OtherDetails";
 import { useCcfsEventMutation } from "../../../services/auth.api";
 import toast from "react-hot-toast";
-import ButtonLoading from "../../../components/Button/ButtonLoading";
 import { useNavigate } from "react-router-dom";
+import ButtonLoading from "../../../components/Button/ButtonLoading";
 
 const MultiStepForm = () => {
 
@@ -55,7 +55,6 @@ const MultiStepForm = () => {
     mode: "onChange",
   });
   
-  // const methods = useForm();
   const onSubmit = async (data) => {
     console.log("Step Data:", data);
 

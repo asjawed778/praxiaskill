@@ -113,10 +113,10 @@ export const apiCourse = createApi({
       }),
     }),
     getAllPublishedCourse: builder.query({
-      query: (pageNo) => ({
-        url: `course/published?pageNo=${pageNo}`,
-        method: "GET",
-      }),
+      query: ({pageNo, searchTerm}) =>({
+        url: `course/published?pageNo=${pageNo}&search=${searchTerm}`,
+        method: "GET"
+      })
     }),
     getCategoryCourse: builder.query({
       query: (categoryId) => ({
