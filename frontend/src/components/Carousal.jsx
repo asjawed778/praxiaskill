@@ -22,9 +22,9 @@ export default function Carousal() {
 
   const [activeTab, setActiveTab] = useState(null);
 
-  const { data: allCategories, isLoading: allCategoriesLoader } =
+  const { data: allCategories, isFetching: allCategoriesLoader } =
     useGetAllCategoryQuery();
-  const { data: categoryCourse, isLoading: categoriesCourseLoader } =
+  const { data: categoryCourse, isFetching: categoriesCourseLoader } =
     useGetCategoryCourseQuery(activeTab, {
       skip: !activeTab,
     });
@@ -70,7 +70,7 @@ export default function Carousal() {
           All the skills you need in one place
         </h2>
         <p className="text-gray-600 font-sans">
-          From critical skills to technical topics, AbilitaEdge supports your
+          From critical skills to technical topics, Praxia Skill supports your
           professional development.
         </p>
       </div>

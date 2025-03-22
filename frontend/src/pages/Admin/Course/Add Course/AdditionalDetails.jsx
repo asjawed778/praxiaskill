@@ -7,15 +7,15 @@ import { useFieldArray, useForm, Controller } from "react-hook-form";
 import JoditEditor from "jodit-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
-import InputField from "../Input Field";
-import Button from "../Button/Button";
+import InputField from "../../../../components/Input Field";
+import Button from "../../../../components/Button/Button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useRef, useState } from "react";
 import secondStepValidationSchema from "./Schema/secondStepValidationSchema";
 import { RxCross2 } from "react-icons/rx";
 import { FaPlus } from "react-icons/fa6";
-import { useUploadAdditionalDetailsMutation } from "../../services/course.api";
-import ButtonLoading from "../Button/ButtonLoading";
+import { useUploadAdditionalDetailsMutation } from "../../../../services/course.api";
+import ButtonLoading from "../../../../components/Button/ButtonLoading";
 
 
 export default function AdditionalDetails({

@@ -1,12 +1,12 @@
 import React from "react";
-import InputField from "../Input Field";
-import Button from "../Button/Button";
+import InputField from "../../../../components/Input Field";
+import Button from "../../../../components/Button/Button";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import firstStepValidationSchema from "./Schema/firstStepValidationSchema";
-import { useUploadDetailsMutation } from "../../services/course.api";
-import ButtonLoading from "../Button/ButtonLoading";
-import Dropdown from "../Dropdown/Dropdown";
+import { useUploadDetailsMutation } from "../../../../services/course.api";
+import ButtonLoading from "../../../../components/Button/ButtonLoading";
+import Dropdown from "../../../../components/Dropdown/Dropdown";
 
 const CourseFirstStep = ({ currentStep, handleNext, handlePrev, setCourseId }) => {
   const [uploadDetails, { isLoading, isError, error: uploadError }] =

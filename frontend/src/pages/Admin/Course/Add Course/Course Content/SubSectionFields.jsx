@@ -2,7 +2,7 @@ import { FaPlus } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
 import { useFieldArray } from "react-hook-form";
-import InputField from "../../Input Field";
+import InputField from "../../../../../components/Input Field/index";
 
 export default function SubSectionFields({ control, sectionIndex, errors }) {
   const {
@@ -13,7 +13,6 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
     control,
     name: `sections.${sectionIndex}.subsections`,
   });
-  console.log(errors);
 
   return (
     <div className="flex flex-col">
@@ -31,6 +30,7 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
                   )}
                   placeholder="Subsection Title"
                 />
+                
 
                 {Array.isArray(errors?.sections) &&
                   errors?.sections[sectionIndex]?.subsections[subIndex]
