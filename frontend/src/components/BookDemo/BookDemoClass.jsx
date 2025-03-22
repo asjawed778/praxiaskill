@@ -44,7 +44,7 @@ export default function BookDemoClass() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="bg-white flex flex-col gap-3 my-5 p-5 h-auto w-[70vw] lg:w-[351.15px] drop-shadow-2xl shadow-xl rounded-xl mx-auto md:mx-0"
+      className="bg-white flex flex-col gap-3 my-5 p-5 h-auto w-[84vw] md:w-[350px] lg:w-[351.15px] drop-shadow-2xl shadow-xl rounded-xl mx-auto md:mx-0"
     >
       <h1 className="font text-xl text-[var(--color-primary)]">
         Book a Live Class, For Free!

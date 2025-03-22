@@ -243,3 +243,16 @@ export const getCourseEnquiry = asyncHandler(async(req: Request, res: Response) 
     const result = await courseService.getCourseEnquiry(pageNo);
     res.send(createResponse(result, "Course enquiry fetched successfully"));
 });
+
+export const changeEnquiryStatus = asyncHandler(async(req: Request, res: Response) => {
+    const enquiryId = req.params.enquiryId;
+    const status = req.body.status;
+    const result = await courseService.changeEnquiryStatus(enquiryId, status);
+    res.send(createResponse({}, "Enquiry status changed successfully"));
+});
+
+export const getPublishedCourses = asyncHandler(async(req: Request, res: Response) => {
+    const pageNo = parseInt(req.query.pageNo as string) || 1;
+    const result = await courseService.getPublishedCourses(pageNo);
+    res.send(createResponse(result, "Published courses fetched successfully"));
+});

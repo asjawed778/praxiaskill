@@ -10,10 +10,10 @@ const InvestmentDetails = () => {
   return (
     <div className="flex flex-col">
       {/* Question 1 - What are you looking for? */}
-      <h2 className="font-semibold mt-8 mb-2 text-2xl">
+      <h2 className="font-semibold mt-8 mb-2 text-xl">
         What are you looking for? (Investment, Mentorship, etc.)<StarMark />
       </h2>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {["Investment", "Mentorship", "Other"].map((option) => (
           <RadioButtonField 
             key={option}
@@ -30,16 +30,17 @@ const InvestmentDetails = () => {
       {/* Show input if "Other" is selected */}
       {investmentSelected === "other" && (
         <InputField
+          className="w-1/2"
           name="otherDetails"
           type="text"
           placeholder="Enter other details"
-          starMark="true"
+          // starMark="true"
         />
       )}
 
       {/* Question 2 - Have you received funding? */}
-      <h2 className="font-semibold mt-8 mb-2 text-2xl">Have you received funding?<StarMark /></h2>
-      <div className="grid grid-cols-2 lg:grid-cols-2 gap-2">
+      <h2 className="font-semibold mt-8 mb-2 text-xl">Have you received funding?<StarMark /></h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {["Yes", "No"].map((option) => (
           <RadioButtonField 
             key={option}
@@ -62,9 +63,10 @@ const InvestmentDetails = () => {
             name="fundingAmount"
             placeholder="Enter amount in Rs."
             starMark="true"
+            
           />
 
-          <h3 className="font-semibold mt-4 mb-2 text-lg">Source of Funding:</h3>
+          <h3 className="font-semibold mt-4 mb-2 text-lg">Source of Funding<StarMark /></h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
             {["Crowdfunding", "Seed Funding", "VC Firm", "Individual"].map((source) => (
               <RadioButtonField
@@ -82,7 +84,7 @@ const InvestmentDetails = () => {
       )}
 
       {/* Funding Requirement */}
-      <h2 className="font-semibold mt-8 mb-2 text-2xl">Requirement of Funding:</h2>
+      <h2 className="font-semibold mt-8 mb-2 text-xl">Requirement of Funding:</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {["2025", "2026"].map((year) => (
           <InputField
@@ -91,7 +93,7 @@ const InvestmentDetails = () => {
             type="number"
             name={`requirement${year}`}
             placeholder="Enter amount in Rs."
-            starMark={["requirement2025", "requirement2026"].includes(name)}
+            starMark={["requirement2025", "requirement2026"].includes(`requirement${year}`)}
           />
         ))}
       </div>

@@ -1,7 +1,7 @@
 import "./ButtonLoading.css";
 
 function ButtonLoading() {
-  return <div className="spinner"></div>;
+  return <span className="loader"></span>;
 }
 
 export default ButtonLoading;
