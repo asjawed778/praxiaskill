@@ -64,7 +64,7 @@ export default function Carousal() {
   };
 
   return (
-    <div className="py-8 mt-4 w-[90vw] lg:w-full mx-auto">
+    <div className="p-8 mt-4 w-[82vw] lg:w-full mx-auto">
       <div className="mb-6 items-center">
         <h2 className="font-sans font-semibold text-2xl text-[var(--color-primary)]">
           All the skills you need in one place
@@ -76,8 +76,7 @@ export default function Carousal() {
       </div>
 
       {/* Tab Menu */}
-      <div className="flex overflow-x-scroll scroll-smooth scrollbar-hide gap-8 md:gap-7 px-4 mb-1 whitespace-nowrap custom-scrollbar border-b border-neutral-300">
-        {/* <div className="flex w-auto flex-nowrap gap-4 space-x-1 overflow-x-auto carousel  scroll-snap-x scroll-smooth"> */}
+      <div className="flex w-auto gap-4 space-x-1 overflow-x-auto carousel  scroll-snap-x scroll-smooth ">
         {categories
           .filter((_, i) => i < 4)
           .map(
@@ -100,30 +99,30 @@ export default function Carousal() {
           )}
       </div>
 
+      <div className="relative md:w-[90%] w-full">
+        <hr className="border-gray-200" />
+        {coursesAll?.length !== 0 && (
+          <Link
+            to="/courses"
+            className="absolute right-0 -top-3 font-bold text-xs text-[var(--color-primary)] bg-white mx-auto"
+          >
+            View More
+          </Link>
+        )}
+      </div>
+
       {/* Scrollable Course Cards */}
       {!(allCategoriesLoader || categoriesCourseLoader) ? (
         <div className="relative w-full">
           {/* Left Button */}
-          <div className="md:flex items-center justify-end gap-4 hidden mt-2">
-            {coursesAll?.length > 1 && (
-              <button
-                onClick={scrollLeft}
-                className="h-8 w-8 flex justify-center items-center bg-primary hover:bg-primary-hover cursor-pointer text-white text-2xl rounded-full shadow-md"
-              >
-                <IoIosArrowBack />
-              </button>
-            )}
-
-            {/* Right Button */}
-            {coursesAll?.length > 1 && (
-              <button
-                onClick={scrollRight}
-                className="h-8 w-8 flex justify-center items-center bg-primary hover:bg-primary-hover cursor-pointer text-white text-2xl rounded-full shadow-md"
-              >
-                <IoIosArrowForward />
-              </button>
-            )}
-          </div>
+          {coursesAll?.length > 1 && (
+            <button
+              onClick={scrollLeft}
+              className="absolute h-8 w-8 flex justify-center items-center -left-10 top-1/2 transform -translate-y-1/2 z-10  bg-primary hover:bg-primary-hover cursor-pointer text-white text-2xl rounded-full shadow-md mx-auto"
+            >
+              <IoIosArrowBack />
+            </button>
+          )}
 
           {/* Scrollable Container */}
           <div
@@ -169,10 +168,8 @@ export default function Carousal() {
                         className="w-[25px] h-[25px]"
                       />
                       <p className="text-gray-600">
-                        {course?.language === "ENGLISH_HINDI"
-                          ? "Bilingual"
-                          : course?.language?.charAt(0).toUpperCase() +
-                            course?.language?.slice(1).toLowerCase()}
+                        {course?.language === "ENGLISH_HINDI" ? "Bilingual" : course?.language?.charAt(0).toUpperCase() +
+                          course?.language?.slice(1).toLowerCase()}
                       </p>
                     </div>
 
@@ -184,20 +181,21 @@ export default function Carousal() {
               </Link>
             ))}
           </div>
+
+          {/* Right Button */}
+          {coursesAll?.length > 1 && (
+            <button
+              onClick={scrollRight}
+              className="absolute h-8 w-8 flex justify-center items-center -right-10 top-1/2 transform -translate-y-1/2 z-10 bg-primary hover:bg-primary-hover cursor-pointer text-white text-2xl rounded-full shadow-md"
+            >
+              <IoIosArrowForward />
+            </button>
+          )}
         </div>
       ) : (
         <CourseSkeleton />
       )}
-      <div className="relative w-full">
-        {coursesAll?.length !== 0 && (
-          <Link
-            to="/courses"
-            className="absolute right-0 top-0 font-bold text-xs text-[var(--color-primary)] bg-white mx-auto"
-          >
-            View More
-          </Link>
-        )}
-      </div>
     </div>
   );
 }
+

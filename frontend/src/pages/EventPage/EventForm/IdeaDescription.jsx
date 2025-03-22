@@ -102,8 +102,8 @@ const IdeaDescription = () => {
     <div className="flex flex-col space-y-8">
       {/* Stage of Start-up */}
       <div>
-        <h2 className="font-semibold text-xl ">Stage of Start-up (Please tick)<StarMark /></h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <h2 className="font-semibold text-2xl">Stage of Start-up (Please tick)<StarMark /></h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {startupStages.map((stage) => (
             <RadioButtonField key={stage.value} name="ideaStage" {...stage} />
           ))}
@@ -115,8 +115,8 @@ const IdeaDescription = () => {
 
       {/* Idea Belonging to Sector */}
       <div>
-        <h2 className="font-semibold text-xl">Idea Belonging to Sector (Please tick)<StarMark /></h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <h2 className="font-semibold text-2xl">Idea Belonging to Sector (Please tick)<StarMark /></h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {sectors.map((sector) => (
             <RadioButtonField key={sector.value} name="ideaSector" {...sector} />
           ))}
@@ -128,8 +128,8 @@ const IdeaDescription = () => {
 
       {/* Business Model */}
       <div>
-        <h2 className="font-semibold text-xl ">Business Model (Please tick)<StarMark /></h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <h2 className="font-semibold text-2xl">Business Model (Please tick)<StarMark /></h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {businessModels.map((model) => (
             <RadioButtonField key={model.value} name="businessModel" {...model} />
           ))}
@@ -141,8 +141,8 @@ const IdeaDescription = () => {
 
       {/* Type of Venture */}
       <div>
-        <h2 className="font-semibold text-xl ">Type of Venture (Please tick)<StarMark /></h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <h2 className="font-semibold text-2xl">Type of Venture (Please tick)<StarMark /></h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {ventureTypes.map((venture) => (
             <RadioButtonField key={venture.value} name="ventureType" {...venture} />
           ))}
@@ -155,7 +155,7 @@ const IdeaDescription = () => {
       {/* Text Area Fields */}
       {textAreas.map(({ label, name, placeholder }) => (
         <div key={name}>
-          <h2 className="font-semibold text-xl">{label}:</h2>
+          <h2 className="font-semibold text-2xl">{label}:</h2>
           <TextAreaField name={name} placeholder={placeholder} 
           starMark={["explainIdea", "explainObjective", "explainProduct", "explainPainPoint", "explainBusiness", "explainMarket", "explainCompetitor", "explainVenture", "explainManagement", "explainSocial"].includes(name)}
           />

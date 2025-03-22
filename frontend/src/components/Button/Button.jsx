@@ -7,11 +7,10 @@ const Button = ({
   onClick = () => {},
   variant = "default",
   className = "",
-  disabled=false
 }) => {
   const variantClasses = {
     default:
-      "text-white bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-active)] disabled:cursor-not-allowed",
+      "text-white bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-active)]",
     inverse: "bg-white text-[var(--color-primary)]",
     red: "text-white bg-red-600 rounded-full hover:bg-red-900",
   };
@@ -20,7 +19,6 @@ const Button = ({
     <button
       type={type || "button"}
       onClick={onClick}
-      disabled={disabled}
       className={clsx(
         "whitespace-nowrap px-5 py-2 rounded-md cursor-pointer duration-200",
         variantClasses[variant] || variantClasses.default,

@@ -34,12 +34,12 @@ function HomePage() {
 
   return (
     <motion.div
-      className="h-auto flex flex-col items-center w-full font-sans overflow-x-hidden"
+      className="h-auto flex flex-col items-center w-full font-sans lg:overflow-x-auto overflow-x-hidden"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
-      <motion.div className="relative w-full flex flex-col md:flex-row md:items-center justify-around p-4">
+      <motion.div className="relative w-full flex flex-col md:flex-row items-center justify-around p-4">
         {/* Background Video */}
         <video
           autoPlay
@@ -128,7 +128,7 @@ function HomePage() {
 
       {/* Courses Section */}
       <motion.div
-        className="flex items-center justify-center lg:w-[1000px]"
+        className="flex items-center justify-center lg:w-[1050px]"
         variants={itemVariants}
       >
         <Courses />
