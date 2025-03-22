@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { LuCheckCheck } from "react-icons/lu";
-import { useGetAllEnquiryQuery } from "../../../services/course.api";
+import { useGetAllEnquiryQuery, useSetEnquiryStatusMutation } from "../../../services/course.api";
 
 const CourseEnqueryManagement = () => {
+  const [setEnquiryStatus, {isError: enquiryStatusError, isFetching:enquiryStatusFetching}]= useSetEnquiryStatusMutation()
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isLoading, error } = useGetAllEnquiryQuery(currentPage);
+  const { data, isFetching: enquiriesFetching, refetch:refetchEnquiries } = useGetAllEnquiryQuery(currentPage);
   const [enquiries, setEnquiries] = useState([]);
 
   const [statusFilter, setStatusFilter] = useState("");
@@ -38,7 +39,7 @@ const CourseEnqueryManagement = () => {
       });
       setEnquiries(enquiries);
     }
-  }, [data, isLoading, currentPage, enquiries]);
+  }, [data, enquiriesFetching, currentPage]);
 
   // Filter and sorting states
 
@@ -90,13 +91,13 @@ const CourseEnqueryManagement = () => {
     setTimeSort("");
   }
 
-  function handleChangeStatus(enquiryId, newStatus) {
-    setEnquiries(
-      enquiries.map((enquiry) =>
-        enquiry.id === enquiryId ? { ...enquiry, status: newStatus } : enquiry
-      )
-    );
-  }
+  // function handleChangeStatus(enquiryId, newStatus) {
+  //   setEnquiries(
+  //     enquiries.map((enquiry) =>
+  //       enquiry.id === enquiryId ? { ...enquiry, status: newStatus } : enquiry
+  //     )
+  //   );
+  // }
 
   function goToNextPage() {
     setEnquiries([]);
@@ -112,6 +113,21 @@ const CourseEnqueryManagement = () => {
   function closeDetails() {
     setShowDetails(false);
     setSelectedEnquiry(null);
+  }
+
+  const handleChangeStatus =  async(enquiryId, newStatus) => {
+    try{
+      const data = {status: newStatus}
+      const result = await setEnquiryStatus({data, enquiryId})
+      if(result?.error)
+      {
+        throw new Error(result?.error?.data?.message)
+      }
+      refetchEnquiries();
+    }catch(err)
+    {
+      console.log(err)
+    }
   }
 
   return (
@@ -141,13 +157,13 @@ const CourseEnqueryManagement = () => {
                   className="px-4 py-2 hover:bg-red-600  hover:text-white cursor-pointer"
                   onClick={() => handleStatusSelect("PENDING")}
                 >
-                  pending
+                  PENDING
                 </div>
                 <div
                   className="px-4 py-2  hover:bg-green-800 hover:text-white cursor-pointer"
-                  onClick={() => handleStatusSelect("COMPLETED")}
+                  onClick={() => handleStatusSelect("CLOSED")}
                 >
-                  completed
+                  CLOSED
                 </div>
               </div>
             )}
@@ -187,7 +203,7 @@ const CourseEnqueryManagement = () => {
       </div>
 
       {/* Enquiries Table */}
-      {!isLoading ? (
+      {!enquiriesFetching ? (
         <div className="border border-gray-300 rounded-md overflow-hidden">
           <table className="w-full ">
             <thead>
@@ -243,7 +259,7 @@ const CourseEnqueryManagement = () => {
                           );
                         }}
                         className={`w-full px-4 py-1.5 border border-gray-300 rounded-md flex items-center justify-between ${
-                          enquiry.status === "pending"
+                          enquiry.status === "PENDING"
                             ? "text-yellow-600"
                             : "text-black"
                         }`}
@@ -256,12 +272,12 @@ const CourseEnqueryManagement = () => {
                         <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10">
                           <div
                             className={`px-4 py-2 hover:bg-gray-100 hover:text-red-700 cursor-pointer ${
-                              enquiry.status === "pending"
+                              enquiry.status === "PENDING"
                                 ? "font-bold text-red-600"
                                 : ""
                             }`}
                             onClick={() => {
-                              handleChangeStatus(enquiry.id, "pending");
+                              handleChangeStatus(enquiry.id, "PENDING");
                               // Hide dropdown after selection
                               setEnquiries(
                                 enquiries.map((e) =>
@@ -272,16 +288,16 @@ const CourseEnqueryManagement = () => {
                               );
                             }}
                           >
-                            pending
+                            PENDING
                           </div>
                           <div
                             className={`px-4 py-2 hover:bg-gray-100 hover:text-green-600 cursor-pointer ${
-                              enquiry.status === "completed"
+                              enquiry.status === "CLOSED"
                                 ? "font-bold text-green-500"
                                 : ""
                             }`}
                             onClick={() => {
-                              handleChangeStatus(enquiry.id, "completed");
+                              handleChangeStatus(enquiry.id, "CLOSED");
                               // Hide dropdown after selection
                               setEnquiries(
                                 enquiries.map((e) =>
@@ -292,7 +308,7 @@ const CourseEnqueryManagement = () => {
                               );
                             }}
                           >
-                            completed
+                            CLOSED
                           </div>
                         </div>
                       )}

@@ -92,6 +92,14 @@ export const apiCourse = createApi({
         credentials: "include"
       }),
     }),
+    setEnquiryStatus: builder.mutation({
+      query: ({data, enquiryId}) => ({
+        url: `course/enquiry-status/${enquiryId}`,
+        method: "POST",
+        body: data,
+        credentials: "include"
+      }),
+    }),
     addCourse: builder.mutation({
       query: (data) => ({
         url: "course/add-course",
@@ -144,6 +152,7 @@ export const {
   useGetDropdownOptionsQuery,
   useGetAllCategoryQuery,
   useAddCategoryMutation,
+  useSetEnquiryStatusMutation,
   useAddCourseMutation,
   useSendEnquiryMutation,
   useGetAllEnquiryQuery,
