@@ -6,8 +6,9 @@ import { createPortal } from "react-dom";
 import Dropdown from "../../../components/Dropdown/Dropdown";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
+import ButtonLoading from "../../../components/Button/ButtonLoading"
 
-const CourseTable = ({ data:publishedCourse, currentPage, setCurrentPage }) => {
+const CourseTable = ({ data:publishedCourse, currentPage, setCurrentPage, isLoading }) => {
   const [openMenu, setOpenMenu] = useState(null);
   const [menuStyles, setMenuStyles] = useState({});
   const buttonRefs = useRef([]);
@@ -40,7 +41,7 @@ const CourseTable = ({ data:publishedCourse, currentPage, setCurrentPage }) => {
   }, [openMenu]);
 
   return (
-    <div className="w-full flex flex-col gap-2 relative">
+   !isLoading ? <div className="w-full flex flex-col gap-2 relative">
       <div className="w-full flex gap-4 text-sm flex-wrap">
         <div className="flex items-center gap-2 border border-neutral-300 px-1 rounded-lg text-neutral-500 flex-1">
           <IoSearch />
@@ -175,7 +176,8 @@ const CourseTable = ({ data:publishedCourse, currentPage, setCurrentPage }) => {
           </div>,
           document.body // Render outside the table
         )}
-    </div>
+    </div> : 
+    <div className="h-30 flex justify-center items-center gap-3"> <ButtonLoading /> Loading...</div>
   );
 };
 
