@@ -9,7 +9,7 @@ import { fourthStepValidationSchema } from "./Schema/fourthStepValidationSchema"
 import SubSectionFields from "./Course Content/SubSectionFields";
 import Button from "../../../../components/Button/Button";
 
-export default function CourseContent({ currentStep, handleNext, handlePrev }) {
+export default function CourseContent() {
   // React Hook Form
   const {
     control,
@@ -40,11 +40,12 @@ export default function CourseContent({ currentStep, handleNext, handlePrev }) {
 
   const onSubmit = (data) => {
     console.log("Submitted Data:", data);
-    handleNext();
+    // handleNext();
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 p-4">
+      <h1 className="text-2xl font-bold">Course Content</h1>
       <h1 className="relative w-fit">
         <span>Section</span>
 
@@ -136,11 +137,13 @@ export default function CourseContent({ currentStep, handleNext, handlePrev }) {
         </Button>
 
         <div className="flex gap-5 justify-between">
-          <Button onClick={handlePrev}>Previous</Button>
+          <Button >Previous</Button>
+          {/* <Button onClick={handlePrev}>Previous</Button> */}
 
           {/* Submit Button */}
           {/* <Button type="submit">Save and Next</Button> */}
-          <Button onClick={handleNext}>Skip</Button>
+          <Button type="submit">Submit</Button>
+          {/* <Button onClick={handleNext}>Skip</Button> */}
         </div>
       </form>
     </div>

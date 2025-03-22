@@ -13,7 +13,6 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
     control,
     name: `sections.${sectionIndex}.subsections`,
   });
-  console.log(errors);
 
   return (
     <div className="flex flex-col">

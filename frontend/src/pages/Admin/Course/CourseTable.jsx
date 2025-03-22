@@ -1,17 +1,22 @@
 import React, { useState, useRef, useEffect } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { IoSearch, IoClose } from "react-icons/io5";
-import { MdEdit, MdDelete } from "react-icons/md";
+import { MdEdit} from "react-icons/md";
 import { createPortal } from "react-dom";
 import Dropdown from "../../../components/Dropdown/Dropdown";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
 import ButtonLoading from "../../../components/Button/ButtonLoading"
+import { RiIndeterminateCircleFill } from "react-icons/ri";
+import { MdOutlineAddCircle } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
-const CourseTable = ({ data:publishedCourse, currentPage, setCurrentPage, isLoading }) => {
+
+const CourseTable = ({ data:publishedCourse, currentPage, setCurrentPage, isLoading, courseManagePageRef }) => {
   const [openMenu, setOpenMenu] = useState(null);
   const [menuStyles, setMenuStyles] = useState({});
   const buttonRefs = useRef([]);
+  const navigate = useNavigate()
   
   const itemsPerPage = 10;
   const totalItems = publishedCourse?.data?.totalItems
@@ -30,9 +35,9 @@ const CourseTable = ({ data:publishedCourse, currentPage, setCurrentPage, isLoad
         setMenuStyles({
           position: "absolute",
           top:
-            spaceBelow < dropdownHeight
-              ? rect.top - dropdownHeight
-              : rect.bottom + 5,
+            spaceBelow < (dropdownHeight + 100)
+              ? rect.bottom - dropdownHeight - 100
+              : rect.top + dropdownHeight - 65,
           left: rect.left - 120, // Adjust for proper alignment
           zIndex: 1000,
         });
@@ -167,14 +172,17 @@ const CourseTable = ({ data:publishedCourse, currentPage, setCurrentPage, isLoad
                 <IoClose />
               </button>
             </div>
-            <button className="flex items-center w-full px-3 py-2 text-left text-gray-700 hover:bg-gray-100 rounded-md">
+            <button onClick={() => navigate(`/dashboard/add-course/add-content/${ openMenu ? courses[openMenu]._id : null}`)} className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 rounded-md">
+              <MdOutlineAddCircle className="mr-2" /> Add Content
+            </button>
+            <button className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 rounded-md">
               <MdEdit className="mr-2" /> Edit
             </button>
-            <button className="flex items-center w-full px-3 py-2 text-left text-red-600 hover:bg-gray-100 rounded-md">
-              <MdDelete className="mr-2" /> Delete
+            <button className="flex items-center w-full px-3 py-2 text-sm text-left text-red-600 hover:bg-gray-100 rounded-md">
+              <RiIndeterminateCircleFill className="mr-2" /> Terminate
             </button>
           </div>,
-          document.body // Render outside the table
+          courseManagePageRef?.current // Render outside the table
         )}
     </div> : 
     <div className="h-30 flex justify-center items-center gap-3"> <ButtonLoading /> Loading...</div>
