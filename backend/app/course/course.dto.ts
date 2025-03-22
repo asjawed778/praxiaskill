@@ -8,6 +8,7 @@ export interface ICourse extends BaseSchema {
     keypoints: string[];
     description: string;
     tags: string[];
+    whatWillYouLearn: string[];
 
     brouchure?: string;
     thumbnail: string;
@@ -29,7 +30,7 @@ export interface ICourse extends BaseSchema {
     trailerVideo?: string;
     
     sections: mongoose.Schema.Types.ObjectId[];
-    isDraft: boolean;
+    courseStatus: CourseEnum.CourseStatus;
 }
 
 export interface ISection extends BaseSchema {

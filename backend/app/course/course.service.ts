@@ -18,6 +18,52 @@ export const isCourseOwner = async (userId: string, courseId: string): Promise<b
     return !!courseLifecycle;
 };
 
+export const upsertCourse = async (
+    courseId: string | null,
+    data: Omit<ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }
+) => {
+    let course;
+
+    if (courseId) {
+        // Update existing course
+        course = await courseSchema.findByIdAndUpdate(courseId, { ...data }, { new: true });
+    } else {
+        // Create a new course
+        course = await courseSchema.create({ ...data });
+        courseId = course._id.toString();
+    }
+
+    // Step 1: Check if sections exist and process them
+    if (data.sections && data.sections.length > 0) {
+        const sectionPromises = data.sections.map(async (section) => {
+            const subsectionDocs = await subSectionSchema.insertMany(section.subSections);
+            const subsectionIds = subsectionDocs.map((sub) => sub._id);
+
+            // Step 2: Create section with subsection IDs
+            const savedSection = await sectionSchema.create({
+                title: section.title,
+                description: section.description,
+                duration: section.duration,
+                subSections: subsectionIds,
+            });
+
+            return savedSection._id;
+        });
+
+        // Execute all section insertions in parallel
+        const sectionIds = await Promise.all(sectionPromises);
+
+        // Step 3: Update Course with new section IDs
+        course = await courseSchema.findByIdAndUpdate(
+            courseId,
+            { $set: { sections: sectionIds } },
+            { new: true }
+        );
+    }
+
+    return course;
+};
+
 
 export const addCourseDetails = async (courseId: string, data: ICourse) => {
     let course;
@@ -297,6 +343,95 @@ export const getCourseEnquiry = async (pageNo = 1) => {
     };
 };
 
+export const changeEnquiryStatus = async (enquiryId: string, status: string) => {
+    const enquiry = await CourseEnquirySchema.findByIdAndUpdate(enquiryId, { status }, { new: true });
+    return enquiry;
+};
+
+export const getPublishedCourses = async (pageNo = 1) => {
+    const pageSize = 10; // Number of courses per page
+    const skip = (pageNo - 1) * pageSize; // Calculate the number of documents to skip
+
+    // Get total count of published courses
+    const totalCountResult = await courseLifecycleSchema.aggregate([
+        {
+            $match: { PUBLISHED: { $exists: true, $ne: [] } }
+        },
+        {
+            $unwind: "$PUBLISHED"
+        },
+        {
+            $count: "total"
+        }
+    ]);
+
+    const totalItems = totalCountResult.length > 0 ? totalCountResult[0].total : 0;
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    const result = await courseLifecycleSchema.aggregate([
+        {
+            $match: { PUBLISHED: { $exists: true, $ne: [] } }
+        },
+        {
+            $unwind: "$PUBLISHED"
+        },
+        {
+            $lookup: {
+                from: "courses",
+                localField: "PUBLISHED",
+                foreignField: "_id",
+                as: "courseDetails"
+            }
+        },
+        {
+            $unwind: "$courseDetails"
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "courseDetails.instructor",
+                foreignField: "_id",
+                as: "instructorDetails"
+            }
+        },
+        {
+            $unwind: "$instructorDetails"
+        },
+        {
+            $lookup: {
+                from: "ratingandreviews",
+                localField: "courseDetails.ratingAndReviews",
+                foreignField: "_id",
+                as: "ratings"
+            }
+        },
+        {
+            $project: {
+                _id: "$courseDetails._id",
+                title: "$courseDetails.title",
+                subtitle: "$courseDetails.subtitle",
+                tags: "$courseDetails.tags",
+                instructor: "$instructorDetails.name",
+                rating: { $avg: "$ratings.rating" },
+                reviews: { $size: "$ratings" },
+                duration: "$courseDetails.duration",
+                thumbnail: "$courseDetails.thumbnail"
+            }
+        },
+        { $sort: { rating: -1 } },
+        { $skip: skip },
+        { $limit: pageSize }
+    ]);
+
+    return {
+        totalItems,
+        totalPages,
+        currentPage: pageNo,
+        from: skip + 1,
+        to: Math.min(skip + pageSize, totalItems),
+        courses: result
+    };
+};
 
 
 

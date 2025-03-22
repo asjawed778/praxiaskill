@@ -92,7 +92,7 @@ function LoginModal({
       onClick={() => setLoginModal(false)}
     >
       <div
-        className="bg-white rounded-lg shadow-lg p-3 relative w-[80vw] md:w-[43vw]"
+        className="bg-white rounded-lg shadow-lg p-3 relative w-[90vw] md:w-[550px]"
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
       >
         <div className="flex justify-between items-center">

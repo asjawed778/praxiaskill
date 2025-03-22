@@ -53,7 +53,7 @@ export const apiCourse = createApi({
       },
     }),
     uploadCourseStructure: builder.mutation({
-      query: ({ data, id }) => {
+      query: ({ data, id }) => { // here id is courseId
         return {
           url: `course/structure/${id}`,
           method: "PUT",
@@ -92,6 +92,14 @@ export const apiCourse = createApi({
         credentials: "include"
       }),
     }),
+    setEnquiryStatus: builder.mutation({
+      query: ({data, enquiryId}) => ({
+        url: `course/enquiry-status/${enquiryId}`,
+        method: "POST",
+        body: data,
+        credentials: "include"
+      }),
+    }),
     addCourse: builder.mutation({
       query: (data) => ({
         url: "course/add-course",
@@ -107,14 +115,14 @@ export const apiCourse = createApi({
       }),
     }),
     getAllEnquiry: builder.query({
-      query: () => ({
-        url: `course/enquiry`,
+      query: (page) => ({
+        url: `course/enquiry?pageNo=${page}`,
         method: "GET",
       }),
     }),
-    getAllCourse: builder.query({
-      query: () => ({
-        url: `course/get-all-course`,
+    getAllPublishedCourse: builder.query({
+      query: (pageNo) => ({
+        url: `course/published?pageNo=${pageNo}`,
         method: "GET",
       }),
     }),
@@ -144,10 +152,11 @@ export const {
   useGetDropdownOptionsQuery,
   useGetAllCategoryQuery,
   useAddCategoryMutation,
+  useSetEnquiryStatusMutation,
   useAddCourseMutation,
   useSendEnquiryMutation,
   useGetAllEnquiryQuery,
-  useGetAllCourseQuery,
+  useGetAllPublishedCourseQuery,
   useGetCategoryCourseQuery,
   useGetFullCourseDetailsQuery,
 } = apiCourse;
