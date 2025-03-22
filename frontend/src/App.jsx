@@ -29,6 +29,7 @@ const AddCourse = lazy(() => import("./pages/Admin/Course/index"));
 const ManageCourse = lazy(() => import("./pages/Admin/Course/ManageCourse"));
 const EventPage = lazy(() => import("./pages/EventPage"));
 const EventForm = lazy(() => import("./pages/EventPage/EventForm"));
+const CourseContent = lazy(() => import("./pages/Admin/Course/Add Course/CourseContent"))
 
 const publicRoutes = [
   {
@@ -160,6 +161,14 @@ const adminRoutes = [
         element: (
           <LazyComponent>
             <AddCourse />
+          </LazyComponent>
+        ),
+      },
+      {
+        path: "add-course/add-content/:courseId",
+        element: (
+          <LazyComponent>
+            <CourseContent />
           </LazyComponent>
         ),
       },

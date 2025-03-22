@@ -2,7 +2,7 @@ import { FaPlus } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 
 import { useFieldArray } from "react-hook-form";
-import InputField from "../../Input Field";
+import InputField from "../../../../../components/Input Field";
 
 export default function SubSectionFields({ control, sectionIndex, errors }) {
   const {
