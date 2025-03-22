@@ -105,7 +105,7 @@ export default function Carousal() {
         <div className="relative w-full">
           {/* Left Button */}
           <div className="md:flex items-center justify-end gap-4 hidden mt-2">
-            {coursesAlle?.length > 1 && (
+            {coursesAll?.length > 1 && (
               <button
                 onClick={scrollLeft}
                 className="h-8 w-8 flex justify-center items-center bg-primary hover:bg-primary-hover cursor-pointer text-white text-2xl rounded-full shadow-md"
