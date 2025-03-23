@@ -4,7 +4,7 @@ import { IRatingAndReviews } from "./course.dto";
 const ratingAndReviewSchema = new mongoose.Schema<IRatingAndReviews>({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "user",
         required: true
     },
     courseId: {

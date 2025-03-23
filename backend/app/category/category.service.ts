@@ -32,12 +32,7 @@ export const updateCourseCategory = async (categoryId: string, data: ICourseCate
 };
 
 export const deleteCourseCategory = async (categoryId: string) => {
-    const category = await courseCategorySchema.findById(categoryId);
-    if(category?.courses?.length) {
-        throw createHttpError(409, "Cannot delete category which have a course");
-    }
-    const result = await courseCategorySchema.findByIdAndDelete(categoryId);
-
+    const result = await courseCategorySchema.findByIdAndUpdate(categoryId, { isDeleted: true }, { new: true });
     if (!result) {
         throw createHttpError(404, "Course category not found");
     }

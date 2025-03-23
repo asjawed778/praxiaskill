@@ -10,6 +10,7 @@ export interface IUser extends BaseSchema {
         profilePic: string;
         refreshToken: string;
         resetPasswordToken: string;
+        active: boolean;
 }
 
 export interface ITempUser extends BaseSchema {
