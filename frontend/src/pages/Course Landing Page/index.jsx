@@ -7,7 +7,7 @@ import { PiNewspaper } from "react-icons/pi";
 import { BiBell } from "react-icons/bi";
 import Curriculum from "./Curriculum";
 
-import { NAVS, ABOUT } from "./data";
+import { NAVS, ABOUT } from "../../Dummy Data/Course Landing Page/data";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useGetFullCourseDetailsQuery } from "../../services/course.api";

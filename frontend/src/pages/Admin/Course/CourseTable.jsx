@@ -172,7 +172,7 @@ const CourseTable = ({ data:publishedCourse, currentPage, setCurrentPage, isLoad
                 <IoClose />
               </button>
             </div>
-            <button onClick={() => navigate(`/dashboard/add-course/add-content/${ openMenu ? courses[openMenu]._id : null}`)} className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 rounded-md">
+            <button onClick={() => navigate(`/dashboard/course/content/${courses[openMenu]._id}`)} className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 rounded-md">
               <MdOutlineAddCircle className="mr-2" /> Add Content
             </button>
             <button className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 rounded-md">
