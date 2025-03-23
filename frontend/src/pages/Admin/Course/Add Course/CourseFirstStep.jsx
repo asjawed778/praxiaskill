@@ -15,9 +15,9 @@ const CourseFirstStep = ({ handleNext }) => {
   const selectedMode = watch("courseMode", "");
   const thumbnail = watch("thumbnail", "");
   const brouchure = watch("brouchure", "");
-
-  console.log("Thumbnail and brouchure", brouchure, thumbnail)
-
+  const category = watch("category", "");
+  const instructor = watch("instructor", "");
+  
   return (
     <div className="w-full">
       <div
@@ -85,6 +85,7 @@ const CourseFirstStep = ({ handleNext }) => {
               className="w-full"
               placeholder="Select a Category"
               label="Category"
+              value={category}
               {...register("category")}
               endpoint={"course/category"}
             />
@@ -102,6 +103,7 @@ const CourseFirstStep = ({ handleNext }) => {
             className="w-full"
             placeholder="Select an Instuctor"
             label="Instructor"
+            value={instructor}
             {...register("instructor")}
             endpoint={"course/instructors"}
           />
