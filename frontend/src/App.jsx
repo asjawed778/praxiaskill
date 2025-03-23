@@ -30,6 +30,8 @@ const ManageCourse = lazy(() => import("./pages/Admin/Course/ManageCourse"));
 const EventPage = lazy(() => import("./pages/EventPage"));
 const EventForm = lazy(() => import("./pages/EventPage/EventForm"));
 const CourseContent = lazy(() => import("./pages/Admin/Course/Add Course/CourseContent"))
+const PurchasedCourse = lazy(() => import("./pages/Admin/User/Purchased"))
+const UnpurchasedCourse = lazy(() => import("./pages/Admin/User/Unpurchasedcourse"))
 
 const publicRoutes = [
   {
@@ -165,7 +167,7 @@ const adminRoutes = [
         ),
       },
       {
-        path: "add-course/add-content/:courseId",
+        path: "course/content/:courseId",
         element: (
           <LazyComponent>
             <CourseContent />
@@ -200,6 +202,22 @@ const userPrivateRoutes = [
         element: (
           <LazyComponent>
             <AdminPage />
+          </LazyComponent>
+        ),
+      },
+      {
+        path: "purchased-course",
+        element: (
+          <LazyComponent>
+            <PurchasedCourse />
+          </LazyComponent>
+        ),
+      },
+      {
+        path: "unpurchased-course",
+        element: (
+          <LazyComponent>
+            <UnpurchasedCourse />
           </LazyComponent>
         ),
       },

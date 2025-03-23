@@ -4,15 +4,15 @@ import clock from "/imgs/slider/language2.png";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setCourses } from "../store/reducers/coursesReducer";
-import { setCategories } from "../store/reducers/adminCategoryReducer";
-import CourseSkeleton from "./skeletons/CourseSkeleton";
+import { setCourses } from "../../store/reducers/coursesReducer";
+import { setCategories } from "../../store/reducers/adminCategoryReducer";
+import CourseSkeleton from "../../components/skeletons/CourseSkeleton";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import {
   useGetAllCategoryQuery,
   useGetCategoryCourseQuery,
-} from "../services/course.api";
-import Button from "./Button/Button";
+} from "../../services/course.api";
+import Button from "../../components/Button/Button";
 
 export default function Carousal() {
   const dispatch = useDispatch();
