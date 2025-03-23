@@ -17,7 +17,10 @@ const CourseFirstStep = ({ handleNext }) => {
   const brouchure = watch("brouchure", "");
   const category = watch("category", "");
   const instructor = watch("instructor", "");
-  
+
+  console.log("Thumnail", thumbnail)
+  console.log("brouchure", brouchure)
+
   return (
     <div className="w-full">
       <div
@@ -157,7 +160,7 @@ const CourseFirstStep = ({ handleNext }) => {
               <img className="h-full w-full rounded-md" src={thumbnail} alt="thumnail" />
               <p className="text-sm text-green-500">Uploaded Image Preview</p>
             </div> }
-            {errors?.thumbnail && (
+            {!thumbnail && errors?.thumbnail && (
               <p className="text-red-600 text-xs ml-1 mt-0.5">
                 {errors?.thumbnail.message}
               </p>
@@ -178,7 +181,7 @@ const CourseFirstStep = ({ handleNext }) => {
           </a>
           <p className="text-sm">Click to Preview Brouchure</p>
           </div> }
-            {errors?.brouchure && (
+            {!brouchure && errors?.brouchure && (
               <p className="text-red-600 text-xs ml-1 mt-0.5">
                 {errors?.brouchure.message}
               </p>

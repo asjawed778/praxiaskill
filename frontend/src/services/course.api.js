@@ -32,10 +32,10 @@ export const apiCourse = createApi({
         };
       },
     }),
-    uploadDetails: builder.mutation({
+    uploadCourse: builder.mutation({
       query: (data) => {
         return {
-          url: "course/details",
+          url: "course",
           method: "POST",
           body: data,
           credentials: "include",
@@ -63,9 +63,9 @@ export const apiCourse = createApi({
       },
     }),
     publishCourse: builder.mutation({
-      query: ({ id }) => {
+      query: ({ id: courseId }) => {
         return {
-          url: `course/publish/${id}`,
+          url: `course/publish/${courseId}`,
           method: "POST",
           credentials: "include",
         };
@@ -92,7 +92,7 @@ export const apiCourse = createApi({
         credentials: "include"
       }),
     }),
-    setEnquiryStatus: builder.mutation({
+    setEnquiryStatus: builder.mutation({ //update
       query: ({data, enquiryId}) => ({
         url: `course/enquiry-status/${enquiryId}`,
         method: "POST",
@@ -100,7 +100,7 @@ export const apiCourse = createApi({
         credentials: "include"
       }),
     }),
-    addCourse: builder.mutation({
+    addCourse: builder.mutation({ //update
       query: (data) => ({
         url: "course/add-course",
         method: "POST",
@@ -126,13 +126,13 @@ export const apiCourse = createApi({
         method: "GET",
       }),
     }),
-    getCategoryCourse: builder.query({
+    getCategoryCourse: builder.query({ //name update
       query: (categoryId) => ({
         url: `course/published/${categoryId}`,
         method: "GET",
       }),
     }),
-    getFullCourseDetails: builder.query({
+    getFullCourseDetails: builder.query({  //ennpoint change
       query: (courseId) => ({
         url: `course/all-details/${courseId}`, 
         method: "GET",
@@ -145,7 +145,7 @@ export const {
   // Courses
   useUploadThumbnailMutation,
   useUploadBrouchureMutation,
-  useUploadDetailsMutation,
+  useUploadCourseMutation,
   useUploadAdditionalDetailsMutation,
   useUploadCourseStructureMutation,
   usePublishCourseMutation,

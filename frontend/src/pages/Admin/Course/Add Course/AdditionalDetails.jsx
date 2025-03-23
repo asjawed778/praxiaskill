@@ -21,6 +21,16 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
     name: "keypoints",
   });
 
+
+  const {
+    fields: whatWillYouLearn,
+    append: appendWhatWillYouLearn,
+    remove: removeWhatWillYouLearn,
+  } = useFieldArray({
+    control,
+    name: "whatWillYouLearn",
+  });
+
   const {
     fields: tags,
     append: tagAppend,
@@ -35,6 +45,17 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
       appendKeypoint(""); // Add an initial empty keypoint when component mounts
     }
   }, [keypoints, appendKeypoint]);
+
+   useEffect(() => {
+    if (whatWillYouLearn.length === 0) {
+      appendWhatWillYouLearn(""); // Add an initial empty keypoint when component mounts
+    }
+  }, [whatWillYouLearn, appendWhatWillYouLearn]);
+
+  const addWhatWillYouLearn = () => {
+    clearErrors("whatWillYouLearn");
+    appendWhatWillYouLearn("");
+  };
 
   const addKeypoint = () => {
     clearErrors("keypoints");
@@ -91,6 +112,54 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
           >
             <FaPlus />
             <span className="font-bold">Add more keypoint</span>
+          </button>
+        </div>
+
+
+        {/* WHat You will Learn  */}
+        <div className="flex flex-col gap-3">
+          <div className="relative flex gap-1 w-fit">
+            <span>What You Will Learn?</span>
+            <img
+              src={required}
+              alt="required"
+              className="absolute -right-3 top-2 w-[7px]"
+            />
+          </div>
+          <div>
+            {/* {keypoints.length === 0 && appendKeypoint("")} */}
+            {whatWillYouLearn.map((field, index) => (
+              <div key={field.id}>
+                <div className="flex items-center gap-1 mt-2">
+                  <input
+                    id={index}
+                    {...register(`whatWillYouLearn.${index}`)}
+                    className={`border p-2 w-full rounded-lg bg-white border-neutral-300 outline-0`}
+                    placeholder={`whatWillYouLearn ${index + 1}`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeWhatWillYouLearn(index)}
+                    className="text-neutral-400 text-3xl cursor-pointer hover:text-neutral-500"
+                  >
+                    <RiDeleteBin6Line />
+                  </button>
+                </div>
+                {errors?.whatWillYouLearn && (
+                  <p className="text-red-500 text-xs ml-2">
+                    {errors?.whatWillYouLearn[index]?.message}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={addWhatWillYouLearn}
+            className="text-primary hover:text-primary-hover w-fit px-4 py-2 rounded flex gap-1 items-center cursor-pointer"
+          >
+            <FaPlus />
+            <span className="font-bold">Add more points</span>
           </button>
         </div>
 
@@ -213,8 +282,9 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
 
             <div>
               <InputField
-                {...register("lecture")}
+                {...register("totalLectures")}
                 id="total-lecture"
+                type="number"
                 placeholder="50 plus classes"
                 labelClassName="relative flex"
               >
@@ -225,9 +295,9 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
                   className="size-2 absolute top-1 -right-3"
                 />
               </InputField>
-              {errors?.lecture && (
+              {errors?.totalLectures && (
                 <p className="text-red-500 text-xs ml-2">
-                  {errors.lecture.message}
+                  {errors.totalLectures.message}
                 </p>
               )}
             </div>

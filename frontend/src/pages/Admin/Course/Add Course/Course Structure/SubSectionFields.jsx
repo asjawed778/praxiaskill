@@ -18,7 +18,7 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
     <div className="flex flex-col gap-3 mt-4">
       <h1 className="font-medium">Subsections</h1>
 
-      {subSectionFields.map((_, subIndex) => (
+      {subSectionFields?.map((_, subIndex) => (
         <div key={subIndex} className="flex flex-col gap-5">
           <div className="flex gap-5 items-center">
             <div className="flex-1">
@@ -31,19 +31,16 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
                 // parentClassName="w-full"
               />
 
-              {Array.isArray(errors?.sections) &&
-                errors?.sections[sectionIndex]?.subSections[subIndex]
-                  ?.title && (
+              {errors?.sections && errors?.sections[sectionIndex]?.title && (
                   <p className="text-red-600 text-xs ml-1 mt-0.5">
                     {
-                      errors?.sections[sectionIndex]?.subSections[subIndex]
-                        .title?.message
+                      errors?.sections[sectionIndex]?.title?.message
                     }
                   </p>
                 )}
             </div>
 
-            {subSectionFields.length > 1 && (
+            {subSectionFields?.length > 1 && (
               <button
                 type="button"
                 onClick={() => removeSubsection(subIndex)}

@@ -29,6 +29,8 @@ export default function Carousal() {
       skip: !activeTab,
     });
 
+    console.log("courses", categoryCourse)
+
   useEffect(() => {
     if (allCategories?.success) {
       dispatch(setCategories(allCategories.data || []));
