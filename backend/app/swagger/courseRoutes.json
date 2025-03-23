@@ -281,8 +281,9 @@
     },
     "/course": {
         "post": {
-            "summary": "Create a New Course",
-            "description": "Creates a new course with all the required details. Requires Super Admin access.",
+            "summary": "Create a new course",
+            "description": "Creates a new course with sections and subsections",
+            "operationId": "createCourse",
             "tags": [
                 "Course"
             ],
@@ -296,186 +297,44 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "type": "object",
-                            "properties": {
-                                "courseId": {
-                                    "type": "string",
-                                    "description": "Optional course ID (MongoDB ObjectId)",
-                                    "example": "60d5ec49f30a3b001c8a4b34"
-                                },
-                                "title": {
-                                    "type": "string",
-                                    "description": "Title of the course",
-                                    "example": "MERN stack development"
-                                },
-                                "subtitle": {
-                                    "type": "string",
-                                    "description": "Subtitle of the course",
-                                    "example": "Become a job ready developer in just 6 months"
-                                },
-                                "category": {
-                                    "type": "string",
-                                    "description": "Category ID (MongoDB ObjectId)",
-                                    "example": "67dee88aa338a54e0dbfe965"
-                                },
-                                "language": {
-                                    "type": "string",
-                                    "description": "Language of the course",
-                                    "example": "HINDI"
-                                },
-                                "instructor": {
-                                    "type": "string",
-                                    "description": "Instructor ID (MongoDB ObjectId)",
-                                    "example": "67deeaaaa338a54e0dbfe96e"
-                                },
-                                "courseMode": {
-                                    "type": "string",
-                                    "description": "Mode of the course (e.g., ONLINE, OFFLINE)",
-                                    "example": "ONLINE"
-                                },
-                                "thumbnail": {
-                                    "type": "string",
-                                    "description": "URL of the course thumbnail",
-                                    "example": "https://example.com/thumbnail.jpg"
-                                },
-                                "brouchure": {
-                                    "type": "string",
-                                    "description": "URL of the course brochure",
-                                    "example": "https://example.com/brouchure.pdf"
-                                },
-                                "keypoints": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    },
-                                    "description": "Key points of the course",
-                                    "example": [
-                                        "Comprehensive course",
-                                        "Hands-on projects"
-                                    ]
-                                },
-                                "tags": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    },
-                                    "description": "Tags related to the course",
-                                    "example": [
-                                        "programming",
-                                        "fullstack"
-                                    ]
-                                },
-                                "description": {
-                                    "type": "string",
-                                    "description": "Detailed description of the course",
-                                    "example": "This is an in-depth course covering full-stack development."
-                                },
-                                "duration": {
-                                    "type": "string",
-                                    "description": "Duration of the course",
-                                    "example": "12 weeks"
-                                },
-                                "totalLectures": {
-                                    "type": "integer",
-                                    "description": "Total number of lectures in the course",
-                                    "example": 50
-                                },
-                                "trailerVideo": {
-                                    "type": "string",
-                                    "description": "URL of the trailer video",
-                                    "example": "https://example.com/trailer.mp4"
-                                },
-                                "whatWillYouLearn": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    },
-                                    "description": "Learning outcomes of the course",
-                                    "example": [
-                                        "Master full-stack development with MERN",
-                                        "Build real-world applications"
-                                    ]
-                                },
-                                "price": {
-                                    "type": "object",
-                                    "properties": {
-                                        "actualPrice": {
-                                            "type": "number",
-                                            "description": "Actual price of the course",
-                                            "example": 4999
-                                        },
-                                        "discountPercentage": {
-                                            "type": "number",
-                                            "description": "Discount percentage on the course",
-                                            "example": 20
-                                        },
-                                        "finalPrice": {
-                                            "type": "number",
-                                            "description": "Final price after discount",
-                                            "example": 3999
-                                        }
-                                    },
-                                    "required": [
-                                        "actualPrice",
-                                        "finalPrice"
-                                    ]
-                                },
-                                "sections": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "title": {
-                                                "type": "string",
-                                                "description": "Title of the section",
-                                                "example": "Introduction to MERN Stack"
-                                            },
-                                            "description": {
-                                                "type": "string",
-                                                "description": "Description of the section",
-                                                "example": "Overview of MongoDB, Express, React, and Node.js."
-                                            },
-                                            "subSections": {
-                                                "type": "array",
-                                                "items": {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "title": {
-                                                            "type": "string",
-                                                            "description": "Title of the subsection",
-                                                            "example": "What is MERN Stack?"
-                                                        }
-                                                    },
-                                                    "required": [
-                                                        "title"
-                                                    ]
-                                                }
-                                            }
-                                        },
-                                        "required": [
-                                            "title"
-                                        ]
-                                    },
-                                    "description": "Sections of the course, each containing subsections"
-                                }
+                            "$ref": "#/components/schemas/Course"
+                        },
+                        "example": {
+                            "title": "Full Stack Development",
+                            "subtitle": "Learn MERN Stack",
+                            "category": "65a2b4d8e5f9d7a12c3e4f56",
+                            "instructor": "65b3c5e9f7a8d9b12e3c4d67",
+                            "courseMode": "ONLINE",
+                            "thumbnail": "https://example.com/image.png",
+                            "brouchure": "https://example.com/brochure.pdf",
+                            "language": "ENGLISH",
+                            "duration": "6 weeks",
+                            "totalLectures": 40,
+                            "price": {
+                                "actualPrice": 4999,
+                                "discountPercentage": 20,
+                                "finalPrice": 3999
                             },
-                            "required": [
-                                "title",
-                                "subtitle",
-                                "category",
-                                "language",
-                                "instructor",
-                                "courseMode",
-                                "thumbnail",
-                                "brouchure",
-                                "keypoints",
-                                "tags",
-                                "description",
-                                "duration",
-                                "totalLectures",
-                                "price",
-                                "sections"
-                            ]
+                            "sections": [
+                                {
+                                    "title": "Introduction",
+                                    "description": "Overview of the course",
+                                    "subSections": [
+                                        {
+                                            "title": "Welcome Video",
+                                            "video": "https://example.com/video.mp4",
+                                            "pdf": "https://example.com/docs.pdf",
+                                            "image": "https://example.com/image.png",
+                                            "resources": [
+                                                "https://example.com/resource1.pdf",
+                                                "https://example.com/resource2.zip"
+                                            ],
+                                            "isPreview": true
+                                        }
+                                    ]
+                                }
+                            ],
+                            "courseStatus": "PUBLISHED"
                         }
                     }
                 }
@@ -486,67 +345,81 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "message": {
-                                        "type": "string",
-                                        "example": "Course created successfully"
+                                "$ref": "#/components/schemas/CourseResponse"
+                            },
+                            "example": {
+                                "message": "Course created successfully",
+                                "data": {
+                                    "_id": "65f4b6d8a7c2b3e9d5f8a9c1",
+                                    "title": "Full Stack Development",
+                                    "subtitle": "Learn MERN Stack",
+                                    "category": "65a2b4d8e5f9d7a12c3e4f56",
+                                    "instructor": "65b3c5e9f7a8d9b12e3c4d67",
+                                    "courseMode": "ONLINE",
+                                    "thumbnail": "https://example.com/image.png",
+                                    "brouchure": "https://example.com/brochure.pdf",
+                                    "language": "ENGLISH",
+                                    "duration": "6 weeks",
+                                    "totalLectures": 40,
+                                    "price": {
+                                        "actualPrice": 4999,
+                                        "discountPercentage": 20,
+                                        "finalPrice": 3999
                                     },
-                                    "course": {
-                                        "type": "object",
-                                        "description": "The created course object",
-                                        "properties": {
-                                            "id": {
-                                                "type": "string",
-                                                "description": "ID of the created course",
-                                                "example": "60d5ec49f30a3b001c8a4b34"
-                                            }
+                                    "sections": [
+                                        {
+                                            "title": "Introduction",
+                                            "description": "Overview of the course",
+                                            "subSections": [
+                                                {
+                                                    "title": "Welcome Video",
+                                                    "video": "https://example.com/video.mp4",
+                                                    "pdf": "https://example.com/docs.pdf",
+                                                    "image": "https://example.com/image.png",
+                                                    "resources": [
+                                                        "https://example.com/resource1.pdf",
+                                                        "https://example.com/resource2.zip"
+                                                    ],
+                                                    "isPreview": true
+                                                }
+                                            ]
                                         }
-                                    }
+                                    ],
+                                    "courseStatus": "PUBLISHED"
                                 }
                             }
                         }
                     }
                 },
                 "400": {
-                    "description": "Validation Error",
+                    "description": "Validation error",
                     "content": {
                         "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "message": {
-                                        "type": "string",
-                                        "examples": [
-                                            "Title is required",
-                                            "Subtitle is required",
-                                            "Category is required",
-                                            "Language is required",
-                                            "Instructor is required",
-                                            "Course mode is required",
-                                            "Thumbnail is required",
-                                            "Brouchure is required",
-                                            "At least one keypoint is required",
-                                            "At least one tag is required",
-                                            "Description is required",
-                                            "Duration is required",
-                                            "Total lectures count is required",
-                                            "Sections must be an array with at least one section"
-                                        ]
-                                    }
-                                }
+                            "example": {
+                                "error": "Title, instructor, and category are required fields"
                             }
                         }
                     }
                 },
-                "401": {
-                    "$ref": "#/components/responses/UnauthorizedError"
-                },
-                "403": {
-                    "$ref": "#/components/responses/ForbiddenError"
+                "404": {
+                    "description": "Instructor or Category not found",
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "error": "Instructor with ID 65b3c5e9f7a8d9b12e3c4d67 not found"
+                            }
+                        }
+                    }
                 },
                 "500": {
-                    "$ref": "#/components/responses/ServerError"
+                    "description": "Internal Server Error",
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "error": "Something went wrong, please try again later"
+                            }
+                        }
+                    }
                 }
             }
         }

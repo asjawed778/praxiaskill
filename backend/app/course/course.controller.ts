@@ -70,6 +70,7 @@ export const createCourse = asyncHandler(async(req: Request, res: Response) => {
     if (!result) {
         throw createHttpError(500, "Error in creating course");
     }
+    await CourseCategoryService.addCourseId(result._id, category);
 
     res.send(createResponse(result, "Course created successfully"));
 }); 
