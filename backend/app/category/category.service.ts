@@ -1,7 +1,6 @@
 import createHttpError from "http-errors";
 import courseCategorySchema from "./category.schema";
 import { ICourseCategory } from "./category.dto";
-import mongoose from "mongoose";
 
 export const createCourseCategory = async(data : ICourseCategory) => {
     if(await courseCategorySchema.exists({name: data.name})) {

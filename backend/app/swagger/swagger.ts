@@ -1,21 +1,21 @@
 import userRoute from './userRoute.json';
 import categoryRoute from './categoryRoutes.json';
-import  courseRoute from './courseRoutes.json';
+import courseRoute from './courseRoutes.json';
 
 const swaggerDocument = {
     openapi: "3.0.0",
     info: {
-      title: "Express API Documentation",
-      version: "1.0.0",
-      description: "API documentation for the Express project",
-      contact: {
-        email: "iamakr.dev@gmail.com",
+        title: "Express API Documentation",
+        version: "1.0.0",
+        description: "API documentation for the Express project",
+        contact: {
+            email: "iamakr.dev@gmail.com",
         },
     },
     servers: [
         {
-        url: "http://localhost:4000/api",
-        description: "Development server",
+            url: "http://localhost:4000/api",
+            description: "Development server",
         },
     ],
     paths: {
@@ -23,8 +23,7 @@ const swaggerDocument = {
         ...categoryRoute,
         ...courseRoute,
     },
-    
+
 };
-  
-  export default swaggerDocument;
-  
+
+export default swaggerDocument;
