@@ -23,7 +23,7 @@ const CourseEnquirySchema = new mongoose.Schema<ICourseEnquiry>({
         type: String,
         required: true,
     },
-    intrestedCourse: {
+    interestedCourse: {
         type: String,
         required: true,
     },

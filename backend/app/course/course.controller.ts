@@ -10,7 +10,14 @@ import * as CourseCategoryService from "../category/category.service";
 import { sendEmail } from '../common/services/email.service';
 import { courseEnquiryEmailTemplate } from '../common/template/courseEnquiry.template';
 
-
+/**
+ * Uploads a public file to AWS S3.
+ *
+ * @param {Request} req - The Express request object, containing the uploaded file.
+ * @param {Response} res - The Express response object.
+ * @throws {HttpError} If no files are uploaded or an invalid file type is selected.
+ * @returns {void} Sends a response with the upload result.
+ */
 export const uploadPublicFile = asyncHandler(async(req: Request, res: Response) => {
     const allowedFields = ["thumbnail", "brouchure", "trailerVideo", "video"];
 
@@ -35,27 +42,18 @@ export const uploadPublicFile = asyncHandler(async(req: Request, res: Response) 
     res.send(createResponse(result, `${fileKey} uploaded successfully to AWS`));
 });
 
-export const addCourseDetails = asyncHandler(async(req: Request, res: Response) => {
-    if (!req.user) {
-        throw createHttpError(401, "User not authenticated");
-    }
-    const userId = req.user._id;
-    const courseId = req.params.courseId;
+/**
+ * Creates a new course.
+ *
+ * @param {Request} req - The Express request object containing course data.
+ * @param {Response} res - The Express response object.
+ * @throws {HttpError} If the instructor ID or category ID is invalid or not found.
+ * @throws {HttpError} If there is an error in creating the course.
+ * @returns {void} Sends a response with the created course details.
+ */
+export const createCourse = asyncHandler(async(req: Request, res: Response) => {
+
     const data = req.body;
-    let previousCategoryId: string | null = null;
-
-    if(courseId) {
-        const course = await courseService.getCourseById(courseId);
-        if(!course) {
-            throw createHttpError(404, "Course id invalid, course not found")
-        }
-        const isCourseOwner = await courseService.isCourseOwner(userId, courseId);
-        if(!isCourseOwner) {
-            throw createHttpError(401, "You are not authorized to update this course");
-        }
-        previousCategoryId = course.category?.toString() || null;
-    }
-
     const { category, instructor } = data;
 
     const isInstrucotrExist = await UserService.getInstructorById(instructor?.toString());
@@ -67,136 +65,96 @@ export const addCourseDetails = asyncHandler(async(req: Request, res: Response) 
         throw createHttpError(404, "Category id is invalid, Not found");
     }
 
-    const result = await courseService.addCourseDetails(courseId, data);
+    const result = await courseService.createCourse(data);
 
     if (!result) {
-        throw createHttpError(500, "Error in creating/updating course");
+        throw createHttpError(500, "Error in creating course");
     }
+    await CourseCategoryService.addCourseId(result._id, category);
 
-    if (previousCategoryId && previousCategoryId !== category?.toString()) {
-        await CourseCategoryService.removeCourseId(result._id?.toString(), previousCategoryId);
-    }
+    res.send(createResponse(result, "Course created successfully"));
+}); 
 
-    await CourseCategoryService.addCourseId(result?._id?.toString(), category?.toString());
-
-    if(!courseId) {
-        await courseService.draftCourse(userId, result._id?.toString());
-    }
-    res.send(createResponse(result, "CourseDetails Added/Updated successfully"));
-});
-
-// Todo : complete this function -- this for course details step 1
-export const getCourseDetails = asyncHandler(async(req: Request, res: Response) => {
-    if (!req.user) {
-        throw createHttpError(401, "User not authenticated");
-    }
-    const userId = req.user._id;
+/**
+ * Retrieves the content of a specific course.
+ *
+ * @param {Request} req - The Express request object containing the course ID in params.
+ * @param {Response} res - The Express response object.
+ * @throws {HttpError} If the course ID is invalid or not found.
+ * @returns {void} Sends a response with the course content.
+ */
+export const getCourseContent = asyncHandler(async(req: Request, res: Response) => {
     const courseId = req.params.courseId;
-
-    const isCourseOwner = await courseService.isCourseOwner(userId, courseId);
-    if(!isCourseOwner) {
-        throw createHttpError(401, "You are not authorized to view this course");
-    }
-
-    
-});
-
-export const addAdditionalDetails = asyncHandler(async(req: Request, res: Response) => {
-    const courseId = req.params.courseId;
-    const data = req.body;
-
-    if(courseId) {
-        const course = await courseService.getCourseById(courseId);
-        if(!course) {
-            throw createHttpError(404, "Course id invalid, course not found")
-        }
-    }
-
-    const result = await courseService.addAdditionalDetails(courseId, data);
-    res.send(createResponse(result, "Additional details added successfully"));
-});
-
-export const addCourseStructure = asyncHandler(async(req: Request, res: Response) => {
-    const courseId = req.params.courseId;
-    const { sections } = req.body;
-
-    if(courseId) {
-        const course = await courseService.getCourseById(courseId);
-        if(!course) {
-            throw createHttpError(404, "Course id invalid, course not found")
-        }
-    }
-
-    const result = await courseService.addCourseStructure(courseId, sections);
-    res.send(createResponse({ course: result }, "Course structure added successfully"));
-    
-});
-
-export const getCoursePreview = asyncHandler(async(req: Request, res: Response) => {
-    const courseId = req.params.courseId;
-    const course = await courseService.getCoursePreview(courseId);
-    if(!course) {
-        throw createHttpError(404, "Course id invalid, course not found")
-    }
-    res.send(createResponse({course}, "Course fetched successfully"));
-});
-
-export const publishCourse = asyncHandler(async(req: Request, res: Response) => {
-    if (!req.user) {
-        throw createHttpError(401, "User not authenticated");
-    }
-    const userId = req.user._id;
-    const courseId = req.params.courseId;
-    const isCourseExist = await courseService.getCourseById(courseId);
+    const isCourseExist = await courseService.isCourseExist(courseId);
     if(!isCourseExist) {
         throw createHttpError(404, "Course id is invalid, Not found");
     }
-    await courseService.publishCourse(userId, courseId);
+    const courseContent = await courseService.getCourseContent(courseId);
+    res.send(createResponse(courseContent, "Course content fetched successfully")); 
+});
+
+/**
+ * Publishes a course, making it available for users.
+ *
+ * @param {Request} req - The Express request object containing the course ID in params.
+ * @param {Response} res - The Express response object.
+ * @throws {HttpError} If the course ID is invalid or not found.
+ * @returns {void} Sends a response confirming the course has been published.
+ */
+export const publishCourse = asyncHandler(async(req: Request, res: Response) => {
+    const courseId = req.params.courseId;
+    const isCourseExist = await courseService.isCourseExist(courseId);
+    if(!isCourseExist) {
+        throw createHttpError(404, "Course id is invalid, Not found");
+    }
+    await courseService.publishCourse(courseId);
     res.send(createResponse({}, "Course published successfully"));
 });
 
+/**
+ * Moves a course to draft status, making it unavailable for users.
+ *
+ * @param {Request} req - The Express request object containing the course ID in params.
+ * @param {Response} res - The Express response object.
+ * @throws {HttpError} If the course ID is invalid or not found.
+ * @returns {void} Sends a response confirming the course has been drafted.
+ */
 export const draftCourse = asyncHandler(async(req: Request, res: Response) => {
-    if (!req.user) {
-        throw createHttpError(401, "User not authenticated");
-    }
-    const userId = req.user._id;
     const courseId = req.params.courseId;
-    const isCourseExist = await courseService.getCourseById(courseId);
+    const isCourseExist = await courseService.isCourseExist(courseId);
     if(!isCourseExist) {
         throw createHttpError(404, "Course id is invalid, Not found");
     }
-    await courseService.draftCourse(userId, courseId);
+    await courseService.draftCourse(courseId);
     res.send(createResponse({}, "Course drafted successfully"));
 });
 
+/**
+ * Terminates a course, making it permanently unavailable for users.
+ *
+ * @param {Request} req - The Express request object containing the course ID in params.
+ * @param {Response} res - The Express response object.
+ * @throws {HttpError} If the course ID is invalid or not found.
+ * @returns {void} Sends a response confirming the course has been terminated.
+ */
 export const terminateCourse = asyncHandler(async(req: Request, res: Response) => {
-    if (!req.user) {
-        throw createHttpError(401, "User not authenticated");
-    }
-    const userId = req.user._id;
     const courseId = req.params.courseId;
-    const isCourseExist = await courseService.getCourseById(courseId);
+    const isCourseExist = await courseService.isCourseExist(courseId);
     if(!isCourseExist) {
         throw createHttpError(404, "Course id is invalid, Not found");
     }
-    await courseService.terminateCourse(userId, courseId);
+    await courseService.terminateCourse(courseId);
     res.send(createResponse({}, "Course terminated successfully"));
 });
 
-export const unpublishCourse = asyncHandler(async(req: Request, res: Response) => {
-    if (!req.user) {
-        throw createHttpError(401, "User not authenticated");
-    }
-    const userId = req.user._id;
-    const courseId = req.params.courseId;
-    const isCourseExist = await courseService.getCourseById(courseId);
-    if(!isCourseExist) {
-        throw createHttpError(404, "Course id is invalid, Not found");
-    }
-    await courseService.unpublishCourse(userId, courseId);
-    res.send(createResponse({}, "Course unpublished successfully"));
-});
-
+/**
+ * Retrieves published courses by category.
+ *
+ * @param {Request} req - The Express request object containing the category ID in params and optional page number in query.
+ * @param {Response} res - The Express response object.
+ * @throws {HttpError} If the category ID is invalid or not found.
+ * @returns {void} Sends a response with the list of published courses in the specified category.
+ */
 export const getPublishedCourseByCategory = asyncHandler(async(req: Request, res: Response) => {
     const categoryId = req.params.categoryId;
     const pageNo = parseInt(req.query.pageNo as string) || 1;
@@ -209,26 +167,52 @@ export const getPublishedCourseByCategory = asyncHandler(async(req: Request, res
     res.send(createResponse(courses, "Published courses by category fetched successfully"));
 });
 
-export const getFullCourseDetails = asyncHandler(async(req: Request, res: Response) => {
+/**
+ * Retrieves the full details of a specific course.
+ *
+ * @param {Request} req - The Express request object containing the course ID in params.
+ * @param {Response} res - The Express response object.
+ * @throws {HttpError} If the course ID is invalid or not found.
+ * @returns {void} Sends a response with the complete course details.
+ */
+export const getCourseDetails = asyncHandler(async(req: Request, res: Response) => {
     const courseId = req.params.courseId;
-    const course = await courseService.getFullCourseDetails(courseId);
+    const isCourseExist = await courseService.isCourseExist(courseId);
+    if(!isCourseExist) {
+        throw createHttpError(404, "Course id is invalid, Not found");
+    }
+    const course = await courseService.getCourseDetails(courseId);
     if(!course) {
         throw createHttpError(404, "Course id invalid, course not found")
     }
     res.send(createResponse(course, "Full course details fetched successfully"));
 });
 
+/**
+ * Retrieves the list of all instructors.
+ *
+ * @param {Request} req - The Express request object.
+ * @param {Response} res - The Express response object.
+ * @returns {void} Sends a response with the list of instructors.
+ */
 export const getIntructorList = asyncHandler(async(req: Request, res: Response) => {
     const instructor = await UserService.getInstructorList();
     res.send(createResponse(instructor, "Instructor List fetched"));
 });
 
+/**
+ * Submits a course enquiry and sends a confirmation email.
+ *
+ * @param {Request} req - The Express request object containing enquiry details in the request body.
+ * @param {Response} res - The Express response object.
+ * @returns {void} Sends a response confirming the course enquiry submission.
+ */
 export const courseEnquiry = asyncHandler(async(req: Request, res: Response) => {
     const data = req.body;
     const result = await courseService.courseEnquiry(data);
 
-    const emailContent = courseEnquiryEmailTemplate(result.ticketNo, data.name, data.email, data.phone, data.education, data.intrestedCourse);
-    await sendEmail({ 
+    const emailContent = courseEnquiryEmailTemplate(result.ticketNo, data.name, data.email, data.phone, data.education, data.interestedCourse);
+    await sendEmail({
         from: process.env.MAIL_USER,
         to: data.email,
         subject: `Course Enquiry Ticket No: ${result.ticketNo}`,
@@ -238,12 +222,26 @@ export const courseEnquiry = asyncHandler(async(req: Request, res: Response) => 
     res.send(createResponse({}, "Course enquiry submitted successfully"));
 });
 
+/**
+ * Retrieves a paginated list of course enquiries.
+ *
+ * @param {Request} req - The Express request object containing the page number in query parameters.
+ * @param {Response} res - The Express response object.
+ * @returns {void} Sends a response with the list of course enquiries.
+ */
 export const getCourseEnquiry = asyncHandler(async(req: Request, res: Response) => {
     const pageNo = parseInt(req.query.pageNo as string) || 1;
     const result = await courseService.getCourseEnquiry(pageNo);
     res.send(createResponse(result, "Course enquiry fetched successfully"));
 });
 
+/**
+ * Changes the status of a course enquiry.
+ *
+ * @param {Request} req - The Express request object containing the enquiry ID in params and the new status in the request body.
+ * @param {Response} res - The Express response object.
+ * @returns {void} Sends a response confirming the enquiry status change.
+ */
 export const changeEnquiryStatus = asyncHandler(async(req: Request, res: Response) => {
     const enquiryId = req.params.enquiryId;
     const status = req.body.status;
@@ -251,8 +249,43 @@ export const changeEnquiryStatus = asyncHandler(async(req: Request, res: Respons
     res.send(createResponse({}, "Enquiry status changed successfully"));
 });
 
+/**
+ * Retrieves a paginated list of published courses.
+ *
+ * @param {Request} req - The Express request object containing the page number in query parameters.
+ * @param {Response} res - The Express response object.
+ * @returns {void} Sends a response with the list of published courses.
+ */
 export const getPublishedCourses = asyncHandler(async(req: Request, res: Response) => {
     const pageNo = parseInt(req.query.pageNo as string) || 1;
     const result = await courseService.getPublishedCourses(pageNo);
     res.send(createResponse(result, "Published courses fetched successfully"));
+});
+
+/**
+ * Allows a user to rate a course if they have purchased it.
+ *
+ * @param {Request} req - The Express request object containing the course ID in params and rating details in the request body.
+ * @param {Response} res - The Express response object.
+ * @throws {HttpError} If the user is not authenticated, the course ID is invalid, or the user has not purchased the course.
+ * @returns {void} Sends a response confirming the course rating submission.
+ */
+export const rateCourse = asyncHandler(async(req: Request, res: Response) => {
+    if(!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+    const userId = req.user._id;
+    const courseId = req.params.courseId;
+    const isCategoryExist = await courseService.isCourseExist(courseId);
+    if(!isCategoryExist) {
+        throw createHttpError(404, "Course id is invalid, Not found");
+    }
+    const isPurchased = await courseService.isUserCoursePurchased(userId, courseId);
+    if(!isPurchased) {
+        throw createHttpError(401, "Unauthorized user, course not purchased");
+    }
+
+    const data = req.body;
+    const result = await courseService.rateCourse(userId, courseId, data);
+    res.send(createResponse(result, "Course rated successfully"));
 });

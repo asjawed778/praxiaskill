@@ -41,6 +41,10 @@ const UserSchema = new mongoose.Schema<IUser>(
     resetPasswordToken: {
       type: String,
       default: null
+    },
+    active: {
+      type: Boolean,
+      default: true
     }
   },
   { timestamps: true }

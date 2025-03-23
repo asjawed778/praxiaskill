@@ -15,7 +15,10 @@ const courseCategorySchema = new mongoose.Schema<ICourseCategory>({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Course",
   }],
-  
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 }, { timestamps: true });
 
 export default mongoose.model<ICourseCategory>("CourseCategory", courseCategorySchema);

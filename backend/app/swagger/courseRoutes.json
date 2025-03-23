@@ -1,0 +1,427 @@
+{
+    "/course/thumbnail": {
+        "post": {
+            "summary": "Upload Course Thumbnail",
+            "description": "Uploads a course thumbnail image. Requires Super Admin access.",
+            "tags": [
+                "Course"
+            ],
+            "security": [
+                {
+                    "bearerAuth": []
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "thumbnail": {
+                                    "type": "string",
+                                    "format": "binary",
+                                    "description": "Thumbnail image file (JPG, JPEG, PNG) with a max size of 5MB"
+                                }
+                            },
+                            "required": [
+                                "thumbnail"
+                            ]
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Thumbnail uploaded successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "thumbnail uploaded successfully to AWS"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Bad request - Invalid file type or size",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Thumbnail must be an image (jpg, jpeg, png) and less than 5MB"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "/course/brouchure": {
+        "post": {
+            "summary": "Upload Course Brochure",
+            "description": "Uploads a course brochure (PDF format). Requires Super Admin access.",
+            "tags": [
+                "Course"
+            ],
+            "security": [
+                {
+                    "bearerAuth": []
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "brouchure": {
+                                    "type": "string",
+                                    "format": "binary",
+                                    "description": "Brochure file in PDF format, max size 5MB"
+                                }
+                            },
+                            "required": [
+                                "brouchure"
+                            ]
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Brochure uploaded successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "brouchure uploaded successfully to AWS"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Bad request - Invalid file type or size",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Brochure must be a PDF file and less than 5MB"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "/course/trailer-video": {
+        "post": {
+            "summary": "Upload Course Trailer Video",
+            "description": "Uploads a trailer video for a course. Requires Super Admin access.",
+            "tags": [
+                "Course"
+            ],
+            "security": [
+                {
+                    "bearerAuth": []
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "video": {
+                                    "type": "string",
+                                    "format": "binary",
+                                    "description": "Video file in MP4, MOV, AVI, MKV, WEBM, FLV, or WMV format, max size 10MB"
+                                }
+                            },
+                            "required": [
+                                "video"
+                            ]
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Trailer video uploaded successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "trailer video uploaded successfully to AWS"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Bad request - Invalid file type or size",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Invalid video format. Allowed formats: mp4, mov, avi, mkv, webm, flv, wmv."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "/course/instructors": {
+        "get": {
+            "summary": "Get List of Instructors",
+            "description": "Fetches a list of all instructors. Requires Super Admin access.",
+            "tags": [
+                "Course"
+            ],
+            "security": [
+                {
+                    "bearerAuth": []
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "List of instructors fetched successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Instructor List fetched"
+                                    },
+                                    "data": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "_id": {
+                                                    "type": "string",
+                                                    "example": "60a7c45b3f1f3c001c8b4567"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "johndoe@example.com"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "INSTRUCTOR"
+                                                },
+                                                "profilePic": {
+                                                    "type": "string",
+                                                    "example": "https://example.com/profile.jpg"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "403": {
+                    "description": "Forbidden - Only Super Admins can access this route",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Access denied"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "/course": {
+        "post": {
+            "summary": "Create a new course",
+            "description": "Creates a new course with sections and subsections",
+            "operationId": "createCourse",
+            "tags": [
+                "Course"
+            ],
+            "security": [
+                {
+                    "bearerAuth": []
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Course"
+                        },
+                        "example": {
+                            "title": "Full Stack Development",
+                            "subtitle": "Learn MERN Stack",
+                            "category": "65a2b4d8e5f9d7a12c3e4f56",
+                            "instructor": "65b3c5e9f7a8d9b12e3c4d67",
+                            "courseMode": "ONLINE",
+                            "thumbnail": "https://example.com/image.png",
+                            "brouchure": "https://example.com/brochure.pdf",
+                            "language": "ENGLISH",
+                            "duration": "6 weeks",
+                            "totalLectures": 40,
+                            "price": {
+                                "actualPrice": 4999,
+                                "discountPercentage": 20,
+                                "finalPrice": 3999
+                            },
+                            "sections": [
+                                {
+                                    "title": "Introduction",
+                                    "description": "Overview of the course",
+                                    "subSections": [
+                                        {
+                                            "title": "Welcome Video",
+                                            "video": "https://example.com/video.mp4",
+                                            "pdf": "https://example.com/docs.pdf",
+                                            "image": "https://example.com/image.png",
+                                            "resources": [
+                                                "https://example.com/resource1.pdf",
+                                                "https://example.com/resource2.zip"
+                                            ],
+                                            "isPreview": true
+                                        }
+                                    ]
+                                }
+                            ],
+                            "courseStatus": "PUBLISHED"
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "201": {
+                    "description": "Course created successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CourseResponse"
+                            },
+                            "example": {
+                                "message": "Course created successfully",
+                                "data": {
+                                    "_id": "65f4b6d8a7c2b3e9d5f8a9c1",
+                                    "title": "Full Stack Development",
+                                    "subtitle": "Learn MERN Stack",
+                                    "category": "65a2b4d8e5f9d7a12c3e4f56",
+                                    "instructor": "65b3c5e9f7a8d9b12e3c4d67",
+                                    "courseMode": "ONLINE",
+                                    "thumbnail": "https://example.com/image.png",
+                                    "brouchure": "https://example.com/brochure.pdf",
+                                    "language": "ENGLISH",
+                                    "duration": "6 weeks",
+                                    "totalLectures": 40,
+                                    "price": {
+                                        "actualPrice": 4999,
+                                        "discountPercentage": 20,
+                                        "finalPrice": 3999
+                                    },
+                                    "sections": [
+                                        {
+                                            "title": "Introduction",
+                                            "description": "Overview of the course",
+                                            "subSections": [
+                                                {
+                                                    "title": "Welcome Video",
+                                                    "video": "https://example.com/video.mp4",
+                                                    "pdf": "https://example.com/docs.pdf",
+                                                    "image": "https://example.com/image.png",
+                                                    "resources": [
+                                                        "https://example.com/resource1.pdf",
+                                                        "https://example.com/resource2.zip"
+                                                    ],
+                                                    "isPreview": true
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "courseStatus": "PUBLISHED"
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Validation error",
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "error": "Title, instructor, and category are required fields"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "Instructor or Category not found",
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "error": "Instructor with ID 65b3c5e9f7a8d9b12e3c4d67 not found"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "Internal Server Error",
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "error": "Something went wrong, please try again later"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

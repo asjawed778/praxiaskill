@@ -21,3 +21,9 @@ export enum EnquiryStatus {
     PENDING = "PENDING",
     CLOSED = "CLOSED",
 }
+
+export enum CourseStatus {
+    DRAFT = "DRAFT",
+    PUBLISHED = "PUBLISHED",
+    TERMINATED = "TERMINATED",
+}
