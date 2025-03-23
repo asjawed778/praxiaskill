@@ -13,9 +13,9 @@ import enrollmentSchema from "./enrollment.schema";
  *
  * @param {Omit<ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }} data 
  *        - The course details including sections and subsections.
- * @returns {Promise<ICourse>} The newly created course with section references.
+ * @returns {Promise<any>} The newly created course with section references.
  */
-export const createCourse = async (data: Omit<ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }): Promise<ICourse> => {
+export const createCourse = async (data: Omit<ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }): Promise<any> => {
 
     const { sections, ...courseDetails } = data;
     const course = await courseSchema.create(courseDetails);

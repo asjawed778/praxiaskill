@@ -1,0 +1,554 @@
+{
+    "/course/thumbnail": {
+        "post": {
+            "summary": "Upload Course Thumbnail",
+            "description": "Uploads a course thumbnail image. Requires Super Admin access.",
+            "tags": [
+                "Course"
+            ],
+            "security": [
+                {
+                    "bearerAuth": []
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "thumbnail": {
+                                    "type": "string",
+                                    "format": "binary",
+                                    "description": "Thumbnail image file (JPG, JPEG, PNG) with a max size of 5MB"
+                                }
+                            },
+                            "required": [
+                                "thumbnail"
+                            ]
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Thumbnail uploaded successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "thumbnail uploaded successfully to AWS"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Bad request - Invalid file type or size",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Thumbnail must be an image (jpg, jpeg, png) and less than 5MB"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "/course/brouchure": {
+        "post": {
+            "summary": "Upload Course Brochure",
+            "description": "Uploads a course brochure (PDF format). Requires Super Admin access.",
+            "tags": [
+                "Course"
+            ],
+            "security": [
+                {
+                    "bearerAuth": []
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "brouchure": {
+                                    "type": "string",
+                                    "format": "binary",
+                                    "description": "Brochure file in PDF format, max size 5MB"
+                                }
+                            },
+                            "required": [
+                                "brouchure"
+                            ]
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Brochure uploaded successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "brouchure uploaded successfully to AWS"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Bad request - Invalid file type or size",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Brochure must be a PDF file and less than 5MB"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "/course/trailer-video": {
+        "post": {
+            "summary": "Upload Course Trailer Video",
+            "description": "Uploads a trailer video for a course. Requires Super Admin access.",
+            "tags": [
+                "Course"
+            ],
+            "security": [
+                {
+                    "bearerAuth": []
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "video": {
+                                    "type": "string",
+                                    "format": "binary",
+                                    "description": "Video file in MP4, MOV, AVI, MKV, WEBM, FLV, or WMV format, max size 10MB"
+                                }
+                            },
+                            "required": [
+                                "video"
+                            ]
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Trailer video uploaded successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "trailer video uploaded successfully to AWS"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Bad request - Invalid file type or size",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Invalid video format. Allowed formats: mp4, mov, avi, mkv, webm, flv, wmv."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "/course/instructors": {
+        "get": {
+            "summary": "Get List of Instructors",
+            "description": "Fetches a list of all instructors. Requires Super Admin access.",
+            "tags": [
+                "Course"
+            ],
+            "security": [
+                {
+                    "bearerAuth": []
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "List of instructors fetched successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Instructor List fetched"
+                                    },
+                                    "data": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "_id": {
+                                                    "type": "string",
+                                                    "example": "60a7c45b3f1f3c001c8b4567"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "johndoe@example.com"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "INSTRUCTOR"
+                                                },
+                                                "profilePic": {
+                                                    "type": "string",
+                                                    "example": "https://example.com/profile.jpg"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "403": {
+                    "description": "Forbidden - Only Super Admins can access this route",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Access denied"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "/course": {
+        "post": {
+            "summary": "Create a New Course",
+            "description": "Creates a new course with all the required details. Requires Super Admin access.",
+            "tags": [
+                "Course"
+            ],
+            "security": [
+                {
+                    "bearerAuth": []
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "courseId": {
+                                    "type": "string",
+                                    "description": "Optional course ID (MongoDB ObjectId)",
+                                    "example": "60d5ec49f30a3b001c8a4b34"
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "description": "Title of the course",
+                                    "example": "MERN stack development"
+                                },
+                                "subtitle": {
+                                    "type": "string",
+                                    "description": "Subtitle of the course",
+                                    "example": "Become a job ready developer in just 6 months"
+                                },
+                                "category": {
+                                    "type": "string",
+                                    "description": "Category ID (MongoDB ObjectId)",
+                                    "example": "67dee88aa338a54e0dbfe965"
+                                },
+                                "language": {
+                                    "type": "string",
+                                    "description": "Language of the course",
+                                    "example": "HINDI"
+                                },
+                                "instructor": {
+                                    "type": "string",
+                                    "description": "Instructor ID (MongoDB ObjectId)",
+                                    "example": "67deeaaaa338a54e0dbfe96e"
+                                },
+                                "courseMode": {
+                                    "type": "string",
+                                    "description": "Mode of the course (e.g., ONLINE, OFFLINE)",
+                                    "example": "ONLINE"
+                                },
+                                "thumbnail": {
+                                    "type": "string",
+                                    "description": "URL of the course thumbnail",
+                                    "example": "https://example.com/thumbnail.jpg"
+                                },
+                                "brouchure": {
+                                    "type": "string",
+                                    "description": "URL of the course brochure",
+                                    "example": "https://example.com/brouchure.pdf"
+                                },
+                                "keypoints": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "description": "Key points of the course",
+                                    "example": [
+                                        "Comprehensive course",
+                                        "Hands-on projects"
+                                    ]
+                                },
+                                "tags": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "description": "Tags related to the course",
+                                    "example": [
+                                        "programming",
+                                        "fullstack"
+                                    ]
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "Detailed description of the course",
+                                    "example": "This is an in-depth course covering full-stack development."
+                                },
+                                "duration": {
+                                    "type": "string",
+                                    "description": "Duration of the course",
+                                    "example": "12 weeks"
+                                },
+                                "totalLectures": {
+                                    "type": "integer",
+                                    "description": "Total number of lectures in the course",
+                                    "example": 50
+                                },
+                                "trailerVideo": {
+                                    "type": "string",
+                                    "description": "URL of the trailer video",
+                                    "example": "https://example.com/trailer.mp4"
+                                },
+                                "whatWillYouLearn": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "description": "Learning outcomes of the course",
+                                    "example": [
+                                        "Master full-stack development with MERN",
+                                        "Build real-world applications"
+                                    ]
+                                },
+                                "price": {
+                                    "type": "object",
+                                    "properties": {
+                                        "actualPrice": {
+                                            "type": "number",
+                                            "description": "Actual price of the course",
+                                            "example": 4999
+                                        },
+                                        "discountPercentage": {
+                                            "type": "number",
+                                            "description": "Discount percentage on the course",
+                                            "example": 20
+                                        },
+                                        "finalPrice": {
+                                            "type": "number",
+                                            "description": "Final price after discount",
+                                            "example": 3999
+                                        }
+                                    },
+                                    "required": [
+                                        "actualPrice",
+                                        "finalPrice"
+                                    ]
+                                },
+                                "sections": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "title": {
+                                                "type": "string",
+                                                "description": "Title of the section",
+                                                "example": "Introduction to MERN Stack"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "description": "Description of the section",
+                                                "example": "Overview of MongoDB, Express, React, and Node.js."
+                                            },
+                                            "subSections": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "title": {
+                                                            "type": "string",
+                                                            "description": "Title of the subsection",
+                                                            "example": "What is MERN Stack?"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "title"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "required": [
+                                            "title"
+                                        ]
+                                    },
+                                    "description": "Sections of the course, each containing subsections"
+                                }
+                            },
+                            "required": [
+                                "title",
+                                "subtitle",
+                                "category",
+                                "language",
+                                "instructor",
+                                "courseMode",
+                                "thumbnail",
+                                "brouchure",
+                                "keypoints",
+                                "tags",
+                                "description",
+                                "duration",
+                                "totalLectures",
+                                "price",
+                                "sections"
+                            ]
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "201": {
+                    "description": "Course created successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Course created successfully"
+                                    },
+                                    "course": {
+                                        "type": "object",
+                                        "description": "The created course object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "description": "ID of the created course",
+                                                "example": "60d5ec49f30a3b001c8a4b34"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Validation Error",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "examples": [
+                                            "Title is required",
+                                            "Subtitle is required",
+                                            "Category is required",
+                                            "Language is required",
+                                            "Instructor is required",
+                                            "Course mode is required",
+                                            "Thumbnail is required",
+                                            "Brouchure is required",
+                                            "At least one keypoint is required",
+                                            "At least one tag is required",
+                                            "Description is required",
+                                            "Duration is required",
+                                            "Total lectures count is required",
+                                            "Sections must be an array with at least one section"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    "$ref": "#/components/responses/UnauthorizedError"
+                },
+                "403": {
+                    "$ref": "#/components/responses/ForbiddenError"
+                },
+                "500": {
+                    "$ref": "#/components/responses/ServerError"
+                }
+            }
+        }
+    }
+}
