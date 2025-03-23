@@ -1,39 +1,14 @@
-import fifthStepValidationSchema from "./Schema/fifthStepValidationSchema";
-
-import { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import React, { useEffect, useState } from "react";
+import { useFormContext, Controller } from "react-hook-form";
+import InputField from "../../../../components/Input Field";
 import Button from "../../../../components/Button/Button";
-import { usePublishCourseMutation } from "../../../../services/course.api";
-import ButtonLoading from "../../../../components/Button/ButtonLoading";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
 
-export default function Pricing({ currentStep, handleNext, handlePrev, courseId }) {
-  const [publishCourse, { isLoading, isError, error: uploadError }] =
-    usePublishCourseMutation();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    control,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(fifthStepValidationSchema),
-    defaultValues: {
-      actualPrice: "",
-      discount: 0,
-      courseAction: "published",
-    },
-  });
-
-  const navigate = useNavigate()
+const Pricing = ({ handlePrev }) => {
+  const { register, control, watch, setValue, formState: { errors } } = useFormContext();
 
   const actualPrice = watch("actualPrice");
   const discount = watch("discount");
 
-  // Calculate price after discount
   const [finalPrice, setFinalPrice] = useState(0);
 
   useEffect(() => {
@@ -41,26 +16,19 @@ export default function Pricing({ currentStep, handleNext, handlePrev, courseId 
       const discountedPrice = actualPrice - (actualPrice * discount) / 100;
       setFinalPrice(discountedPrice.toFixed(2));
     }
+
+    if(!actualPrice)
+    {
+      setFinalPrice(0)
+    }
   }, [actualPrice, discount]);
 
-  const onSubmit = async(data) => {
-    try {
-      const id = `${courseId}`;
-      const result = await publishCourse({id});
-      console.log("Result after submitting Fifth Step:", result);
-      if (result?.error) {   
-        throw new Error(result.error.data.message);
-      }
-      toast.success("Course Published Successfully");
-      navigate("/admin")
-      
-    } catch (err) {
-      console.log("Fifth Step form Error:", err);
-    }
-  };
 
+  const handlevalues = () => {
+    console.log("hello", errors)
+  }
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 p-6">
+    <div className="flex flex-col gap-5 p-6">
       {/* Actual Price */}
       <div className="mb-4">
         <label className="block text-sm font-medium">Actual Price:</label>
@@ -96,7 +64,7 @@ export default function Pricing({ currentStep, handleNext, handlePrev, courseId 
       </div>
 
       {/* Final Price Display */}
-      <div className="mb-4">
+      <div onClick={handlevalues} className="mb-4">
         <label className="block text-sm font-medium">Final Price:</label>
         <p className="text-lg font-semibold">₹ {finalPrice}</p>
       </div>
@@ -123,13 +91,21 @@ export default function Pricing({ currentStep, handleNext, handlePrev, courseId 
         {/* Submit Button */}
         <Button
             type="submit"
+            className={`flex items-center justify-center disabled:bg-gray-400 w-40`}
+          >
+           Submit
+          </Button>
+        {/* <Button
+            type="submit"
             className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${
               isLoading && "cursor-not-allowed"
             }`}
           >
             {isLoading ? <ButtonLoading /> : <p>Publish</p>}
-          </Button>
+          </Button> */}
       </div>
-    </form>
+    </div>
   );
-}
+};
+
+export default Pricing;
