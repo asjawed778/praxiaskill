@@ -1,12 +1,21 @@
 import mongoose from "mongoose";
-import { ICourse, ICourseEnquiry, ISection, ISubSection } from "./course.dto";
+import { ICourse, ICourseEnquiry, IRatingAndReviews, ISection, ISubSection } from "./course.dto";
 import courseSchema from "./course.schema";
 import sectionSchema from "./section.schema";
 import subSectionSchema from "./subSection.schema";
 import CourseEnquirySchema from "./course.enquiry";
 import * as courseEnum from "./course.enum";
+import ratingAndReviewSchema from "./ratingAndReview.schema";
+import enrollmentSchema from "./enrollment.schema";
 
-export const createCourse = async (data: Omit<ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }) => {
+/**
+ * Creates a new course along with its sections and subsections.
+ *
+ * @param {Omit<ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }} data 
+ *        - The course details including sections and subsections.
+ * @returns {Promise<ICourse>} The newly created course with section references.
+ */
+export const createCourse = async (data: Omit<ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }): Promise<ICourse> => {
 
     const { sections, ...courseDetails } = data;
     const course = await courseSchema.create(courseDetails);
@@ -42,8 +51,13 @@ export const createCourse = async (data: Omit<ICourse, "sections"> & { sections:
     return course as ICourse;
 };
 
-export const getCourseContent = async (courseId: string) => {
-    // console.log(courseId);
+/**
+ * Retrieves course content including sections and subsections.
+ *
+ * @param {string} courseId - The unique identifier of the course.
+ * @returns {Promise<any>} The course content including sections and subsections.
+ */
+export const getCourseContent = async (courseId: string): Promise<any> => {
     const coursesContent = await courseSchema.findById(courseId)
     .select("_id title sections")
         .populate({
@@ -52,51 +66,63 @@ export const getCourseContent = async (courseId: string) => {
                 path: "subSections",
             },
         });
-    // const coursesContent = await courseSchema.findById(courseId);
     return coursesContent;
 };
 
-
+/**
+ * Checks whether a course exists in the database.
+ *
+ * @param {string} courseId - The unique identifier of the course.
+ * @returns {Promise<boolean>} True if the course exists, false otherwise.
+ */
 export const isCourseExist = async (courseId: string): Promise<boolean> => {
     const courseExists = await courseSchema.exists({ _id: courseId });
     return courseExists !== null;
 };
 
-
-
-
-export const draftCourse = async (courseId: string) => {
+/**
+ * Moves a course to draft by updating its status to "DRAFT".
+ *
+ * @param {string} courseId - The unique identifier of the course.
+ * @returns {Promise<any>} The updated course document.
+ */
+export const draftCourse = async (courseId: string): Promise<any> => {
     const result = await courseSchema.findByIdAndUpdate
         (courseId, { courseStatus: "DRAFT" }, { new: true });
     return result;
 };
 
-export const terminateCourse = async (courseId: string) => {
+/**
+ * Terminates a course by updating its status to "TERMINATED".
+ *
+ * @param {string} courseId - The unique identifier of the course.
+ * @returns {Promise<any>} The updated course document.
+ */
+export const terminateCourse = async (courseId: string): Promise<any> => {
     const result = await courseSchema.findByIdAndUpdate
         (courseId, { courseStatus: "TERMINATED" }, { new: true });
     return result;
 };
 
-export const publishCourse = async (courseId: string) => {
+/**
+ * Publishes a course by updating its status to "PUBLISHED".
+ *
+ * @param {string} courseId - The unique identifier of the course.
+ * @returns {Promise<any>} The updated course document.
+ */
+export const publishCourse = async (courseId: string): Promise<any> => {
     const result = await courseSchema.findByIdAndUpdate
         (courseId, { courseStatus: "PUBLISHED" }, { new: true });
     return result;
 };
 
-export const getCoursePreview = async (courseId: string) => {
-    const course = await courseSchema
-        .findById(courseId)
-        .populate({
-            path: "sections",
-            populate: {
-                path: "subSections",
-            },
-        });
-
-    return course;
-};
-
-export const getFullCourseDetails = async (courseId: string) => {
+/**
+ * Retrieves detailed information about a specific course.
+ *
+ * @param {string} courseId - The unique identifier of the course.
+ * @returns {Promise<any>} The course document populated with instructor, category, ratings, and sections.
+ */
+export const getCourseDetails = async (courseId: string): Promise<any> => {
     const course = await courseSchema
         .findById(courseId)
         .populate({
@@ -108,42 +134,31 @@ export const getFullCourseDetails = async (courseId: string) => {
             select: "_id name",
         })
         .populate({
+            path: "ratingAndReviews",
+            select: "_id rating comment userId",
+            populate: {
+                path: "userId",
+                select: "_id name profilePic",
+            }
+        })
+        .populate({
             path: "sections",
             populate: {
                 path: "subSections",
                 select: "_id title",
             },
         });
-
     return course;
-
 };
 
-// export const getPublishedCoursesByCategory = async (categoryId: string, pageNo = 1) => {
-//     const pageSize = 10; // Number of courses per page
-//     const skip = (pageNo - 1) * pageSize; // Calculate the number of documents to skip
-
-//     const result = await courseSchema.find({ category: categoryId, courseStatus: "PUBLISHED" })
-//         .select("_id title subtitle tags duration thumbnail lanugage courseMode totalLeactures")
-//         .populate({
-//             path: "instructor",
-//             select: "_id name profilePic",
-//         })
-//         .populate({
-//             path: "category",
-//             select: "_id name",
-//         })
-
-//     return {
-//         success: true,
-//         totalCourses: result.length,
-//         page: pageNo,
-//         pageSize,
-//         courses: result
-//     };
-// };
-
-export const getPublishedCoursesByCategory = async (categoryId: string, pageNo = 1) => {
+/**
+ * Fetches published courses based on a specific category with pagination.
+ *
+ * @param {string} categoryId - The unique identifier of the category.
+ * @param {number} [pageNo=1] - The page number for pagination.
+ * @returns {Promise<any>} An object containing success status, total courses, page details, and course data.
+ */
+export const getPublishedCoursesByCategory = async (categoryId: string, pageNo: number = 1): Promise<any> => {
     const pageSize = 10; // Number of courses per page
     const skip = (pageNo - 1) * pageSize; // Calculate the number of documents to skip
 
@@ -225,14 +240,25 @@ export const getPublishedCoursesByCategory = async (categoryId: string, pageNo =
     };
 };
 
-
-export const courseEnquiry = async (data: ICourseEnquiry) => {
+/**
+ * Creates a new course enquiry and saves it to the database.
+ *
+ * @param {ICourseEnquiry} data - The enquiry data containing user details and message.
+ * @returns {Promise<any>} The newly created enquiry document.
+ */
+export const courseEnquiry = async (data: ICourseEnquiry): Promise<any> => {
     const enquiry = new CourseEnquirySchema(data);
     await enquiry.save();
     return enquiry;
 };
 
-export const getCourseEnquiry = async (pageNo = 1) => {
+/**
+ * Retrieves course enquiries with pagination.
+ *
+ * @param {number} [pageNo=1] - The page number for pagination.
+ * @returns {Promise<any>} An object containing enquiries, start and end entry indices, current page, and total results.
+ */
+export const getCourseEnquiry = async (pageNo: number = 1): Promise<any> => {
     const pageSize = 10;
     const skip = (pageNo - 1) * pageSize;
 
@@ -255,12 +281,25 @@ export const getCourseEnquiry = async (pageNo = 1) => {
     };
 };
 
-export const changeEnquiryStatus = async (enquiryId: string, status: string) => {
+/**
+ * Updates the status of a specific course enquiry.
+ *
+ * @param {string} enquiryId - The unique identifier of the enquiry.
+ * @param {string} status - The new status of the enquiry.
+ * @returns {Promise<ICourseEnquiry>} The updated enquiry document.
+ */
+export const changeEnquiryStatus = async (enquiryId: string, status: string): Promise<ICourseEnquiry> => {
     const enquiry = await CourseEnquirySchema.findByIdAndUpdate(enquiryId, { status }, { new: true });
-    return enquiry;
+    return enquiry as ICourseEnquiry;
 };
 
-export const getPublishedCourses = async (pageNo = 1) => {
+/**
+ * Retrieves a paginated list of published courses.
+ *
+ * @param {number} [pageNo=1] - The page number for pagination.
+ * @returns {Promise<any>} An object containing success status, total courses, page details, and course data.
+ */
+export const getPublishedCourses = async (pageNo: number = 1): Promise<any> => {
     const pageSize = 10; // Number of courses per page
     const skip = (pageNo - 1) * pageSize; // Calculate the number of documents to skip
 
@@ -341,7 +380,33 @@ export const getPublishedCourses = async (pageNo = 1) => {
     };
 };
 
+/**
+ * Submits a rating and review for a specific course.
+ *
+ * @param {string} courseId - The unique identifier of the course.
+ * @param {string} userId - The unique identifier of the user submitting the review.
+ * @param {IRatingAndReviews} data - The rating and review data.
+ * @returns {Promise<any>} The newly created rating and review document.
+ */
+export const rateCourse = async (courseId: string, userId: string, data: IRatingAndReviews): Promise<any> => {
+    const rating = new ratingAndReviewSchema({
+        ...data,
+        courseId,
+        userId,
+    });
+    await rating.save();
+    return rating;
+};
 
-
-
+/**
+ * Checks if a user has purchased a specific course.
+ *
+ * @param {string} courseId - The unique identifier of the course.
+ * @param {string} userId - The unique identifier of the user.
+ * @returns {Promise<boolean>} A boolean indicating whether the user has purchased the course.
+ */
+export const isUserCoursePurchased = async (courseId: string, userId: string): Promise<boolean> => {
+    const isPurchased = await enrollmentSchema.exists({ courseId, userId });
+    return isPurchased !== null;
+};
 

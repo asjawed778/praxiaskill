@@ -22,10 +22,8 @@ router
     .post("/enquiry", courseValidation.courseEnquiry,catchError, courseController.courseEnquiry)
     .get("/enquiry",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseController.getCourseEnquiry)
     .patch("/enquiry-status/:enquiryId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.changeEnquiryStatus, catchError, courseController.changeEnquiryStatus)
+    .get("/:courseId", courseValidation.getCourseDetails, courseController.getCourseDetails)
 
-
-    // .get("/all-details/:courseId", courseValidation.getFullCourseDetails, courseController.getFullCourseDetails)
-    // .get("/preview/:courseId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.coursePreview, catchError, courseController.getCoursePreview)
     
 
 export default router;

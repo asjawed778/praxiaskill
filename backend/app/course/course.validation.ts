@@ -184,3 +184,9 @@ export const changeEnquiryStatus = [
         .withMessage(`Status must be one of: ${Object.values(CourseEnum.EnquiryStatus).join(', ')}`)
 ];
 
+export const getCourseDetails = [
+    param('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+];
+
