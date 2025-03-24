@@ -74,7 +74,7 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
           className="lg:hidden flex justify-end ml-auto text-2xl font-thin text-black"
           onClick={() => setIsOpen(false)}
         >
-          <RxCross2 className="hover:bg-hover-sidebar-background cursor-pointer" />
+          <RxCross2 className="hover:bg-neutral-200 rounded-full cursor-pointer" />
         </p>
 
         <Link to="/dashboard">

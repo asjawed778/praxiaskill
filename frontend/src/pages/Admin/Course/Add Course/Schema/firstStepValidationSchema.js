@@ -7,8 +7,8 @@ const firstStepValidationSchema = yup.object().shape({
   category: yup.string().required("Category selection is required"),
   instructor: yup.string().required("Instructor name is required"),
   courseMode: yup.string().required("Please select a mode"),
-  thumbnail: yup.string().url("Invalid URL").required("Thumbnail URL is required"),
-  brouchure: yup.string().url("Invalid URL").required("Brochure PDF URL is required"),
+  thumbnail: yup.string().url("Invalid URL").required("Thumbnail is required"),
+  brouchure: yup.string().url("Invalid URL").required("Brochure PDF is required"),
 });
 
 export default firstStepValidationSchema;

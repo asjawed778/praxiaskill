@@ -151,6 +151,14 @@ const adminRoutes = [
         ),
       },
       {
+        path: "add-category",
+        element: (
+          <LazyComponent>
+            <AddCategory />
+          </LazyComponent>
+        ),
+      },
+      {
         path: "course-enquiry",
         element: (
           <LazyComponent>

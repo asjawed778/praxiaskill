@@ -1,48 +1,26 @@
 import React from "react";
+import { useFormContext } from "react-hook-form";
 import InputField from "../../../../components/Input Field";
 import Button from "../../../../components/Button/Button";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import firstStepValidationSchema from "./Schema/firstStepValidationSchema";
-import { useUploadDetailsMutation } from "../../../../services/course.api";
-import ButtonLoading from "../../../../components/Button/ButtonLoading";
 import Dropdown from "../../../../components/Dropdown/Dropdown";
 
-const CourseFirstStep = ({ currentStep, handleNext, handlePrev, setCourseId }) => {
-  const [uploadDetails, { isLoading, isError, error: uploadError }] =
-    useUploadDetailsMutation();
-
+const CourseFirstStep = ({ handleNext }) => {
   const {
     register,
-    handleSubmit,
-    watch,
     setValue,
+    watch,
     formState: { errors },
-  } = useForm({
-    resolver: yupResolver(firstStepValidationSchema),
-  });
+  } = useFormContext();
 
-  const selectedMode = watch("courseMode", ""); // Get the selected value
+  const selectedMode = watch("courseMode", "");
+  const thumbnail = watch("thumbnail", "");
+  const brouchure = watch("brouchure", "");
+  const category = watch("category", "");
+  const instructor = watch("instructor", "");
 
-  const onSubmit = async (data) => {
-    try {
-      const result = await uploadDetails(data);
-      console.log("Uploaded Data", data);
-      console.log("Result after submitting:", result);
-      if (result?.error) {
-        throw new Error(result.error.data.message);
-      }
-      
-      setCourseId(result?.data.data._id)
-      handleNext();
-    } catch (err) {
-      console.log("First Step form Error:", err);
-    }
-  };
   return (
     <div className="w-full">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
+      <div
         className="p-3 flex flex-col gap-6 px-4"
       >
         <div>
@@ -107,6 +85,7 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev, setCourseId }) =
               className="w-full"
               placeholder="Select a Category"
               label="Category"
+              value={category}
               {...register("category")}
               endpoint={"course/category"}
             />
@@ -124,6 +103,7 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev, setCourseId }) =
             className="w-full"
             placeholder="Select an Instuctor"
             label="Instructor"
+            value={instructor}
             {...register("instructor")}
             endpoint={"course/instructors"}
           />
@@ -173,7 +153,11 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev, setCourseId }) =
             <InputField setvalue={setValue} type="image" id="thumbnail">
               Thumbnail Image <span className="text-red-600">*</span>
             </InputField>
-            {errors?.thumbnail && (
+            {thumbnail && <div className="h-30 w-full rounded-md mt-2">
+              <img className="h-full w-full rounded-md" src={thumbnail} alt="thumnail" />
+              <p className="text-sm text-green-500">Uploaded Image Preview</p>
+            </div> }
+            {!thumbnail && errors?.thumbnail && (
               <p className="text-red-600 text-xs ml-1 mt-0.5">
                 {errors?.thumbnail.message}
               </p>
@@ -184,7 +168,17 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev, setCourseId }) =
             <InputField setvalue={setValue} type="pdf" id="pdf">
               Brochure pdf <span className="text-red-600">*</span>
             </InputField>
-            {errors?.brouchure && (
+            {brouchure && <div><a
+            href={brouchure}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="z-10 mt-1 flex items-center justify-center text-xl text-white bg-black/55 w-full h-10 rounded-md cursor-pointer"
+          >
+            Preview
+          </a>
+          <p className="text-sm">Click to Preview Brouchure</p>
+          </div> }
+            {!brouchure && errors?.brouchure && (
               <p className="text-red-600 text-xs ml-1 mt-0.5">
                 {errors?.brouchure.message}
               </p>
@@ -194,15 +188,13 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev, setCourseId }) =
 
         <div className={`flex justify-end items-center text-white`}>
           <Button
-            type="submit"
-            className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${
-              isLoading && "cursor-not-allowed"
-            }`}
+            onClick={handleNext}
+            className={`flex items-center justify-center w-40 `}
           >
-            {isLoading ? <ButtonLoading /> : <p>Save and Next</p>}
+            Next
           </Button>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

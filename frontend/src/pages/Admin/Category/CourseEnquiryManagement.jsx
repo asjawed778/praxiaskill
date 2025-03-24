@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { LuCheckCheck } from "react-icons/lu";
 import { useGetAllEnquiryQuery, useSetEnquiryStatusMutation } from "../../../services/course.api";
+import { toast } from "react-hot-toast";
 
 const CourseEnqueryManagement = () => {
   const [setEnquiryStatus, {isError: enquiryStatusError, isFetching:enquiryStatusFetching}]= useSetEnquiryStatusMutation()
@@ -9,6 +10,7 @@ const CourseEnqueryManagement = () => {
 
   const { data, isFetching: enquiriesFetching, refetch:refetchEnquiries } = useGetAllEnquiryQuery(currentPage);
   const [enquiries, setEnquiries] = useState([]);
+
 
   const [statusFilter, setStatusFilter] = useState("");
   const [timeSort, setTimeSort] = useState("");
@@ -31,7 +33,7 @@ const CourseEnqueryManagement = () => {
           createdAt: new Date(enquiry.createdAt),
           details: {
             email: enquiry.email,
-            course: enquiry.intrestedCourse,
+            course: enquiry.interestedCourse,
             message:
               "I would like to know more about the course curriculum and schedule.",
           },
@@ -91,13 +93,13 @@ const CourseEnqueryManagement = () => {
     setTimeSort("");
   }
 
-  // function handleChangeStatus(enquiryId, newStatus) {
-  //   setEnquiries(
-  //     enquiries.map((enquiry) =>
-  //       enquiry.id === enquiryId ? { ...enquiry, status: newStatus } : enquiry
-  //     )
-  //   );
-  // }
+  function changeStatus(enquiryId, newStatus) {
+    setEnquiries(
+      enquiries.map((enquiry) =>
+        enquiry.id === enquiryId ? { ...enquiry, status: newStatus, showStatusDropdown: !enquiry.showStatusDropdown } : enquiry
+      )
+    );
+  }
 
   function goToNextPage() {
     setEnquiries([]);
@@ -123,7 +125,9 @@ const CourseEnqueryManagement = () => {
       {
         throw new Error(result?.error?.data?.message)
       }
-      refetchEnquiries();
+
+      // refetchEnquiries();
+      changeStatus(enquiryId, newStatus)
     }catch(err)
     {
       console.log(err)
@@ -258,7 +262,7 @@ const CourseEnqueryManagement = () => {
                             )
                           );
                         }}
-                        className={`w-full px-4 py-1.5 border border-gray-300 rounded-md flex items-center justify-between ${
+                        className={`w-full px-4 py-1.5 border border-gray-300 rounded-md flex items-center justify-between cursor-pointer ${
                           enquiry.status === "PENDING"
                             ? "text-yellow-600"
                             : "text-black"

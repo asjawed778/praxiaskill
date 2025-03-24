@@ -19,7 +19,7 @@ const CourseTable = ({ data:publishedCourse, currentPage, setCurrentPage, isLoad
   const navigate = useNavigate()
   
   const itemsPerPage = 10;
-  const totalItems = publishedCourse?.data?.totalItems
+  const totalItems = publishedCourse?.data?.totalCourses
 
   const courses = publishedCourse?.data?.courses
 
@@ -46,7 +46,7 @@ const CourseTable = ({ data:publishedCourse, currentPage, setCurrentPage, isLoad
   }, [openMenu]);
 
   return (
-   !isLoading ? <div className="w-full flex flex-col gap-2 relative">
+   !isLoading ? courses?.length > 0 ? <div className="w-full flex flex-col gap-2 relative">
       <div className="w-full flex gap-4 text-sm flex-wrap">
         <div className="flex items-center gap-2 border border-neutral-300 px-1 rounded-lg text-neutral-500 flex-1">
           <IoSearch />
@@ -89,8 +89,8 @@ const CourseTable = ({ data:publishedCourse, currentPage, setCurrentPage, isLoad
               >
                 <td className="px-4 py-1">{(currentPage)*10 + 1 + index}</td>
                 <td className="px-4 py-1">{course.title}</td>
-                <td className="px-4 py-1">{course.instructor}</td>
-                <td className="px-4 py-1">{course.category || "Category"}</td>
+                <td className="px-4 py-1">{course.instructor.name}</td>
+                <td className="px-4 py-1">{course.category.name}</td>
                 <td className="px-4 py-1 relative">
                   <button
                     ref={(el) => (buttonRefs.current[index] = el)}
@@ -184,7 +184,9 @@ const CourseTable = ({ data:publishedCourse, currentPage, setCurrentPage, isLoad
           </div>,
           courseManagePageRef?.current // Render outside the table
         )}
-    </div> : 
+    </div> : <div className="h-30 bg-neutral-500 flex justify-center items-center">
+      No courses found.
+    </div> :
     <div className="h-30 flex justify-center items-center gap-3"> <ButtonLoading /> Loading...</div>
   );
 };

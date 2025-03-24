@@ -29,6 +29,9 @@ export default function Carousal() {
       skip: !activeTab,
     });
 
+    console.log("courses", categoryCourse)
+    console.log("cats", allCategories)
+
   useEffect(() => {
     if (allCategories?.success) {
       dispatch(setCategories(allCategories.data || []));
@@ -192,7 +195,7 @@ export default function Carousal() {
         {coursesAll?.length !== 0 && (
           <Link
             to="/courses"
-            className="absolute right-0 top-0 font-bold text-xs text-[var(--color-primary)] bg-white mx-auto"
+            className="absolute right-0 top-0 font-bold text-xs text-[var(--color-primary)] bg-white mx-auto cursor-pointer z-50"
           >
             View More
           </Link>
