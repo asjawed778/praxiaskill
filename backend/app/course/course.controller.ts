@@ -73,7 +73,24 @@ export const createCourse = asyncHandler(async(req: Request, res: Response) => {
     await CourseCategoryService.addCourseId(result._id, category);
 
     res.send(createResponse(result, "Course created successfully"));
-}); 
+});
+
+// export const updateCourse = asyncHandler(async(req: Request, res: Response) => {
+//     const courseId = req.params.courseId;
+//     const data = req.body;
+//     const { category, instructor } = data;
+//     const isInstrucotrExist = await UserService.getInstructorById(instructor?.toString());
+//     if(!isInstrucotrExist) {
+//         throw createHttpError(404, "Instructor id is invalid, Not found");
+//     }
+//     const isCategoryExist = await CourseCategoryService.getCourseCategoryById(category?.toString());
+//     if(!isCategoryExist) {
+//         throw createHttpError(404, "Category id is invalid, Not found");
+//     }
+
+//     const result = await courseService.updateCourse(courseId, data);
+
+// });
 
 /**
  * Retrieves the content of a specific course.
@@ -288,4 +305,27 @@ export const rateCourse = asyncHandler(async(req: Request, res: Response) => {
     const data = req.body;
     const result = await courseService.rateCourse(userId, courseId, data);
     res.send(createResponse(result, "Course rated successfully"));
+});
+
+export const deleteSection = asyncHandler(async(req: Request, res: Response) => {
+    const courseId = req.params.courseId;
+    const sectionId = req.params.sectionId;
+    const isCourseExist = await courseService.isCourseExist(courseId);
+    if(!isCourseExist) {
+        throw createHttpError(404, "Course id is invalid, Not found");
+    }
+    const result = await courseService.deleteSection(courseId, sectionId);
+    res.send(createResponse(result, "Section deleted successfully"));
+});
+
+export const deleteSubSection = asyncHandler(async(req: Request, res: Response) => {
+    const courseId = req.params.courseId;
+    const sectionId = req.params.sectionId;
+    const subSectionId = req.params.subSectionId;
+    const isCourseExist = await courseService.isCourseExist(courseId);
+    if(!isCourseExist) {
+        throw createHttpError(404, "Course id is invalid, Not found");
+    }
+    const result = await courseService.deleteSubSection(courseId, sectionId, subSectionId);
+    res.send(createResponse(result, "Subsection deleted successfully"));
 });
