@@ -8,6 +8,6 @@ export const schemaValidation = yup.object().shape({
       .matches(/^\d{10}$/, "Phone number must be 10 digits")
       .required("Phone number is required"),
     email: yup.string().email("Invalid email format").required("Email is required"),
-    intrestedCourse: yup.string().required("Course selection is required"),
+    interestedCourse: yup.string().required("Course selection is required"),
     whatsAppOptIn: yup.boolean().default(false),
   });

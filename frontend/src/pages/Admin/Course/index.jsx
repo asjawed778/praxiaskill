@@ -1,30 +1,20 @@
 import { useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import * as yup from "yup";
-// We use manual validation so we don’t pass a static resolver here.
 import CourseFirstStep from "./Add Course/CourseFirstStep";
 import AdditionalDetails from "./Add Course/AdditionalDetails";
 import CourseStructure from "./Add Course/CourseStructure";
 import Pricing from "./Add Course/Pricing";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-// Import each step’s Yup validation schema
 import firstStepValidationSchema from "./Add Course/Schema/firstStepValidationSchema";
 import secondStepValidationSchema from "./Add Course/Schema/secondStepValidationSchema";
 import thirdStepValidationSchema from "./Add Course/Schema/thirdStepValidationSchema";
 import fifthStepValidationSchema from "./Add Course/Schema/fifthStepValidationSchema";
 import { useUploadCourseMutation } from "../../../services/course.api";
-
-// Create an array of schemas for step-wise validation
-const validationSchemas = [
-  firstStepValidationSchema,
-  secondStepValidationSchema,
-  thirdStepValidationSchema,
-  fifthStepValidationSchema,
-];
+import { toast } from "react-hot-toast";
 
 const AddCourse = () => {
-  const [uploadCourse , {isFetching, errors}] = useUploadCourseMutation()
+  const [uploadCourse , {isLoading, errors}] = useUploadCourseMutation()
   const [currentStep, setCurrentStep] = useState(0);
 
   const resolver = useMemo(() => {
@@ -64,7 +54,6 @@ const AddCourse = () => {
         discountPercentage: 0,
         finalPrice: 0,
       },
-      courseAction: "published",
     },
   });
 
@@ -80,12 +69,27 @@ const AddCourse = () => {
   };
 
   const onSubmit = async (formData) => {
-    const { tags } = formData;
-    const newTags = tags.map((tag) => tag.value);
-    const data = { ...formData, tags: newTags };
-    console.log("Final Form Data:", data);
-    const result = await uploadCourse(data);
-    console.log("Result", result)
+    try{
+      const { tags } = formData;
+      const newTags = tags.map((tag) => tag.value);
+      const data = { ...formData, tags: newTags };
+      console.log("Final Form Data:", data);
+      const result = await uploadCourse(data);
+      console.log("Result", result)
+      if(result.error)
+      {
+        if(result.error.status === 400)
+        {
+          toast.error("Please fill all steps before submitting!")
+        }
+        throw new Error(result.error.data.message)
+      }
+      methods.reset();
+      toast.success("Course published successfully!")
+    }catch(err)
+    {
+      console.log("Error", err)
+    }
   };
 
   return (
@@ -146,7 +150,7 @@ const AddCourse = () => {
           {currentStep === 2 && (
             <CourseStructure handleNext={handleNext} handlePrev={handlePrev} />
           )}
-          {currentStep === 3 && <Pricing handlePrev={handlePrev} />}
+          {currentStep === 3 && <Pricing isLoading={isLoading} handlePrev={handlePrev} />}
         </div>
       </form>
     </FormProvider>

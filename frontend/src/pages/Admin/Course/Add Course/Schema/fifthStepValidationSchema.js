@@ -17,10 +17,6 @@ const fifthStepValidationSchema = yup.object().shape({
       .typeError("Final price must be a number")
       .required("Final price is required"),
   }),
-  courseAction: yup
-    .string()
-    .oneOf(["published", "unpublished", "preview"], "Invalid option")
-    .required("Course action is required"),
 });
 
 export default fifthStepValidationSchema;

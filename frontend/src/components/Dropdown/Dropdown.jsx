@@ -4,7 +4,7 @@ import { ImSpinner2 } from "react-icons/im";
 
 const Dropdown = forwardRef(({ endpoint, label, value, required,showLabel=true , placeholder = "Select an option", className = "", ...rest }, ref) => {
   const [fetchData, setFetchData] = useState(false);
-  const { data: options, error, isLoading } = useGetDropdownOptionsQuery(endpoint, { skip: !fetchData });
+  const { data: options, error, isFetching: isLoading } = useGetDropdownOptionsQuery(endpoint, { skip: !fetchData });
   
   useEffect(() => {
     if(value)
@@ -29,18 +29,16 @@ const Dropdown = forwardRef(({ endpoint, label, value, required,showLabel=true ,
         {...rest}
       >
         <option value="">{placeholder || "Select an Option"}</option>
-        {isLoading ? (
-          <option className="text-center">
-              Loading...
-          </option>
-        ) : error ? (
-          <option disabled>Error fetching options</option>
-        ) : (
+        {(fetchData && !isLoading) ? options?.data.length > 0 ?(
           options?.data?.map((option) => (
             <option key={option._id} value={option._id}>
               {option.name}
             </option>
           ))
+        ) : <option disabled className="text-center">No data found</option> :  (
+          <option className="text-center">
+              Loading...
+          </option>
         )}
       </select>
     </div>

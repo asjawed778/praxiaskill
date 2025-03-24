@@ -22,7 +22,7 @@ const Button = ({
       onClick={onClick}
       disabled={disabled}
       className={clsx(
-        "whitespace-nowrap px-5 py-2 rounded-md cursor-pointer duration-200",
+        "whitespace-nowrap px-5 py-2 rounded-md cursor-pointer transition duration-400",
         variantClasses[variant] || variantClasses.default,
         className
       )}

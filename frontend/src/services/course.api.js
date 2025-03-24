@@ -95,7 +95,7 @@ export const apiCourse = createApi({
     setEnquiryStatus: builder.mutation({ //update
       query: ({data, enquiryId}) => ({
         url: `course/enquiry-status/${enquiryId}`,
-        method: "POST",
+        method: "PATCH",
         body: data,
         credentials: "include"
       }),
@@ -132,9 +132,9 @@ export const apiCourse = createApi({
         method: "GET",
       }),
     }),
-    getFullCourseDetails: builder.query({  //ennpoint change
+    getFullCourseDetails: builder.query({
       query: (courseId) => ({
-        url: `course/all-details/${courseId}`, 
+        url: `course/${courseId}`, 
         method: "GET",
       }),
     }),

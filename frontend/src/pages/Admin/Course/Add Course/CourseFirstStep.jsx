@@ -18,9 +18,6 @@ const CourseFirstStep = ({ handleNext }) => {
   const category = watch("category", "");
   const instructor = watch("instructor", "");
 
-  console.log("Thumnail", thumbnail)
-  console.log("brouchure", brouchure)
-
   return (
     <div className="w-full">
       <div

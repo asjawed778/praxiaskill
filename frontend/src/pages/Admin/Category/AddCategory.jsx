@@ -78,6 +78,7 @@ const CourseDetailsForm = () => {
             className={`flex items-center justify-center disabled:bg-gray-400 w-full ${
               isLoading && "cursor-not-allowed"
             }`}
+            disabled={isLoading}
           >
             {isLoading ? <ButtonLoading /> : <p>Submit</p>}
           </Button>

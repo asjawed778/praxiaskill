@@ -6,8 +6,9 @@ import { FaCheck, FaCircleCheck } from "react-icons/fa6";
 import { PiNewspaper } from "react-icons/pi";
 import { BiBell } from "react-icons/bi";
 import Curriculum from "./Curriculum";
+import { GoDotFill } from "react-icons/go";
 
-import { NAVS, ABOUT } from "../../Dummy Data/Course Landing Page/data";
+import { NAVS } from "../../Dummy Data/Course Landing Page/data";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useGetFullCourseDetailsQuery } from "../../services/course.api";
@@ -87,9 +88,9 @@ const Course = () => {
         <div className="flex flex-col gap-4">
           <h2 className="font-semibold text-lg">What you'll learn</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-neutral-800">
-            {ABOUT.map((item, index) => (
-              <div key={index} className="flex gap-4">
-                <FaCheck size={30} />
+            {specificCourse?.whatWillYouLearn?.map((item, index) => (
+              <div key={index} className="flex gap-2">
+                <GoDotFill className="mt-1" />
                 <p>{item}</p>
               </div>
             ))}
