@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const thirdStepValidationSchema = yup.object().shape({
+const thirdStepValidationSchema = yup.object().shape({
   sections: yup
     .array()
     .of(
@@ -19,3 +19,5 @@ export const thirdStepValidationSchema = yup.object().shape({
     )
     .min(1, "At least one section is required"),
 });
+
+export default thirdStepValidationSchema;

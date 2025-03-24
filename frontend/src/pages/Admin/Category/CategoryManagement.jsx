@@ -8,10 +8,15 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { useGetAllCategoryQuery } from "../../../services/course.api";
+import { useNavigate } from "react-router-dom";
 
 const Category = () => {
-  const { data, isLoading } = useGetAllCategoryQuery();
+  const { data, isFetching: isLoading } = useGetAllCategoryQuery();
   const [categories, setCategories] = useState([]);
+
+  const navigate = useNavigate();
+
+  console.log("data", data)
 
 
   useEffect(() => {
@@ -316,14 +321,14 @@ const Category = () => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl"></h2>
         <button
-          className="flex items-center gap-2 border text-white bg-red-600 border-gray-300 rounded-md px-4 py-2"
-          onClick={handleAddCategory}
+          className="flex items-center gap-2 border cursor-pointer text-white bg-red-600 border-gray-300 rounded-md px-4 py-2"
+          onClick={() => navigate("/dashboard/add-category")}
         >
           <Plus size={20} /> Add Category
         </button>
       </div>
 
-      {!isLoading ? <div className="border border-gray-300 rounded-lg overflow-hidden">
+      {!isLoading ? data?.data.length > 0 ? <div className="border border-gray-300 rounded-lg overflow-hidden">
         <table className="w-full">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-300 text-sm text-neutral-500">
@@ -363,13 +368,13 @@ const Category = () => {
           
           }
         </table>
-      </div>: 
+      </div>: <div className="h-30 flex justify-center items-center text-neutral-500">No category to show</div> :
         <div className="h-30 flex justify-center items-center">
         Loading...
       </div>
         }
 
-      {!isLoading && <div className="mt-4 flex justify-between items-center">
+      {data?.data?.length > 0 && !isLoading && <div className="mt-4 flex justify-between items-center">
         <div>
           Showing {indexOfFirstItem + 1} to{" "}
           {Math.min(indexOfLastItem, categories.length)} of {categories.length}

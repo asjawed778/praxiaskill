@@ -12,7 +12,6 @@ const CourseCard = () => {
 
   // Queries
   const { data: publishedCourses, isFetching: isLoading, isError } = useGetAllPublishedCourseQuery(currentPage);
-  // const { data: publishedCourses, isLoading, isError } = useGetAllPublishedCourseQuery({ currentPage, searchTerm });
   const { data: categoriesData, isLoading: categoryLoading } = useGetAllCategoryQuery();
   const { data: CategoryCourses, isLoading: categoryCoursesLoading } = useGetCategoryCourseQuery(categoryId, { skip: !categoryId });
 
@@ -20,6 +19,7 @@ const CourseCard = () => {
   const coursesData = categoryId ? CategoryCourses?.data  : publishedCourses?.data;
   
   const courses = coursesData?.courses || [];
+
   const totalPages = coursesData?.totalPages || 1;
   const totalItems = coursesData?.totalItems || coursesData?.totalCourses;
   const itemsPerPage = 10;
@@ -67,7 +67,7 @@ const CourseCard = () => {
               ) : (
                 categories.map((category) => (
                   <option key={category._id} value={category._id}>
-                    {category.name}
+                    {category?.name}
                   </option>
                 ))
               )}
@@ -107,7 +107,7 @@ const CourseCard = () => {
         </p>
       ) : isError ? (
         <p className="text-center text-2xl text-red-500">Error loading courses.</p>
-      ) : courses.length === 0 ? (
+      ) : courses?.length === 0 ? (
         <p className="text-center text-xl text-gray-500">No courses found.</p>
       ) : (
         // Courses Grid
@@ -122,10 +122,10 @@ const CourseCard = () => {
               <img className="w-full h-52 object-cover" src={course.thumbnail} alt={course.title} />
               <div className="p-4">
                 <h3 className="text-xl mb-4 font-semibold">{course.title}</h3>
-                <p className="text-gray-600">{course.instructor}</p>
+                <p className="text-gray-600">{course?.instructor?.name}</p>
                 <p className="text-sm text-gray-500">{course.type || "Professional Certificate"} • {course.level || "Beginner to Advanced"}</p>
                 <p className="text-sm mt-2"><strong>Skills you'll gain:</strong> {course.tags?.join(", ")}</p>
-                <p className="mt-8 font-semibold">{course.rating || "4.1"} ⭐ ({course.reviews})</p>
+                <p className="mt-8 font-semibold">{course?.totalRatings} ⭐ ({course.reviews || "0"})</p>
                 <p className="text-sm mt-2">{course.level || "Beginner to Advance"}{" . "}{course.type || "Professional Certificate"}{" . "}{course.duration}</p>
               </div>
             </div>
