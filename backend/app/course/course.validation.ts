@@ -420,3 +420,18 @@ export const completeUpload = [
             });
         }).withMessage("Each part must have partNumber (number) and ETag (string)"),
 ];
+
+export const courseContentPresignedUrl = [
+    param('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+
+    param('sectionId')
+        .notEmpty().withMessage('sectionId is required')
+        .isMongoId().withMessage('Invalid sectionId. Must be a valid MongoDB ObjectId'),
+
+    param('subSectionId')
+        .notEmpty().withMessage('subSectionId is required')
+        .isMongoId().withMessage('Invalid subSectionId. Must be a valid MongoDB ObjectId'),
+
+];

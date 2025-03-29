@@ -46,11 +46,7 @@ export const startUpload = asyncHandler(async (req: Request, res: Response) => {
     const { fileName, fileType, courseTitle } = req.body;
     const { courseId, sectionId, subSectionId } = req.params;
 
-    const isCourseExist = await courseService.isCourseExist(courseId);
-    if (!isCourseExist) {
-        throw createHttpError(404, "Course invalid, course not exits");
-    }
-
+    await courseService.isValidSectionSubsectionId(courseId, sectionId, subSectionId);
 
     const courseName = courseTitle.replace(/\s+/g, "_");
     const fileNameNew = fileName.replace(/\s+/g, "_");
@@ -64,36 +60,40 @@ export const startUpload = asyncHandler(async (req: Request, res: Response) => {
 export const uploadChunk = asyncHandler(async (req: Request, res: Response) => {
     const { uploadId, fileKey } = req.body;
     const chunk = req.files!.chunk as UploadedFile;
-    console.log(chunk)
 
-    const partNumber = Number(req.body.partNumber);
+    const PartNumber = Number(req.body.partNumber);
 
-    const eTag = await AWSservice.uploadChunk(uploadId, fileKey, partNumber, chunk);
+    const ETag = await AWSservice.uploadChunk(uploadId, fileKey, PartNumber, chunk);
 
-    res.send(createResponse({ eTag, partNumber }, "Chunk uploaded successfully"));
-
+    res.send(createResponse({ ETag, PartNumber }, "Chunk uploaded successfully"));
 });
 
 export const completeUpload = asyncHandler(async (req: Request, res: Response) => {
     const { uploadId, fileKey, parts } = req.body;
+    const { courseId, sectionId, subSectionId} = req.params;
 
     if (!Array.isArray(parts) || parts.length === 0) {
         throw createHttpError(400, "Parts array is required and cannot be empty");
     }
 
     const completedUpload = await AWSservice.completeMultipartUpload(uploadId, fileKey, parts);
+    await courseService.isValidSectionSubsectionId(courseId, sectionId, subSectionId);
+
+    await courseService.addContentLink(subSectionId, fileKey);
+
     res.send(createResponse(completedUpload, "Upload completed successfully"));
 });
 
+// this section will implement wiht some modificaion in enrolment schema
 export const getCourseVideoAccessUrl = asyncHandler(async (req: Request, res: Response) => {
-    const { fileKey } = req.body;
-    console.log(" file called: ", req.body);
+    const { courseId, sectionId, subSectionId} = req.params;
 
-    const url = await AWSservice.getPresignedUrl(fileKey);
+    await courseService.isValidSectionSubsectionId(courseId, sectionId, subSectionId);
 
-    res.send(createResponse(url, "Presigned url generated"));
+    // const url = await AWSservice.getPresignedUrl(fileKey);
+
+    // res.send(createResponse(url, "Presigned url generated"));
 });
-
 
 
 /**

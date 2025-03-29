@@ -10,6 +10,38 @@ import enrollmentSchema from "./enrollment.schema";
 import createHttpError from "http-errors";
 
 /**
+ * Checks whether a course exists in the database.
+ *
+ * @param {string} courseId - The unique identifier of the course.
+ * @returns {Promise<boolean>} True if the course exists, false otherwise.
+ */
+export const isCourseExist = async (courseId: string): Promise<boolean> => {
+    const courseExists = await courseSchema.exists({ _id: courseId });
+    return courseExists !== null;
+};
+
+export const isValidSectionSubsectionId = async(courseId: string, sectionId: string, subSectionId?: string) => {
+    const course = await courseSchema.findById(courseId);
+    if (!course) {
+        throw createHttpError(404, "Course not found, Invalid courseId");
+    }
+    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Schema.Types.ObjectId)) {
+        throw  createHttpError(404, "Section does not belong to the course");
+    }
+    if(!subSectionId) {
+        return true;
+    }
+    const section = await sectionSchema.findById(sectionId);
+    if (!section) {
+        throw createHttpError(404, "Section not found, Invalid SectionId");
+    }
+    if (!section.subSections.includes(new mongoose.Types.ObjectId(subSectionId) as unknown as mongoose.Schema.Types.ObjectId)) {
+        throw createHttpError(404, "Subsection does not belong to the section");
+    }
+    return true;
+};
+
+/**
  * Creates a new course along with its sections and subsections.
  *
  * @param {Omit<ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }} data 
@@ -64,22 +96,12 @@ export const getCourseContent = async (courseId: string): Promise<any> => {
         .populate({
             path: "sections",
             populate: {
-                path: "subSections",
+                path: "subSections"
             },
         });
     return coursesContent;
 };
 
-/**
- * Checks whether a course exists in the database.
- *
- * @param {string} courseId - The unique identifier of the course.
- * @returns {Promise<boolean>} True if the course exists, false otherwise.
- */
-export const isCourseExist = async (courseId: string): Promise<boolean> => {
-    const courseExists = await courseSchema.exists({ _id: courseId });
-    return courseExists !== null;
-};
 
 /**
  * Moves a course to draft by updating its status to "DRAFT".
@@ -449,5 +471,12 @@ export const deleteSubSection = async (courseId: string, sectionId: string, subS
 
     await sectionSchema.findByIdAndUpdate(sectionId, { $pull: { subSections: subSectionId } });
     await subSectionSchema.findByIdAndDelete(subSectionId);
-}
+};
+
+export const addContentLink = async (subSectionId: string, fileKey: string) => {
+    await subSectionSchema.findByIdAndUpdate(subSectionId, {
+        "video.link": fileKey
+    });
+};
+
 

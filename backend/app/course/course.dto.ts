@@ -42,7 +42,10 @@ export interface ISection extends BaseSchema {
 
 export interface ISubSection extends BaseSchema {
     title: string;
-    video?: string;
+    video?: {
+        link: string;
+        duration: string;
+    };
     pdf?: string;
     image?: string;
     resources?: string[];

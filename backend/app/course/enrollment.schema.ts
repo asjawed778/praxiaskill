@@ -5,7 +5,7 @@ import * as CourseEnum from "./course.enum";
 const enrollmentSchema = new mongoose.Schema<IEnrollment>({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "user",
         required: true
     },
     courseId: {
@@ -35,7 +35,8 @@ const enrollmentSchema = new mongoose.Schema<IEnrollment>({
     status: {
         type: String,
         enum: Object.values(CourseEnum.Status),
-        required: true
+        required: true,
+        default: CourseEnum.Status.ACTIVE
     }
 }, { timestamps: true });
 
