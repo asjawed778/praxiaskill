@@ -121,7 +121,7 @@ export const startMultipartUpload = async (fileKey: string, fileType: string): P
 export const uploadChunk = async (
     uploadId: string,
     fileKey: string,
-    partNumber: number,
+    PartNumber: number,
     chunk: { tempFilePath: string; name: string; mimetype: string }
 ): Promise<string> => {
     const fileBuffer = fs.readFileSync(chunk.tempFilePath);
@@ -130,7 +130,7 @@ export const uploadChunk = async (
         Bucket: S3_BUCKET_NAME,
         Key: fileKey,
         UploadId: uploadId,
-        PartNumber: partNumber,
+        PartNumber: PartNumber,
         Body: fileBuffer
     });
     const response = await s3Client.send(command);
