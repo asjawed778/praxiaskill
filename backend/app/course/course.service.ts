@@ -7,6 +7,7 @@ import CourseEnquirySchema from "./course.enquiry";
 import * as courseEnum from "./course.enum";
 import ratingAndReviewSchema from "./ratingAndReview.schema";
 import enrollmentSchema from "./enrollment.schema";
+import createHttpError from "http-errors";
 
 /**
  * Creates a new course along with its sections and subsections.
@@ -59,7 +60,7 @@ export const createCourse = async (data: Omit<ICourse, "sections"> & { sections:
  */
 export const getCourseContent = async (courseId: string): Promise<any> => {
     const coursesContent = await courseSchema.findById(courseId)
-    .select("_id title sections")
+        .select("_id title sections")
         .populate({
             path: "sections",
             populate: {
@@ -164,8 +165,8 @@ export const getPublishedCoursesByCategory = async (categoryId: string, pageNo: 
 
     const result = await courseSchema.aggregate([
         {
-            $match: { 
-                category: new mongoose.Types.ObjectId(categoryId), 
+            $match: {
+                category: new mongoose.Types.ObjectId(categoryId),
                 courseStatus: courseEnum.CourseStatus.PUBLISHED
             }
         },
@@ -305,7 +306,7 @@ export const getPublishedCourses = async (pageNo: number = 1): Promise<any> => {
 
     const result = await courseSchema.aggregate([
         {
-            $match: { 
+            $match: {
                 courseStatus: courseEnum.CourseStatus.PUBLISHED
             }
         },
@@ -409,4 +410,44 @@ export const isUserCoursePurchased = async (courseId: string, userId: string): P
     const isPurchased = await enrollmentSchema.exists({ courseId, userId });
     return isPurchased !== null;
 };
+
+export const deleteSection = async (courseId: string, sectionId: string): Promise<any> => {
+    const course = await courseSchema.findById(courseId);
+    if (!course) {
+        throw createHttpError(404, "Course not found");
+    }
+    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Schema.Types.ObjectId)) {
+        throw  createHttpError(404, "Section does not belong to the course");
+    }
+
+    await courseSchema.findByIdAndUpdate(courseId, { $pull: { sections: sectionId } });
+
+    const section = await sectionSchema.findById(sectionId);
+    if (section) {
+        await subSectionSchema.deleteMany({ _id: { $in: section.subSections } });
+    }
+    await sectionSchema.findByIdAndDelete(sectionId);
+
+};
+
+export const deleteSubSection = async (courseId: string, sectionId: string, subSectionId: string): Promise<any> => {
+    const course = await courseSchema.findById(courseId);
+    if (!course) {
+        throw createHttpError(404, "Course not found");
+    }
+    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Schema.Types.ObjectId)) {
+        throw  createHttpError(404, "Section does not belong to the course");
+    }
+
+    const section = await sectionSchema.findById(sectionId);
+    if (!section) {
+        throw new Error("Section not found");
+    }
+    if (!section.subSections.includes(new mongoose.Types.ObjectId(subSectionId) as unknown as mongoose.Schema.Types.ObjectId)) {
+        throw new Error("Subsection does not belong to the section");
+    }
+
+    await sectionSchema.findByIdAndUpdate(sectionId, { $pull: { subSections: subSectionId } });
+    await subSectionSchema.findByIdAndDelete(subSectionId);
+}
 
