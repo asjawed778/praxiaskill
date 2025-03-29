@@ -138,6 +138,12 @@ export const apiCourse = createApi({
         method: "GET",
       }),
     }),
+    getFullCourseContent: builder.query({
+      query: (courseId) => ({
+        url: `course/content/${courseId}`, 
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -159,4 +165,5 @@ export const {
   useGetAllPublishedCourseQuery,
   useGetCategoryCourseQuery,
   useGetFullCourseDetailsQuery,
+  useGetFullCourseContentQuery,
 } = apiCourse;
