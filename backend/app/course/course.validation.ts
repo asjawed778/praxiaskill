@@ -1,6 +1,21 @@
 import { body, param } from "express-validator";
 import * as CourseEnum from "./course.enum";
 
+const allowedVideoTypes = [
+    "video/mp4", "video/mov", "video/avi",
+    "video/mkv", "video/webm", "video/flv", "video/wmv"
+];
+
+const allowedImageTypes = [
+    "image/png", "image/jpeg", "image/jpg", "image/gif"
+];
+
+const allowedFileTypes = [
+    ...allowedVideoTypes,
+    "application/pdf",
+    ...allowedImageTypes
+];
+
 export const createCourse = [
 
     // Basic Course Details
@@ -331,3 +346,77 @@ export const deleteSubSection = [
         .isMongoId().withMessage('Invalid subSectionId. Must be a valid MongoDB ObjectId'),
 ];
 
+export const courseUpload = [
+    param('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+
+    param('sectionId')
+        .notEmpty().withMessage('sectionId is required')
+        .isMongoId().withMessage('Invalid sectionId. Must be a valid MongoDB ObjectId'),
+
+    param('subSectionId')
+        .notEmpty().withMessage('subSectionId is required')
+        .isMongoId().withMessage('Invalid subSectionId. Must be a valid MongoDB ObjectId'),
+
+    body('fileName')
+        .notEmpty().withMessage('file name is required')
+        .isString().withMessage('fileName must be a string'),
+
+    body('fileType')
+        .notEmpty().withMessage('fileType is required')
+        .isString().withMessage('fileType must be a valid MIME type')
+        .isIn(allowedFileTypes).withMessage(`Invalid fileType. Allowed types: ${allowedFileTypes.join(", ")}`),
+
+    body('courseTitle')
+        .notEmpty().withMessage('courseTitle is required')
+        .isString().withMessage('courseTitle must be a string'),
+];
+
+export const uploadChunk = [
+    param('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+
+    param('sectionId')
+        .notEmpty().withMessage('sectionId is required')
+        .isMongoId().withMessage('Invalid sectionId. Must be a valid MongoDB ObjectId'),
+
+    param('subSectionId')
+        .notEmpty().withMessage('subSectionId is required')
+        .isMongoId().withMessage('Invalid subSectionId. Must be a valid MongoDB ObjectId'),
+];
+
+export const completeUpload = [
+    param('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+
+    param('sectionId')
+        .notEmpty().withMessage('sectionId is required')
+        .isMongoId().withMessage('Invalid sectionId. Must be a valid MongoDB ObjectId'),
+
+    param('subSectionId')
+        .notEmpty().withMessage('subSectionId is required')
+        .isMongoId().withMessage('Invalid subSectionId. Must be a valid MongoDB ObjectId'),
+
+    body("uploadId")
+        .notEmpty().withMessage("uploadId is required")
+        .isString().withMessage("uploadId must be a string"),
+
+    body("fileKey")
+        .notEmpty().withMessage("fileKey is required")
+        .isString().withMessage("fileKey must be a string"),
+
+    body("parts")
+        .isArray({ min: 1 }).withMessage("parts must be an array with at least one part")
+        .custom((value) => {
+            return value.every((part: any) => {
+                return (
+                    typeof part.PartNumber === "number" &&
+                    part.PartNumber > 0 &&
+                    typeof part.ETag === "string"
+                );
+            });
+        }).withMessage("Each part must have partNumber (number) and ETag (string)"),
+];
