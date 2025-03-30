@@ -433,6 +433,16 @@ export const isUserCoursePurchased = async (courseId: string, userId: string): P
     return isPurchased !== null;
 };
 
+export const isUserCourseActive = async (courseId: string, userId: string): Promise<boolean> => {
+    const enrollment = await enrollmentSchema.findOne({ courseId, userId });
+    if (!enrollment) return false;
+    
+    const isActive = enrollment.status === courseEnum.Status.ACTIVE;
+    const isNotExpired = !enrollment.expiresAt || enrollment.expiresAt > new Date();
+    
+    return isActive && isNotExpired;
+};
+
 export const deleteSection = async (courseId: string, sectionId: string): Promise<any> => {
     const course = await courseSchema.findById(courseId);
     if (!course) {
@@ -478,5 +488,15 @@ export const addContentLink = async (subSectionId: string, fileKey: string) => {
         "video.link": fileKey
     });
 };
+
+export const getSubSectionFileKey = async(subSectionId: string) => {
+    const subsection = await subSectionSchema.findById(subSectionId);
+    if (!subsection || !subsection.video) return null;
+    
+    return {
+        link: subsection.video.link,
+        duration: subsection.video.duration,
+    };
+}
 
 

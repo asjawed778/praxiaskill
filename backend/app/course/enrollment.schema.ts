@@ -1,43 +1,50 @@
 import mongoose from "mongoose";
-import { IEnrollment } from "./course.dto";
 import * as CourseEnum from "./course.enum";
+import { IEnrollment } from "./course.dto";
 
-const enrollmentSchema = new mongoose.Schema<IEnrollment>({
+const enrollmentSchema = new mongoose.Schema<IEnrollment>(
+  {
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+      index: true,
     },
     courseId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Course",
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
+      index: true,
     },
     enrolledAt: {
-        type: Date,
-        required: true
+      type: Date,
+      default: Date.now,
     },
     expiresAt: {
-        type: Date
+      type: Date,
+      default: null,
     },
     progress: {
-        type: Number,
-        required: true,
-        default: 0
+      type: Number,
+      min: 0,
+      max: 100,
+      default: 0,
     },
     isCompleted: {
-        type: Boolean,
-        required: true
+      type: Boolean,
+      default: false,
     },
     certificate: {
-        type: String
+      type: String,
+      default: null,
     },
     status: {
-        type: String,
-        enum: Object.values(CourseEnum.Status),
-        required: true,
-        default: CourseEnum.Status.ACTIVE
-    }
-}, { timestamps: true });
+      type: String,
+      enum: Object.values(CourseEnum.Status),
+      default: CourseEnum.Status.ACTIVE,
+    },
+  },
+  { timestamps: true }
+);
 
-export default mongoose.model("Enrollment", enrollmentSchema);
+export default mongoose.model<IEnrollment>("Enrollment", enrollmentSchema);

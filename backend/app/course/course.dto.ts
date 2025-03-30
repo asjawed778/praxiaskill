@@ -24,6 +24,7 @@ export interface ICourse extends BaseSchema {
     language: CourseEnum.Language;
     duration: string;
     totalLectures: number;
+    validity: CourseEnum.CourseValidity;
 
     courseMode: CourseEnum.CourseMode;
 

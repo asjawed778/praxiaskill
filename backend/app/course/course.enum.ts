@@ -27,3 +27,9 @@ export enum CourseStatus {
     PUBLISHED = "PUBLISHED",
     TERMINATED = "TERMINATED",
 }
+
+export enum CourseValidity {
+    ONE_YEAR = "1 Year",
+    TWO_YEAR = "2 Year",
+    LIFETIME = "LifeTime"
+}
