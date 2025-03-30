@@ -60,24 +60,24 @@ export default function CourseContent() {
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       <div>
-                        <InputField id="step4-image" type="image">
+                        <InputField disabled id="step4-image" type="image">
                           Content Image
                         </InputField>
                       </div>
 
                       <div>
-                        <InputField id="step4-pdf" type="pdf">
+                        <InputField disabled id="step4-pdf" type="pdf">
                           Content Brochure pdf
                         </InputField>
                       </div>
 
                       <div className="">
-                        <VideoUploader
+                         <VideoUploader
                           courseId={courseId}
                           sectionId={section?._id}
                           subSectionId={subSection?._id}
                           courseTitle={courseTitle}
-                        />
+                        /> 
                       </div>
                     </div>
                   </div>

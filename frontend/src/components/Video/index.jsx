@@ -21,6 +21,7 @@ const allowedVideoTypes = [
 const VideoUploader = ({ courseId, sectionId, subSectionId, courseTitle }) => {
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const uniqueInputId = `videoUploader-${sectionId}-${subSectionId}`;
 
   const [uploadParts, setUploadParts] = useState([]);
 
@@ -128,14 +129,14 @@ const VideoUploader = ({ courseId, sectionId, subSectionId, courseTitle }) => {
     <div className="">
       <p>Content Video</p>
       <label
-        htmlFor="videoUploader"
+        htmlFor={uniqueInputId}
         className="text-gray-500 flex flex-col items-center justify-center w-[15rem] py-2 h-fit border-2 border-dashed border-gray-300 cursor-pointer"
       >
         <AiOutlineCloudUpload size={30} />
         <p>Upload Video</p>
       </label>
       <input
-        id="videoUploader"
+        id={uniqueInputId}
         hidden
         type="file"
         accept="video/*"

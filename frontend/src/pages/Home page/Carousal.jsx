@@ -28,10 +28,6 @@ export default function Carousal() {
     useGetCategoryCourseQuery(activeTab, {
       skip: !activeTab,
     });
-
-    console.log("courses", categoryCourse)
-    console.log("cats", allCategories)
-
   useEffect(() => {
     if (allCategories?.success) {
       dispatch(setCategories(allCategories.data || []));
@@ -82,7 +78,6 @@ export default function Carousal() {
       <div className="flex overflow-x-scroll scroll-smooth scrollbar-hide gap-8 md:gap-7 px-4 mb-1 whitespace-nowrap custom-scrollbar border-b border-neutral-300">
         {/* <div className="flex w-auto flex-nowrap gap-4 space-x-1 overflow-x-auto carousel  scroll-snap-x scroll-smooth"> */}
         {categories
-          .filter((_, i) => i < 4)
           .map(
             (tab) =>
               tab.courses.length !== 0 && (
