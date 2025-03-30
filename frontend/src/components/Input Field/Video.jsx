@@ -26,7 +26,7 @@ const Video = forwardRef(({ id, required = false, ...rest }, ref) => {
 
   if (isModalOpen)
     return (
-      <div className="fixed inset-0 bg-black/75 bg-opacity-50 flex justify-center items-center z-50">
+      <div className="fixed w-[15rem] inset-0 bg-black/75 bg-opacity-50 flex justify-center items-center z-50">
         <div className="flex flex-col gap-5 p-4 rounded-lg">
           <video controls className="w-fit h-[40rem]">
             <source src={videoSrc} type="video/mp4" />
@@ -40,10 +40,10 @@ const Video = forwardRef(({ id, required = false, ...rest }, ref) => {
     );
   else
     return (
-      <div className="flex flex-col w-fit">
+      <div className="flex flex-col w-[15rem]">
         <label
           htmlFor={id}
-          className="text-gray-500 flex flex-col items-center justify-center w-[20rem] py-2 h-fit border-2 border-dashed border-gray-300 cursor-pointer"
+          className="text-gray-500 flex flex-col items-center justify-center w-[15rem] py-2 h-fit border-2 border-dashed border-gray-300 cursor-pointer"
         >
           <MdOutlineNoteAdd size={30} />
           <p>Upload or Drag file</p>

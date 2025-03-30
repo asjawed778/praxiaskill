@@ -4,7 +4,7 @@ import { MdDelete } from "react-icons/md";
 import { useFieldArray } from "react-hook-form";
 import InputField from "../../../../../components/Input Field/index";
 
-export default function SubSectionFields({ control, sectionIndex, errors }) {
+export default function SubSectionFields({ control, sectionIndex, errors, isReadOnly = true }) {
   const {
     fields: subSectionFields,
     append: appendSubsection,
@@ -28,6 +28,7 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
                   {...control.register(
                     `sections.${sectionIndex}.subsections.${subIndex}.title`
                   )}
+                  disabled
                   placeholder="Subsection Title"
                 />
                 
@@ -44,7 +45,7 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
                   )}
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex gap-3 flex-col md:flex-row md:justify-between">
                 <div>
                   <InputField id="step4-image" type="image">
                     Content Image
@@ -63,7 +64,7 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
                 </div>
 
                 <div>
-                  <InputField id="step4-pdf" type="image">
+                  <InputField id="step4-pdf" type="pdf">
                     Content Brochure pdf
                   </InputField>
 
@@ -97,29 +98,7 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
                 </div>
               </div>
             </div>
-
-            <div className="flex flex-col justify-center items-center gap-5">
-              {subSectionFields.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeSubsection(subIndex)}
-                >
-                  <MdDelete size={30} />
-                </button>
-              )}
-            </div>
           </div>
-
-          {subIndex === subSectionFields?.length - 1 && (
-            <button
-              type="button"
-              onClick={() => appendSubsection({ title: "" })}
-              className="text-[var(--color-primary)] cursor-pointer flex items-center gap-1 w-fit"
-            >
-              <FaPlus size={30} />
-              <span>Add More Subsection</span>
-            </button>
-          )}
         </div>
       ))}
     </div>
