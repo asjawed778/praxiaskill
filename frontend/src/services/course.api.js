@@ -144,6 +144,30 @@ export const apiCourse = createApi({
         method: "GET",
       }),
     }),
+    startUpload: builder.mutation({
+      query: ({ courseId, sectionId, subSectionId, fileName, fileType, courseTitle }) => ({
+        url: `course/start-upload/${courseId}/${sectionId}/${subSectionId}`,
+        method: 'POST',
+        body: { fileName, fileType, courseTitle },
+        credentials: "include"
+      }),
+    }),
+    chunkUpload: builder.mutation({
+      query: ({ courseId, sectionId, subSectionId, formData }) => ({
+        url: `course/chunk-upload/${courseId}/${sectionId}/${subSectionId}`,
+        method: 'POST',
+        body: formData,
+        credentials: "include"
+      }),
+    }),
+    completeUpload: builder.mutation({
+      query: ({ courseId, sectionId, subSectionId, uploadId, fileKey, parts }) => ({
+        url: `course/complete-upload/${courseId}/${sectionId}/${subSectionId}`,
+        method: 'POST',
+        body: { uploadId, fileKey, parts },
+        credentials: "include"
+      }),
+    }),
   }),
 });
 
@@ -166,4 +190,7 @@ export const {
   useGetCategoryCourseQuery,
   useGetFullCourseDetailsQuery,
   useGetFullCourseContentQuery,
+  useStartUploadMutation,
+  useChunkUploadMutation,
+  useCompleteUploadMutation,
 } = apiCourse;

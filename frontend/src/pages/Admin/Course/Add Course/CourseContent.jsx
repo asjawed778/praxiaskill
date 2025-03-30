@@ -4,12 +4,14 @@ import Button from "../../../../components/Button/Button";
 import { useParams } from "react-router-dom";
 import { useGetFullCourseContentQuery } from "../../../../services/course.api";
 import ButtonLoading from "../../../../components/Button/ButtonLoading";
+import VideoUploader from "../../../../components/Video";
 
 export default function CourseContent() {
   const { courseId } = useParams();
   const { data: courseContent, isFetching } =
     useGetFullCourseContentQuery(courseId);
   const data = courseContent?.data;
+  const courseTitle = courseContent?.data?.title;
 
   if (isFetching) {
     return (
@@ -69,10 +71,13 @@ export default function CourseContent() {
                         </InputField>
                       </div>
 
-                      <div>
-                        <InputField id="step4-video" type="video">
-                          Content Video
-                        </InputField>
+                      <div className="">
+                        <VideoUploader
+                          courseId={courseId}
+                          sectionId={section?._id}
+                          subSectionId={subSection?._id}
+                          courseTitle={courseTitle}
+                        />
                       </div>
                     </div>
                   </div>

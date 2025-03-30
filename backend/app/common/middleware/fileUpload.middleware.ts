@@ -106,9 +106,9 @@ export const validateChunkUpload = (req: Request, res: Response, next: NextFunct
 
     const chunk = req.files.chunk as UploadedFile;
 
-    if (!allowedFileTypes.includes(chunk.mimetype)) {
-        return next(createHttpError(400, `Invalid file type. Allowed: ${allowedFileTypes.join(", ")}`));
-    }
+    // if (!allowedFileTypes.includes(chunk.mimetype)) {
+    //     return next(createHttpError(400, `Invalid file type. Allowed: ${allowedFileTypes.join(", ")}`));
+    // }
 
     if (chunk.size > MAX_CHUNK_SIZE) {
         return next(createHttpError(400, "Chunk size exceeds 5MB limit"));
