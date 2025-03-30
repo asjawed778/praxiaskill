@@ -84,15 +84,35 @@ export const completeUpload = asyncHandler(async (req: Request, res: Response) =
     res.send(createResponse(completedUpload, "Upload completed successfully"));
 });
 
-// this section will implement wiht some modificaion in enrolment schema
 export const getCourseVideoAccessUrl = asyncHandler(async (req: Request, res: Response) => {
     const { courseId, sectionId, subSectionId} = req.params;
-
+    if (!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+    const userId = req.user._id;
+    const role = req.user.role;
     await courseService.isValidSectionSubsectionId(courseId, sectionId, subSectionId);
+    if(role !== 'SUPER_ADMIN') {
+        const isUserCourseActive = await courseService.isUserCourseActive(courseId, userId);
+        if(!isUserCourseActive) {
+            res.send(createResponse({}, "This course may have expired, been canceled, or is no longer available"));
+            return;
+        }
+    }
 
-    // const url = await AWSservice.getPresignedUrl(fileKey);
+    const fileKeyData = await courseService.getSubSectionFileKey(subSectionId);
+    
+    if (!fileKeyData) {
+        throw createHttpError(404, "Content not available, will be uploaded soon");
+    }
+    const { link, duration } = fileKeyData;
+    if(!link) {
+        res.send(createResponse({}, "Content not available, will be uploaded soon"));
+        return;
+    }
+    const url = await AWSservice.getPresignedUrl(link);
 
-    // res.send(createResponse(url, "Presigned url generated"));
+    res.send(createResponse({url, duration}, "Presigned url generated"));
 });
 
 
@@ -159,6 +179,18 @@ export const getCourseContent = asyncHandler(async (req: Request, res: Response)
     const isCourseExist = await courseService.isCourseExist(courseId);
     if (!isCourseExist) {
         throw createHttpError(404, "Course id is invalid, Not found");
+    }
+    if (!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+    const userId = req.user._id;
+    const role = req.user.role;
+    if(role !== 'SUPER_ADMIN') {
+        const isUserCourseActive = await courseService.isUserCourseActive(courseId, userId);
+        if(!isUserCourseActive) {
+            res.send(createResponse({}, "This course may have expired, been canceled, or is no longer available"));
+            return;
+        }
     }
     const courseContent = await courseService.getCourseContent(courseId);
     res.send(createResponse(courseContent, "Course content fetched successfully"));

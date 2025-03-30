@@ -21,7 +21,7 @@ router
     .patch("/publish/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.publishCourse, catchError, courseController.publishCourse)
     .patch("/terminate/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.terminateCourse, catchError, courseController.terminateCourse)
     .patch("/draft/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.draftCourse, catchError, courseController.draftCourse)
-    .get("/content/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseController.getCourseContent)
+    .get("/content/:courseId", authMiddlerware.auth, courseController.getCourseContent)
     .get("/published/:categoryId", courseValidation.getPublishedCourseByCategory, courseController.getPublishedCourseByCategory)
     .get("/published", courseController.getPublishedCourses)
     .post("/enquiry", courseValidation.courseEnquiry, catchError, courseController.courseEnquiry)
@@ -32,7 +32,7 @@ router
     .post("/start-upload/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.courseUpload, catchError, courseController.startUpload)
     .post("/chunk-upload/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.uploadChunk, fileUploadMiddleware.validateChunkUpload, catchError, courseController.uploadChunk)
     .post("/complete-upload/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.completeUpload, catchError, courseController.completeUpload)
-    .get("/presigned/:courseId/:sectionId/:subSectionId",authMiddlerware.auth, authMiddlerware.isUser,courseValidation.courseContentPresignedUrl, catchError, courseController.getCourseVideoAccessUrl)
+    .get("/presigned/:courseId/:sectionId/:subSectionId",authMiddlerware.auth, courseValidation.courseContentPresignedUrl, catchError, courseController.getCourseVideoAccessUrl)
 
 
 
