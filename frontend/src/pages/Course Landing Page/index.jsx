@@ -18,7 +18,6 @@ const Course = () => {
   const dispatch = useDispatch()
   const { id } = useParams();
   const {data:courseDetails, isLoading} = useGetFullCourseDetailsQuery(id)
-  console.log("data", courseDetails)
 
 
   useEffect(() => {
