@@ -10,14 +10,16 @@ import { GoDotFill } from "react-icons/go";
 
 import { NAVS } from "../../Dummy Data/Course Landing Page/data";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetFullCourseDetailsQuery } from "../../services/course.api";
 import { setSpecificCourse } from "../../store/reducers/coursesReducer";
 
 const Course = () => {
   const dispatch = useDispatch()
-  const { id } = useParams();
-  const {data:courseDetails, isLoading} = useGetFullCourseDetailsQuery(id)
+  const { courseId } = useParams();
+  const {data:courseDetails, isLoading} = useGetFullCourseDetailsQuery(courseId)
+
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -56,10 +58,15 @@ const Course = () => {
           </div>
         </div>
         <div className="flex gap-3 flex-col">
-          <Button className="flex flex-col gap-0.5 w-full md:w-[13rem] font-semibold">
+          <div className="flex gap-3">
+          <Button className="flex flex-col gap-0.5 w-[13rem] font-semibold">
             <span className="text-xs">Enroll for Free</span>
             <span className="text-[10px]">Starts Mar 16</span>
           </Button>
+          <Button onClick={() => navigate(`/course-payment/${courseId}`)} className="w-[13rem] font-semibold">
+            <span className="">Buy Now</span>
+          </Button>
+          </div>
           <p className="text-sm flex items-center gap-1">
             <span className="font-semibold">7,772</span>
             <span className="text-neutral-600">already enrolled</span>

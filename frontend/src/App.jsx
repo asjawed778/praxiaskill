@@ -66,7 +66,7 @@ const publicRoutes = [
     ),
   },
   {
-    path: "course/:id",
+    path: "course/:courseId",
     element: (
       <LazyComponent>
         <CourseLandingPage />
@@ -90,10 +90,12 @@ const publicRoutes = [
     ),
   },
   {
-    path: "coursepayment",
+    path: "course-payment/:courseId",
     element: (
       <LazyComponent>
-        <CoursePayment />
+        <PrivateRoute>
+          <CoursePayment />
+        </PrivateRoute>
       </LazyComponent>
     )
   },
