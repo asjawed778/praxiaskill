@@ -32,10 +32,10 @@ export const apiCourse = createApi({
         };
       },
     }),
-    uploadDetails: builder.mutation({
+    uploadCourse: builder.mutation({
       query: (data) => {
         return {
-          url: "course/details",
+          url: "course",
           method: "POST",
           body: data,
           credentials: "include",
@@ -63,9 +63,9 @@ export const apiCourse = createApi({
       },
     }),
     publishCourse: builder.mutation({
-      query: ({ id }) => {
+      query: ({ id: courseId }) => {
         return {
-          url: `course/publish/${id}`,
+          url: `course/publish/${courseId}`,
           method: "POST",
           credentials: "include",
         };
@@ -92,15 +92,15 @@ export const apiCourse = createApi({
         credentials: "include"
       }),
     }),
-    setEnquiryStatus: builder.mutation({
+    setEnquiryStatus: builder.mutation({ //update
       query: ({data, enquiryId}) => ({
         url: `course/enquiry-status/${enquiryId}`,
-        method: "POST",
+        method: "PATCH",
         body: data,
         credentials: "include"
       }),
     }),
-    addCourse: builder.mutation({
+    addCourse: builder.mutation({ //update
       query: (data) => ({
         url: "course/add-course",
         method: "POST",
@@ -126,7 +126,7 @@ export const apiCourse = createApi({
         method: "GET",
       }),
     }),
-    getCategoryCourse: builder.query({
+    getCategoryCourse: builder.query({ //name update
       query: (categoryId) => ({
         url: `course/published/${categoryId}`,
         method: "GET",
@@ -134,8 +134,38 @@ export const apiCourse = createApi({
     }),
     getFullCourseDetails: builder.query({
       query: (courseId) => ({
-        url: `course/all-details/${courseId}`, 
+        url: `course/${courseId}`, 
         method: "GET",
+      }),
+    }),
+    getFullCourseContent: builder.query({
+      query: (courseId) => ({
+        url: `course/content/${courseId}`, 
+        method: "GET",
+      }),
+    }),
+    startUpload: builder.mutation({
+      query: ({ courseId, sectionId, subSectionId, fileName, fileType, courseTitle }) => ({
+        url: `course/start-upload/${courseId}/${sectionId}/${subSectionId}`,
+        method: 'POST',
+        body: { fileName, fileType, courseTitle },
+        credentials: "include"
+      }),
+    }),
+    chunkUpload: builder.mutation({
+      query: ({ courseId, sectionId, subSectionId, formData }) => ({
+        url: `course/chunk-upload/${courseId}/${sectionId}/${subSectionId}`,
+        method: 'POST',
+        body: formData,
+        credentials: "include"
+      }),
+    }),
+    completeUpload: builder.mutation({
+      query: ({ courseId, sectionId, subSectionId, uploadId, fileKey, parts }) => ({
+        url: `course/complete-upload/${courseId}/${sectionId}/${subSectionId}`,
+        method: 'POST',
+        body: { uploadId, fileKey, parts },
+        credentials: "include"
       }),
     }),
   }),
@@ -145,7 +175,7 @@ export const {
   // Courses
   useUploadThumbnailMutation,
   useUploadBrouchureMutation,
-  useUploadDetailsMutation,
+  useUploadCourseMutation,
   useUploadAdditionalDetailsMutation,
   useUploadCourseStructureMutation,
   usePublishCourseMutation,
@@ -159,4 +189,8 @@ export const {
   useGetAllPublishedCourseQuery,
   useGetCategoryCourseQuery,
   useGetFullCourseDetailsQuery,
+  useGetFullCourseContentQuery,
+  useStartUploadMutation,
+  useChunkUploadMutation,
+  useCompleteUploadMutation,
 } = apiCourse;

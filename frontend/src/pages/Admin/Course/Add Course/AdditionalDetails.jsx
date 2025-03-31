@@ -1,48 +1,16 @@
-import { CiSquarePlus } from "react-icons/ci";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import { useFormContext, useFieldArray, Controller } from "react-hook-form";
 import required from "/imgs/required.svg";
-
-import { useFieldArray, useForm, Controller } from "react-hook-form";
-
-import JoditEditor from "jodit-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
-import InputField from "../../../../components/Input Field";
-import Button from "../../../../components/Button/Button";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect, useRef, useState } from "react";
-import secondStepValidationSchema from "./Schema/secondStepValidationSchema";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
 import { FaPlus } from "react-icons/fa6";
-import { useUploadAdditionalDetailsMutation } from "../../../../services/course.api";
-import ButtonLoading from "../../../../components/Button/ButtonLoading";
+import InputField from "../../../../components/Input Field";
+import Button from "../../../../components/Button/Button";
+import { useEffect, useRef } from "react";
 
+import JoditEditor from "jodit-react";
 
-export default function AdditionalDetails({
-  currentStep,
-  handleNext,
-  handlePrev,
-  courseId
-}) {
-  const license_key = import.meta.env.VITE_CK_LICENSE_KEY;
-
-  const [uploadAdditionalDetails, { isLoading, isError, error: uploadError }] =
-    useUploadAdditionalDetailsMutation();
-
-  const {
-    control,
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    getValues,
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = useForm({
-    defaultValues: { keypoints: [], description: "", tags: [] },
-    resolver: yupResolver(secondStepValidationSchema),
-  });
+const AdditionalDetails = ({ handleNext, handlePrev }) => {
+  const { control, register, setValue, clearErrors, formState: { errors } } = useFormContext();
 
   const {
     fields: keypoints,
@@ -51,6 +19,16 @@ export default function AdditionalDetails({
   } = useFieldArray({
     control,
     name: "keypoints",
+  });
+
+
+  const {
+    fields: whatWillYouLearn,
+    append: appendWhatWillYouLearn,
+    remove: removeWhatWillYouLearn,
+  } = useFieldArray({
+    control,
+    name: "whatWillYouLearn",
   });
 
   const {
@@ -62,35 +40,31 @@ export default function AdditionalDetails({
     name: "tags",
   });
 
+   useEffect(() => {
+    if (keypoints.length === 0) {
+      appendKeypoint(""); // Add an initial empty keypoint when component mounts
+    }
+  }, [keypoints, appendKeypoint]);
+
+   useEffect(() => {
+    if (whatWillYouLearn.length === 0) {
+      appendWhatWillYouLearn(""); // Add an initial empty keypoint when component mounts
+    }
+  }, [whatWillYouLearn, appendWhatWillYouLearn]);
+
+  const addWhatWillYouLearn = () => {
+    clearErrors("whatWillYouLearn");
+    appendWhatWillYouLearn("");
+  };
 
   const addKeypoint = () => {
     clearErrors("keypoints");
     appendKeypoint("");
   };
 
-  const onSubmit = async (formData) => {
-    try {
-      const { tags } = formData
-      const newTags = tags.map((tag) => tag.value)
-
-      const data = { ...formData, tags: newTags };
-      console.log("submitted data", data)
-      const id = `${courseId}`;
-      const result = await uploadAdditionalDetails({ data, id });
-      console.log("Result after submitting Second Step:", result);
-      if (result?.error) {
-        throw new Error(result.error.data.message);
-      }
-      handleNext();
-    } catch (err) {
-      console.log("Second Step form Error:", err);
-    }
-  };
-
   return (
-    <form
+    <div
       onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
-      onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-5"
     >
       <div className="flex flex-col gap-5">
@@ -105,7 +79,7 @@ export default function AdditionalDetails({
             />
           </div>
           <div>
-            {keypoints.length === 0 && appendKeypoint("")}
+            {/* {keypoints.length === 0 && appendKeypoint("")} */}
             {keypoints.map((field, index) => (
               <div key={field.id}>
                 <div className="flex items-center gap-1 mt-2">
@@ -138,6 +112,54 @@ export default function AdditionalDetails({
           >
             <FaPlus />
             <span className="font-bold">Add more keypoint</span>
+          </button>
+        </div>
+
+
+        {/* WHat You will Learn  */}
+        <div className="flex flex-col gap-3">
+          <div className="relative flex gap-1 w-fit">
+            <span>What You Will Learn?</span>
+            <img
+              src={required}
+              alt="required"
+              className="absolute -right-3 top-2 w-[7px]"
+            />
+          </div>
+          <div>
+            {/* {keypoints.length === 0 && appendKeypoint("")} */}
+            {whatWillYouLearn.map((field, index) => (
+              <div key={field.id}>
+                <div className="flex items-center gap-1 mt-2">
+                  <input
+                    id={index}
+                    {...register(`whatWillYouLearn.${index}`)}
+                    className={`border p-2 w-full rounded-lg bg-white border-neutral-300 outline-0`}
+                    placeholder={`whatWillYouLearn ${index + 1}`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeWhatWillYouLearn(index)}
+                    className="text-neutral-400 text-3xl cursor-pointer hover:text-neutral-500"
+                  >
+                    <RiDeleteBin6Line />
+                  </button>
+                </div>
+                {errors?.whatWillYouLearn && (
+                  <p className="text-red-500 text-xs ml-2">
+                    {errors?.whatWillYouLearn[index]?.message}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={addWhatWillYouLearn}
+            className="text-primary hover:text-primary-hover w-fit px-4 py-2 rounded flex gap-1 items-center cursor-pointer"
+          >
+            <FaPlus />
+            <span className="font-bold">Add more points</span>
           </button>
         </div>
 
@@ -260,8 +282,9 @@ export default function AdditionalDetails({
 
             <div>
               <InputField
-                {...register("lecture")}
+                {...register("totalLectures")}
                 id="total-lecture"
+                type="number"
                 placeholder="50 plus classes"
                 labelClassName="relative flex"
               >
@@ -272,9 +295,9 @@ export default function AdditionalDetails({
                   className="size-2 absolute top-1 -right-3"
                 />
               </InputField>
-              {errors?.lecture && (
+              {errors?.totalLectures && (
                 <p className="text-red-500 text-xs ml-2">
-                  {errors.lecture.message}
+                  {errors.totalLectures.message}
                 </p>
               )}
             </div>
@@ -301,15 +324,14 @@ export default function AdditionalDetails({
       {/* Buttons */}
       <div className="flex justify-between">
         <Button onClick={handlePrev}>Previous</Button>
-        {/* <Button type="submit">Save and Next</Button> */}
-        <Button
-          type="submit"
-          className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${isLoading && "cursor-not-allowed"
-            }`}
+        <Button onClick={handleNext}
+          className={`flex items-center justify-center w-40`}
         >
-          {isLoading ? <ButtonLoading /> : <p>Save and Next</p>}
+         Next
         </Button>
       </div>
-    </form>
+    </div>
   );
-}
+};
+
+export default AdditionalDetails;

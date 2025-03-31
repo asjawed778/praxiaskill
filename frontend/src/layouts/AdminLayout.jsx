@@ -1,6 +1,5 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "../components/Header/Header";
-import ErrorBoundary from "../components/ErrorBoundary";
 import Sidebar from "../pages/Admin/Sidebar";
 import { useState, useEffect } from "react";
 
@@ -26,7 +25,6 @@ export default function AdminLayout() {
   return (
     <div className="flex flex-col min-h-screen w-full custom-scrollbar">
       <Header />
-      <ErrorBoundary>
         <main className="flex-grow flex">
           {/* Left Component Admin Sidebar */}
           <div className={`h-[calc(100vh-5rem)]`}>
@@ -42,7 +40,6 @@ export default function AdminLayout() {
             <Outlet />
           </div>
         </main>
-      </ErrorBoundary>
     </div>
   );
 }

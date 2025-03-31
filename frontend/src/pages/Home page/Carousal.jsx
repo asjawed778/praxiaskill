@@ -4,15 +4,15 @@ import clock from "/imgs/slider/language2.png";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setCourses } from "../store/reducers/coursesReducer";
-import { setCategories } from "../store/reducers/adminCategoryReducer";
-import CourseSkeleton from "./skeletons/CourseSkeleton";
+import { setCourses } from "../../store/reducers/coursesReducer";
+import { setCategories } from "../../store/reducers/adminCategoryReducer";
+import CourseSkeleton from "../../components/skeletons/CourseSkeleton";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import {
   useGetAllCategoryQuery,
   useGetCategoryCourseQuery,
-} from "../services/course.api";
-import Button from "./Button/Button";
+} from "../../services/course.api";
+import Button from "../../components/Button/Button";
 
 export default function Carousal() {
   const dispatch = useDispatch();
@@ -28,7 +28,6 @@ export default function Carousal() {
     useGetCategoryCourseQuery(activeTab, {
       skip: !activeTab,
     });
-
   useEffect(() => {
     if (allCategories?.success) {
       dispatch(setCategories(allCategories.data || []));
@@ -79,7 +78,6 @@ export default function Carousal() {
       <div className="flex overflow-x-scroll scroll-smooth scrollbar-hide gap-8 md:gap-7 px-4 mb-1 whitespace-nowrap custom-scrollbar border-b border-neutral-300">
         {/* <div className="flex w-auto flex-nowrap gap-4 space-x-1 overflow-x-auto carousel  scroll-snap-x scroll-smooth"> */}
         {categories
-          .filter((_, i) => i < 4)
           .map(
             (tab) =>
               tab.courses.length !== 0 && (
@@ -192,7 +190,7 @@ export default function Carousal() {
         {coursesAll?.length !== 0 && (
           <Link
             to="/courses"
-            className="absolute right-0 top-0 font-bold text-xs text-[var(--color-primary)] bg-white mx-auto"
+            className="absolute right-0 top-0 font-bold text-xs text-[var(--color-primary)] bg-white mx-auto cursor-pointer z-50"
           >
             View More
           </Link>

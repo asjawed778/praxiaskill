@@ -11,6 +11,7 @@ import coursesReducer from "./reducers/coursesReducer";
 // Importing Apis
 import { apiAuth } from "../services/auth.api";
 import { apiCourse } from "../services/course.api";
+import { paymentApi } from "../services/payment.api";
 
 // Persist configuration
 const persistConfig = {
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   courses: coursesReducer,
   [apiAuth.reducerPath]: apiAuth.reducer,
   [apiCourse.reducerPath]: apiCourse.reducer,
+  [paymentApi.reducerPath]: paymentApi.reducer,
 });
 
 // Create a persisted reducer
@@ -42,6 +44,7 @@ export const store = configureStore({
     }).concat(
       apiAuth.middleware,
       apiCourse.middleware,
+      paymentApi.middleware,
     ),
 });
 

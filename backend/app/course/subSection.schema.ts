@@ -7,8 +7,14 @@ const subSectionSchema = new mongoose.Schema<ISubSection>({
         required: true
     },
     video: {
-        type: String,
-        required: false
+        link: {
+            type: String,
+            required: false
+        },
+        duration: {
+            type: String,
+            required: false
+        }
     },
     pdf: {
         type: String,

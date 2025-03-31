@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaValidation } from "./Schema/schemaValidation";
 import { useSendEnquiryMutation } from "../../services/course.api";
 import ButtonLoading from "../Button/ButtonLoading";
+import { toast } from "react-hot-toast";
 
 export default function BookDemoClass() {
   const {
@@ -35,6 +36,7 @@ export default function BookDemoClass() {
         setValue("whatsAppOptIn", false)
         setIsChecked(false)
         reset();
+        toast.success("Enquiry sent successfully!")
       }
     } catch (err) {
       const error = JSON.parse(err?.message);
@@ -111,14 +113,14 @@ export default function BookDemoClass() {
       {/* Interested Course */}
       <div>
         <input
-          {...register("intrestedCourse")}
+          {...register("interestedCourse")}
           type="text"
           placeholder="Interested Course"
           className="w-full h-10 px-3 py-1 border-t bg-[#F2F4F7] text-neutral-800 border-gray-300 rounded-md outline-none placeholder:text-neutral-400 focus:ring-1 focus:ring-[var(--alt-secondary-color)]"
         />
-        {errors?.intrestedCourse && (
+        {errors?.interestedCourse && (
           <p className="text-red-500 text-xs mt-0.5">
-            {errors?.intrestedCourse?.message}
+            {errors?.interestedCourse?.message}
           </p>
         )}
       </div>

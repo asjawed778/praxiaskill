@@ -1,6 +1,16 @@
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import {
+    S3Client,
+    PutObjectCommand,
+    DeleteObjectCommand,
+    CreateMultipartUploadCommand,
+    UploadPartCommand,
+    CompleteMultipartUploadCommand,
+    GetObjectCommand
+} from "@aws-sdk/client-s3";
 import * as fs from "fs";
 import { loadConfig } from "../helper/config.hepler";
+import createHttpError from "http-errors";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 loadConfig();
 
@@ -32,7 +42,7 @@ interface UploadResult {
 export const putObject = async (file: { tempFilePath: string; name: string; mimetype: string }, folderName = ''): Promise<UploadResult | null> => {
     try {
         const fileBuffer = fs.readFileSync(file.tempFilePath);
-        const fileName = `${Date.now()}_${file.name}`;
+        const fileName = `${file.name}-${Date.now()}`;
         const contentType = file.mimetype;
         const key = folderName ? `${folderName}/${fileName}` : fileName;
 
@@ -89,4 +99,86 @@ export const deleteObject = async (url: string): Promise<{ success: boolean; key
         console.error("Error deleting file from S3:", (err as Error).message);
         throw err;
     }
+};
+
+export const startMultipartUpload = async (fileKey: string, fileType: string): Promise<string> => {
+
+    const command = new CreateMultipartUploadCommand({
+        Bucket: S3_BUCKET_NAME as string,
+        Key: fileKey,
+        ContentType: fileType,
+        ACL: "private",
+    });
+
+    const response = await s3Client.send(command);
+
+    if (!response.UploadId) {
+        throw new Error("Failed to initiate multipart upload.");
+    }
+    return response.UploadId;
+};
+
+export const uploadChunk = async (
+    uploadId: string,
+    fileKey: string,
+    PartNumber: number,
+    chunk: { tempFilePath: string; name: string; mimetype: string }
+): Promise<string> => {
+    const fileBuffer = fs.readFileSync(chunk.tempFilePath);
+
+    const command = new UploadPartCommand({
+        Bucket: S3_BUCKET_NAME,
+        Key: fileKey,
+        UploadId: uploadId,
+        PartNumber: PartNumber,
+        Body: fileBuffer
+    });
+    const response = await s3Client.send(command);
+
+    if (!response.ETag) {
+        throw createHttpError(500, "Chunk upload failed");
+    }
+
+    return response.ETag;
+};
+
+export const completeMultipartUpload = async (
+    uploadId: string,
+    fileKey: string,
+    parts: { PartNumber: number; ETag: string }[]
+) => {
+    parts.sort((a, b) => a.PartNumber - b.PartNumber);
+
+    const cleanedParts = parts.map(part => ({
+        PartNumber: part.PartNumber,
+        ETag: part.ETag.replace(/"/g, '').trim()
+    }));
+
+    const command = new CompleteMultipartUploadCommand({
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: fileKey,
+        UploadId: uploadId,
+        MultipartUpload: {
+            Parts: cleanedParts,
+        },
+    });
+
+    try {
+        const response = await s3Client.send(command);
+        console.log("Upload completed successfully:", response);
+        return { success: true, data: response };
+    } catch (error) {
+        console.error("Error completing multipart upload:", error);
+        throw error;
+    }
+};
+
+export const getPresignedUrl = async (fileKey: string) => {
+    const command = new GetObjectCommand({
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: fileKey,
+    });
+
+    const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+    return signedUrl;
 };

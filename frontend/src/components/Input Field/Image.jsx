@@ -81,27 +81,6 @@ const Image = forwardRef(
 
     return (
       <>
-        {image ? (
-          <div className="group relative w-fit h-fit">
-            <button
-              onClick={removeImage}
-              className="z-20 absolute top-2 right-0 cursor-pointer"
-            >
-              <RxCross2 className="size-8 text-white" />
-            </button>
-            <div
-              onClick={openModal}
-              className="z-10 hidden group-hover:flex items-center justify-center absolute top-0 text-xl text-white bg-black/55 w-full h-full rounded-md cursor-pointer"
-            >
-              Preview
-            </div>
-            <img
-              src={image || ""}
-              alt="Preview"
-              className="w-64 h-48 object-cover rounded-md"
-            />
-          </div>
-        ) : (
           <div>
             <label
               htmlFor={id}
@@ -121,27 +100,6 @@ const Image = forwardRef(
             />
             {error && <p className="text-red-600 text-xs mt-1 ml-1">{error}</p>}
           </div>
-        )}
-        {modalOpen && (
-          <div
-            className="z-50 fixed inset-0 bg-black/75 flex justify-center items-center"
-            onClick={closeModal}
-          >
-            <button
-              onClick={removeImage && closeModal}
-              className="cursor-pointer"
-            >
-              <RxCross2 className="absolute top-5 right-5 size-8 text-white" />
-            </button>
-            <img
-              src={image}
-              alt="Full Preview"
-              onClick={(e) => e.stopPropagation()}
-              className="h-full"
-            />
-          </div>
-        )}
-
         {isLoading && <div className="text-green-500">Uploading...</div>}
         {!isLoading && image && <div className="text-green-500">Uploaded</div>}
       </>

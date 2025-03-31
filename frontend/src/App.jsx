@@ -30,6 +30,7 @@ const ManageCourse = lazy(() => import("./pages/Admin/Course/ManageCourse"));
 const EventPage = lazy(() => import("./pages/EventPage"));
 const EventForm = lazy(() => import("./pages/EventPage/EventForm"));
 const CourseContent = lazy(() => import("./pages/Admin/Course/Add Course/CourseContent"))
+const CoursePayment = lazy(() => import("./pages/CoursePayment"));
 
 const publicRoutes = [
   {
@@ -87,7 +88,15 @@ const publicRoutes = [
         <EventForm />
       </LazyComponent>
     ),
-  }
+  },
+  {
+    path: "coursepayment",
+    element: (
+      <LazyComponent>
+        <CoursePayment />
+      </LazyComponent>
+    )
+  },
 ];
 
 const authRoutes = [
@@ -149,6 +158,14 @@ const adminRoutes = [
         ),
       },
       {
+        path: "add-category",
+        element: (
+          <LazyComponent>
+            <AddCategory />
+          </LazyComponent>
+        ),
+      },
+      {
         path: "course-enquiry",
         element: (
           <LazyComponent>
@@ -165,7 +182,7 @@ const adminRoutes = [
         ),
       },
       {
-        path: "add-course/add-content/:courseId",
+        path: "course/content/:courseId",
         element: (
           <LazyComponent>
             <CourseContent />

@@ -6,8 +6,9 @@ import { FaCheck, FaCircleCheck } from "react-icons/fa6";
 import { PiNewspaper } from "react-icons/pi";
 import { BiBell } from "react-icons/bi";
 import Curriculum from "./Curriculum";
+import { GoDotFill } from "react-icons/go";
 
-import { NAVS, ABOUT } from "./data";
+import { NAVS } from "../../Dummy Data/Course Landing Page/data";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useGetFullCourseDetailsQuery } from "../../services/course.api";
@@ -30,25 +31,25 @@ const Course = () => {
   const courses = useSelector((state) => state.courses);
   const specificCourse = courses?.specificCourse;
   return (
-    <div className="px-12">
+    <div className="md:px-12 px-4">
       <div>
         <Heading specificCourse={specificCourse} />
       </div>
       <div className="bg-[#FFF7ED] -mx-12 px-12 pt-8 lg:pb-20 mt-3 flex flex-col gap-10 relative mb-20">
         {/* <div>Logo</div> */}
         <div className="lg:w-3/5 md:w-4/5 w-full flex flex-col gap-3">
-          <h1 className="text-4xl font-semibold text-neutral-800">
+          <h1 className="text-[40px] font-semibold  text-neutral-900">
             {specificCourse?.title}
           </h1>
-          <p className="text-sm text-neutral-700">
+          <p className="text-neutral-800">
             {specificCourse?.subtitle}
           </p>
           <div className="flex gap-3 items-center">
             {/* for instructor image */}
-            <div className="h-8 w-8 bg-neutral-700 rounded-full">
+            <div className="h-8 w-8 bg-neutral-800 rounded-full">
               <img src={specificCourse?.instructor?.profilePic} className="h-full w-full rounded-full" alt={specificCourse?.instructor?.name} />
             </div>
-            <div className="flex items-center gap-2 text-sm text-neutral-700">
+            <div className="flex items-center gap-2 text-sm text-neutral-800">
               <span>Instrutor: </span>
               <span>{specificCourse?.instructor?.name}</span>
             </div>
@@ -87,9 +88,9 @@ const Course = () => {
         <div className="flex flex-col gap-4">
           <h2 className="font-semibold text-lg">What you'll learn</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-neutral-800">
-            {ABOUT.map((item, index) => (
-              <div key={index} className="flex gap-4">
-                <FaCheck size={30} />
+            {specificCourse?.whatWillYouLearn?.map((item, index) => (
+              <div key={index} className="flex gap-2">
+                <FaCheck className="mt-1" />
                 <p>{item}</p>
               </div>
             ))}
@@ -100,7 +101,7 @@ const Course = () => {
           <h2 className="font-semibold text-lg">Skills you'll gain</h2>
           <div className="flex flex-wrap gap-5 text-neutral-800">
             {specificCourse?.tags?.map((item, index) => (
-              <span key={index} className="py-1 px-2 bg-primary-hover cursor-pointer rounded text-white hover:underline capitalize">
+              <span key={index} className="py-1 px-2 text-sm bg-primary-hover cursor-pointer rounded text-white hover:underline capitalize">
                 {item}
               </span>
             ))}
@@ -109,7 +110,7 @@ const Course = () => {
 
         <div className="flex flex-col gap-4">
           <h2 className="font-semibold text-lg">Details to know</h2>
-          <div className="flex gap-20">
+          <div className="flex md:gap-20 gap-10">
             <div className="flex flex-col gap-3 border border-neutral-200 p-4 rounded-lg ">
               <PiNewspaper size={20} />
               <span className="text-sm font-semibold">Taught in {specificCourse?.language === "ENGLISH_HINDI" ? "Bilingual" : specificCourse?.language?.slice(0,1) + specificCourse?.language?.slice(1).toLowerCase()}</span>
@@ -136,7 +137,7 @@ const Course = () => {
           {/* Course Features */}
           <ul className="flex flex-col gap-3">
             {specificCourse?.keypoints?.map((keypoint, index) => (
-              <li key={index} className="text-xs text-neutral-600">
+              <li key={index} className="text-sm text-neutral-600">
                 <div className="flex items-center">
                   <FaCircleCheck size={8} style={{ color: "#3B82F6" }} />
                   <div className="ml-2">{keypoint}</div>

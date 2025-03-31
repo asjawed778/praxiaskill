@@ -1,151 +1,97 @@
-import { FaPlus } from "react-icons/fa";
-import required from "/imgs/required.svg";
-
-import { useFieldArray, useForm } from "react-hook-form";
 import InputField from "../../../../components/Input Field";
-import { yupResolver } from "@hookform/resolvers/yup";
 
-import { fourthStepValidationSchema } from "./Schema/fourthStepValidationSchema";
-import SubSectionFields from "./Course Content/SubSectionFields";
 import Button from "../../../../components/Button/Button";
+import { useParams } from "react-router-dom";
+import { useGetFullCourseContentQuery } from "../../../../services/course.api";
+import ButtonLoading from "../../../../components/Button/ButtonLoading";
+import VideoUploader from "./Course Content/Video";
+import { useState } from "react";
+import VideoDeletePopUp from "./Course Content/VideoDeletePopUp";
 
 export default function CourseContent() {
-  // React Hook Form
-  const {
-    control,
-    handleSubmit,
-    register,
-    watch,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(fourthStepValidationSchema),
-    defaultValues: {
-      sections: [
-        {
-          title: "",
-          subsections: [{ title: "", description: "" }],
-        },
-      ],
-    },
-  });
+  const { courseId } = useParams();
+  const { data: courseContent, isFetching } =
+    useGetFullCourseContentQuery(courseId);
+  const data = courseContent?.data;
+  const courseTitle = courseContent?.data?.title;
 
-  const {
-    fields: sectionFields,
-    append: appendSection,
-    remove: removeSection,
-  } = useFieldArray({
-    control,
-    name: "sections",
-  });
+  const [deletePopUpIds, setDeletePopIds] = useState(null);
 
-  const onSubmit = (data) => {
-    console.log("Submitted Data:", data);
-    // handleNext();
-  };
-
-  return (
-    <div className="flex flex-col gap-5 p-4">
+  return !isFetching ? (
+    <div id="model-root" className="relative flex flex-col gap-5 p-4">
       <h1 className="text-2xl font-bold">Course Content</h1>
-      <h1 className="relative w-fit">
-        <span>Section</span>
-
-        <img
-          src={required}
-          alt="required"
-          className="size-2 absolute -right-3 top-1"
-        />
-      </h1>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {sectionFields.map((_, sectionIndex) => (
+      <div className="flex flex-col gap-10">
+        {data?.sections?.map((section, index) => (
           <div
-            key={sectionIndex}
-            className="relative flex flex-col gap-3 px-5 py-4 border border-gray-300 rounded-md"
+            key={index}
+            className="flex flex-col gap-4 bg-[#F5F5F5] p-4 rounded-md"
           >
-            <p className="absolute right-5 -top-0">{sectionIndex + 1}</p>
+            <div className="text-lg font-semibold">Section {index + 1}</div>
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-1">
+                <p>Title</p>
+                <p className="bg-white py-2 px-4 rounded-md border border-neutral-300">
+                  {section?.title}
+                </p>
+              </div>
+              <div className="flex flex-col gap-1">
+                <p>Description</p>
+                <p className="bg-white py-2 px-4 rounded-md border border-neutral-300">
+                  {section?.description}
+                </p>
+              </div>
 
-            <div>
-              {/* Section Title */}
-              <InputField
-                id="step4-title"
-                {...register(`sections.${sectionIndex}.title`)}
-                placeholder="Title"
-              >
-                Title :
-              </InputField>
+              <div className="flex flex-col gap-3">
+                <p>Subsections</p>
+                {section?.subSections.map((subSection, index) => (
+                  <div
+                    key={index}
+                    className="relative flex flex-col gap-5 border border-neutral-300 p-4 rounded-md"
+                  >
+                    <p className="bg-white py-2 px-4 mt-2 rounded-md border border-neutral-300">
+                      {subSection?.title}
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div>
+                        <InputField disabled id="step4-image" type="image">
+                          Content Image
+                        </InputField>
+                      </div>
 
-              {Array.isArray(errors?.sections) &&
-                errors?.sections[sectionIndex]?.title && (
-                  <p className="text-red-600 text-xs ml-1 mt-0.5">
-                    {errors?.sections[sectionIndex]?.title?.message}
-                  </p>
-                )}
+                      <div>
+                        <InputField disabled id="step4-pdf" type="pdf">
+                          Content Brochure pdf
+                        </InputField>
+                      </div>
+
+                      <div className="">
+                        <VideoUploader
+                          courseId={courseId}
+                          sectionId={section?._id}
+                          subSectionId={subSection?._id}
+                          courseTitle={courseTitle}
+                          video={subSection?.video}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-
-            <div>
-              {/* Section Description */}
-              <label htmlFor="step4-description">Description :</label>
-              <textarea
-                id="step4-description"
-                {...register(`sections.${sectionIndex}.description`)}
-                placeholder="Description"
-                className="bg-white w-full p-2 mt-2 border border-gray-300 rounded outline-none"
-              />
-
-              {Array.isArray(errors?.sections) &&
-                errors?.sections[sectionIndex]?.description && (
-                  <p className="text-red-600 text-xs ml-1 mt-0.5">
-                    {errors?.sections[sectionIndex]?.description?.message}
-                  </p>
-                )}
-            </div>
-
-            {/* Subsections */}
-            <SubSectionFields
-              control={control}
-              sectionIndex={sectionIndex}
-              errors={errors}
-            />
-
-            {/* Remove Section Button */}
-            {sectionFields.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeSection(sectionIndex)}
-                className="text-red-500 ml-auto px-5 py-1 border border-red-500 rounded-md cursor-pointer"
-              >
-                Remove Section
-              </button>
-            )}
           </div>
         ))}
+      </div>
 
-        {/* Add Section Button */}
-        <Button
-          type="button"
-          onClick={() =>
-            appendSection({
-              title: "",
-              description: "",
-              subsections: [{ title: "", description: "" }],
-            })
-          }
-          className="flex items-center gap-2"
-        >
-          <span>Add Section</span>
-          <FaPlus />
-        </Button>
-
-        <div className="flex gap-5 justify-between">
-          <Button >Previous</Button>
-          {/* <Button onClick={handlePrev}>Previous</Button> */}
-
-          {/* Submit Button */}
-          {/* <Button type="submit">Save and Next</Button> */}
-          <Button type="submit">Submit</Button>
-          {/* <Button onClick={handleNext}>Skip</Button> */}
-        </div>
-      </form>
+      <div className="flex justify-end">
+        <Button>Submit </Button>
+      </div>
+    </div>
+  ) : (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">Course Content</h1>
+      <div className="h-30 flex justify-center items-center">
+        <ButtonLoading />
+      </div>
     </div>
   );
 }

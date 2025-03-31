@@ -24,6 +24,7 @@ export interface ICourse extends BaseSchema {
     language: CourseEnum.Language;
     duration: string;
     totalLectures: number;
+    validity: CourseEnum.CourseValidity;
 
     courseMode: CourseEnum.CourseMode;
 
@@ -42,7 +43,10 @@ export interface ISection extends BaseSchema {
 
 export interface ISubSection extends BaseSchema {
     title: string;
-    video?: string;
+    video?: {
+        link: string;
+        duration: string;
+    };
     pdf?: string;
     image?: string;
     resources?: string[];

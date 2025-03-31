@@ -92,6 +92,12 @@ const courseSchema = new mongoose.Schema<ICourse>({
         enum: Object.values(CourseEnum.CourseStatus),
         default: CourseEnum.CourseStatus.PUBLISHED
     },
+    validity: {
+        type: String,
+        required: true,
+        enum: Object.values(CourseEnum.CourseValidity),
+        default: CourseEnum.CourseValidity.LIFETIME
+    }
 }, { timestamps: true });
 
 export default mongoose.model<ICourse>("Course", courseSchema);
