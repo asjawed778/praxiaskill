@@ -1,0 +1,488 @@
+{
+    "videos": [
+      {
+        "id": "1",
+        "title": "Introduction to Web Development",
+        "rating": 4.8,
+        "duration": "55m",
+        "totalSubSections": 2,
+        "completedSubSection": 0
+      },
+      {
+        "id": "2",
+        "title": "JavaScript Essentials",
+        "rating": 4.5,
+        "duration": "40m",
+        "totalSubSections": 1,
+        "completedSubSection": 0
+      },
+      {
+        "id": "3",
+        "title": "JavaScript Essentials",
+        "rating": 4.5,
+        "duration": "40m",
+        "totalSubSections": 1,
+        "completedSubSection": 0
+      },
+      {
+        "id": "4",
+        "title": "JavaScript Essentials",
+        "rating": 4.5,
+        "duration": "40m",
+        "totalSubSections": 1,
+        "completedSubSection": 0
+      },
+      {
+        "id": "5",
+        "title": "JavaScript Essentials",
+        "rating": 4.5,
+        "duration": "40m",
+        "totalSubSections": 1,
+        "completedSubSection": 0
+      },
+      {
+        "id": "6",
+        "title": "JavaScript Essentials",
+        "rating": 4.5,
+        "duration": "40m",
+        "totalSubSections": 1,
+        "completedSubSection": 0
+      },
+      {
+        "id": "7",
+        "title": "JavaScript Essentials",
+        "rating": 4.5,
+        "duration": "40m",
+        "totalSubSections": 1,
+        "completedSubSection": 0
+      },
+      {
+        "id": "8",
+        "title": "JavaScript Essentials",
+        "rating": 4.5,
+        "duration": "40m",
+        "totalSubSections": 1,
+        "completedSubSection": 0
+      }
+    ],
+    "subSections": [
+      {
+        "id": "101",
+        "videoId": 1,
+        "title": "HTML Basics",
+        "rating": 4.8,
+        "duration": "15m",
+        "completed": true,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "id": "102",
+        "videoId": 1,
+        "title": "CSS Fundamentals",
+        "rating": 4.2,
+        "duration": "20m",
+        "completed": false,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+      },
+      {
+        "id": "103",
+        "videoId": 1,
+        "title": "HTML Basics",
+        "rating": 4.8,
+        "duration": "15m",
+        "completed": false,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "id": "104",
+        "videoId": 1,
+        "title": "CSS Fundamentals",
+        "rating": 4.2,
+        "duration": "20m",
+        "completed": true,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+      },
+      {
+        "id": "105",
+        "videoId": 1,
+        "title": "HTML Basics",
+        "rating": 4.8,
+        "duration": "15m",
+        "completed": false,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "id": "106",
+        "videoId": 1,
+        "title": "CSS Fundamentals",
+        "rating": 4.2,
+        "duration": "20m",
+        "completed": true,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+      },
+      {
+        "id": "107",
+        "videoId": 1,
+        "title": "HTML Basics",
+        "rating": 4.8,
+        "duration": "15m",
+        "completed": false,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "id": "108",
+        "videoId": 1,
+        "title": "CSS Fundamentals",
+        "rating": 4.2,
+        "duration": "20m",
+        "completed": true,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+      },
+      {
+        "id": "201",
+        "videoId": 2,
+        "title": "Introduction to JavaScript",
+        "rating": 4,
+        "duration": "20m",
+        "completed": true,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "id": "301",
+        "videoId": 3,
+        "title": "HTML Basics",
+        "rating": 4.8,
+        "duration": "15m",
+        "completed": false,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "id": "302",
+        "videoId": 3,
+        "title": "CSS Fundamentals",
+        "rating": 4.2,
+        "duration": "20m",
+        "completed": true,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+      },
+      {
+        "id": "401",
+        "videoId": 4,
+        "title": "Introduction to JavaScript",
+        "rating": 4,
+        "duration": "20m",
+        "completed": true,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "id": "501",
+        "videoId": 5,
+        "title": "HTML Basics",
+        "rating": 4.8,
+        "duration": "15m",
+        "completed": false,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "id": "502",
+        "videoId": 5,
+        "title": "CSS Fundamentals",
+        "rating": 4.2,
+        "duration": "20m",
+        "completed": true,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+      },
+      {
+        "id": "601",
+        "videoId": 6,
+        "title": "Introduction to JavaScript",
+        "rating": 4,
+        "duration": "20m",
+        "completed": true,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "id": "701",
+        "videoId": 7,
+        "title": "HTML Basics",
+        "rating": 4.8,
+        "duration": "15m",
+        "completed": false,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "id": "702",
+        "videoId": 7,
+        "title": "CSS Fundamentals",
+        "rating": 4.2,
+        "duration": "20m",
+        "completed": true,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+      },
+      {
+        "id": "801",
+        "videoId": 8,
+        "title": "Introduction to JavaScript",
+        "rating": 4,
+        "duration": "20m",
+        "completed": true,
+        "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      }
+    ],
+    "courseOverview": {
+      "title": "Learn all in one course: React JS with BootStrap, MongoDB, NodeJS, ExpressJS, Swagger, OpenAPI",
+      "rating": 4.1,
+      "reviews": 318,
+      "students": 55660,
+      "total_hours": 5.5,
+      "last_updated": "June 2021",
+      "language": "English",
+      "auto_translate": true,
+      "schedule_learning": {
+        "title": "Schedule learning time",
+        "description": "Learning a little each day adds up. Research shows that students who make learning a habit are more likely to reach their goals. Set time aside to learn and get reminders using your learning scheduler.",
+        "actions": [
+          "Get started",
+          "Dismiss"
+        ]
+      },
+      "course_details": {
+        "skill_level": "All Levels",
+        "lectures": 54,
+        "video_hours": 5.5,
+        "captions": true
+      }
+    },
+    "courseQnA": {
+      "search_placeholder": "Search all course questions",
+      "filters": {
+        "lecture_filter": "All lectures",
+        "sort_by": "Sort by recommended",
+        "filter_button": "Filter questions"
+      },
+      "featured_questions": [
+        {
+          "id": 1,
+          "author": {
+            "name": "shah Akshat",
+            "profile_initials": "SH"
+          },
+          "lecture": "Lecture 39",
+          "timestamp": "3 years ago",
+          "question": "in section 5 there is no post api doc , what to do about that?",
+          "votes": 4,
+          "comments": 2
+        },
+        {
+          "id": 2,
+          "author": {
+            "name": "Sergey",
+            "profile_image": "profile_sergey.jpg"
+          },
+          "lecture": "Lecture 1",
+          "timestamp": "3 years ago",
+          "question": "how to make app multilingual",
+          "details": "Hi. Could you, please, give me some ideas how to make and use multilingual documents collecti...",
+          "votes": 1,
+          "comments": 4
+        }
+      ]
+    },
+    "reviews": [
+      {
+        "id": "1",
+        "author": {
+          "name": "Woro R.",
+          "profile_image": "profile_woro.jpg"
+        },
+        "rating": 5,
+        "timestamp": "3 months ago",
+        "comment": "Good explanation"
+      },
+      {
+        "id": "2",
+        "author": {
+          "name": "John D.",
+          "profile_image": "profile_john.jpg"
+        },
+        "rating": 4,
+        "timestamp": "2 months ago",
+        "comment": "Helpful content, but needs more examples"
+      },
+      {
+        "id": "5041",
+        "rating": 5,
+        "comment": "irshad",
+        "author": {
+          "name": "Anonymous",
+          "profile_image": "/default-profile.png"
+        },
+        "timestamp": "3/27/2025"
+      },
+      {
+        "id": "a5ca",
+        "rating": 1,
+        "comment": "it's goods",
+        "author": {
+          "name": "Anonymous",
+          "profile_image": "/default-profile.png"
+        },
+        "timestamp": "3/27/2025"
+      },
+      {
+        "id": "1ae1",
+        "rating": 5,
+        "comment": "jsgdsdkjfsbldj",
+        "author": {
+          "name": "Anonymous",
+          "profile_image": "/default-profile.png"
+        },
+        "timestamp": "3/29/2025"
+      }
+    ],
+    "course_info": {
+      "course_rating": 4.1,
+      "rating_distribution": {
+        "5_star": {
+          "percentage": 47,
+          "count": 470
+        },
+        "4_star": {
+          "percentage": 30,
+          "count": 300
+        },
+        "3_star": {
+          "percentage": 14,
+          "count": 140
+        },
+        "2_star": {
+          "percentage": 5,
+          "count": 50
+        },
+        "1_star": {
+          "percentage": 4,
+          "count": 40
+        }
+      }
+    },
+    "filters": {
+      "search_placeholder": "Search reviews",
+      "filter_options": [
+        "All ratings",
+        "5 stars",
+        "4 stars",
+        "3 stars",
+        "2 stars",
+        "1 star"
+      ]
+    },
+    "announcements": [
+      {
+        "id": "1",
+        "title": "YouTube Link for the Courses & Updates",
+        "message": "Hope you are going through the courses. I have created my YouTube Channel.",
+        "link": "https://youtube.com/channel/xyz",
+        "author": {
+          "name": "Chandan",
+          "image": "https://example.com/profile.jpg"
+        },
+        "postedYear": 2023
+      }
+    ],
+    "notes": [
+      {
+        "id": "1",
+        "videoId": "1",
+        "timestamp": "4:32",
+        "content": "This is an important concept.",
+        "createdAt": "2025-03-27T12:00:00Z"
+      },
+      {
+        "id": "5f8e",
+        "content": "<p>it is importat <strong>word</strong>.</p>",
+        "createdAt": "2025-03-27T10:17:19.162Z"
+      },
+      {
+        "id": "4c06",
+        "content": "<p>hjhkjgkjk</p>",
+        "createdAt": "2025-03-29T15:15:09.109Z"
+      }
+    ],
+    "orders": [
+      {
+        "id": "1",
+        "originalPrice": 1000,
+        "discount": 10,
+        "couponCodes": [
+          {
+            "code": "DISCOUNT50",
+            "discountPercentage": 50
+          },
+          {
+            "code": "DISCOUNT10",
+            "discountPercentage": 10
+          }
+        ]
+      },
+      {
+        "id": "15fe",
+        "city": "muzaffarpur",
+        "village": "java",
+        "paymentMethod": "paypal",
+        "couponCode": "",
+        "country": "India",
+        "state": "Bihar",
+        "originalPrice": 1000,
+        "discount": 0,
+        "finalPrice": 1000
+      },
+      {
+        "id": "3cb9",
+        "city": "DKJSD",
+        "village": "MUZAFFARPUT",
+        "paymentMethod": "credit_card",
+        "couponCode": "DICOUNT50",
+        "country": "India",
+        "state": "Bihar",
+        "originalPrice": 1000,
+        "couponDiscount": 0,
+        "finalPrice": 1000
+      },
+      {
+        "id": "541a",
+        "city": "muzaffarpur",
+        "village": "java",
+        "couponCode": "DISCOUNT50",
+        "country": "India",
+        "state": "Bihar",
+        "originalPrice": 1000,
+        "generalDiscount": 100,
+        "couponDiscount": 500,
+        "finalPrice": 900
+      },
+      {
+        "id": "a37c",
+        "city": "patna",
+        "village": "jaya",
+        "couponCode": "",
+        "country": "India",
+        "state": "Bihar",
+        "originalPrice": 1000,
+        "generalDiscount": 100,
+        "couponDiscount": 0,
+        "finalPrice": -100
+      },
+      {
+        "id": "ab03",
+        "city": "gaya",
+        "village": "jaya",
+        "couponCode": "DISCOUNT50",
+        "country": "India",
+        "state": "Bihar",
+        "originalPrice": 1000,
+        "generalDiscount": 100,
+        "couponDiscount": 500,
+        "finalPrice": 400
+      }
+    ]
+  }
