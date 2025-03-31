@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 import * as PaymentEnum from "./payment.enum";
 import { ICoupon } from "./payment.dto";
 
-const couponSchema = new mongoose.Schema<ICoupon>(
-  {
+const couponSchema = new mongoose.Schema<ICoupon>({
     code: {
       type: String,
       required: true,
@@ -14,10 +13,12 @@ const couponSchema = new mongoose.Schema<ICoupon>(
     discountType: {
       type: String,
       enum: Object.values(PaymentEnum.DiscountType),
+      default: PaymentEnum.DiscountType.PERCENTAGE,
       required: true,
     },
     discountValue: {
       type: Number,
+      default: 0,
       required: true,
     },
     maxDiscountAmount: {
@@ -44,13 +45,13 @@ const couponSchema = new mongoose.Schema<ICoupon>(
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
-    ], // Optional: If set, only these users can use this coupon
+    ],
     usageLimit: {
-      type: Number, // Total number of times this coupon can be used
-      default: null, // Null means unlimited
+      type: Number,
+      default: null,
     },
     perUserLimit: {
-      type: Number, // Number of times a single user can use this coupon
+      type: Number,
       default: 1,
     },
     expiresAt: {
