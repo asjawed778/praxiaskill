@@ -1,19 +1,26 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { publicBaseQuery } from "./api";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { authBaseQuery } from "./api";
 
 export const paymentApi = createApi({
   reducerPath: "paymentApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
+  baseQuery: authBaseQuery,
   endpoints: (builder) => ({
-    getOrderDetails: builder.query({ query: () => "/orders/1" }),
-    placeOrder: builder.mutation({
-      query: (orderData) => ({
-        url: "/orders",
+    createPaymentOrder: builder.mutation({
+      query: ({ courseId, order }) => ({
+        url: `/payment/create-order/${courseId}`,
         method: "POST",
-        body: orderData,
+        body: order,
+      }),
+    }),
+    verifyPayment: builder.mutation({
+      query: (courseId, rajorPayData) => ({
+        url: `/payment/verify-payment/${courseId}`,
+        method: "POST",
+        body: rajorPayData,
       }),
     }),
   }),
 });
 
-export const { useGetOrderDetailsQuery, usePlaceOrderMutation } = paymentApi;
+export const { useCreatePaymentOrderMutation, useVerifyPaymentMutation } =
+  paymentApi;
