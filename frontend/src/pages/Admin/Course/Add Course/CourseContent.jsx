@@ -4,7 +4,9 @@ import Button from "../../../../components/Button/Button";
 import { useParams } from "react-router-dom";
 import { useGetFullCourseContentQuery } from "../../../../services/course.api";
 import ButtonLoading from "../../../../components/Button/ButtonLoading";
-import VideoUploader from "../../../../components/Video";
+import VideoUploader from "./Course Content/Video";
+import { useState } from "react";
+import VideoDeletePopUp from "./Course Content/VideoDeletePopUp";
 
 export default function CourseContent() {
   const { courseId } = useParams();
@@ -13,19 +15,10 @@ export default function CourseContent() {
   const data = courseContent?.data;
   const courseTitle = courseContent?.data?.title;
 
-  if (isFetching) {
-    return (
-      <div className="p-4">
-        <h1 className="text-2xl font-bold">Course Content</h1>
-        <div className="h-30 flex justify-center items-center">
-          <ButtonLoading />
-        </div>
-      </div>
-    );
-  }
+  const [deletePopUpIds, setDeletePopIds] = useState(null);
 
-  return (
-    <div className="flex flex-col gap-5 p-4">
+  return !isFetching ? (
+    <div id="model-root" className="relative flex flex-col gap-5 p-4">
       <h1 className="text-2xl font-bold">Course Content</h1>
       <div className="flex flex-col gap-10">
         {data?.sections?.map((section, index) => (
@@ -72,12 +65,13 @@ export default function CourseContent() {
                       </div>
 
                       <div className="">
-                         <VideoUploader
+                        <VideoUploader
                           courseId={courseId}
                           sectionId={section?._id}
                           subSectionId={subSection?._id}
                           courseTitle={courseTitle}
-                        /> 
+                          video={subSection?.video}
+                        />
                       </div>
                     </div>
                   </div>
@@ -90,6 +84,13 @@ export default function CourseContent() {
 
       <div className="flex justify-end">
         <Button>Submit </Button>
+      </div>
+    </div>
+  ) : (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">Course Content</h1>
+      <div className="h-30 flex justify-center items-center">
+        <ButtonLoading />
       </div>
     </div>
   );
