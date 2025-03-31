@@ -2,7 +2,7 @@ import { body, param } from "express-validator";
 
 export const createOrder = [
     param('courseId')
-        .isEmail().withMessage("Course id is required")
+        .notEmpty().withMessage("Course id is required")
         .isMongoId().withMessage("Course must be a mongdb id"),
 
     body("amount")

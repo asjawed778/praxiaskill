@@ -26,7 +26,7 @@ export interface ITransaction extends BaseSchema {
   userId: mongoose.Schema.Types.ObjectId;
   courseId: mongoose.Schema.Types.ObjectId;
   orderId: string;
-  paymentId: string;
+  paymentId?: string;
   paymentStatus: PaymentEnum.PaymentStatus;
   amount: number;
   billingAddress: BillingAddress;

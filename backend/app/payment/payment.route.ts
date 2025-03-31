@@ -7,7 +7,7 @@ import * as paymentController from "./payment.controller";
 const router = Router();
 
 router
-    .post("/create-order", authMiddlerware.auth, paymentController.createOrder)
+    .post("/create-order/:courseId", authMiddlerware.auth, paymentValidation.createOrder, catchError, paymentController.createOrder)
 
 
 

@@ -1,5 +1,7 @@
 import Razorpay from "razorpay";
 import { loadConfig } from "../common/helper/config.hepler";
+import { ITransaction } from "./payment.dto";
+import transactionSchema from "./payment.transaction";
 loadConfig();
 
 const razorpay = new Razorpay({
@@ -15,3 +17,8 @@ export const createRazorpayOrder = async (amount: number, currency?: string) => 
     const order = await razorpay.orders.create(options);
     return order;
 }
+
+export const createTransaction = async(userId: string, courseId: string, data: ITransaction, orderId: string) => {
+    const result = await transactionSchema.create({...data, orderId, userId, courseId});
+    return result;
+};

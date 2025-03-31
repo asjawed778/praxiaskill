@@ -19,7 +19,7 @@ const transactionSchema = new mongoose.Schema<ITransaction>({
     },
     paymentId: {
         type: String,
-        required: true
+        required: false
     },
     paymentStatus: {
         type: String,
