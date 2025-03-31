@@ -8,6 +8,7 @@ const router = Router();
 
 router
     .post("/create-order/:courseId", authMiddlerware.auth, paymentValidation.createOrder, catchError, paymentController.createOrder)
+    .post("/verify-payment/:courseId", authMiddlerware.auth, paymentValidation.verifyPayment, catchError, paymentController.verifyPayment)
 
 
 
