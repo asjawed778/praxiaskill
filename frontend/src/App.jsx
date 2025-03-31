@@ -219,23 +219,7 @@ const userPrivateRoutes = [
             <AdminPage />
           </LazyComponent>
         ),
-      },
-      {
-        path: "purchased-course",
-        element: (
-          <LazyComponent>
-            <PurchasedCourse />
-          </LazyComponent>
-        ),
-      },
-      {
-        path: "unpurchased-course",
-        element: (
-          <LazyComponent>
-            <UnpurchasedCourse />
-          </LazyComponent>
-        ),
-      },
+      }
     ],
   },
 ];
