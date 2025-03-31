@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 import { BaseSchema } from "../common/dto/base.dto";
-import { DiscountType } from "./payment.enum";
+import * as PaymentEnum from "./payment.enum";
 
 export interface ICoupon extends BaseSchema {
   code: string;
-  discountType: DiscountType;
+  discountType: PaymentEnum.DiscountType;
   discountValue: number;
   maxDiscountAmount?: number; 
   applicableCourses?: mongoose.Schema.Types.ObjectId[];
@@ -14,3 +14,22 @@ export interface ICoupon extends BaseSchema {
   expiresAt: Date;
   isActive?: boolean;
 }
+
+export interface BillingAddress {
+  country: string;
+  state: string;
+  city: string;
+  village: string;
+}
+
+export interface ITransaction extends BaseSchema {
+  userId: mongoose.Schema.Types.ObjectId;
+  courseId: mongoose.Schema.Types.ObjectId;
+  orderId: string;
+  paymentId?: string;
+  paymentStatus: PaymentEnum.PaymentStatus;
+  amount: number;
+  billingAddress: BillingAddress;
+}
+
+

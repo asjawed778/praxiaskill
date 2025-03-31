@@ -499,4 +499,13 @@ export const getSubSectionFileKey = async(subSectionId: string) => {
     };
 }
 
+export const enrollStudentIntoCourse = async(userId: string, courseId: string) => {
+    const result = await enrollmentSchema.create({userId, courseId});
+    return result;
+}
+
+export const isAlredyEnrolledInCourse = async(userId: string, courseId: string) => {
+    return await enrollmentSchema.exists({userId, courseId}); 
+}
+
 
