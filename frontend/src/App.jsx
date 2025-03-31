@@ -8,8 +8,6 @@ import PageNotFound from "./pages/pagenotfound";
 import AdminLayout from "./layouts/AdminLayout";
 import CategoryManagement from "./pages/Admin/Category/CategoryManagement";
 import { useSelector } from "react-redux";
-import Overview from "./pages/CoursePlayer/CourseDetails/Overview";
-import QnA from "./pages/CoursePlayer/CourseDetails/QnA";
 const ViewCategories = lazy(() =>
   import("./pages/Admin/Category/ViewCategories")
 );
@@ -32,10 +30,7 @@ const ManageCourse = lazy(() => import("./pages/Admin/Course/ManageCourse"));
 const EventPage = lazy(() => import("./pages/EventPage"));
 const EventForm = lazy(() => import("./pages/EventPage/EventForm"));
 const CourseContent = lazy(() => import("./pages/Admin/Course/Add Course/CourseContent"))
-const PurchasedCourse = lazy(() => import("./pages/Admin/User/Purchased"))
-const UnpurchasedCourse = lazy(() => import("./pages/Admin/User/Unpurchasedcourse"))
 const CoursePayment = lazy(() => import("./pages/CoursePayment"));
-const CoursePlayer = lazy(() => import("./pages/CoursePlayer/CourseContents"));
 
 const publicRoutes = [
   {
@@ -102,18 +97,6 @@ const publicRoutes = [
       </LazyComponent>
     )
   },
-  {
-    path: "coursePlayer",
-    element: (
-      <LazyComponent>
-        <CoursePlayer />
-      </LazyComponent>
-    ),
-    children: [
-      {path: "overview", element: <Overview />},
-      {path: "qna", element: <QnA />}
-    ]
-  }
 ];
 
 const authRoutes = [
@@ -234,22 +217,6 @@ const userPrivateRoutes = [
         element: (
           <LazyComponent>
             <AdminPage />
-          </LazyComponent>
-        ),
-      },
-      {
-        path: "purchased-course",
-        element: (
-          <LazyComponent>
-            <PurchasedCourse />
-          </LazyComponent>
-        ),
-      },
-      {
-        path: "unpurchased-course",
-        element: (
-          <LazyComponent>
-            <UnpurchasedCourse />
           </LazyComponent>
         ),
       },
