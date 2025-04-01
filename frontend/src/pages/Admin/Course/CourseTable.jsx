@@ -11,6 +11,7 @@ import { RiIndeterminateCircleFill } from "react-icons/ri";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { FaPhotoVideo } from "react-icons/fa";
 
 const CourseTable = ({
   data: publishedCourse,
@@ -223,6 +224,14 @@ const CourseTable = ({
               className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 rounded-md"
             >
               <MdOutlineAddCircle className="mr-2" /> Add Content
+            </button>
+            <button
+              onClick={() =>
+                navigate(`/course-lecture/${courses[openMenu]._id}`)
+              }
+              className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 rounded-md"
+            >
+              <FaPhotoVideo className="mr-2" /> Lectures
             </button>
             <button className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 rounded-md">
               <MdEdit className="mr-2" /> Edit

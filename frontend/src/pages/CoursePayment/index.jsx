@@ -23,8 +23,9 @@ const schema = yup.object().shape({
 
 const CoursePayment = () => {
   const { courseId } = useParams();
-  const [createPaymentOrder, {isLoading, isError}] = useCreatePaymentOrderMutation()
-  const [verifyPayment, {isLoading: isPlacing}] = useVerifyPaymentMutation()
+  const [createPaymentOrder, { isLoading, isError }] =
+    useCreatePaymentOrderMutation();
+  const [verifyPayment, { isLoading: isPlacing }] = useVerifyPaymentMutation();
 
   const {
     register,
@@ -40,10 +41,8 @@ const CoursePayment = () => {
   const state = watch("state");
   const couponCode = watch("couponCode");
 
-
-
   // Order Details
-  const originalPrice =  500;
+  const originalPrice = 500;
 
   const couponCodes = [23455];
   const discountPercentage = 15; // General discount (e.g., 20%)
@@ -66,7 +65,6 @@ const CoursePayment = () => {
     }
   }, [originalPrice, discountPercentage]);
 
-
   // Handle applying coupon discount
   const applyCoupon = () => {
     const coupon = couponCodes.find((c) => c.code === couponCode);
@@ -85,22 +83,21 @@ const CoursePayment = () => {
   };
 
   const onSubmit = async (data) => {
-
     const order = {
       amount: 500,
       billingAddress: {
         country: country?.label || "",
         state: state?.label || "",
         city: data.city,
-        village: data.village
-      }
-    }
-    await handlePayment(order)
+        village: data.village,
+      },
+    };
+    await handlePayment(order);
   };
 
   const handlePayment = async (order) => {
     try {
-      const data = await createPaymentOrder({courseId, order})
+      const data = await createPaymentOrder({ courseId, order });
 
       if (!data?.data?.success) {
         toast.error("Error creating order");
@@ -109,24 +106,28 @@ const CoursePayment = () => {
 
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-        amount: data.data.amount,
-        currency: data.data.currency,
+        amount: data.data.data.amount,
+        currency: data.data.data.currency,
         name: "Praxia Skill",
         description: "Buy a Course",
-        order_id: data.data.id,
+        order_id: data.data.data.id,
         handler: async function (response) {
-
           console.log("Payment Success", response);
-          const razorpayData = {
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-          }
 
-          const verifyRes = await verifyPayment(courseId, razorpayData)
-          console.log("verify response", verifyRes)
+          const verificationData = {
+            courseId,
+            razorpayData: {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            },
+          };
 
-          if (verifyRes.data.success) {
+
+          const verifyRes = await verifyPayment(verificationData);
+          console.log("verify response", verifyRes);
+
+          if (verifyRes?.data?.success) {
             toast.success("Payment successful!");
           } else {
             toast.error("Payment verification failed!");
@@ -143,7 +144,7 @@ const CoursePayment = () => {
       };
 
       // ⿤ Open Razorpay Checkout
-      const razorpay = new (window).Razorpay(options);
+      const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (error) {
       console.error("Payment error", error);
@@ -157,7 +158,6 @@ const CoursePayment = () => {
     script.async = true;
     document.body.appendChild(script);
   }, []);
-
 
   const paymentMethods = [
     { id: "upi", label: "UPI" },

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import PublicRoute from "./components/auth/PublicRoute";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import BasicLayout from "./layouts/Basic";
+import CourseLecturesLayout from "./layouts/CourseLecturesLayout";
 import LazyComponent from "./components/LazyComponent";
 import PageNotFound from "./pages/pagenotfound";
 import AdminLayout from "./layouts/AdminLayout";
@@ -31,6 +32,7 @@ const EventPage = lazy(() => import("./pages/EventPage"));
 const EventForm = lazy(() => import("./pages/EventPage/EventForm"));
 const CourseContent = lazy(() => import("./pages/Admin/Course/Add Course/CourseContent"))
 const CoursePayment = lazy(() => import("./pages/CoursePayment"));
+const CourseLectures = lazy(() => import("./pages/Course Lectures"));
 
 const publicRoutes = [
   {
@@ -226,6 +228,29 @@ const userPrivateRoutes = [
   },
 ];
 
+const courseLectureRoute = [
+  {
+    path: "course-lecture",
+    element: (
+      <LazyComponent>
+        <PrivateRoute>
+          <CourseLecturesLayout />
+        </PrivateRoute>
+      </LazyComponent>
+    ),
+    children: [
+      {
+        path: ":courseId",
+        element:(
+          <LazyComponent>
+            <CourseLectures />
+          </LazyComponent>
+        )
+      }
+    ]
+  }
+]
+
 function App() {
   const { accessToken, user } = useSelector((store) => store.auth);
 
@@ -275,6 +300,18 @@ function App() {
           ))
         ) : (
           <Route path="/dashboard/*" element={<Navigate to="/" replace />} />
+        )}
+
+        {accessToken && user?.role === "SUPER_ADMIN" || "USER" ? (
+          courseLectureRoute.map((route, index) => (
+            <Route key={index} path={route.path} element={route.element}>
+              {route.children?.map((child, childIndex) => (
+                <Route key={childIndex} {...child} />
+              ))}
+            </Route>
+          ))
+        ) : (
+          <Route path="/course-lecture/*" element={<Navigate to="/auth" replace />} />
         )}
 
         {/* if route does other than predefined endpoints will be redirected PageNotFound Page  */}
