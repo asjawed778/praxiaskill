@@ -29,7 +29,7 @@ export const verifyPayment = asyncHandler(async (req: Request, res: Response) =>
     const isPaymentVerified = PaymentService.verifyPayment(data);
 
     if (isPaymentVerified) {
-        await PaymentService.updateTransaction(userId, courseId, data.orderId, isPaymentVerified, data.razorpay_payment_id);
+        await PaymentService.updateTransaction(userId, courseId, data.razorpay_order_id, isPaymentVerified, data.razorpay_payment_id);
         await CourseService.enrollStudentIntoCourse(userId, courseId);
     } else {
         throw createHttpError(400, "Payment verification failed. Invalid signature.");

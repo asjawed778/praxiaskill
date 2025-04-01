@@ -13,10 +13,10 @@ export const paymentApi = createApi({
       }),
     }),
     verifyPayment: builder.mutation({
-      query: (courseId, rajorPayData) => ({
+      query: ({courseId, razorpayData}) => ({
         url: `/payment/verify-payment/${courseId}`,
         method: "POST",
-        body: rajorPayData,
+        body: razorpayData,
       }),
     }),
   }),
