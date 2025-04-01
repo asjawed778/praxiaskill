@@ -1,12 +1,12 @@
 import { RiArrowDropUpLine, RiArrowDropDownLine } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import { GoVideo } from "react-icons/go";
-export default function Sections({ specificCourse }) {
+export default function Sections({ courseContent, setSectionIds, sectionIds }) {
   const [expandedLessons, setExpandedLessons] = useState({});
-  const [lessonsData, setLessonsData] = useState([]);
+  const [sectionData, setSectionData] = useState([]);
 
-  const toggleLesson = (index, hasSubLessons) => {
-    if (!hasSubLessons) return;
+  const toggleLesson = (index, hasSubSections) => {
+    if (!hasSubSections) return;
     setExpandedLessons((prev) => ({
       ...prev,
       [index]: !prev[index],
@@ -14,32 +14,37 @@ export default function Sections({ specificCourse }) {
   };
 
   function courseData() {
-    return specificCourse?.sections?.map((section) => ({
+    return courseContent?.sections?.map((section) => ({
+      id: section._id,
       title: section.title,
       description: section.description,
-      totalLessons: section.subSections.length,
+      totalSubsections: section.subSections.length,
       totalDuration: "45 Mins",
-      expanded: false,
-      subLessons: section.subSections.map((sub) => ({
+      subSections: section.subSections.map((sub) => ({
+        id: sub._id,
         title: sub.title,
         duration: "2:25",
-        completed: true,
-        locked: true,
       })),
     }));
   }
 
   useEffect(() => {
     const data = courseData;
-    setLessonsData(data);
-  }, [specificCourse]);
+    setSectionData(data);
+  }, [courseContent]);
+
+  const handleSubSectionClick = (sectionId, subSectionId) => {
+    setSectionIds((prev) => {
+      return {...prev, sectionId, subSectionId}
+    })
+  }
 
   return (
     <div className="">
       <div className="flex flex-col w-full">
-        {lessonsData?.map((lesson, index) => {
+        {sectionData?.map((section, index) => {
           const isExpanded = expandedLessons[index] || false;
-          const hasSubLessons = lesson.subLessons.length > 0;
+          const hasSubSections = section.subSections?.length > 0;
 
           return (
             <div key={index} className="bg-white rounded-lg">
@@ -47,7 +52,7 @@ export default function Sections({ specificCourse }) {
                 className={`flex flex-col cursor-pointer px-1 border-b hover:bg-neutral-50 border-neutral-200 ${
                   isExpanded && "bg-neutral-50"
                 }`}
-                onClick={() => toggleLesson(index, hasSubLessons)}
+                onClick={() => toggleLesson(index, hasSubSections)}
               >
                 <div className="w-full py-3 px-4">
                   <div className="flex justify-between ">
@@ -58,10 +63,10 @@ export default function Sections({ specificCourse }) {
                         } font-semibold`}
                       >
                         <span>Section {index + 1}: </span>
-                        {lesson.title}
+                        {section.title}
                       </span>
                     </div>
-                    {hasSubLessons ? (
+                    {hasSubSections ? (
                       isExpanded ? (
                         <RiArrowDropUpLine className="text-2xl" />
                       ) : (
@@ -72,8 +77,8 @@ export default function Sections({ specificCourse }) {
                     )}
                   </div>
                   <div className="flex items-center gap-4 text-xs text-neutral-500">
-                    <p>{lesson?.subLessons?.length} Lessions</p>
-                    <p>{lesson.totalDuration}</p>
+                    <p>{section?.subSections?.length} Lessions</p>
+                    <p>{section.totalDuration}</p>
                   </div>
                 </div>
               </div>
@@ -87,18 +92,18 @@ export default function Sections({ specificCourse }) {
                     : "max-h-0 opacity-0"
                 } `}
               >
-                {lesson.subLessons.map((subLesson, index) => (
+                {section.subSections.map((subSection, index) => (
                   <div
                     key={index}
-                    className=" p-2 ml-4 text-sm border-b border-neutral-200"
+                    className={`p-2 ml-4 text-sm border-b border-neutral-200 hover:bg-blue-50 rounded-md ${sectionIds?.subSectionId === subSection?.id ? "bg-blue-50" : null}`}
                   >
-                    <div className="flex gap-5 items-start">
-                        <input type="checkbox" className="mt-1.5" />
+                    <div onClick={() => handleSubSectionClick(section.id, subSection.id)} className="flex gap-5 items-start cursor-pointer">
+                        <input disabled type="checkbox" className="mt-1.5" />
                         <div>
-                            <p className="">{subLesson.title}</p>
+                            <p className="">{subSection.title}</p>
                             <div className="flex items-center gap-2">
                                 <GoVideo />
-                                <span className="text-xs text-neutral-500">{subLesson.duration}</span>
+                                <span className="text-xs text-neutral-500">{subSection.duration}</span>
                             </div>
                         </div>
                     </div>

@@ -7,7 +7,7 @@ export const apiCourse = createApi({
   endpoints: (builder) => ({
     // Courses APIs
     uploadThumbnail: builder.mutation({
-      query: ({formData, accessToken}) => {
+      query: ({ formData, accessToken }) => {
         return {
           url: "course/thumbnail",
           method: "POST",
@@ -20,7 +20,7 @@ export const apiCourse = createApi({
       },
     }),
     uploadBrouchure: builder.mutation({
-      query: ({formData, accessToken}) => {
+      query: ({ formData, accessToken }) => {
         return {
           url: "course/brouchure",
           method: "POST",
@@ -53,7 +53,8 @@ export const apiCourse = createApi({
       },
     }),
     uploadCourseStructure: builder.mutation({
-      query: ({ data, id }) => { // here id is courseId
+      query: ({ data, id }) => {
+        // here id is courseId
         return {
           url: `course/structure/${id}`,
           method: "PUT",
@@ -89,18 +90,20 @@ export const apiCourse = createApi({
         url: "course/category",
         method: "POST",
         body: data,
-        credentials: "include"
+        credentials: "include",
       }),
     }),
-    setEnquiryStatus: builder.mutation({ //update
-      query: ({data, enquiryId}) => ({
+    setEnquiryStatus: builder.mutation({
+      //update
+      query: ({ data, enquiryId }) => ({
         url: `course/enquiry-status/${enquiryId}`,
         method: "PATCH",
         body: data,
-        credentials: "include"
+        credentials: "include",
       }),
     }),
-    addCourse: builder.mutation({ //update
+    addCourse: builder.mutation({
+      //update
       query: (data) => ({
         url: "course/add-course",
         method: "POST",
@@ -126,7 +129,8 @@ export const apiCourse = createApi({
         method: "GET",
       }),
     }),
-    getCategoryCourse: builder.query({ //name update
+    getCategoryCourse: builder.query({
+      //name update
       query: (categoryId) => ({
         url: `course/published/${categoryId}`,
         method: "GET",
@@ -134,38 +138,58 @@ export const apiCourse = createApi({
     }),
     getFullCourseDetails: builder.query({
       query: (courseId) => ({
-        url: `course/${courseId}`, 
+        url: `course/${courseId}`,
         method: "GET",
       }),
     }),
     getFullCourseContent: builder.query({
       query: (courseId) => ({
-        url: `course/content/${courseId}`, 
+        url: `course/content/${courseId}`,
         method: "GET",
       }),
     }),
     startUpload: builder.mutation({
-      query: ({ courseId, sectionId, subSectionId, fileName, fileType, courseTitle }) => ({
+      query: ({
+        courseId,
+        sectionId,
+        subSectionId,
+        fileName,
+        fileType,
+        courseTitle,
+      }) => ({
         url: `course/start-upload/${courseId}/${sectionId}/${subSectionId}`,
-        method: 'POST',
+        method: "POST",
         body: { fileName, fileType, courseTitle },
-        credentials: "include"
+        credentials: "include",
       }),
     }),
     chunkUpload: builder.mutation({
       query: ({ courseId, sectionId, subSectionId, formData }) => ({
         url: `course/chunk-upload/${courseId}/${sectionId}/${subSectionId}`,
-        method: 'POST',
+        method: "POST",
         body: formData,
-        credentials: "include"
+        credentials: "include",
       }),
     }),
     completeUpload: builder.mutation({
-      query: ({ courseId, sectionId, subSectionId, uploadId, fileKey, parts }) => ({
+      query: ({
+        courseId,
+        sectionId,
+        subSectionId,
+        uploadId,
+        fileKey,
+        parts,
+      }) => ({
         url: `course/complete-upload/${courseId}/${sectionId}/${subSectionId}`,
-        method: 'POST',
+        method: "POST",
         body: { uploadId, fileKey, parts },
-        credentials: "include"
+        credentials: "include",
+      }),
+    }),
+    getLectureVideo: builder.query({
+      query: ({courseId, sectionId, subSectionId}) => ({
+        url: `course/presigned/${courseId}/${sectionId}/${subSectionId}`,
+        method: "GET",
       }),
     }),
   }),
@@ -193,4 +217,5 @@ export const {
   useStartUploadMutation,
   useChunkUploadMutation,
   useCompleteUploadMutation,
+  useGetLectureVideoQuery,
 } = apiCourse;
