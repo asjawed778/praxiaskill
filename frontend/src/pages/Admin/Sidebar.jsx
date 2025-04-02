@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FiHome } from "react-icons/fi";
 import { HiOutlineDesktopComputer } from "react-icons/hi";
@@ -12,11 +12,14 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
 import { FaQuestion } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { VscBookmark } from "react-icons/vsc";
+
 
 const sections = [
   {
     name: "courses",
     accessRole: "SUPER_ADMIN",
+    redirectTO: null,
     icon: <HiOutlineDesktopComputer />,
     links: [
       { url: "/dashboard/add-course", label: "Add Course", icon: <FiUpload /> },
@@ -25,12 +28,20 @@ const sections = [
       { url: "/dashboard/course-enquiry", label: "Enquiry", icon: <FaQuestion /> },
     ],
   },
+  {
+    name: "My Enrollment",
+    accessRole: "BOTH",
+    redirectTO: "/dashboard/my-enrollment",
+    icon: <VscBookmark />,
+    links: [],
+  },
 ];
 
 
 
 export default function Sidebar({ isOpen, setIsOpen, location }) {
   const [drawer, setDrawer] = useState({});
+  const navigate = useNavigate()
 
   const { user: {role: userRole} } = useSelector((state) => state.auth);
 
@@ -47,6 +58,14 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
       }
     });
   }, [location.pathname]);
+
+  const handleSectionOnClick = (name, redirectTO) => {
+    toggleDropdown(name);
+    if(redirectTO)
+    {
+      navigate(redirectTO);
+    }
+  }
 
   return (
     <>
@@ -84,18 +103,18 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
           </div>
         </Link>
 
-        {sections.map(({ icon, name, links, accessRole }, index) => (
-          userRole === accessRole ? <div key={index}>
+        {sections.map(({ icon, name, links, accessRole, redirectTO }, index) => (
+          userRole === accessRole || "BOTH" ? <div key={index}>
             <div
-              onClick={() => toggleDropdown(name)}
-              className="flex items-center justify-between py-2 rounded-md cursor-pointer hover:bg-neutral-200"
+              onClick={() =>{handleSectionOnClick(name, redirectTO)}}
+              className={`flex items-center justify-between py-2 rounded-md cursor-pointer hover:bg-neutral-200 ${location.pathname === redirectTO ? "bg-neutral-200 text-primary" : "text-neutral-700"}`}
             >
-              <div className="flex items-center gap-4 text-sm px-2 text-neutral-700  ">
+              <div className="flex items-center gap-4 text-sm px-2">
                 {icon}
                 <span className="capitalize text-sm">{name}</span>
               </div>
-              <svg
-                className={`w-4 h-4 mr-2 text-gray-400 transform transition-transform ${
+              {links.length > 0 && <svg
+                className={`w-4 h-4 mr-2 transform transition-transform ${
                   drawer[name] ? "rotate-180" : ""
                 }`}
                 xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +128,7 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
                   strokeWidth="2"
                   d="M19 9l-7 7-7-7"
                 />
-              </svg>
+              </svg>}
             </div>
 
             {drawer[name] && (
