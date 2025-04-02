@@ -12,7 +12,7 @@ import {
 import { BsArrowClockwise } from "react-icons/bs";
 import { BsArrowCounterclockwise } from "react-icons/bs";
 
-const VideoPlayer = ({ src }) => {
+const VideoPlayer = ({ src, lectureDataFetching, lectureData, sectionIds }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -176,7 +176,6 @@ const VideoPlayer = ({ src }) => {
         "0"
       )}`;
     };
-
     return `${formatTime(currentTime)} / ${formatTime(duration)}`;
   };
 
@@ -187,13 +186,20 @@ const VideoPlayer = ({ src }) => {
     setShowControls(true);
   };
 
+  useEffect(() => {
+    if(lectureDataFetching)
+    {
+      setIsPlaying(false);
+    }
+  }, [lectureDataFetching])
+
   return (
     <div
-      className="relative w-full bg-black"
+      className="relative w-[720px] max-h-[70vh] bg-black rounded-md"
       onMouseMoveCapture={handleMouseOverOnVideo}
       onMouseLeave={() => setShowControls(false)}
     >
-      <video ref={videoRef} className="w-full" src={src} />
+      <video ref={videoRef} className="w-[720px] max-h-[70vh] rounded-md mx-auto" src={src} />
 
         {/* play pause when clicking in the central area of video  */}
       <div className="absolute inset-0 flex items-center justify-center">
@@ -203,8 +209,15 @@ const VideoPlayer = ({ src }) => {
       </div>
 
 
+      {/* if no video */}
+      {(!lectureDataFetching && !lectureData?.success) && (
+        <div className="absolute inset-0 flex items-center justify-center z-50 text-white">
+          No lecture selected
+        </div>
+      )}
+
       {/* loader */}
-      {isBuffering && (
+      {sectionIds?.sectionId && (lectureDataFetching || isBuffering) && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-12 h-12 border-4 border-t-4 border-gray-300 border-t-white rounded-full animate-spin" />
         </div>
@@ -237,7 +250,7 @@ const VideoPlayer = ({ src }) => {
       <div
         className={`${
           showControls ? "opacity-100 duration-300" : "opacity-0 duration-1000"
-        } absolute bottom-0 left-0 right-0 bg-transparent p-2 flex flex-col transition-all`}
+        } absolute bottom-0 left-0 right-0 bg-transparent p-2 flex flex-col transition-all ${!lectureData?.success ? "hidden" : null}`}
       >
         <div className="flex-1 mx-4">
           <input
@@ -280,7 +293,6 @@ const VideoPlayer = ({ src }) => {
             </div>
           </div>
 
-          {/* Right group: volume, fullscreen, autoplay */}
           <div className="flex items-center space-x-3">
             <button
               onClick={toggleMute}
