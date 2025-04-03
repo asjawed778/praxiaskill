@@ -68,7 +68,7 @@ const index = () => {
         </div>
 
         <div
-          className={`w-96 mr-5 rounded-md border border-neutral-200 shadow-md h-[calc(100vh-5rem)] z-50 overflow-y-hidden transition-all duration-300 ${
+          className={`w-96 mr-5 rounded-md border border-neutral-200 shadow-md h-[calc(100vh-5rem)] z-50 overflow-y-hidden transition-all duration-300 pb-14 ${
             isSidebarOpen ? "" : "hidden"
           }`}
         >
