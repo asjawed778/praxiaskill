@@ -30,7 +30,7 @@ const sections = [
   },
   {
     name: "My Enrollment",
-    accessRole: "BOTH",
+    accessRole: "USER",
     redirectTO: "/dashboard/my-enrollment",
     icon: <VscBookmark />,
     links: [],
@@ -104,7 +104,7 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
         </Link>
 
         {sections.map(({ icon, name, links, accessRole, redirectTO }, index) => (
-          userRole === accessRole || "BOTH" ? <div key={index}>
+          (userRole === accessRole || accessRole === "BOTH") ? <div key={index}>
             <div
               onClick={() =>{handleSectionOnClick(name, redirectTO)}}
               className={`flex items-center justify-between py-2 rounded-md cursor-pointer hover:bg-neutral-200 ${location.pathname === redirectTO ? "bg-neutral-200 text-primary" : "text-neutral-700"}`}
