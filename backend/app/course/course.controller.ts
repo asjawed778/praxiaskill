@@ -416,3 +416,14 @@ export const deleteSubSection = asyncHandler(async (req: Request, res: Response)
     res.send(createResponse(result, "Subsection deleted successfully"));
 });
 
+export const getMyCourses = asyncHandler(async(req:Request, res:Response) => {
+    if(!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+    const userId = req.user._id;
+    const pageNo = req.query.pageNo ? parseInt(req.query.pageNo as string, 10) : undefined;
+    const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string, 10) : undefined;
+    const result = await courseService.getMyCourses(userId, pageNo, pageSize);
+
+    res.send(createResponse(result, "My Course fetched successfull"));
+});
