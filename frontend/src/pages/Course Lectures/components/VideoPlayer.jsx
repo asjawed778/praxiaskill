@@ -194,7 +194,7 @@ const VideoPlayer = ({ src, lectureDataFetching, lectureData, sectionIds }) => {
 
   return (
     <div
-      className={`relative w-[90%] max-h-[80vh] lg:max-h-[70vh] rounded-md mx-auto transition-colors duration-500 bg-black`}
+      className={`relative w-[90%] max-h-[80vh] rounded-md mx-auto transition-colors duration-500 bg-black`}
       onMouseMoveCapture={handleMouseOverOnVideo}
       onMouseLeave={() => setShowControls(false)}
     >

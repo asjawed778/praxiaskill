@@ -1,8 +1,7 @@
 import { RiArrowDropUpLine, RiArrowDropDownLine } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import { GoVideo } from "react-icons/go";
-export default function Sections({ courseContent, setSectionIds, sectionIds }) {
-  const [expandedLessons, setExpandedLessons] = useState({});
+export default function Sections({ courseContent, setSectionIds, sectionIds, expandedLessons, setExpandedLessons }) {
   const [sectionData, setSectionData] = useState([]);
 
   const toggleLesson = (index, hasSubSections) => {
@@ -57,14 +56,14 @@ export default function Sections({ courseContent, setSectionIds, sectionIds }) {
                 <div className="w-full py-3 px-4">
                   <div className="flex justify-between ">
                     <div>
-                      <span
+                      <div
                         className={`${
                           isExpanded && "text-primary"
                         } font-semibold`}
                       >
                         <span>Section {index + 1}: </span>
                         {section.title}
-                      </span>
+                      </div>
                     </div>
                     {hasSubSections ? (
                       isExpanded ? (

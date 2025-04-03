@@ -8,9 +8,14 @@ import backgroundVideo from "/video/background_video.mp4";
 import VideoPlayer from "./components/VideoPlayer";
 import Sections from "./components/Sections";
 import ButtonLoading from "../../components/Button/ButtonLoading";
+import VideoInformation from "./components/VideoInformation";
 
 const index = () => {
   const { courseId } = useParams();
+
+  //this is to track if the content section is expanded or not. if it is then it will be expanded on both small and larger screens
+  const [expandedLessons, setExpandedLessons] = useState({});
+
 
   const { data: courseContent, isFetching: courseContentFetching } =
     useGetFullCourseContentQuery(courseId);
@@ -58,42 +63,54 @@ const index = () => {
   return (
     <div className="px-4">
       <div className="flex flex-grow">
-        <div className="flex-1 w-full">
+        <div className="w-full">
           <VideoPlayer
             sectionIds={sectionIds}
             lectureData={lectureData}
             lectureDataFetching={lectureDataFetching}
             src={videoSrc}
           />
+          <div className="w-full">
+            <VideoInformation
+              sectionIds={sectionIds}
+              courseContent={data}
+              setSectionIds={setSectionIds}
+              isSidebarOpen={isSidebarOpen}
+              setExpandedLessons={setExpandedLessons}
+              expandedLessons={expandedLessons}
+            />
+          </div>
         </div>
 
         <div
-          className={`w-96 mr-5 rounded-md border border-neutral-200 shadow-md h-[calc(100vh-5rem)] z-50 overflow-y-hidden transition-all duration-300 pb-14 ${
-            isSidebarOpen ? "" : "hidden"
-          }`}
+          className={`w-[450px] relative mr-5 ${isSidebarOpen ? "" : "hidden"}`}
         >
-          <div className="h-12 border-b border-neutral-300 p-2">
-            <p className="text-xl font-semibold">Content Section</p>
-          </div>
-          {!courseContentFetching ? (
-            data?.sections?.length > 0 ? (
-              <div className="overflow-y-auto h-full">
-                <Sections
-                  sectionIds={sectionIds}
-                  courseContent={data}
-                  setSectionIds={setSectionIds}
-                />
-              </div>
-            ) : (
-              <div className="w-full h-28 flex justify-center items-center text-neutral-500 text-sm">
-                No sections available
-              </div>
-            )
-          ) : (
-            <div className="w-full h-28 flex justify-center items-center">
-              <ButtonLoading />
+          <div className="sticky top-0 w-[350px] h-screen right-5 rounded-md border border-neutral-200 shadow-md z-50 overflow-y-hidden transition-all duration-300 pb-14">
+            <div className="h-12 border-b border-neutral-300 p-2">
+              <p className="text-xl font-semibold">Content Section</p>
             </div>
-          )}
+            {!courseContentFetching ? (
+              data?.sections?.length > 0 ? (
+                <div className="overflow-y-auto h-full custom-styled-scrollbar">
+                  <Sections
+                    sectionIds={sectionIds}
+                    courseContent={data}
+                    setSectionIds={setSectionIds}
+                    expandedLessons={expandedLessons}
+                    setExpandedLessons={setExpandedLessons}
+                  />
+                </div>
+              ) : (
+                <div className="w-full h-28 flex justify-center items-center text-neutral-500 text-sm">
+                  No sections available
+                </div>
+              )
+            ) : (
+              <div className="w-full h-28 flex justify-center items-center">
+                <ButtonLoading />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
