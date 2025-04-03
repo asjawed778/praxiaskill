@@ -1,16 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { BsThreeDots } from "react-icons/bs";
-import { IoSearch, IoClose } from "react-icons/io5";
-import { MdEdit } from "react-icons/md";
 import { createPortal } from "react-dom";
-import Dropdown from "../../../components/Dropdown/Dropdown";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
-import ButtonLoading from "../../../components/Button/ButtonLoading";
-import { RiIndeterminateCircleFill } from "react-icons/ri";
-import { MdOutlineAddCircle } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import ButtonLoading from "../../../../components/Button/ButtonLoading";
 import { useForm } from "react-hook-form";
+import TableActionButtons from "./TableActionButtons";
+import TableFilters from "./TableFilters";
 
 const CourseTable = ({
   data: publishedCourse,
@@ -23,7 +19,6 @@ const CourseTable = ({
   const [courses, setCourses] = useState([]);
   const [menuStyles, setMenuStyles] = useState({});
   const buttonRefs = useRef([]);
-  const navigate = useNavigate();
 
   const { register, watch, setValue } = useForm();
   const category = watch("category", "");
@@ -31,7 +26,6 @@ const CourseTable = ({
   const itemsPerPage = 10;
   const totalItems = courses?.length;
 
-  // const courses = publishedCourse?.data?.courses
   useEffect(() => {
     if (publishedCourse && !category) {
       setCourses(publishedCourse?.data?.courses);
@@ -54,6 +48,7 @@ const CourseTable = ({
 
         setMenuStyles({
           position: "absolute",
+          display: "block",
           top:
             spaceBelow < dropdownHeight + 100
               ? rect.bottom - dropdownHeight - 100
@@ -67,30 +62,7 @@ const CourseTable = ({
 
   return (
     <div className="w-full flex flex-col gap-2 relative">
-      <div className="w-full flex gap-4 text-sm flex-wrap">
-        <div className="flex items-center gap-2 border border-neutral-300 px-1 rounded-lg text-neutral-500 flex-1">
-          <IoSearch />
-          <input
-            type="text"
-            className="outline-0 flex-1 px-2 py-2"
-            placeholder="Search Courses..."
-          />
-        </div>
-        <button
-          type="button"
-          onClick={() => setValue("category", "")}
-          className="px-4 rounded-lg border border-neutral-300 w-fit cursor-pointer hover:bg-primary hover:text-white active:bg-primary-hover"
-        >
-          Clear
-        </button>
-        <Dropdown
-          className="w-60 text-center cursor-pointer"
-          placeholder="All Category"
-          endpoint={"course/category"}
-          showLabel={false}
-          {...register("category")}
-        />
-      </div>
+      <TableFilters register={register} setValue={setValue} />
 
       {!isLoading ? (
         courses?.length > 0 ? (
@@ -201,36 +173,7 @@ const CourseTable = ({
 
       {openMenu !== null &&
         createPortal(
-          <div
-            style={menuStyles}
-            className="absolute bg-white border border-gray-200 shadow-lg rounded-lg w-40 p-2"
-          >
-            <div className="flex justify-between items-center pb-2">
-              <span className="text-sm font-semibold text-gray-500">
-                Actions
-              </span>
-              <button
-                onClick={() => setOpenMenu(null)}
-                className="text-gray-500 text-lg p-1 hover:bg-neutral-100 rounded-full hover:text-gray-700"
-              >
-                <IoClose />
-              </button>
-            </div>
-            <button
-              onClick={() =>
-                navigate(`/dashboard/course/content/${courses[openMenu]._id}`)
-              }
-              className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 rounded-md"
-            >
-              <MdOutlineAddCircle className="mr-2" /> Add Content
-            </button>
-            <button className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 rounded-md">
-              <MdEdit className="mr-2" /> Edit
-            </button>
-            <button className="flex items-center w-full px-3 py-2 text-sm text-left text-red-600 hover:bg-gray-100 rounded-md">
-              <RiIndeterminateCircleFill className="mr-2" /> Terminate
-            </button>
-          </div>,
+          <TableActionButtons menuStyles={menuStyles} setMenuStyles={setMenuStyles} setOpenMenu={setOpenMenu} courses={courses} openMenu={openMenu} />,
           courseManagePageRef?.current // Render outside the table
         )}
     </div>
