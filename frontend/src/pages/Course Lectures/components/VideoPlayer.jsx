@@ -187,30 +187,31 @@ const VideoPlayer = ({ src, lectureDataFetching, lectureData, sectionIds }) => {
   };
 
   useEffect(() => {
-    if(lectureDataFetching)
-    {
+    if (lectureDataFetching) {
       setIsPlaying(false);
     }
-  }, [lectureDataFetching])
+  }, [lectureDataFetching]);
 
   return (
     <div
-      className="relative w-[720px] max-h-[70vh] bg-black rounded-md"
+      className={`relative w-[90%] max-h-[80vh] lg:max-h-[70vh] rounded-md mx-auto transition-colors duration-500 bg-black`}
       onMouseMoveCapture={handleMouseOverOnVideo}
       onMouseLeave={() => setShowControls(false)}
     >
-      <video ref={videoRef} className="w-[720px] max-h-[70vh] rounded-md mx-auto" src={src} />
+      <video ref={videoRef} className="w-full h-full rounded-md" src={src} />
 
-        {/* play pause when clicking in the central area of video  */}
+      {/* play pause when clicking in the central area of video  */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div onDoubleClick={handleBackward10} className="w-[30%] h-[40%] z-50" />
+        <div
+          onDoubleClick={handleBackward10}
+          className="w-[30%] h-[40%] z-50"
+        />
         <div onClick={togglePlayPause} className="w-[40%] h-[40%] z-50" />
         <div onDoubleClick={handleForward10} className="w-[30%] h-[40%] z-50" />
       </div>
 
-
       {/* if no video */}
-      {(!lectureDataFetching && !lectureData?.success) && (
+      {!lectureDataFetching && !lectureData?.success && (
         <div className="absolute inset-0 flex items-center justify-center z-50 text-white">
           No lecture selected
         </div>
@@ -219,7 +220,7 @@ const VideoPlayer = ({ src, lectureDataFetching, lectureData, sectionIds }) => {
       {/* loader */}
       {sectionIds?.sectionId && (lectureDataFetching || isBuffering) && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-t-4 border-gray-300 border-t-white rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-t-4 border-primary border-t-white rounded-full animate-spin" />
         </div>
       )}
 
@@ -247,10 +248,13 @@ const VideoPlayer = ({ src, lectureDataFetching, lectureData, sectionIds }) => {
         </div>
       )}
 
+      {/* controllers  */}
       <div
         className={`${
           showControls ? "opacity-100 duration-300" : "opacity-0 duration-1000"
-        } absolute bottom-0 left-0 right-0 bg-transparent p-2 flex flex-col transition-all ${!lectureData?.success ? "hidden" : null}`}
+        } absolute bottom-0 left-0 right-0 bg-transparent p-2 flex flex-col transition-all ${
+          !lectureData?.success ? "hidden" : null
+        }`}
       >
         <div className="flex-1 mx-4">
           <input
