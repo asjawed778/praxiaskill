@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import CourseTable from "./CourseTable";
+import CourseTable from "./Manage Course/CourseTable";
 import { useGetAllPublishedCourseQuery } from "../../../services/course.api";
 
 

@@ -27,10 +27,13 @@ const CourseLandingPage = lazy(() =>
 // const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
 const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
 const AddCourse = lazy(() => import("./pages/Admin/Course/index"));
+const MyEnrollment = lazy(() => import("./pages/Admin/My Enrollment"));
 const ManageCourse = lazy(() => import("./pages/Admin/Course/ManageCourse"));
 const EventPage = lazy(() => import("./pages/EventPage"));
 const EventForm = lazy(() => import("./pages/EventPage/EventForm"));
-const CourseContent = lazy(() => import("./pages/Admin/Course/Add Course/CourseContent"))
+const CourseContent = lazy(() =>
+  import("./pages/Admin/Course/Add Course/CourseContent")
+);
 const CoursePayment = lazy(() => import("./pages/CoursePayment"));
 const CourseLectures = lazy(() => import("./pages/Course Lectures"));
 
@@ -99,7 +102,7 @@ const publicRoutes = [
           <CoursePayment />
         </PrivateRoute>
       </LazyComponent>
-    )
+    ),
   },
 ];
 
@@ -201,6 +204,14 @@ const adminRoutes = [
           </LazyComponent>
         ),
       },
+      {
+        path:"my-enrollment",
+        element: (
+          <LazyComponent>
+            <MyEnrollment />
+          </LazyComponent>
+        ),
+      },
     ],
   },
 ];
@@ -223,7 +234,15 @@ const userPrivateRoutes = [
             <AdminPage />
           </LazyComponent>
         ),
-      }
+      },
+      {
+        path:"my-enrollment",
+        element: (
+          <LazyComponent>
+            <MyEnrollment />
+          </LazyComponent>
+        ),
+      },
     ],
   },
 ];
@@ -241,15 +260,15 @@ const courseLectureRoute = [
     children: [
       {
         path: ":courseId",
-        element:(
+        element: (
           <LazyComponent>
             <CourseLectures />
           </LazyComponent>
-        )
-      }
-    ]
-  }
-]
+        ),
+      },
+    ],
+  },
+];
 
 function App() {
   const { accessToken, user } = useSelector((store) => store.auth);
@@ -286,8 +305,10 @@ function App() {
               ))}
             </Route>
           ))
+        ) : accessToken && user?.role === "SUPER_ADMIN" ? (
+          <Route path="/dashboard/*" element={<PageNotFound />} />
         ) : (
-          <Route path="/dashboard/*" element={<Navigate to="/" replace />} />
+          <Route path="/dashboard/*" element={<Navigate to="/" />} replace />
         )}
 
         {accessToken && user?.role === "SUPER_ADMIN" ? (
@@ -302,7 +323,7 @@ function App() {
           <Route path="/dashboard/*" element={<Navigate to="/" replace />} />
         )}
 
-        {accessToken && user?.role === "SUPER_ADMIN" || "USER" ? (
+        {(accessToken && user?.role === "SUPER_ADMIN") || "USER" ? (
           courseLectureRoute.map((route, index) => (
             <Route key={index} path={route.path} element={route.element}>
               {route.children?.map((child, childIndex) => (
@@ -311,7 +332,10 @@ function App() {
             </Route>
           ))
         ) : (
-          <Route path="/course-lecture/*" element={<Navigate to="/auth" replace />} />
+          <Route
+            path="/course-lecture/*"
+            element={<Navigate to="/auth" replace />}
+          />
         )}
 
         {/* if route does other than predefined endpoints will be redirected PageNotFound Page  */}
