@@ -63,7 +63,7 @@ const Course = () => {
             <span className="text-xs">Enroll for Free</span>
             <span className="text-[10px]">Starts Mar 16</span>
           </Button>
-          <Button onClick={() => navigate(`/course-payment/${courseId}`)} className="w-[13rem] font-semibold">
+          <Button onClick={() => navigate(`/course-payment/${courseId}`,{ state: courseDetails?.data} )} className="w-[13rem] font-semibold">
             <span className="">Buy Now</span>
           </Button>
           </div>

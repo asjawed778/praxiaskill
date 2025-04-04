@@ -8,8 +8,11 @@ import {
   useCreatePaymentOrderMutation,
   useVerifyPaymentMutation,
 } from "../../services/payment.api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
+import ButtonLoading from "../../components/Button/ButtonLoading";
+import Button from "../../components/Button/Button";
 
 const schema = yup.object().shape({
   country: yup.object().required("Country is required"),
@@ -28,6 +31,8 @@ const CoursePayment = () => {
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+  const {price, title} = location.state || {};
   const {
     register,
     handleSubmit,
@@ -46,7 +51,7 @@ const CoursePayment = () => {
   const originalPrice = 500;
 
   const couponCodes = [23455];
-  const discountPercentage = 15; // General discount (e.g., 20%)
+  const discountPercentage = 20;
 
   // State for discounts
   const [appliedDiscount, setAppliedDiscount] = useState(0);
@@ -54,7 +59,7 @@ const CoursePayment = () => {
   const [finalPrice, setFinalPrice] = useState(originalPrice);
   const [couponError, setCouponError] = useState("");
   const [isCouponApplied, setIsCouponApplied] = useState(false);
-  const [selectedMethod, setSelectedMethod] = useState("upi");
+  const [selectedMethod, setSelectedMethod] = useState("all");
   // console.log("Final: ", finalPrice);
 
   // Calculate discount when orderData is available
@@ -62,7 +67,7 @@ const CoursePayment = () => {
     if (originalPrice > 0 && discountPercentage > 0) {
       const discountValue = (discountPercentage / 100) * originalPrice;
       setDiscountAmount(discountValue);
-      setFinalPrice(originalPrice - discountValue); // ✅ Correct calculation
+      setFinalPrice(originalPrice - discountValue);
     }
   }, [originalPrice, discountPercentage]);
 
@@ -85,7 +90,7 @@ const CoursePayment = () => {
 
   const onSubmit = async (data) => {
     const order = {
-      amount: 500,
+      amount: price.finalPrice,
       billingAddress: {
         country: country?.label || "",
         state: state?.label || "",
@@ -164,6 +169,7 @@ const CoursePayment = () => {
   }, []);
 
   const paymentMethods = [
+    { id: "all", label: "ALL" },
     { id: "upi", label: "UPI" },
     { id: "cards", label: "Cards" },
     { id: "netbanking", label: "Net Banking" },
@@ -175,7 +181,7 @@ const CoursePayment = () => {
       {/* Billing & Payment */}
       <div className="mx-2 flex flex-col md:flex-row items-center">
         <div className="w-full px-2 md:w-[60%] md:px-16">
-          <h2 className="text-xl font-semibold mb-4">Checkout</h2>
+          <h2 className="text-xl font-semibold mb-4">Checkout: {title}</h2>
           <h2 className="text-md font-semibold mb-4">Billing Address</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-x-4 gap-y-4">
@@ -272,6 +278,7 @@ const CoursePayment = () => {
                   value={method.id}
                   checked={selectedMethod === method.id}
                   onChange={() => setSelectedMethod(method.id)}
+                  disabled={method.id !== "all"}
                   className="mr-2"
                 />
                 <span className="font-semibold">{method.label}</span>
@@ -283,19 +290,15 @@ const CoursePayment = () => {
         {/* Order Summary */}
         <div className="w-full md:w-[40%] bg-gray-100 h-screen md:p-6 px-4">
           <h2 className="text-xl font-bold mb-4 pt-8">Order Summary</h2>
-
-          {isLoading ? (
-            <p>Loading...</p>
-          ) : (
             <div className="md:mr-8">
               <div className="flex gap-5">
                 <p>Original Price:</p>
-                <p className="font-semibold">₹{originalPrice}</p>
+                <p className="font-semibold">₹{price?.actualPrice}</p>
               </div>
               <div className="flex gap-4 mt-2">
-                <p>General Discount ({discountPercentage}%):</p>
+                <p>General Discount ({price?.discountPercentage || 0}%):</p>
                 <p className="font-semibold text-green-500">
-                  -₹{discountAmount}
+                  -₹{price?.actualPrice - price?.finalPrice}
                 </p>
               </div>
               {appliedDiscount ? (
@@ -340,17 +343,17 @@ const CoursePayment = () => {
 
               <div className="flex gap-14 mt-4 border-t border-gray-500 pt-2">
                 <p className="text-lg font-semibold">Total:</p>
-                <p className="text-lg font-bold">₹{finalPrice}</p>
+                <p className="text-lg font-bold">₹{price?.finalPrice}</p>
               </div>
 
-              <button
+              <Button
                 type="submit"
-                className="w-full mt-6 bg-red-500 hover:bg-red-600 cursor-pointer text-white py-3 rounded-lg font-semibold"
+                disabled={isLoading}
+                className={`w-full h-10 mt-3 disabled:bg-gray-400 ${isLoading ? "cursor-not-allowed" : ""}`}
               >
-                {isPlacing ? "Processing..." : "Proceed to Payment"}
-              </button>
+                {isLoading ? <ButtonLoading /> : "Proceed to Payment"}
+              </Button>
             </div>
-          )}
         </div>
       </div>
     </form>
