@@ -68,7 +68,7 @@ const index = () => {
               transition-transform duration-500 ease-in-out"
             >
               <img
-                className="w-full h-44 object-fit"
+                className="w-full h-52 object-fit"
                 src={course.thumbnail}
                 alt={course.title}
               />
@@ -81,9 +81,6 @@ const index = () => {
                   {course.type || "Professional Certificate"} •{" "}
                   {course.level || "Beginner to Advanced"}
                 </p>
-                {/* <p className="text-sm mt-2"><strong>Skills you'll gain:</strong> {course.tags?.join(", ")}</p>
-                <p className="mt-8 font-semibold">{course?.totalRatings} ⭐ ({course.reviews || "0"})</p>
-                <p className="text-sm mt-2">{course.level || "Beginner to Advance"}{" . "}{course.type || "Professional Certificate"}{" . "}{course.duration}</p> */}
               </div>
             </div>
           ))}

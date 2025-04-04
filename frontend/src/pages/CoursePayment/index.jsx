@@ -8,9 +8,8 @@ import {
   useCreatePaymentOrderMutation,
   useVerifyPaymentMutation,
 } from "../../services/payment.api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
-// import { useGetOrderDetailsQuery, usePlaceOrderMutation } from "../store/orderApi";
 
 const schema = yup.object().shape({
   country: yup.object().required("Country is required"),
@@ -26,6 +25,8 @@ const CoursePayment = () => {
   const [createPaymentOrder, { isLoading, isError }] =
     useCreatePaymentOrderMutation();
   const [verifyPayment, { isLoading: isPlacing }] = useVerifyPaymentMutation();
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -112,7 +113,6 @@ const CoursePayment = () => {
         description: "Buy a Course",
         order_id: data.data.data.id,
         handler: async function (response) {
-          console.log("Payment Success", response);
 
           const verificationData = {
             courseId,
@@ -123,12 +123,12 @@ const CoursePayment = () => {
             },
           };
 
-
           const verifyRes = await verifyPayment(verificationData);
           console.log("verify response", verifyRes);
 
           if (verifyRes?.data?.success) {
             toast.success("Payment successful!");
+            navigate("/my-enrollments");
           } else {
             toast.error("Payment verification failed!");
           }

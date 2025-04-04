@@ -218,32 +218,14 @@ const adminRoutes = [
 
 const userPrivateRoutes = [
   {
-    path: "dashboard",
+    path: "my-enrollments",
     element: (
       <LazyComponent>
         <PrivateRoute>
-          <AdminLayout />
+          <MyEnrollment />
         </PrivateRoute>
       </LazyComponent>
     ),
-    children: [
-      {
-        index: true,
-        element: (
-          <LazyComponent>
-            <AdminPage />
-          </LazyComponent>
-        ),
-      },
-      {
-        path:"my-enrollment",
-        element: (
-          <LazyComponent>
-            <MyEnrollment />
-          </LazyComponent>
-        ),
-      },
-    ],
   },
 ];
 
@@ -298,18 +280,16 @@ function App() {
 
         {/* Private routes  */}
         {accessToken && user?.role === "USER" ? (
-          userPrivateRoutes.map((route, index) => (
-            <Route key={index} path={route.path} element={route.element}>
-              {route.children?.map((child, childIndex) => (
-                <Route key={childIndex} {...child} />
-              ))}
-            </Route>
-          ))
+          <Route element={<BasicLayout />}>
+          {userPrivateRoutes.map((route, index) => (
+            <Route key={index} path={route.path} element={route.element} />
+          ))}
+        </Route>
         ) : accessToken && user?.role === "SUPER_ADMIN" ? (
           <Route path="/dashboard/*" element={<PageNotFound />} />
         ) : (
           <Route path="/dashboard/*" element={<Navigate to="/" />} replace />
-        )}
+        )}        
 
         {accessToken && user?.role === "SUPER_ADMIN" ? (
           adminRoutes.map((route, index) => (
