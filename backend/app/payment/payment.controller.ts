@@ -13,6 +13,10 @@ export const createOrder = asyncHandler(async (req: Request, res: Response) => {
         throw createHttpError(404, "User not found, Please Login again");
     }
     const userId = req.user._id;
+    const isAlredyEnrolledInCourse = await CourseService.isAlreadyEnrolledInCourse(userId, courseId);
+    if(isAlredyEnrolledInCourse) {
+        throw createHttpError(409, "You have alredy enrolled in this course");
+    }
     const result = await PaymentService.createRazorpayOrder(data.amount, data.currency);
     const response = await PaymentService.createTransaction(userId, courseId, data, result.id);
     res.send(createResponse(result, "order created sucessfully"));

@@ -20,15 +20,15 @@ export const isCourseExist = async (courseId: string): Promise<boolean> => {
     return courseExists !== null;
 };
 
-export const isValidSectionSubsectionId = async(courseId: string, sectionId: string, subSectionId?: string) => {
+export const isValidSectionSubsectionId = async (courseId: string, sectionId: string, subSectionId?: string) => {
     const course = await courseSchema.findById(courseId);
     if (!course) {
         throw createHttpError(404, "Course not found, Invalid courseId");
     }
     if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Schema.Types.ObjectId)) {
-        throw  createHttpError(404, "Section does not belong to the course");
+        throw createHttpError(404, "Section does not belong to the course");
     }
-    if(!subSectionId) {
+    if (!subSectionId) {
         return true;
     }
     const section = await sectionSchema.findById(sectionId);
@@ -436,10 +436,10 @@ export const isUserCoursePurchased = async (courseId: string, userId: string): P
 export const isUserCourseActive = async (courseId: string, userId: string): Promise<boolean> => {
     const enrollment = await enrollmentSchema.findOne({ courseId, userId });
     if (!enrollment) return false;
-    
+
     const isActive = enrollment.status === courseEnum.Status.ACTIVE;
     const isNotExpired = !enrollment.expiresAt || enrollment.expiresAt > new Date();
-    
+
     return isActive && isNotExpired;
 };
 
@@ -449,7 +449,7 @@ export const deleteSection = async (courseId: string, sectionId: string): Promis
         throw createHttpError(404, "Course not found");
     }
     if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Schema.Types.ObjectId)) {
-        throw  createHttpError(404, "Section does not belong to the course");
+        throw createHttpError(404, "Section does not belong to the course");
     }
 
     await courseSchema.findByIdAndUpdate(courseId, { $pull: { sections: sectionId } });
@@ -468,7 +468,7 @@ export const deleteSubSection = async (courseId: string, sectionId: string, subS
         throw createHttpError(404, "Course not found");
     }
     if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Schema.Types.ObjectId)) {
-        throw  createHttpError(404, "Section does not belong to the course");
+        throw createHttpError(404, "Section does not belong to the course");
     }
 
     const section = await sectionSchema.findById(sectionId);
@@ -489,23 +489,135 @@ export const addContentLink = async (subSectionId: string, fileKey: string) => {
     });
 };
 
-export const getSubSectionFileKey = async(subSectionId: string) => {
+export const getSubSectionFileKey = async (subSectionId: string) => {
     const subsection = await subSectionSchema.findById(subSectionId);
     if (!subsection || !subsection.video) return null;
-    
+
     return {
         link: subsection.video.link,
         duration: subsection.video.duration,
     };
 }
 
-export const enrollStudentIntoCourse = async(userId: string, courseId: string) => {
-    const result = await enrollmentSchema.create({userId, courseId});
+export const enrollStudentIntoCourse = async (userId: string, courseId: string) => {
+    const result = await enrollmentSchema.create({ userId, courseId });
     return result;
 }
 
-export const isAlredyEnrolledInCourse = async(userId: string, courseId: string) => {
-    return await enrollmentSchema.exists({userId, courseId}); 
-}
+export const isAlreadyEnrolledInCourse = async (userId: string, courseId: string) => {
+    return await enrollmentSchema.exists({
+        userId,
+        courseId,
+        status: courseEnum.Status.ACTIVE, 
+        $or: [
+            { expiresAt: null },
+            { expiresAt: { $gt: new Date() } } 
+        ]
+    });
+};
 
+
+export const getMyCourses = async (userId: string, pageNo: number = 1, pageSize: number = 10) => {
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        throw createHttpError(400, "Invalid user ID format");
+    }
+
+    const skip = (pageNo - 1) * pageSize;
+
+    const result = await enrollmentSchema.aggregate([
+        { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+        {
+            $lookup: {
+                from: "courses",
+                localField: "courseId",
+                foreignField: "_id",
+                as: "course"
+            }
+        },
+        { $unwind: "$course" },
+        {
+            $lookup: {
+                from: "users",
+                localField: "course.instructor",
+                foreignField: "_id",
+                as: "instructor"
+            }
+        },
+        { $unwind: "$instructor" },
+        {
+            $lookup: {
+                from: "coursecategories",
+                localField: "course.category",
+                foreignField: "_id",
+                as: "category"
+            }
+        },
+        { $unwind: "$category" },
+        {
+            $addFields: {
+                isExpired: {
+                    $cond: {
+                        if: { $and: [{ $ne: ["$expiresAt", null] }, { $lte: ["$expiresAt", new Date()] }] },
+                        then: true,
+                        else: false
+                    }
+                },
+                courseStatus: {
+                    $switch: {
+                        branches: [
+                            { case: { $eq: ["$expiresAt", null] }, then: courseEnum.Status.ACTIVE }, // Lifetime access
+                            { case: { $lte: ["$expiresAt", new Date()] }, then: courseEnum.Status.EXPIRED }
+                        ],
+                        default: courseEnum.Status.ACTIVE
+                    }
+                },
+                validTill: {
+                    $cond: {
+                        if: { $eq: ["$expiresAt", null] },
+                        then: courseEnum.CourseValidity.LIFETIME,
+                        else: {
+                            $switch: {
+                                branches: [
+                                    { case: { $gte: ["$expiresAt", new Date(new Date().setFullYear(new Date().getFullYear() + 2))] }, then: courseEnum.CourseValidity.TWO_YEAR },
+                                    { case: { $gte: ["$expiresAt", new Date(new Date().setFullYear(new Date().getFullYear() + 1))] }, then: courseEnum.CourseValidity.ONE_YEAR }
+                                ],
+                                default: courseEnum.CourseValidity.LIFETIME
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            $project: {
+                _id: "$course._id",
+                title: "$course.title",
+                subtitle: "$course.subtitle",
+                tags: "$course.tags",
+                thumbnail: "$course.thumbnail",
+                language: "$course.language",
+                duration: "$course.duration",
+                totalLectures: "$course.totalLectures",
+                courseMode: "$course.courseMode",
+                validTill: 1,
+                courseStatus: 1,
+                "instructor._id": 1,
+                "instructor.name": 1,
+                "instructor.profilePic": 1,
+                "category._id": 1,
+                "category.name": 1
+            }
+        },
+        { $skip: skip },
+        { $limit: pageSize }
+    ]);
+
+    return {
+        success: true,
+        totalCourses: result.length,
+        page: pageNo,
+        pageSize,
+        courses: result
+    };
+};
 
