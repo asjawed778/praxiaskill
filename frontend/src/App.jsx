@@ -218,7 +218,7 @@ const adminRoutes = [
 
 const userPrivateRoutes = [
   {
-    path: "my-enrollments",
+    path: "my-courses",
     element: (
       <LazyComponent>
         <PrivateRoute>

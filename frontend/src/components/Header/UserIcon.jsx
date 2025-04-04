@@ -60,7 +60,7 @@ const UserIcon = ({ user, setShowUserMenu, showUserMenu, handleLogout }) => {
           </div>
           {user?.role === "USER" ? (
             <div className="flex flex-col gap-0.5 text-neutral-700 font-normal mb-1 border-t border-neutral-300">
-              <Link to="/my-enrollments">
+              <Link to="/my-courses">
                 <div
                   onClick={(e) => {
                     e.stopPropagation();

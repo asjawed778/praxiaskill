@@ -187,9 +187,16 @@ export const apiCourse = createApi({
       }),
     }),
     getLectureVideo: builder.query({
-      query: ({courseId, sectionId, subSectionId}) => ({
+      query: ({ courseId, sectionId, subSectionId }) => ({
         url: `course/presigned/${courseId}/${sectionId}/${subSectionId}`,
         method: "GET",
+      }),
+    }),
+    getMyCourses: builder.query({
+      query: (pageNo) => ({
+        url: `course/my-courses?pageNo${pageNo}`,
+        method: "GET",
+        credentials: "include",
       }),
     }),
   }),
@@ -218,4 +225,5 @@ export const {
   useChunkUploadMutation,
   useCompleteUploadMutation,
   useGetLectureVideoQuery,
+  useGetMyCoursesQuery,
 } = apiCourse;

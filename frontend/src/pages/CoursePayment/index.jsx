@@ -128,7 +128,7 @@ const CoursePayment = () => {
 
           if (verifyRes?.data?.success) {
             toast.success("Payment successful!");
-            navigate("/my-enrollments");
+            navigate("/my-courses");
           } else {
             toast.error("Payment verification failed!");
           }

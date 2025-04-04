@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useGetAllPublishedCourseQuery } from "../../../services/course.api";
+import {
+  useGetAllPublishedCourseQuery,
+  useGetMyCoursesQuery,
+} from "../../../services/course.api";
 import { useEffect, useState } from "react";
 import ButtonLoading from "../../../components/Button/ButtonLoading";
 import Filters from "./components/Filters";
@@ -11,14 +14,10 @@ const index = () => {
   const { register, setValue, watch } = useForm();
   const category = watch("category", "");
 
-  const {
-    data: publishedCourses,
-    isFetching: isLoading,
-    isError,
-  } = useGetAllPublishedCourseQuery(currentPage);
-
-  const totalPages = publishedCourses?.data?.totalPages || 1;
-  const totalItems = publishedCourses?.data?.totalCourses;
+  const { data: myCourses, isFetching: myCoursesFetching } =
+    useGetMyCoursesQuery(currentPage);
+  const totalPages = myCourses?.data?.totalPages || 1;
+  const totalItems = myCourses?.data?.totalCourses;
   const itemsPerPage = 10;
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = category
@@ -31,29 +30,29 @@ const index = () => {
   };
 
   useEffect(() => {
-    if (publishedCourses && !category) {
-      setCourses(publishedCourses?.data?.courses);
+    if (myCourses && !category) {
+      setCourses(myCourses?.data?.courses);
     } else {
-      const categoryWiseCourses = publishedCourses?.data?.courses.filter(
+      const categoryWiseCourses = myCourses?.data?.courses.filter(
         (course) => course.category._id === category
       );
       setCourses(categoryWiseCourses);
     }
-  }, [publishedCourses, category]);
+  }, [myCourses, category]);
 
   return (
     <div className="container mx-auto px-4 py-10">
-      <h2 className="text-xl font-bold mb-6">My Enrollments</h2>
+      <h2 className="text-xl font-bold mb-6">My Courses</h2>
 
       <Filters register={register} setValue={setValue} />
 
-      {isLoading ? (
-        <p className=" flex h-28 justify-center items-center text-center mt-6 text-red-500">
+      {myCoursesFetching ? (
+        <div className=" flex h-28 justify-center items-center text-center mt-6 text-red-500">
           <div className="flex gap-2 items-center">
             <ButtonLoading />
             <span>Loading courses...</span>
           </div>
-        </p>
+        </div>
       ) : courses?.length === 0 ? (
         <p className="flex items-center justify-center h-28 text-gray-500">
           No courses found.
@@ -72,14 +71,40 @@ const index = () => {
                 src={course.thumbnail}
                 alt={course.title}
               />
-              <div className="p-4 flex-grow flex flex-col">
+              <div className="relative p-4 flex-grow flex flex-col">
                 <h3 className="text-xl mb-4 font-semibold flex-grow">
                   {course.title}
                 </h3>
-                <p className="text-gray-600">{course?.instructor?.name}</p>
-                <p className="text-sm text-gray-500">
-                  {course.type || "Professional Certificate"} •{" "}
-                  {course.level || "Beginner to Advanced"}
+                <p className="text-7ray-600">{course?.instructor?.name}</p>
+                <p className="text-sm text-gray-700">{course.subtitle}</p>
+                <div className="flex items-center justify-between gap-2 mt-3 pb-3">
+                  <p className="flex items-center flex-col">
+                    <span className="lowercase text-xs">{course.duration}</span>
+                    <span className="font-semibold">Duration</span>
+                  </p>
+                  <p className="flex flex-col items-center">
+                    <span className="lowercase text-xs">
+                      {course.validTill === "LifeTime"
+                        ? "Life time"
+                        : course.validTill}
+                    </span>
+                    <span className="font-semibold">Validity</span>
+                  </p>
+                  <p className="flex flex-col items-center">
+                    <span className="lowercase text-xs">
+                      {course.courseMode}
+                    </span>
+                    <span className="font-semibold">Mode</span>
+                  </p>
+                </div>
+                <p
+                  className={`absolute right-2 bottom-1 flex justify-end text-[9px] font-semibold ${
+                    course.courseStatus === "ACTIVE"
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }`}
+                >
+                  {course.courseStatus}
                 </p>
               </div>
             </div>
