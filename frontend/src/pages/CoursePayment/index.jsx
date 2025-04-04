@@ -99,9 +99,14 @@ const CoursePayment = () => {
   const handlePayment = async (order) => {
     try {
       const data = await createPaymentOrder({ courseId, order });
-
       if (!data?.data?.success) {
-        toast.error("Error creating order");
+        //if user has already bought the course then error message with status 409 will popup on the screen
+        if (data?.error?.status === 409) {
+          toast.error("You have already enrolled in this course");
+          // toast.error(data.error.data.message);
+        } else {
+          toast.error("Error creating order");
+        }
         return;
       }
 
@@ -113,7 +118,6 @@ const CoursePayment = () => {
         description: "Buy a Course",
         order_id: data.data.data.id,
         handler: async function (response) {
-
           const verificationData = {
             courseId,
             razorpayData: {
@@ -170,7 +174,7 @@ const CoursePayment = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       {/* Billing & Payment */}
       <div className="mx-2 flex flex-col md:flex-row items-center">
-        <div className="w-full px-2 md:w-[60%] md:ml-24 md:pl-32 md:p-6">
+        <div className="w-full px-2 md:w-[60%] md:px-16">
           <h2 className="text-xl font-semibold mb-4">Checkout</h2>
           <h2 className="text-md font-semibold mb-4">Billing Address</h2>
 
@@ -187,7 +191,7 @@ const CoursePayment = () => {
                 onChange={(val) => setValue("country", val)}
                 className="mt-1"
               />
-              {errors.country && (
+              {errors?.country && (
                 <p className="text-red-500 text-sm">{errors.country.message}</p>
               )}
             </label>
@@ -277,20 +281,18 @@ const CoursePayment = () => {
         </div>
 
         {/* Order Summary */}
-        <div className="w-full md:w-[40%] bg-gray-100 h-screen md:p-6 md:px-12 px-4">
+        <div className="w-full md:w-[40%] bg-gray-100 h-screen md:p-6 px-4">
           <h2 className="text-xl font-bold mb-4 pt-8">Order Summary</h2>
 
           {isLoading ? (
             <p>Loading...</p>
-          ) : isError ? (
-            <p className="text-red-500">Failed to load order data.</p>
           ) : (
-            <div className="md:mr-8 md:pr-16">
-              <div className="flex justify-between">
+            <div className="md:mr-8">
+              <div className="flex gap-5">
                 <p>Original Price:</p>
                 <p className="font-semibold">₹{originalPrice}</p>
               </div>
-              <div className="flex justify-between mt-2">
+              <div className="flex gap-4 mt-2">
                 <p>General Discount ({discountPercentage}%):</p>
                 <p className="font-semibold text-green-500">
                   -₹{discountAmount}
@@ -307,10 +309,10 @@ const CoursePayment = () => {
                 ""
               )}
 
-              <div className="flex space-x-2 mt-4">
+              <div className="flex space-x-2 mt-4 w-[15rem]">
                 <input
                   type="text"
-                  className="flex-1 p-2 border border-gray-500 outline-none focus:border-red-500 focus:shadow-sm rounded disabled:bg-gray-200"
+                  className="flex-1 w-[15rem] px-2 py-1 border border-gray-500 outline-none focus:border-red-500 focus:shadow-sm rounded disabled:bg-gray-200"
                   {...register("couponCode")}
                   placeholder="Enter Coupon Code"
                   onChange={(e) =>
@@ -336,7 +338,7 @@ const CoursePayment = () => {
                 <p className="text-red-500 text-sm">{couponError}</p>
               )}
 
-              <div className="flex justify-between mt-4 border-t border-gray-500 pt-2">
+              <div className="flex gap-14 mt-4 border-t border-gray-500 pt-2">
                 <p className="text-lg font-semibold">Total:</p>
                 <p className="text-lg font-bold">₹{finalPrice}</p>
               </div>
