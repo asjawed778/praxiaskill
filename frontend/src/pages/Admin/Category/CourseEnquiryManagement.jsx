@@ -149,6 +149,7 @@ const CourseEnqueryManagement = () => {
       }
       changeStatus(enquiryId, newStatus);
       setOpenMenu(null)
+      setMenuStyles({...menuStyles, display:"none"});
     } catch (err) {
       console.log(err);
     }
@@ -157,7 +158,6 @@ const CourseEnqueryManagement = () => {
   useEffect(() => {
     if (openMenu !== null) {
       const button = buttonRefs.current[openMenu];
-      console.log("rect");
 
       if (button) {
         const rect = button.getBoundingClientRect();
@@ -166,6 +166,7 @@ const CourseEnqueryManagement = () => {
 
         setMenuStyles({
           position: "absolute",
+          display:"block",
           top:
             spaceBelow < dropdownHeight + 100
               ? rect.bottom - dropdownHeight + 20
@@ -403,7 +404,7 @@ const CourseEnqueryManagement = () => {
         createPortal(
           <div
             style={menuStyles}
-            className="absolute bg-white border border-gray-300 shadow-lg rounded-lg w-40"
+            className="absolute hidden bg-white border border-gray-300 shadow-lg rounded-lg w-40"
           >
             {enquiries[openMenu].status === "CLOSED" ?<div
               className={`px-4 py-2 flex items-center gap-2 hover:bg-gray-100 rounded-lg text-red-600 cursor-pointer`}

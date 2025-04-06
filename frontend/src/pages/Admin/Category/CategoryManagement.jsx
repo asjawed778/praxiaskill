@@ -16,8 +16,6 @@ const Category = () => {
 
   const navigate = useNavigate();
 
-  console.log("data", data)
-
 
   useEffect(() => {
     if (data?.success) {
