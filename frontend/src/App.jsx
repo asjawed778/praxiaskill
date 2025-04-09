@@ -22,7 +22,7 @@ const HomePage = lazy(() => import("./pages/Home page/homepage"));
 const BlogPage = lazy(() => import("./pages/Blog/landingpage"));
 const AdminPage = lazy(() => import("./pages/Admin/adminpage"));
 const CourseLandingPage = lazy(() =>
-  import("./pages/Course Landing Page/index")
+  import("./pages/CourseLandingPage/index")
 );
 // const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
 const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
@@ -71,7 +71,7 @@ const publicRoutes = [
     ),
   },
   {
-    path: "course/:courseId",
+    path: "course/:courseTitle/:courseId",
     element: (
       <LazyComponent>
         <CourseLandingPage />

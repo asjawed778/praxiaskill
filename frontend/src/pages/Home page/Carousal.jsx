@@ -2,7 +2,7 @@ import user from "/imgs/slider/user_icon2.png";
 import clock from "/imgs/slider/language2.png";
 
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCourses } from "../../store/reducers/coursesReducer";
 import { setCategories } from "../../store/reducers/adminCategoryReducer";
@@ -16,6 +16,7 @@ import Button from "../../components/Button/Button";
 
 export default function Carousal() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const categories = useSelector((state) => state.categories.categories);
   const coursesAll = useSelector((state) => state.courses.courses);
@@ -62,6 +63,12 @@ export default function Carousal() {
     }
   };
 
+  const handleCourseClick = (courseId, title) => {
+    const courseTitle = title.toLowerCase().split(' ').join('-');
+    navigate(`/course/${courseTitle}/${courseId}`);
+  };
+  
+
   return (
     <div className="py-8 mt-4 w-[90vw] lg:w-full mx-auto">
       <div className="mb-6 items-center">
@@ -86,11 +93,10 @@ export default function Carousal() {
                   onClick={() => {
                     setActiveTab(tab._id);
                   }}
-                  className={`flex justify-center items-center w-fit px-0 py-2 border-b-2 cursor-pointer ${
-                    activeTab === tab._id
+                  className={`flex justify-center items-center w-fit px-0 py-2 border-b-2 cursor-pointer ${activeTab === tab._id
                       ? " border-[var(--color-primary)] text-[var(--secondary-heading-color)]"
                       : " border-transparent text-[var(--alt-secondary-text-color)] carousel-item"
-                  }`}
+                    }`}
                 >
                   {tab.name}
                 </button>
@@ -129,10 +135,10 @@ export default function Carousal() {
             className="flex overflow-x-scroll scroll-smooth scrollbar-hide gap-8 md:gap-7 p-4 whitespace-nowrap custom-scrollbar"
           >
             {coursesAll?.map((course, index) => (
-              <Link
+              <button
                 key={index}
-                to={`/course/${course?._id}`}
-                className="bg-white flex flex-col h-70 gap-2 w-[300px] pb-3 rounded-lg shadow-md flex-none mx-auto md:mx-0"
+                onClick={()=>handleCourseClick(course._id, course?.title)}
+                className="bg-white flex flex-col h-70 gap-2 w-[300px] pb-3 rounded-lg shadow-md flex-none mx-auto md:mx-0 cursor-pointer"
               >
                 <div className="w-full h-44 relative rounded-lg">
                   <img
@@ -170,7 +176,7 @@ export default function Carousal() {
                         {course?.language === "ENGLISH_HINDI"
                           ? "Bilingual"
                           : course?.language?.charAt(0).toUpperCase() +
-                            course?.language?.slice(1).toLowerCase()}
+                          course?.language?.slice(1).toLowerCase()}
                       </p>
                     </div>
 
@@ -179,7 +185,7 @@ export default function Carousal() {
                     </Button>
                   </div>
                 </div>
-              </Link>
+              </button>
             ))}
           </div>
         </div>
