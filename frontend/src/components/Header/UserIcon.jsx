@@ -3,6 +3,9 @@ import logo from "/logopng.png";
 import { RxCross2 } from "react-icons/rx";
 import { GiWaterDrop } from "react-icons/gi";
 import { Link } from "react-router-dom";
+import { MdLibraryBooks } from "react-icons/md";
+import { BiLogOut } from "react-icons/bi";
+
 
 const UserIcon = ({ user, setShowUserMenu, showUserMenu, handleLogout }) => {
   return (
@@ -37,10 +40,6 @@ const UserIcon = ({ user, setShowUserMenu, showUserMenu, handleLogout }) => {
         </div>
 
         <div>
-          <div className="pt-0.5 overflow-hidden">
-            <img src={logo} className="w-28 relative right-2" alt="logo" />
-          </div>
-
           <div className="mt-4 flex items-center gap-3 p-1 pb-3">
             <div className="h-12 w-12 rounded-ful" title={user?.name}>
               <img
@@ -58,36 +57,35 @@ const UserIcon = ({ user, setShowUserMenu, showUserMenu, handleLogout }) => {
               </span>
             </div>
           </div>
-          {user?.role === "USER" ? (
             <div className="flex flex-col gap-0.5 text-neutral-700 font-normal mb-1 border-t border-neutral-300">
-              <Link to="/my-courses">
+              {user?.role === "USER" && <Link to="/my-courses">
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowUserMenu(false);
                   }}
-                  className="p-2 hover:bg-neutral-300 hover:text-black cursor-pointer"
+                  className="p-2 hover:bg-neutral-300 hover:text-black cursor-pointer flex gap-3 items-center"
                 >
-                  My courses
+                  <div className="h-8 w-8 flex justify-center items-center bg-neutral-200 rounded-full text-primary">
+                    <MdLibraryBooks />
+                  </div>
+                  <span>
+                    My courses
+                  </span>
                 </div>
-              </Link>
+              </Link>}
               <div
                 onClick={handleLogout}
-                className="p-2 hover:bg-neutral-300 hover:text-black cursor-pointer"
+                className="p-2 hover:bg-neutral-300 hover:text-black cursor-pointer flex gap-3 items-center"
               >
-                Sign out
+                <div className="h-8 w-8 flex justify-center items-center bg-neutral-200 rounded-full text-primary">
+                    <BiLogOut />
+                  </div>
+                  <span>
+                    Sign out
+                  </span>
               </div>
             </div>
-          ) : (
-            <div className="flex justify-end">
-              <span
-                onClick={handleLogout}
-                className="pr-3 text-neutral-600 hover:text-primary cursor-pointer text-sm"
-              >
-                Sign out
-              </span>
-            </div>
-          )}
         </div>
       </div>
     </div>
