@@ -20,7 +20,7 @@ loadConfig();
 
 declare global {
   namespace Express {
-    interface User extends Omit<IUser, "password"> {}
+    interface User extends Omit<IUser, "password"> { }
     interface Request {
       user?: User;
     }
@@ -39,8 +39,20 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
+const allowedOrigins = [
+  "http://localhost:3000", 
+  "https://www.praxiaskill.com",
+  "https://praxiaskill.com"
+];
+
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true,
 }));
