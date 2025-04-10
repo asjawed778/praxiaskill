@@ -1,13 +1,7 @@
 import { Helmet } from "react-helmet-async";
+import { detailedSEO } from "./data";
 
-const defaultSEO = {
-  title: "LearnNow | Top Online Courses",
-  description: "Learn programming, design, and more with expert-led online courses.",
-  keywords: "online courses, e-learning, education, LearnNow",
-  image: "https://yourdomain.com/default-og-image.jpg",
-  url: "https://yourdomain.com",
-  robots: "index, follow",
-};
+const defaultSEO = {...detailedSEO}
 
 const SEOHelmet = ({
   title,
