@@ -8,14 +8,17 @@ import "./index.css";
 import { store } from "./store/store.js";
 import App from "./App.jsx";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { HelmetProvider } from "react-helmet-async";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Provider store={store}>
-      <ErrorBoundary>
-        <App />
-      </ErrorBoundary>
-      <Toaster />
-    </Provider>
+    <HelmetProvider>
+      <Provider store={store}>
+        <ErrorBoundary>
+          <App />
+          <Toaster />
+        </ErrorBoundary>
+      </Provider>
+    </HelmetProvider>
   </StrictMode>
 );
