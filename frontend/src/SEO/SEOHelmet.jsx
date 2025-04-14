@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { detailedSEO } from "./data";
 
-const defaultSEO = {...detailedSEO}
+const defaultSEO = { ...detailedSEO }
 
 const SEOHelmet = ({
   title,
@@ -53,6 +53,19 @@ const SEOHelmet = ({
       <meta name="twitter:title" content={metaTitle} />
       <meta name="twitter:description" content={metaDescription} />
       <meta name="twitter:image" content={metaImage} />
+
+      {/* Google tag (gtag.js) */}
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-43PRGD2MHL"></script>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-43PRGD2MHL');
+          `,
+        }}
+      />
 
       {/* JSON-LD Structured Data */}
       {schema && (
