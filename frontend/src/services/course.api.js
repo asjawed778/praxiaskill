@@ -199,6 +199,14 @@ export const apiCourse = createApi({
         credentials: "include",
       }),
     }),
+
+    // implement terminate course api here
+    terminateCourse: builder.mutation({
+      query: ({courseId}) => ({
+        url: `course/terminate/${courseId}`,
+        method: "PATCH",
+      })
+    }),
   }),
 });
 
@@ -226,4 +234,5 @@ export const {
   useCompleteUploadMutation,
   useGetLectureVideoQuery,
   useGetMyCoursesQuery,
+  useTerminateCourseMutation,
 } = apiCourse;
