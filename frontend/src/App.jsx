@@ -36,6 +36,7 @@ const CourseContent = lazy(() =>
 );
 const CoursePayment = lazy(() => import("./pages/CoursePayment"));
 const CourseLectures = lazy(() => import("./pages/Course Lectures"));
+const ContactUs = lazy(() => import("./pages/ContactUs"));
 
 const publicRoutes = [
   {
@@ -101,6 +102,14 @@ const publicRoutes = [
         <PrivateRoute>
           <CoursePayment />
         </PrivateRoute>
+      </LazyComponent>
+    ),
+  },
+  {
+    path: "contact-us",
+    element: (
+      <LazyComponent>
+        <ContactUs />
       </LazyComponent>
     ),
   },

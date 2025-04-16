@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import CourseFirstStep from "./Add Course/CourseFirstStep";
 import AdditionalDetails from "./Add Course/AdditionalDetails";
@@ -10,13 +10,32 @@ import firstStepValidationSchema from "./Add Course/Schema/firstStepValidationSc
 import secondStepValidationSchema from "./Add Course/Schema/secondStepValidationSchema";
 import thirdStepValidationSchema from "./Add Course/Schema/thirdStepValidationSchema";
 import fifthStepValidationSchema from "./Add Course/Schema/fifthStepValidationSchema";
-import { useUploadCourseMutation } from "../../../services/course.api";
+import { useGetFullCourseDetailsQuery, useUploadCourseMutation } from "../../../services/course.api";
 import { toast } from "react-hot-toast";
+import { useLocation } from "react-router-dom";
 
 const AddCourse = () => {
   const [uploadCourse , {isLoading, errors}] = useUploadCourseMutation()
   const [currentStep, setCurrentStep] = useState(0);
 
+  const location = useLocation();
+  const course = location.state || null;
+  const editMode = Boolean(course);
+  console.log("Course to be edit: ", course?.course._id);
+
+  const { data: updateCourse, isLoading: isCourseLoading, isError } = useGetFullCourseDetailsQuery(
+    course?.course?._id,
+    { skip: !editMode }
+  );
+  useEffect(() => {
+    if (isError) {
+      console.error("Error fetching course details:", updateCourse?.data.data); 
+    }
+    if (!isError && updateCourse) {
+      console.log("Update course all: ", updateCourse);
+      console.log("Need value: ", updateCourse.data.category.name);
+    }
+  }, [updateCourse, isError]);
   const resolver = useMemo(() => {
     switch (currentStep) {
       case 0:
@@ -32,10 +51,26 @@ const AddCourse = () => {
     }
   }, [currentStep]);
 
-  const methods = useForm({
-    resolver,
-    mode: "onChange",
-    defaultValues: {
+  const defaultValues = useMemo(() => {
+    if (updateCourse?.data) {
+      return {
+        ...updateCourse.data,
+        category: updateCourse.data.category?._id || "",
+        instructor: updateCourse.data.instructor?.name || "",
+        tags: updateCourse.data.tags?.map((tag) => ({ label: tag, value: tag })) || [],
+        keypoints: updateCourse.data.keypoints || [""],
+        sections: updateCourse.data.sections?.length
+          ? updateCourse.data.sections
+          : [{ title: "", description: "", subSections: [{ title: "" }] }],
+        price: {
+          actualPrice: updateCourse.data.price?.actualPrice || "",
+          discountPercentage: updateCourse.data.price?.discountPercentage || 0,
+          finalPrice: updateCourse.data.price?.finalPrice || 0,
+        },
+      };
+    }
+  
+    return {
       title: "",
       subtitle: "",
       language: "",
@@ -54,8 +89,58 @@ const AddCourse = () => {
         discountPercentage: 0,
         finalPrice: 0,
       },
-    },
+    };
+  }, [updateCourse]);
+  
+  
+  
+
+  const methods = useForm({
+    resolver,
+    mode: "onChange",
+    // defaultValues: {
+    //       title: "",
+    //       subtitle: "",
+    //       language: "",
+    //       category: "",
+    //       instructor: "",
+    //       courseMode: "",
+    //       thumbnail: "",
+    //       keypoints: [""],
+    //       tags: [],
+    //       description: "",
+    //       duration: "",
+    //       totalLectures: "",
+    //       sections: [{ title: "", description: "", subSections: [{ title: "" }] }],
+    //       price: {
+    //         actualPrice: "",
+    //         discountPercentage: 0,
+    //         finalPrice: 0,
+    //       },
+    //     },
+    defaultValues,
   });
+
+  useEffect(() => {
+    if (updateCourse?.data && !isCourseLoading) {
+      const courseData = {
+        ...updateCourse.data,
+        category: updateCourse.data.category?.name || "",
+        instructor: updateCourse.data.instructor?.name || "",
+        tags: updateCourse.data.tags?.map((tag) => ({ label: tag, value: tag })) || [],
+        keypoints: updateCourse.data.keypoints || [""],
+        sections: updateCourse.data.sections?.length
+          ? updateCourse.data.sections
+          : [{ title: "", description: "", subSections: [{ title: "" }] }],
+        price: {
+          actualPrice: updateCourse.data.price?.actualPrice || "",
+          discountPercentage: updateCourse.data.price?.discountPercentage || 0,
+          finalPrice: updateCourse.data.price?.finalPrice || 0,
+        },
+      };
+      methods.reset(courseData); // This will update the form once the data is fetched
+    }
+  }, [updateCourse, isCourseLoading, methods]);
 
   const handleNext = async () => {
     const isValid = await methods.trigger();
@@ -75,6 +160,7 @@ const AddCourse = () => {
       const data = { ...formData, tags: newTags };
       console.log("Final Form Data:", data);
       const result = await uploadCourse(data);
+      // const result = editMode ? await EditCourse(data) : await uploadCourse(data);
       console.log("Result", result)
       if(result.error)
       {
@@ -85,7 +171,7 @@ const AddCourse = () => {
         throw new Error(result.error.data.message)
       }
       methods.reset();
-      toast.success("Course published successfully!")
+      toast.success(editMode ? "Course updated successfully" : "Course published successfully!")
     }catch(err)
     {
       console.log("Error", err)

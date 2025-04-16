@@ -12,6 +12,7 @@ import coursesReducer from "./reducers/coursesReducer";
 import { apiAuth } from "../services/auth.api";
 import { apiCourse } from "../services/course.api";
 import { paymentApi } from "../services/payment.api";
+import { contactApi } from "../services/contactApi";
 
 // Persist configuration
 const persistConfig = {
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   [apiAuth.reducerPath]: apiAuth.reducer,
   [apiCourse.reducerPath]: apiCourse.reducer,
   [paymentApi.reducerPath]: paymentApi.reducer,
+  [contactApi.reducerPath]: contactApi.reducer,
 });
 
 // Create a persisted reducer
@@ -45,6 +47,7 @@ export const store = configureStore({
       apiAuth.middleware,
       apiCourse.middleware,
       paymentApi.middleware,
+      contactApi.middleware,
     ),
 });
 
