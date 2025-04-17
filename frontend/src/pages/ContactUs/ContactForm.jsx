@@ -1,72 +1,90 @@
 // components/ContactForm.jsx
-import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { 
-  Box, 
-  Typography, 
-  TextField, 
-  Button, 
-  Grid, 
+import React, { useState } from "react";
+import { useForm, Controller, set } from "react-hook-form";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Grid,
   IconButton,
   InputAdornment,
-} from '@mui/material';
-import { InsertEmoticon as EmojiIcon } from '@mui/icons-material';
-import { useAppTheme } from '../../context/ThemeContext';
-import { yupResolver } from '@hookform/resolvers/yup';
-import {contactUsSchema} from "../../pages/ContactUs/contactUsSchema"
+} from "@mui/material";
+import { InsertEmoticon as EmojiIcon } from "@mui/icons-material";
+import { useAppTheme } from "../../context/ThemeContext";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { contactUsSchema } from "../../pages/ContactUs/contactUsSchema";
+import toast from "react-hot-toast";
+import CustomInputField from "../../components/CustomInputField";
+import CustomButton from "../../components/CustomButton";
+import { useContactUsMutation } from "../../services/contactApi";
 
-
-// Form field configuration for DRY code
 const formFields = [
-  { 
-    name: 'name', 
-    label: 'Your Name', 
-    placeholder: 'John Trangely',
+  {
+    name: "name",
+    label: "Your Name",
+    placeholder: "Enter Name here",
     gridSize: { xs: 12, md: 6 },
   },
-  { 
-    name: 'email', 
-    label: 'Your Email', 
-    placeholder: 'abc@gmail.com',
+  {
+    name: "email",
+    label: "Your Email",
+    placeholder: "abc@gmail.com",
     gridSize: { xs: 12, md: 6 },
   },
-  { 
-    name: 'subject', 
-    label: 'Your Subject', 
-    placeholder: 'I want to hire you quickly',
+  {
+    name: "subject",
+    label: "Interested Subject",
+    placeholder: "Enter Subject Name",
     gridSize: { xs: 12 },
   },
 ];
 
-// Common TextField styles
 const textFieldStyles = {
-  '& .MuiInput-underline:before': {
-    borderBottomColor: 'colors.primary',
+  "& .MuiInput-underline:before": {
+    borderBottomColor: "colors.primary",
   },
-  '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+  "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
     borderBottomColor: "white",
   },
 };
 
 const ContactForm = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const {colors} = useAppTheme();
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const { colors } = useAppTheme();
+  const [sendMessage, { isLoading }] = useContactUsMutation();
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(contactUsSchema),
     defaultValues: {
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
-    }
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
   });
 
   const onSubmit = async (data) => {
     try {
-      const response = await submitForm(data).unwrap();
-      toast.success('Form submitted successfully!');
+      const response = await sendMessage(data).unwrap();
+      if (response.message) {
+        toast.success("Your Message submitted successfully!");
+        reset();
+      } else {
+        toast.error(
+          response.data.message || "Error submitting Message."
+        );
+      }
     } catch (error) {
-      toast.error('Error submitting form.');
+      console.error(error);
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "An unknown error occurred.";
+      toast.error(errorMessage || "Network Error. Please try again later.");
     }
   };
 
@@ -75,8 +93,13 @@ const ContactForm = () => {
       <Grid container spacing={3}>
         {/* Render standard form fields */}
         {formFields.map((field) => (
-          <Grid size={{...field.gridSize}} key={field.name}>
-            <Typography variant="caption" color="textSecondary">{field.label}</Typography>
+          <Grid size={{ ...field.gridSize }} key={field.name}>
+            <Typography variant="caption" color="textSecondary">
+              {field.label}
+              <Box component="span" sx={{ color: "error.main" }}>
+                {" *"}
+              </Box>
+            </Typography>
             <Controller
               name={field.name}
               control={control}
@@ -95,8 +118,13 @@ const ContactForm = () => {
             />
           </Grid>
         ))}
-        <Grid size={{xs: 12}}>
-          <Typography variant="caption" color="textSecondary">Message</Typography>
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="caption" color="textSecondary">
+            Message
+            <Box component="span" sx={{ color: "error.main" }}>
+              {" *"}
+            </Box>
+          </Typography>
           <Controller
             name="message"
             control={control}
@@ -114,18 +142,22 @@ const ContactForm = () => {
                 sx={textFieldStyles}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position="end">
-                    </InputAdornment>
-                  )
+                    <InputAdornment position="end"></InputAdornment>
+                  ),
                 }}
               />
             )}
           />
         </Grid>
-         <Grid item xs={12}>
-         <Button type="submit" variant="contained" color="primary" disabled={isLoading}>
-        {isLoading ? 'Submitting...' : 'Submit'}
-      </Button>
+        <Grid item xs={12}>
+          <CustomButton
+            type="submit"
+            variant="contained"
+            color="primary"
+            loading={isLoading}
+          >
+            Send Message
+          </CustomButton>
         </Grid>
       </Grid>
     </Box>

@@ -11,7 +11,7 @@ function ContactPage() {
     <Box sx={{ minHeight: '100vh' }}>
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <PageHeader />
-        <Paper elevation={2} sx={{ borderRadius: 4, overflow: 'hidden', p: 1, whiteSpace:2  }}>
+        <Paper elevation={2} sx={{ borderRadius: 4, overflow: 'hidden', p: 1, whiteSpace:2 , mb: 4 }}>
           <Grid container spacing={3}>
             {/* Contact Information Panel */}
             <Grid size={{xs: 12, md: 4}}>
@@ -35,7 +35,7 @@ const PageHeader = () => (
       component="h1" 
       sx={{ 
         fontWeight: 700, 
-        color: '#333',
+        color: "red",
         fontSize: { xs: '2rem', md: '2.5rem' }
       }}
     >
@@ -46,7 +46,7 @@ const PageHeader = () => (
       sx={{ 
         maxWidth: 700, 
         mx: 'auto',
-        color: '#666'
+        color: '#d13838'
       }}
     >
      "We'll create high-quality, engaging content for our courses and build a strong learning ecosystem that connects students with top-tier resources, expert instructors, and peer-driven learning. Our platform will empower learners to gain valuable skills and certifications recognized by industry leaders."

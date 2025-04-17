@@ -18,6 +18,9 @@ const CustomButton: React.FC<LoadingButtonProps> = ({
     <Button
       type={type}
       disabled={isLoading || disabled}
+      sx={{
+        cursor: isLoading ? 'not-allowed' : 'pointer'
+      }}
       {...rest}
     >
       {isLoading ? <CircularProgress size={24} color="inherit" /> : children}
