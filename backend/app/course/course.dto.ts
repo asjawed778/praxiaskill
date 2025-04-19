@@ -34,6 +34,8 @@ export interface ICourse extends BaseSchema {
     courseStatus: CourseEnum.CourseStatus;
 }
 
+export interface IUpdateCourseDetails extends Omit<ICourse, "_id" | "createdAt" | "updatedAt" | "sections" | "ratingAndReviews"> {}
+
 export interface ISection extends BaseSchema {
     title: string;
     description: string;
