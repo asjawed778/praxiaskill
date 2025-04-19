@@ -4,9 +4,7 @@ import morgan from "morgan";
 import http from "http";
 import cookieParser from "cookie-parser";
 import cors from 'cors';
-import path from "path";
 import fileUpload from "express-fileupload";
-
 import { initDB } from "./app/common/services/database.service";
 import { initPassport } from "./app/common/services/passport-jwt.service";
 import { loadConfig } from "./app/common/helper/config.hepler";
@@ -15,8 +13,10 @@ import errorHandler from "./app/common/middleware/error-handler.middleware";
 import routes from "./app/routes";
 import swaggerUi from "swagger-ui-express";
 import apiLimiter from "./app/common/middleware/rate-limit.middleware";
+import './app/common/queue/jobProcessor';
 
 loadConfig();
+
 
 declare global {
   namespace Express {

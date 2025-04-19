@@ -13,6 +13,7 @@ import { loadConfig } from "../common/helper/config.hepler";
 import jwt from "jsonwebtoken";
 import { UserRole } from "./user.schema";
 import * as OTPSrvice from '../common/services/OTP.service';
+import { emailQueue } from "../common/queue/queues/email.queue";
 
 loadConfig();
 
@@ -30,7 +31,7 @@ export const sendSignupOTP = asyncHandler(async (req: Request, res: Response) =>
 
   if ("role" in data) {
     if (![UserRole.USER, UserRole.INSTRUCTOR].includes(data.role)) {
-        throw createHttpError(400, "Invalid role. Role must be either USER or INSTRUCTOR.");
+      throw createHttpError(400, "Invalid role. Role must be either USER or INSTRUCTOR.");
     }
   }
 
@@ -101,29 +102,29 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     email: result.email,
     role: result.role,
   };
-    const { refreshToken, accessToken } = jwthelper.generateTokens(payload);
-    const user: Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> | null = await userService.updateRefreshToken(
-      result._id,
-      refreshToken
+  const { refreshToken, accessToken } = jwthelper.generateTokens(payload);
+  const user: Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> | null = await userService.updateRefreshToken(
+    result._id,
+    refreshToken
+  );
+  if (!user) {
+    throw createHttpError(
+      500,
+      "Failed to update refresh token, Login to continue"
     );
-    if (!user) {
-      throw createHttpError(
-        500,
-        "Failed to update refresh token, Login to continue"
-      );
-    }
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: false,
-    });
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: false,
-    });
+  }
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: false,
+    sameSite: false,
+  });
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: false,
+    sameSite: false,
+  });
 
-    res.send(createResponse({ user, refreshToken, accessToken }, "User LoggedIn successfully"));
+  res.send(createResponse({ user, refreshToken, accessToken }, "User LoggedIn successfully"));
 });
 
 export const logout = asyncHandler(async (req: Request, res: Response) => {
@@ -139,95 +140,94 @@ export const logout = asyncHandler(async (req: Request, res: Response) => {
 
 
 export const updateAccessToken = asyncHandler(async (req: Request, res: Response) => {
-    const refreshToken = req.cookies.refreshToken || req.headers.authorization?.split(" ")[1];
-    if (!refreshToken) {
-      throw createHttpError(401, "Refresh token not found");
-    }
-
-    const { valid, decoded } = jwthelper.validateToken(
-      refreshToken,
-      REFRESH_TOKEN_SECRET
-    );
-    if (!valid || !decoded) {
-      throw createHttpError(401, "Invalid refresh token, Please login again");
-    }
-    const payload: Payload = decoded as Payload;
-    const user = await userService.getUserById(payload._id);
-    if (!user) {
-      throw createHttpError(404, "User not found");
-    }
-    const newPayload: Payload = {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    };
-    const { accessToken, refreshToken: newRefreshToken } = jwthelper.generateTokens(newPayload);
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-    });
-
-    res.cookie("refreshToken", newRefreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-    });
-
-    const result = await userService.updateRefreshToken(user._id, newRefreshToken);
-
-    res.send(createResponse({user: result, accessToken, refreshToken: newRefreshToken}, "Access token updated successfully"));
+  const refreshToken = req.cookies.refreshToken || req.headers.authorization?.split(" ")[1];
+  if (!refreshToken) {
+    throw createHttpError(401, "Refresh token not found");
   }
+
+  const { valid, decoded } = jwthelper.validateToken(
+    refreshToken,
+    REFRESH_TOKEN_SECRET
+  );
+  if (!valid || !decoded) {
+    throw createHttpError(401, "Invalid refresh token, Please login again");
+  }
+  const payload: Payload = decoded as Payload;
+  const user = await userService.getUserById(payload._id);
+  if (!user) {
+    throw createHttpError(404, "User not found");
+  }
+  const newPayload: Payload = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  };
+  const { accessToken, refreshToken: newRefreshToken } = jwthelper.generateTokens(newPayload);
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
+
+  res.cookie("refreshToken", newRefreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
+
+  const result = await userService.updateRefreshToken(user._id, newRefreshToken);
+
+  res.send(createResponse({ user: result, accessToken, refreshToken: newRefreshToken }, "Access token updated successfully"));
+}
 );
 
 
 export const updatePassword = asyncHandler(async (req: Request, res: Response) => {
-    const user = req.user;
-    if (!user) {
-      throw createHttpError(404, "User not found, please login again");
-    }
-    const isUser = await userService.getUserById(user._id);
-    if (!isUser) {
-      throw createHttpError(404, "User not found, please login again");
-    }
-    const data = req.body;
-    const result = await userService.authenticateUserById(user._id, data.oldPassword);
-
-    await userService.updatePassword(result._id, data.newPassword);
-
-    res.send(createResponse({}, "Password updated successfully"));
+  const user = req.user;
+  if (!user) {
+    throw createHttpError(404, "User not found, please login again");
   }
+  const isUser = await userService.getUserById(user._id);
+  if (!isUser) {
+    throw createHttpError(404, "User not found, please login again");
+  }
+  const data = req.body;
+  const result = await userService.authenticateUserById(user._id, data.oldPassword);
+
+  await userService.updatePassword(result._id, data.newPassword);
+
+  res.send(createResponse({}, "Password updated successfully"));
+}
 );
 
 export const forgotPasswordSendToken = asyncHandler(async (req: Request, res: Response) => {
-    const { email } = req.body;
+  const { email } = req.body;
 
-    const user = await userService.getUserByEmail(email);
-    if (!user) {
-      throw createHttpError(404, "User not exists");
-    }
-
-    // Generate JWT for password reset, setting expiration time (e.g., 1 hour)
-    const resetToken = await jwthelper.generatePasswordRestToken(user._id);
-
-    await userService.updateResetToken(user._id, resetToken);
-
-    const resetLink = `${BASE_URL}/reset-password/${resetToken}`;
-    const emailContent = resetPasswordEmailTemplate(resetLink);
-
-    await sendEmail({
-      from: process.env.MAIL_USER,
-      to: email,
-      subject: "Password reset Link",
-      html: emailContent,
-    });
-
-    res.send(
-      createResponse({}, "Reset password Link send successfully")
-    );
+  const user = await userService.getUserByEmail(email);
+  if (!user) {
+    throw createHttpError(404, "User not exists");
   }
-);
+
+  // Generate JWT for password reset, setting expiration time (e.g., 1 hour)
+  const resetToken = await jwthelper.generatePasswordRestToken(user._id);
+
+  await userService.updateResetToken(user._id, resetToken);
+
+  const resetLink = `${BASE_URL}/reset-password/${resetToken}`;
+  const emailContent = resetPasswordEmailTemplate(resetLink);
+
+  await emailQueue.add('sendEmail', {
+    from: process.env.MAIL_USER,
+    to: email,
+    subject: "Password reset Link",
+    html: emailContent,
+  });
+
+  res.send(
+    createResponse({}, "Reset password Link send successfully")
+  );
+});
 
 
 /**
