@@ -44,7 +44,7 @@ const PageHeader = () => (
     <Typography 
       variant="body1" 
       sx={{ 
-        maxWidth: 600, 
+        maxWidth: 500, 
         mx: 'auto',
         color: '#d13838'
       }}

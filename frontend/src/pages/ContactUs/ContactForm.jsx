@@ -150,13 +150,12 @@ const ContactForm = () => {
         </Grid>
         <Grid item xs={12}>
           <CustomButton
+            label="Send Message"
             type="submit"
             variant="contained"
             color="primary"
             loading={isLoading}
-          >
-            Send Message
-          </CustomButton>
+          />
         </Grid>
       </Grid>
     </Box>

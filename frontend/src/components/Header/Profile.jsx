@@ -11,57 +11,53 @@ import {
 } from '@mui/material';
 import {
   Person,
-  Message,
-  Notifications,
   Settings,
   Logout,
+  Dashboard,
 } from '@mui/icons-material';
+import MenuBookIcon from '@mui/icons-material/MenuBook'; // ✅ Import here
 import { useNavigate } from 'react-router-dom';
-// import { useAppDispatch, useAppSelector } from '@/store/store';
 import { logout } from '@/store/reducers/authReducer';
 import toast from 'react-hot-toast';
 import CustomButton from '../CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLogoutMutation } from '../../services/auth.api';
 
-const menuItems = [
-  { icon: <Person />, label: 'Profile' },
-  { icon: <Settings />, label: 'Settings' },
-];
-
-const  Profile = () => {
+const Profile = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
   const navigate = useNavigate();
-  const [logoutUser, {isLoading}] = useLogoutMutation();
-  console.log("User", user);
-  
-  
-  const handleOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const [logoutUser, { isLoading }] = useLogoutMutation();
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const handleOpen = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
 
   const handleLogout = async () => {
     try {
-      const response = await logoutUser().unwrap(); 
-      console.log("Logout response: ", response);
+      await logoutUser().unwrap();
       handleClose();
       dispatch(logout());
       toast.success("Logged out successfully");
       navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
-      toast.error(error?.data?.Message || "Logout failed");    }
+      toast.error(error?.data?.Message || "Logout failed");
+    }
   };
 
-  if(!user) return null;
+  if (!user) return null;
+
+  const menuItems = [
+    user?.role === 'SUPER_ADMIN'
+      ? { icon: <Dashboard />, label: 'Dashboard', to: '/dashboard' }
+      : { icon: <MenuBookIcon />, label: 'My Courses', to: '/my-courses' },
+    { icon: <Person />, label: 'Profile', to: '/profile' },
+    { icon: <Settings />, label: 'Settings', to: '/settings' },
+  ];
+
   return (
     <>
       <IconButton onClick={handleOpen}>
@@ -101,13 +97,12 @@ const  Profile = () => {
           },
         }}
       >
+        {/* Top user info */}
         <Box display="flex" alignItems="center" gap={1} px={1.5} py={1}>
           <Avatar src={user?.profilePic} />
           <Box>
             <Typography fontWeight="bold">{user?.name}</Typography>
-            <Typography variant="body2" color="text.secondary" 
-            fontSize="12px"
-            >
+            <Typography variant="body2" color="text.secondary" fontSize="12px">
               {user?.role}
             </Typography>
           </Box>
@@ -115,17 +110,37 @@ const  Profile = () => {
 
         <Divider sx={{ my: 1 }} />
 
-        {menuItems.map(({ icon, label }) => (
-          <MenuItem key={label} onClick={handleClose} sx={{ fontSize: "14px" }}>
-            <ListItemIcon  >{icon}</ListItemIcon >
+        {/* Menu Items */}
+        {menuItems.map(({ icon, label, to }) => (
+          <MenuItem
+            key={label}
+            onClick={() => {
+              navigate(to);
+              handleClose();
+            }}
+            sx={{ fontSize: "14px" }}
+          >
+            <ListItemIcon>{icon}</ListItemIcon>
             {label}
           </MenuItem>
         ))}
 
         <Divider sx={{ my: 1 }} />
-           <CustomButton label="logout" type='button' variant='outlined' color='secondary'   startIcon={<Logout />} loading={isLoading} fullWidth onClick={handleLogout} />
+
+        {/* Logout Button */}
+        <CustomButton
+          label="Logout"
+          type="button"
+          variant="outlined"
+          color="secondary"
+          startIcon={<Logout />}
+          loading={isLoading}
+          fullWidth
+          onClick={handleLogout}
+        />
       </Menu>
     </>
   );
 };
+
 export default Profile;
