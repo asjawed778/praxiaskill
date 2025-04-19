@@ -3,7 +3,7 @@ import { RxCross1 } from "react-icons/rx";
 import { CiSearch } from "react-icons/ci";
 
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function HamNavbar({ handleLogout }) {
@@ -51,7 +51,6 @@ export default function HamNavbar({ handleLogout }) {
   const handleHamLogout = async () => {
     try {
       await handleLogout();
-
       setIsMenuOpen(false);
     } catch (error) {
       console.error(error.message);
@@ -81,12 +80,14 @@ export default function HamNavbar({ handleLogout }) {
             />
           </div>
 
-          <Link
+           <Link
             to="/courses"
             className="text-center text-[var(--color-primary)] active:text-white active:bg-[var(--color-primary)] w-full px-5 py-3 duration-200"
           >
             Learning
-          </Link>
+          </Link> 
+
+
 
           {/* <Link
             to="/blog"

@@ -1,19 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { MdEdit } from "react-icons/md";
 import { RiIndeterminateCircleFill } from "react-icons/ri";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { FaPhotoVideo } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { IoClose } from "react-icons/io5";
+import TerminateCourseModal from './TerminateCourse';
+import AddCourse from '..';
 
 
 const TableActionButtons = ({menuStyles, setOpenMenu, setMenuStyles, courses, openMenu}) => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [isTerminate, setIsTerminate] = useState(false);
+    const [course, setCourse] = useState(null);
+    const [editMode, setEditMode] = useState(false);
+  console.log("Table Action courses: ", course);
+  
 
     const handleCloseOnClick = () => {
         setOpenMenu(null);
         setMenuStyles({...menuStyles, display:"none"}); //to avoid flickering Action menu
     }
+
+    const handleTeminateCourse = (course) => {
+      setCourse(course);
+      setIsTerminate(true);
+    };
+    const handleCourseEdit = () => {
+      // setCourse(courses[openMenu]);
+      setEditMode(true);
+      navigate("/dashboard/add-course", {
+        state: {course: courses[openMenu], editMode: true}
+      });
+    };
   return (
     <div
             style={menuStyles}
@@ -46,12 +65,23 @@ const TableActionButtons = ({menuStyles, setOpenMenu, setMenuStyles, courses, op
             >
               <FaPhotoVideo className="mr-2" /> Lectures
             </button>
-            <button className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 rounded-md">
+            <button className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 rounded-md hover:cursor-pointer"
+            onClick={handleCourseEdit}
+            >
               <MdEdit className="mr-2" /> Edit
             </button>
-            <button className="flex items-center w-full px-3 py-2 text-sm text-left text-red-600 hover:bg-gray-100 rounded-md">
-              <RiIndeterminateCircleFill className="mr-2" /> Terminate
+            <button className="flex items-center w-full px-3 py-2 text-sm text-left text-red-600 hover:cursor-pointer hover:bg-gray-100 rounded-md"
+            onClick={() => handleTeminateCourse(courses[openMenu])}
+            >
+              <RiIndeterminateCircleFill className="mr-2"/> Terminate
             </button>
+            {isTerminate && 
+            <TerminateCourseModal 
+              open={isTerminate}
+              onClose={() => setIsTerminate(false)}
+              course={course}
+            />
+            }
           </div>
   )
 }

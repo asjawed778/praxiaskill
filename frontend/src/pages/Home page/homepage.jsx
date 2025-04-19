@@ -69,26 +69,26 @@ function HomePage() {
             variants={itemVariants}
           >
             <motion.h2
-              className="text-2xl md:text-4xl font-sans"
+              className="text-4xl  md:text-4xl font-sans"
               variants={itemVariants}
             >
               Ready For the Future
             </motion.h2>
             <motion.h2
-              className="text-2xl md:text-4xl font-sans mb-4"
+              className="text-4xl md:text-4xl font-sans mb-4"
               variants={itemVariants}
             >
               At Praxia Skill
             </motion.h2>
 
             <motion.p
-              className="text-white mb-1 font-sans"
+              className="text-white mt-6 mb-1 font-sans text-xl"
               variants={itemVariants}
             >
               Join this 20 weeks, Job-ready Program to master
             </motion.p>
             <motion.p
-              className="text-white mb-1 font-sans"
+              className="text-white text-xl mb-1 font-sans"
               variants={itemVariants}
             >
               Data Analytics from scratch with Top Data Analysts
@@ -105,7 +105,7 @@ function HomePage() {
               variants={itemVariants}
 
             >
-              <Button type="button" className="relative py-2 px-6 rounded-lg duration-200">Explore Program</Button>
+              <Button type="button" className="relative mt-4  py-2 px-6 rounded-lg duration-200">Explore Program</Button>
 
             </Link>
           </motion.div>
@@ -146,7 +146,8 @@ function HomePage() {
           <Courses />
         </motion.div>
 
-        <Membership />
+        {/* <Membership /> */}
+
       </motion.div>
     </>
   );
