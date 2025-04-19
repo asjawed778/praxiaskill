@@ -1,31 +1,24 @@
-// theme/ThemeContext.tsx
 import React, { createContext, useContext, useMemo, useState } from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import createAppTheme from '../theme/muiTheme';
-import { AppColors, Colors } from '../theme/colors';
-// import createAppTheme from './muiTheme';
+import { Colors } from '../theme/colors';
 
-type ThemeMode = 'light' | 'dark';
+const ThemeContext = createContext({
+  mode: 'light',
+  toggleMode: () => {},
+  colors: Colors['light'],
+});
 
-interface ThemeContextProps {
-  mode: ThemeMode;
-  toggleMode: () => void;
-  colors: AppColors;
-}
-
-const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
-
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [mode, setMode] = useState<ThemeMode>('light');
+export const ThemeProvider = ({ children }) => {
+  const [mode, setMode] = useState('light'); 
 
   const toggleMode = () => {
-    setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
+    setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
   };
 
   const theme = useMemo(() => createAppTheme(mode), [mode]);
   const colors = useMemo(() => Colors[mode], [mode]);
-
 
   return (
     <ThemeContext.Provider value={{ mode, toggleMode, colors }}>
@@ -39,6 +32,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 export const useAppTheme = () => {
   const context = useContext(ThemeContext);
-  if (!context) throw new Error('useAppTheme must be used within ThemeProvider');
+  if (!context) {
+    throw new Error('useAppTheme must be used within ThemeProvider');
+  }
   return context;
 };

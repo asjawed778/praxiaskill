@@ -1,8 +1,12 @@
+import { Box, Container, Typography } from "@mui/material";
+
 const adminpage = () => {
   return (
-    <div className="w-full overflow-y-auto h-screen flex justify-center items-center">
-      This is Admin Dashboard.
-    </div>
+    <Container>
+        <Typography variant="h2">
+        This is admin dashbard
+        </Typography>
+    </Container>
   );
 };
 

@@ -6,7 +6,6 @@ import {
   LocationOn as LocationIcon,
 } from "@mui/icons-material";
 import { useAppTheme } from "../../context/ThemeContext";
-import { Link } from "react-router-dom";
 
 const contactItems = [
   {
@@ -39,8 +38,6 @@ const contactItems = [
           >
             info@praxiaskill.com
           </a>
-
-          {/* Support Email Link */}
           <a
             href="mailto:support@praxiaskill.com"
             underline="none"
@@ -88,7 +85,7 @@ const ContactInfo = () => {
   return (
     <Box
       sx={{
-        backgroundColor: colors.primary, // Using dynamic color from theme
+        backgroundColor: colors.primary, 
         color: "white",
         padding: 4,
         borderRadius: 2,

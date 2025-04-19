@@ -6,6 +6,7 @@ import storage from "redux-persist/lib/storage"; // Use sessionStorage if needed
 import adminCategoryReducer from "./reducers/adminCategoryReducer";
 import authReducer from "./reducers/authReducer";
 import coursesReducer from "./reducers/coursesReducer";
+import sidebarReducer from "../store/reducers/sidebarSlice"
 
 
 // Importing Apis
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   categories: adminCategoryReducer,
   courses: coursesReducer,
+  sidebar: sidebarReducer,
   [apiAuth.reducerPath]: apiAuth.reducer,
   [apiCourse.reducerPath]: apiCourse.reducer,
   [paymentApi.reducerPath]: paymentApi.reducer,

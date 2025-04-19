@@ -1,4 +1,3 @@
-// ContactPage.jsx - Main component
 import React from 'react';
 import { Box, Container, Paper, Grid, Typography, colors } from '@mui/material';
 import ContactForm from './ContactForm';
@@ -36,20 +35,21 @@ const PageHeader = () => (
       sx={{ 
         fontWeight: 700, 
         color: "red",
-        fontSize: { xs: '2rem', md: '2.5rem' }
+        fontSize: { xs: '1rem', md: '1.5rem' }
       }}
     >
-      Get In Touch
+      Get expert guidance
+      to accelerate your learning journey
     </Typography>
     <Typography 
       variant="body1" 
       sx={{ 
-        maxWidth: 700, 
+        maxWidth: 600, 
         mx: 'auto',
         color: '#d13838'
       }}
     >
-     "We'll create high-quality, engaging content for our courses and build a strong learning ecosystem that connects students with top-tier resources, expert instructors, and peer-driven learning. Our platform will empower learners to gain valuable skills and certifications recognized by industry leaders."
+     "Talk with a Praxia Skill advisor to get personalized support in choosing the right course for your goals. Discover how our industry-relevant programs, hands-on learning, and expert mentorship can help you upskill faster and build a future-ready career."
     </Typography>
   </Box>
 );
