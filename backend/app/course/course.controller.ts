@@ -8,8 +8,8 @@ import * as courseService from './course.service';
 import * as UserService from '../user/user.service';
 import * as CourseDTO from './course.dto';
 import * as CourseCategoryService from "../category/category.service";
-import { sendEmail } from '../common/services/email.service';
 import { courseEnquiryEmailTemplate } from '../common/template/courseEnquiry.template';
+import { emailQueue } from '../common/queue/queues/email.queue';
 
 /**
  * Uploads a public file to AWS S3.
@@ -324,7 +324,8 @@ export const courseEnquiry = asyncHandler(async (req: Request, res: Response) =>
     const result = await courseService.courseEnquiry(data);
 
     const emailContent = courseEnquiryEmailTemplate(result.ticketNo, data.name, data.email, data.phone, data.education, data.interestedCourse);
-    await sendEmail({
+
+    await emailQueue.add('sendEmail', {
         from: process.env.MAIL_USER,
         to: data.email,
         subject: `Course Enquiry Ticket No: ${result.ticketNo}`,
