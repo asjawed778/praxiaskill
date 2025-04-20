@@ -1,5 +1,7 @@
 {
-  "name": "template",
+  "name": "praxiaskill-bakcend",
+  "version": "1.0.0",
+  "description": "Backend for Praxias Skill",
   "private": true,
   "scripts": {
     "local": "nodemon",
@@ -10,8 +12,7 @@
     "lint": "eslint . --ext .ts,.js --max-warnings=0",
     "lint:fix": "eslint --fix --ext .js,.ts .",
     "format": "prettier . -w",
-    "format:check": "prettier . --check",
-    "postinstall": "husky install"
+    "format:check": "prettier . --check"
   },
   "lint-staged": {
     "**/*.{js,ts}": [
@@ -24,7 +25,7 @@
   },
   "devDependencies": {
     "@types/aws-sdk": "^0.0.42",
-    "@types/bcrypt": "^5.0.0",
+    "@types/bcryptjs": "^2.4.6",
     "@types/body-parser": "^1.19.5",
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
@@ -50,7 +51,6 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
     "eslint-plugin-promise": "^6.2.0",
-    "husky": "^8.0.0",
     "lint-staged": "^13.2.3",
     "prettier": "^3.0.0",
     "ts-node": "^10.9.1",
@@ -59,7 +59,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.750.0",
     "@aws-sdk/s3-request-presigner": "^3.777.0",
-    "bcrypt": "^5.1.0",
+    "bcryptjs": "^3.0.2",
     "body-parser": "^1.20.2",
     "bullmq": "^5.49.1",
     "cookie-parser": "^1.4.7",

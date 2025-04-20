@@ -5,7 +5,7 @@ import { type Request, type Response } from "express";
 import { ITempUser, IUser } from "./user.dto";
 import createHttpError from "http-errors";
 import { Payload } from "./user.dto";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { sendEmail } from "../common/services/email.service";
 import { resetPasswordEmailTemplate } from "../common/template/mail.template";
 import * as jwthelper from "../common/helper/jwt.helper";
