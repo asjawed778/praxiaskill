@@ -1,7 +1,8 @@
 import { Outlet, useLocation } from "react-router-dom";
-import Header from "../components/Header/Header";
+import Header from "../components/Header";
 import Sidebar from "../pages/Admin/Sidebar";
 import { useState, useEffect } from "react";
+import { Box, Toolbar } from "@mui/material";
 
 export default function AdminLayout() {
   const [isOpen, setIsOpen] = useState(window.innerWidth >= 1024); // sidebat will be always open for large screens
@@ -41,5 +42,20 @@ export default function AdminLayout() {
           </div>
         </main>
     </div>
+
+    // added by irshad......
+    // <Box height="100vh" display="flex" flexDirection="column">
+    //   {/* Header */}
+    //   <Header />
+
+    //   {/* Sidebar + Main content */}
+    //   <Box sx={{ display: "flex", flexGrow: 1 }}>
+    //     <Sidebar />
+    //     <Box component="main" sx={{ flexGrow: 1, }}>
+    //       <Toolbar />
+    //       <Outlet />
+    //     </Box>
+    //   </Box>
+    // </Box>
   );
 }
