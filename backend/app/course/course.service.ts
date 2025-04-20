@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ICourse, ICourseEnquiry, IRatingAndReviews, ISection, ISubSection } from "./course.dto";
+import * as CourseDTO from "./course.dto";
 import courseSchema from "./course.schema";
 import sectionSchema from "./section.schema";
 import subSectionSchema from "./subSection.schema";
@@ -44,11 +44,11 @@ export const isValidSectionSubsectionId = async (courseId: string, sectionId: st
 /**
  * Creates a new course along with its sections and subsections.
  *
- * @param {Omit<ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }} data 
+ * @param {Omit<CourseDTO.ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }} data 
  *        - The course details including sections and subsections.
  * @returns {Promise<any>} The newly created course with section references.
  */
-export const createCourse = async (data: Omit<ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }): Promise<any> => {
+export const createCourse = async (data: Omit<CourseDTO.ICourse, "sections"> & { sections: (CourseDTO.ISection & { subSections: CourseDTO.ISubSection[] })[] }): Promise<any> => {
 
     const { sections, ...courseDetails } = data;
     const course = await courseSchema.create(courseDetails);
@@ -81,7 +81,12 @@ export const createCourse = async (data: Omit<ICourse, "sections"> & { sections:
         );
         return result;
     }
-    return course as ICourse;
+    return course as CourseDTO.ICourse;
+};
+
+export const updateCourseDetails = async (courseId: string, data: CourseDTO.IUpdateCourseDetails): Promise<any> => {
+    const course = await courseSchema.findByIdAndUpdate(courseId, data, { new: true });
+    return course as CourseDTO.ICourse;
 };
 
 /**
@@ -269,7 +274,7 @@ export const getPublishedCoursesByCategory = async (categoryId: string, pageNo: 
  * @param {ICourseEnquiry} data - The enquiry data containing user details and message.
  * @returns {Promise<any>} The newly created enquiry document.
  */
-export const courseEnquiry = async (data: ICourseEnquiry): Promise<any> => {
+export const courseEnquiry = async (data: CourseDTO.ICourseEnquiry): Promise<any> => {
     const enquiry = new CourseEnquirySchema(data);
     await enquiry.save();
     return enquiry;
@@ -309,11 +314,11 @@ export const getCourseEnquiry = async (pageNo: number = 1): Promise<any> => {
  *
  * @param {string} enquiryId - The unique identifier of the enquiry.
  * @param {string} status - The new status of the enquiry.
- * @returns {Promise<ICourseEnquiry>} The updated enquiry document.
+ * @returns {Promise<CourseDTO.ICourseEnquiry>} The updated enquiry document.
  */
-export const changeEnquiryStatus = async (enquiryId: string, status: string): Promise<ICourseEnquiry> => {
+export const changeEnquiryStatus = async (enquiryId: string, status: string): Promise<CourseDTO.ICourseEnquiry> => {
     const enquiry = await CourseEnquirySchema.findByIdAndUpdate(enquiryId, { status }, { new: true });
-    return enquiry as ICourseEnquiry;
+    return enquiry as CourseDTO.ICourseEnquiry;
 };
 
 /**
@@ -408,10 +413,10 @@ export const getPublishedCourses = async (pageNo: number = 1): Promise<any> => {
  *
  * @param {string} courseId - The unique identifier of the course.
  * @param {string} userId - The unique identifier of the user submitting the review.
- * @param {IRatingAndReviews} data - The rating and review data.
+ * @param {CourseDTO.IRatingAndReviews} data - The rating and review data.
  * @returns {Promise<any>} The newly created rating and review document.
  */
-export const rateCourse = async (courseId: string, userId: string, data: IRatingAndReviews): Promise<any> => {
+export const rateCourse = async (courseId: string, userId: string, data: CourseDTO.IRatingAndReviews): Promise<any> => {
     const rating = new ratingAndReviewSchema({
         ...data,
         courseId,

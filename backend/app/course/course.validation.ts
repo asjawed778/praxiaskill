@@ -228,25 +228,6 @@ export const updateCourse = [
         .notEmpty().withMessage("Final price is required")
         .isNumeric().withMessage("Final price must be a number"),
 
-    // Course Sections
-    body("sections")
-        .isArray({ min: 1 }).withMessage("Sections must be an array with at least one section"),
-
-    body("sections.*.title")
-        .notEmpty().withMessage("Section title is required")
-        .isString().withMessage("Section title must be a string"),
-
-    body("sections.*.description")
-        .optional()
-        .isString().withMessage("Section description must be a string"),
-
-    body("sections.*.subSections")
-        .isArray().withMessage("SubSections must be an array"),
-
-    body("sections.*.subSections.*.title")
-        .notEmpty().withMessage("SubSection title is required")
-        .isString().withMessage("SubSection title must be a string"),
-
     // Course Status
     body("courseStatus")
         .optional()

@@ -1,20 +1,23 @@
-# Use the official Node.js 20.x image as the base image
-FROM node:20-alpine
+# Using your exact Node.js version (v22.14.0)
+FROM node:22.14.0-alpine
 
-# Set the working directory in the container
-WORKDIR /app/backend
+# Set working directory
+WORKDIR /app
 
-# Copy the package.json and package-lock.json files to the container
-COPY package*.json ./
+# Copy package files for caching
+COPY package.json package-lock.json ./
 
-# Install the dependencies
-RUN npm install
+# Install dependencies (npm)
+RUN npm install --production
 
-# Copy the rest of the application code to the container
+# Copy all source files
 COPY . .
 
-# Expose the port the app runs on (change if necessary)
-EXPOSE 5000
+# Build the app (TypeScript)
+RUN npm run build
 
-# Command to run the application
+# Expose port 4000
+EXPOSE 4000
+
+# Start in production mode
 CMD ["npm", "run", "prod"]

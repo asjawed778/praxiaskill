@@ -9,16 +9,19 @@ import { store } from "./store/store.js";
 import App from "./App.jsx";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { HelmetProvider } from "react-helmet-async";
+import { ThemeProvider } from "./context/ThemeContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <HelmetProvider>
-      <Provider store={store}>
         <ErrorBoundary>
-          <App />
+      <ThemeProvider>
+      <Provider store={store}>
           <Toaster />
-        </ErrorBoundary>
+          <App />
       </Provider>
+      </ThemeProvider>
+        </ErrorBoundary>
     </HelmetProvider>
   </StrictMode>
 );

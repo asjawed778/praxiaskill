@@ -1,6 +1,7 @@
 import createHttpError from "http-errors";
 import courseCategorySchema from "./category.schema";
 import { ICourseCategory } from "./category.dto";
+import mongoose from "mongoose";
 
 export const createCourseCategory = async(data : ICourseCategory) => {
     if(await courseCategorySchema.exists({name: data.name})) {
@@ -75,6 +76,36 @@ export const removeCourseId = async (courseId: string, categoryId: string) => {
     return category;
 };
 
+export const moveCourseToCategory = async (courseId: string, categoryId: string): Promise<any> => {
+    // Check if the target category exists
+    const targetCategory = await courseCategorySchema.findById(categoryId);
+    if (!targetCategory) {
+        throw createHttpError(404, "Category not found");
+    }
+
+    // If course is already in the target category, return early
+    if ((targetCategory.courses ?? []).includes(new mongoose.Types.ObjectId(courseId))) {
+        return targetCategory;
+    }
+
+    // Remove the course from any other categories (if present)
+    await courseCategorySchema.updateMany(
+        { 
+            _id: { $ne: categoryId },  // Exclude the target category
+            courses: courseId           // Only categories containing this course
+        },
+        { $pull: { courses: courseId } }
+    );
+
+    // Add to the target category (whether it was in another or not)
+    const updatedCategory = await courseCategorySchema.findByIdAndUpdate(
+        categoryId,
+        { $push: { courses: courseId } }, // Using $push since we already checked for duplicates
+        { new: true }
+    );
+
+    return updatedCategory;
+};
 
 
 

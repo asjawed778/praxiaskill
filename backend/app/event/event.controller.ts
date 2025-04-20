@@ -1,11 +1,8 @@
 import asyncHandler from 'express-async-handler';
 import { type Request, type Response } from 'express';
-import createHttpError from 'http-errors';
 import * as eventService from './event.service';
 import { createResponse } from '../common/helper/response.hepler';
-import { sendEmail } from '../common/services/email.service';
-import { at } from 'lodash';
-import { text } from 'pdfkit';
+import { emailQueue } from '../common/queue/queues/email.queue';
 
 export const ccfsEvent = asyncHandler(async (req: Request, res: Response) => {
     const data = req.body;
@@ -18,7 +15,7 @@ export const ccfsEvent = asyncHandler(async (req: Request, res: Response) => {
         from: process.env.MAIL_USER,
         to: process.env.MAIL_USER,
         subject: "Event created successfully",
-        text: "CCFS | Startovation 2025, Registration successful",
+        html: '<p>CCFS | Startovation 2025, Registration successful</p>',
         attachments: [
             {
                 filename: "event.pdf",
@@ -27,8 +24,8 @@ export const ccfsEvent = asyncHandler(async (req: Request, res: Response) => {
             },
         ],
     }
-    await sendEmail(mailOptions);
+
+    await emailQueue.add('sendEmail', mailOptions);
 
     res.send(createResponse({}, "Event created successfully"));
-    // res.send(pdfBuffer);
 });

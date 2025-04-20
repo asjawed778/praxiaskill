@@ -6,9 +6,10 @@ import { createResponse } from '../common/helper/response.hepler';
 import * as AWSservice from '../common/services/AWS.service';
 import * as courseService from './course.service';
 import * as UserService from '../user/user.service';
+import * as CourseDTO from './course.dto';
 import * as CourseCategoryService from "../category/category.service";
-import { sendEmail } from '../common/services/email.service';
 import { courseEnquiryEmailTemplate } from '../common/template/courseEnquiry.template';
+import { emailQueue } from '../common/queue/queues/email.queue';
 
 /**
  * Uploads a public file to AWS S3.
@@ -149,22 +150,30 @@ export const createCourse = asyncHandler(async (req: Request, res: Response) => 
     res.send(createResponse(result, "Course created successfully"));
 });
 
-// export const updateCourse = asyncHandler(async(req: Request, res: Response) => {
-//     const courseId = req.params.courseId;
-//     const data = req.body;
-//     const { category, instructor } = data;
-//     const isInstrucotrExist = await UserService.getInstructorById(instructor?.toString());
-//     if(!isInstrucotrExist) {
-//         throw createHttpError(404, "Instructor id is invalid, Not found");
-//     }
-//     const isCategoryExist = await CourseCategoryService.getCourseCategoryById(category?.toString());
-//     if(!isCategoryExist) {
-//         throw createHttpError(404, "Category id is invalid, Not found");
-//     }
+export const updateCourseDetails = asyncHandler(async(req: Request, res: Response) => {
+    const courseId = req.params.courseId;
+    const isCourseExist = await courseService.isCourseExist(courseId);
+    if (!isCourseExist) {
+        throw createHttpError(404, "Course id is invalid, Not found");
+    }
+    const data: CourseDTO.IUpdateCourseDetails = req.body;
+    const { category, instructor } = data;
+    const isInstrucotrExist = await UserService.getInstructorById(instructor?.toString());
+    if(!isInstrucotrExist) {
+        throw createHttpError(404, "Instructor id is invalid, Not found");
+    }
+    const isCategoryExist = await CourseCategoryService.getCourseCategoryById(category?.toString());
+    if(!isCategoryExist) {
+        throw createHttpError(404, "Category id is invalid, Not found");
+    } 
 
-//     const result = await courseService.updateCourse(courseId, data);
-
-// });
+    const result = await courseService.updateCourseDetails(courseId, data);
+    if(!result) {
+        throw createHttpError(500, "Error in updating course details");
+    }
+    await CourseCategoryService.moveCourseToCategory(courseId, category.toString());
+    res.send(createResponse(result, "Course details updated successfully"));
+});
 
 /**
  * Retrieves the content of a specific course.
@@ -315,7 +324,8 @@ export const courseEnquiry = asyncHandler(async (req: Request, res: Response) =>
     const result = await courseService.courseEnquiry(data);
 
     const emailContent = courseEnquiryEmailTemplate(result.ticketNo, data.name, data.email, data.phone, data.education, data.interestedCourse);
-    await sendEmail({
+
+    await emailQueue.add('sendEmail', {
         from: process.env.MAIL_USER,
         to: data.email,
         subject: `Course Enquiry Ticket No: ${result.ticketNo}`,

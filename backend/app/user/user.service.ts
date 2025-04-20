@@ -1,6 +1,6 @@
 import { ITempUser, type IUser } from "./user.dto";
 import UserSchema from "./user.schema";
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import * as jwthelper from '../common/helper/jwt.helper';
 import createHttpError from "http-errors";
 import TempUserSchema from "./tempUser.schema";

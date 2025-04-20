@@ -10,7 +10,7 @@ const ManageCourse = () => {
 
   const [filter, setFilter] = useState(2)
   return (
-    <div ref={courseManagePageRef} className="w-full px-4">
+    <div ref={courseManagePageRef} className="w-full px-4 mt-6">
       <div className="w-[95%] border border-neutral-300 rounded-lg text-sm md:text-md flex justify-between items-center mx-auto mb-2">
         <div
           onClick={() => setFilter(1)}
