@@ -1,5 +1,3 @@
-
-
 const sidebarItems = [
   {
     path: "/dashboard",
@@ -9,17 +7,17 @@ const sidebarItems = [
 
   {
     label: "Courses",
-    icon: "MenuBook",
+    icon: "MenuBookOutlined",
     children: [
       {
         path: "/dashboard/add-course",
         label: "Add Course",
-        icon: "FileUpload",
+        icon: "FileUploadOutlined",
       },
       {
         path: "/dashboard/manage-course",
         label: "Courses",
-        icon: "Visibility",
+        icon: "VisibilityOutlined",
       },
       {
         path: "/dashboard/manage-category",

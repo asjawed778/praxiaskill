@@ -17,7 +17,7 @@ export const Colors = {
 
     // Sidebar
     sidebarBg: "#01204F",
-    sidebarText: "#f0f5f2",
+    sidebarText: "#1b1c1c",
     sidebarIcon: "#dfdfeb",
     sidebarActiveBg: "#ED1C25",
     sidebarActiveText: "#ffffff",
@@ -79,7 +79,7 @@ export const Colors = {
 
     // Sidebar
     sidebarBg: "#01204F",
-    sidebarText: "#979c98",
+    sidebarText: "#f0f5f2",
     sidebarIcon: "#dfdfeb",
     sidebarActiveBg: "#ED1C25",
     sidebarActiveText: "#ffffff",

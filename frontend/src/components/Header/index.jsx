@@ -7,6 +7,7 @@ import {
   IconButton,
   useMediaQuery,
   useTheme,
+  Menu,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CustomButton from "../CustomButton";
@@ -15,7 +16,7 @@ import { useAppTheme } from "../../context/ThemeContext";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, NavLink } from "react-router-dom";
 import Profile from "./Profile";
-import MobileDrawer from "./MobileDrawer"; 
+import MobileDrawer from "./MobileDrawer";
 const Header = () => {
   const { colors } = useAppTheme();
   const dispatch = useDispatch();
@@ -24,8 +25,7 @@ const Header = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
+  const isMobile = useMediaQuery("(max-width: 600px)");
   const navItems = [
     { to: "/", label: "Home" },
     { to: "/courses", label: "Learning" },
@@ -90,7 +90,7 @@ const Header = () => {
                 />
               </Link>
 
-              {!isSmallScreen && (
+              {!isMobile && (
                 <Box sx={{ display: "flex", gap: 4, fontSize: "14px" }}>
                   {navItems.map((item) => (
                     <NavItem key={item.to} to={item.to} label={item.label} />
@@ -101,7 +101,7 @@ const Header = () => {
 
             {/* Right side */}
             <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-              {!isSmallScreen && (
+              {!isMobile && (
                 <Link
                   href="tel:+919123735554"
                   underline="none"
@@ -133,7 +133,7 @@ const Header = () => {
               )}
 
               {/* Show menu icon only on mobile */}
-              {isSmallScreen && (
+              {isMobile && (
                 <IconButton onClick={() => setOpenDrawer(true)}>
                   <MenuIcon sx={{ color: colors.primary }} />
                 </IconButton>
