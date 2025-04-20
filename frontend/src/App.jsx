@@ -20,7 +20,7 @@ const AddCategory = lazy(() => import("./pages/Admin/Category/AddCategory"));
 const AuthPage = lazy(() => import("./pages/authpage"));
 const HomePage = lazy(() => import("./pages/Home page/homepage"));
 const BlogPage = lazy(() => import("./pages/Blog/landingpage"));
-const AdminPage = lazy(() => import("./pages/Admin/adminpage"));
+const AdminDashboard = lazy(() => import("./pages/Admin/AdminDashboard"));
 const CourseLandingPage = lazy(() =>
   import("./pages/CourseLandingPage/index")
 );
@@ -153,7 +153,7 @@ const adminRoutes = [
         index: true,
         element: (
           <LazyComponent>
-            <AdminPage />
+            <AdminDashboard />
           </LazyComponent>
         ),
       },
