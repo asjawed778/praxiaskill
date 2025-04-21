@@ -16,7 +16,6 @@ import {
   useMediaQuery,
   IconButton,
   Box,
-  Menu,
 } from "@mui/material";
 import * as Icons from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -58,7 +57,6 @@ const Sidebar = () => {
 
   const handleToggle = () => {
     dispatch(toggleSidebar());
-    console.log("toggle: ", toggleSidebar());
   };
   const lastScreenRef = useRef("");
   useEffect(() => {
@@ -160,7 +158,6 @@ const Sidebar = () => {
       },
     },
   };
-
   return (
     <>
       {isMobile && (
@@ -204,7 +201,8 @@ const Sidebar = () => {
                         sx={{
                           color: colors.sidebarText,
                           minWidth: 40,
-                          ...(isRouteActive(path) ? activeStyles : {}),
+                          transition: 'all 0.3s ease',
+                          // ...(isRouteActive(path) ? activeStyles : {}),
                         }}
                       >
                         {renderIcon(icon)}
@@ -217,6 +215,7 @@ const Sidebar = () => {
                               fontSize: "0.875rem",
                               fontWeight: "600",
                               color: colors.sidebarText,
+                              transition: 'all 0.3s ease',
                             }}
                           />
                           {isOpen ? (

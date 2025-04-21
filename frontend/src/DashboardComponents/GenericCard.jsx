@@ -1,59 +1,58 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
+import {useAppTheme} from "../context/ThemeContext"
 
-const GenericCard = ({ icon, value, label, color }) => {
-    return (
-        <Card
-        sx={{
-          height: '100%',
-          width: '100%',
-          borderRadius: 2,
-          backgroundColor: `${color}.50`,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-          transition: 'all 0.3s ease-in-out',
-          cursor: 'pointer',
-          '&:hover': {
-            transform: 'translateY(-5px) scale(1.02)',
-            boxShadow: '0 6px 20px rgba(0,0,0,0.1)',
-          },
-        }}
-      >      
-        <CardContent sx={{ padding: 3 }}>
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: 'column',
-            gap: 1.5,
-          }}>
-            <Box sx={{ 
-              display: 'flex', 
-              justifyContent: 'flex-start', 
-              alignItems: 'center',
-              width: 40,
-            height: 40 
-            }}>
-              <Box 
-                sx={{ 
-                  backgroundColor: `${color}.100`, 
-                  borderRadius: 1.5,
-                  padding: 1,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: 40,
-                  height: 40
-                }}
-              >
-                {icon}
-              </Box>
-            </Box>
-            <Typography variant="h4" component="div" fontWeight="bold">
-              {value}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {label}
-            </Typography>
-          </Box>
-        </CardContent>
-      </Card>
-    );
-  };
-  export default GenericCard;
+const GenericCard = ({ cards = [] }) => {
+  if (!Array.isArray(cards)) return null;
+  const { colors } = useAppTheme();
+
+  return (
+    <Box
+      sx={{
+        width: '100%',
+        display: 'grid',
+        // justifyContent: cards.length <= 2 ? 'center' : 'flex-start',
+        justifyContent: "center",
+        gap: 1.5,
+        gridTemplateColumns: {
+          xs: 'repeat(auto-fit, minmax(140px, 1fr))', // allows shrinking on small screens
+          md: 'repeat(4, 1fr)',
+        }
+      }}
+    >
+      {cards.length === 0 ? (
+        <Typography variant="h6" textAlign="center" width="100%">
+          No cards available
+        </Typography>
+      ) : (
+        cards.map((card, index) => (
+          <Card
+            key={index}
+            sx={{
+              display: 'grid',
+              justifyContent: "center",
+              borderRadius: 4,
+              backgroundColor: colors.cardBackgroundColor,
+              color: colors.cardText,
+              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+              '&:hover': {
+                transform: 'translateY(-4px)',
+                boxShadow: 6,
+              },
+            }}
+          >
+            <CardContent>
+              <Typography variant="h5" component="div">
+                {card.value}
+              </Typography>
+              <Typography variant="body2" >
+                {card.label}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))
+      )}
+    </Box>
+  );
+};
+
+export default GenericCard;

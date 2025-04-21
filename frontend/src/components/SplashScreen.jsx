@@ -1,9 +1,10 @@
 import React from "react";
 import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
-import logo from "../../public/logopng.png"
+import logo from "../assets/logo.png";
 
-const SplashScreen: React.FC = () => {
+const SplashScreen = () => {
   const theme = useTheme();
+
   return (
     <Box
       sx={{
@@ -13,16 +14,17 @@ const SplashScreen: React.FC = () => {
         justifyContent: "center",
         height: "100vh",
         backgroundColor: theme.palette.background.default,
-        color: theme.palette.primary.main
+        color: theme.palette.primary.main,
       }}
     >
-      {/* Logo */}
-      <img src={logo} alt="Logo" width={120} height={120} style={{ marginBottom: 16 }} />
-      
-      {/* App Name */}
+      <img
+        src={logo}
+        alt="Logo"
+        width={120}
+        height={120}
+        style={{ marginBottom: 16 }}
+      />
       <Typography variant="h4">TCMS</Typography>
-      
-      {/* Loading Indicator */}
       <CircularProgress color="secondary" sx={{ mt: 2 }} />
     </Box>
   );
