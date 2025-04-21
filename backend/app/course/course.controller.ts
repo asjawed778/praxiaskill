@@ -175,6 +175,8 @@ export const updateCourseDetails = asyncHandler(async(req: Request, res: Respons
     res.send(createResponse(result, "Course details updated successfully"));
 });
 
+// export const 
+
 /**
  * Retrieves the content of a specific course.
  *
