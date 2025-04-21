@@ -2,24 +2,16 @@ import React from "react";
 import { Modal, Box, Typography, IconButton, Grow } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-interface WrapperModalProps {
-  open: boolean;
-  onClose: () => void;
-  title?: string;
-  children: React.ReactNode;
-  width?: number | string;
-}
-
-const ModalWrapper: React.FC<WrapperModalProps> = ({ 
-    open, 
-    onClose, 
-    title, 
-    children, 
-    width = 500 
+const ModalWrapper = ({
+  open,
+  onClose,
+  title,
+  children,
+  width = 500,
 }) => {
   return (
     <Modal open={open} onClose={onClose} closeAfterTransition>
-      <Grow in={open} >
+      <Grow in={open}>
         <Box
           sx={{
             display: "flex",
@@ -40,7 +32,6 @@ const ModalWrapper: React.FC<WrapperModalProps> = ({
               p: 4,
               borderRadius: 2,
               textAlign: "center",
-            //   overflowY: "auto",
             }}
           >
             <IconButton
@@ -59,7 +50,9 @@ const ModalWrapper: React.FC<WrapperModalProps> = ({
                 {title}
               </Typography>
             )}
-            <Box sx={{ maxHeight: "75vh", overflowY: "auto" }}>{children}</Box>
+            <Box sx={{ maxHeight: "75vh", overflowY: "auto" }}>
+              {children}
+            </Box>
           </Box>
         </Box>
       </Grow>

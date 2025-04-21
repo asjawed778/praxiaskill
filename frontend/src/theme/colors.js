@@ -23,6 +23,10 @@ export const Colors = {
     sidebarActiveText: "#ffffff",
     sidebarActiveIcon: "#ffffff",
 
+    // Dashboard
+    cardBackgroundColor: "#ed1c24",
+    cardText: "#ffffff",
+
     // Borders & Dividers
     border: "#DEE2E6",
 
@@ -86,6 +90,10 @@ export const Colors = {
     sidebarActiveIcon: "#ffffff",
     // Borders & Dividers
     border: "#d6ced2",
+
+    // Dashboard
+    cardBackgroundColor: "#ed1c24",
+    cardText: "#ffffff",
 
     // Upload File Box
     uploadFileHover: "#e9ecf0",

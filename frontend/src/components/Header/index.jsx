@@ -6,8 +6,6 @@ import {
   Link,
   IconButton,
   useMediaQuery,
-  useTheme,
-  Menu,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CustomButton from "../CustomButton";
@@ -21,10 +19,9 @@ const Header = () => {
   const { colors } = useAppTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const theme = useTheme();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const navItems = [
     { to: "/", label: "Home" },
@@ -73,7 +70,7 @@ const Header = () => {
         <Toolbar>
           <Box
             sx={{
-              display: "flex",
+              display: "flex", 
               justifyContent: "space-between",
               alignItems: "center",
               width: "100%",
@@ -100,13 +97,14 @@ const Header = () => {
             </Box>
 
             {/* Right side */}
-            <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+            <Box sx={{ display: "flex", gap: { xs: 0.5, sm: 1, md: 2 }, alignItems: "center",  }}>
               {!isMobile && (
                 <Link
                   href="tel:+919123735554"
                   underline="none"
                   sx={{
                     color: colors.primary,
+                    fontSize : "14px",
                     "&:hover": {
                       color: colors.secondary,
                     },

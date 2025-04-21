@@ -2,35 +2,18 @@ import React, { useState } from "react";
 import {
   TextField,
   InputAdornment,
-  IconButton,
-  TextFieldProps,
+  IconButton
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Controller, useFormContext, Control } from "react-hook-form";
-import type { TextFieldPropsSizeOverrides } from "@mui/material/TextField";
-import type { OverridableStringUnion } from "@mui/types";
+import { Controller, useFormContext } from "react-hook-form";
 import { useAppTheme } from "../context/ThemeContext";
 
-interface CustomInputFieldProps extends Omit<TextFieldProps, 'name'> {
-  name: string;
-  label: string;
-  placeholder?: string;
-  type?: string;
-  startIcon?: React.ReactNode;
-  endIcon?: React.ReactNode;
-  control?: Control<any>; 
-  minDate?: string;
-  maxDate?: string;
-  required?: boolean;
-  size?: OverridableStringUnion<"small" | "medium", TextFieldPropsSizeOverrides>;
-}
-
-const CustomInputField: React.FC<CustomInputFieldProps> = ({
+const CustomInputField = ({
   name,
   label,
   placeholder,
   type = "text",
-  size="medium",
+  size = "medium",
   startIcon,
   endIcon,
   control,
@@ -51,8 +34,7 @@ const CustomInputField: React.FC<CustomInputFieldProps> = ({
   const [uncontrolledValue, setUncontrolledValue] = useState("");
   const { colors } = useAppTheme();
 
-
-  const renderTextField = (field: any, error?: any) => (
+  const renderTextField = (field, error) => (
     <TextField
       {...field}
       label={
@@ -65,10 +47,11 @@ const CustomInputField: React.FC<CustomInputFieldProps> = ({
       placeholder={isDate ? undefined : placeholder}
       size={size}
       type={
-
-        isDate ? "date" :
-        isPassword && !showPassword ? "password" :
-        type
+        isDate
+          ? "date"
+          : isPassword && !showPassword
+          ? "password"
+          : type
       }
       fullWidth={fullWidth}
       variant="outlined"
@@ -99,7 +82,6 @@ const CustomInputField: React.FC<CustomInputFieldProps> = ({
       }}
       InputLabelProps={isDate ? { shrink: true } : undefined}
       inputProps={isDate ? { max: maxDate, min: minDate } : undefined}
-      
       {...rest}
     />
   );
@@ -111,12 +93,10 @@ const CustomInputField: React.FC<CustomInputFieldProps> = ({
       render={({ field, fieldState: { error } }) => renderTextField(field, error)}
     />
   ) : (
-    // renderTextField({}, null)
     renderTextField(
       {
         value: uncontrolledValue,
-        onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-          setUncontrolledValue(e.target.value),
+        onChange: (e) => setUncontrolledValue(e.target.value),
       },
       null
     )
