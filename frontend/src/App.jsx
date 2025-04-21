@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import PublicRoute from "./components/auth/PublicRoute";
 import PrivateRoute from "./components/auth/PrivateRoute";
@@ -9,6 +9,7 @@ import PageNotFound from "./pages/pagenotfound";
 import AdminLayout from "./layouts/AdminLayout";
 import CategoryManagement from "./pages/Admin/Category/CategoryManagement";
 import { useSelector } from "react-redux";
+import SplashScreen from "./components/SplashScreen";
 const ViewCategories = lazy(() =>
   import("./pages/Admin/Category/ViewCategories")
 );
@@ -214,7 +215,7 @@ const adminRoutes = [
         ),
       },
       {
-        path:"my-enrollment",
+        path: "my-enrollment",
         element: (
           <LazyComponent>
             <MyEnrollment />
@@ -263,6 +264,15 @@ const courseLectureRoute = [
 
 function App() {
   const { accessToken, user } = useSelector((store) => store.auth);
+  const [showSplash, setShowSplash] = useState(true);
+    useEffect(() => {
+    const timer = setTimeout(() => setShowSplash(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (showSplash) {
+    return <SplashScreen />;
+  }
 
   return (
     <BrowserRouter>
@@ -290,15 +300,15 @@ function App() {
         {/* Private routes  */}
         {accessToken && user?.role === "USER" ? (
           <Route element={<BasicLayout />}>
-          {userPrivateRoutes.map((route, index) => (
-            <Route key={index} path={route.path} element={route.element} />
-          ))}
-        </Route>
+            {userPrivateRoutes.map((route, index) => (
+              <Route key={index} path={route.path} element={route.element} />
+            ))}
+          </Route>
         ) : accessToken && user?.role === "SUPER_ADMIN" ? (
           <Route path="/dashboard/*" element={<PageNotFound />} />
         ) : (
           <Route path="/dashboard/*" element={<Navigate to="/" />} replace />
-        )}        
+        )}
 
         {accessToken && user?.role === "SUPER_ADMIN" ? (
           adminRoutes.map((route, index) => (
@@ -331,6 +341,7 @@ function App() {
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
+
   );
 }
 

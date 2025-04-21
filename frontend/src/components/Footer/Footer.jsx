@@ -1,5 +1,5 @@
 // import logo from "../../aassets/logo.png";
-import logo from "../../assets/logo.png"
+import logo from "../../assets/logo-red-transparent-bg.png";
 
 const Footer = () => {
   return (
@@ -7,7 +7,7 @@ const Footer = () => {
       {/* Top component */}
       <div className="flex flex-col items-start gap-8 md:flex-row md:items-start md:justify-between md:gap-16 lg:gap-36">
         {/* Logo */}
-        <img src={logo} className="w-34 h-12" alt="logo" />
+        <img src={logo} className="max-w-48 h-12" alt="logo" />
 
         {/* Program Section */}
         <ul className="text-white flex flex-col gap-5 mx-auto text-left">

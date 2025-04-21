@@ -175,6 +175,8 @@ export const updateCourseDetails = asyncHandler(async(req: Request, res: Respons
     res.send(createResponse(result, "Course details updated successfully"));
 });
 
+// export const 
+
 /**
  * Retrieves the content of a specific course.
  *
@@ -328,6 +330,12 @@ export const courseEnquiry = asyncHandler(async (req: Request, res: Response) =>
     await emailQueue.add('sendEmail', {
         from: process.env.MAIL_USER,
         to: data.email,
+        subject: `Course Enquiry Ticket No: ${result.ticketNo}`,
+        html: emailContent,
+    });
+    await emailQueue.add('sendEmail', {
+        from: process.env.MAIL_USER,
+        to: process.env.MAIL_USER,
         subject: `Course Enquiry Ticket No: ${result.ticketNo}`,
         html: emailContent,
     });
