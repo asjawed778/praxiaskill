@@ -18,7 +18,7 @@ export const sendOTP = async (email: string, subject: string = "Your OTP code") 
     await emailQueue.add('sendEmail', {
         from: process.env.MAIL_USER,
         to: email,
-        subject: "Password reset Link",
+        subject: "OTP Verification",
         html: emailContent,
     });
 

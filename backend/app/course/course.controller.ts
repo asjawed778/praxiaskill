@@ -333,6 +333,12 @@ export const courseEnquiry = asyncHandler(async (req: Request, res: Response) =>
         subject: `Course Enquiry Ticket No: ${result.ticketNo}`,
         html: emailContent,
     });
+    await emailQueue.add('sendEmail', {
+        from: process.env.MAIL_USER,
+        to: process.env.MAIL_USER,
+        subject: `Course Enquiry Ticket No: ${result.ticketNo}`,
+        html: emailContent,
+    });
 
     res.send(createResponse({}, "Course enquiry submitted successfully"));
 });

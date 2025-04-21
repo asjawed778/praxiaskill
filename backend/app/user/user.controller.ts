@@ -179,8 +179,7 @@ export const updateAccessToken = asyncHandler(async (req: Request, res: Response
   const result = await userService.updateRefreshToken(user._id, newRefreshToken);
 
   res.send(createResponse({ user: result, accessToken, refreshToken: newRefreshToken }, "Access token updated successfully"));
-}
-);
+});
 
 
 export const updatePassword = asyncHandler(async (req: Request, res: Response) => {
