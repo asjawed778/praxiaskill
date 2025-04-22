@@ -29,8 +29,6 @@ const Profile = () => {
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
-  console.log("User: ", user);
-  
   const navigate = useNavigate();
   const [logoutUser, { isLoading }] = useLogoutMutation();
 

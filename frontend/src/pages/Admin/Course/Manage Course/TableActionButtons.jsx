@@ -14,7 +14,6 @@ const TableActionButtons = ({menuStyles, setOpenMenu, setMenuStyles, courses, op
     const [isTerminate, setIsTerminate] = useState(false);
     const [course, setCourse] = useState(null);
     const [editMode, setEditMode] = useState(false);
-  console.log("Table Action courses: ", course);
   
 
     const handleCloseOnClick = () => {

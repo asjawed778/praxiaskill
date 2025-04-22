@@ -2,7 +2,7 @@ import React from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Box } from '@mui/material';
 
-const GenericPieChart = (props) => {
+const CustomPieChart = (props) => {
   const {
     data,
     dataKey = 'value',
@@ -98,6 +98,6 @@ const GenericPieChart = (props) => {
   );
 };
 
-export default GenericPieChart;
+export default CustomPieChart;
 
 

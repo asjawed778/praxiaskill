@@ -28,7 +28,6 @@ export default function BookDemoClass() {
   const onSubmit = async(data) => {
     try {
       const res = await sendEnquiry(data);
-      console.log("Result:", res)
       if (res?.error) {
         throw new Error(JSON.stringify(res.error));
       }

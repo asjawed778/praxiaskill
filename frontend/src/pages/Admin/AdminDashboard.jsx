@@ -3,14 +3,15 @@ import {
   Box,
   Grid,
 } from "@mui/material";
-import GenericCard from "../../DashboardComponents/GenericCard";
-import { cardData, enrollments, revenueData, topCourses, userData } from "../../data";
-import GenericLineChart from "../../DashboardComponents/GenericLineChart";
-import ChartWrapper from "../../DashboardComponents/ChartWrapper";
-import GenericPieChart from "../../DashboardComponents/GenericPieChart";
-import GenericBarChart from "../../DashboardComponents/GenericBarChart";
-import GenericLinearProgress from "../../DashboardComponents/GenericLinearProgress";
 import { useAppTheme } from "../../context/ThemeContext"
+
+import { cardData, enrollments, revenueData, topCourses, userData } from "../../data";
+import CustomLineChart from "../../components/Dashboard/CustomLineChart";
+import CustomPieChart from "../../components/Dashboard/CustomPieChart";
+import CustomBarChart from "../../components/Dashboard/CustomBarChart";
+import CustomLinearProgress from "../../components/Dashboard/CustomLinearProgress";
+import GenericCard from "../../components/Dashboard/GenericCard";
+import ChartWrapper from "../../components/Dashboard/ChartWrapper";
 
 const AdminDashboard = () => {
   const { colors } = useAppTheme();
@@ -26,7 +27,7 @@ const AdminDashboard = () => {
       <Grid container spacing={3} sx={{ mt: 3 }}>
         <Grid size={{ xs: 12, md: 6 }}>
           <ChartWrapper title="Monthly Revenue">
-            <GenericLineChart 
+            <CustomLineChart 
             data={revenueData}
             title="Monthly Revenue"
             yAxisLabel="Revenue ($)"
@@ -36,17 +37,17 @@ const AdminDashboard = () => {
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
         <ChartWrapper title="User Analytics">
-          <GenericPieChart data={userData} colors = {[ colors.pieChartColor1, colors.pieChartColor2]} />
+          <CustomPieChart data={userData} colors = {[ colors.pieChartColor1, colors.pieChartColor2]} />
           </ChartWrapper>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
         <ChartWrapper title="Course Enrollments">
-          <GenericBarChart data={enrollments} />
+          <CustomBarChart data={enrollments} />
           </ChartWrapper>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
         <ChartWrapper title="Top Courses">
-          <GenericLinearProgress data={topCourses} />
+          <CustomLinearProgress data={topCourses} />
           </ChartWrapper>
         </Grid>
       </Grid>

@@ -16,9 +16,6 @@ const Category = () => {
 
   const navigate = useNavigate();
 
-  console.log("data", data)
-
-
   useEffect(() => {
     if (data?.success) {
       const allCategories = data?.data.map((item) => {
@@ -222,11 +219,10 @@ const Category = () => {
               <input
                 type="text"
                 name="name"
-                className={`w-full border ${
-                  errors.name && touched.name
+                className={`w-full border ${errors.name && touched.name
                     ? "border-red-500"
                     : "border-gray-300"
-                } rounded p-2`}
+                  } rounded p-2`}
                 value={currentCategory.name}
                 onChange={handleFieldChange}
                 onBlur={() => setTouched({ ...touched, name: true })}
@@ -240,11 +236,10 @@ const Category = () => {
               <input
                 type="text"
                 name="courses"
-                className={`w-full h-20 border ${
-                  errors.courses && touched.courses
+                className={`w-full h-20 border ${errors.courses && touched.courses
                     ? "border-red-500"
                     : "border-gray-300"
-                } rounded p-2`}
+                  } rounded p-2`}
                 onChange={handleFieldChange}
                 onBlur={() => setTouched({ ...touched, courses: true })}
                 min=""
@@ -339,7 +334,7 @@ const Category = () => {
             </tr>
           </thead>
           {<tbody>
-            { currentItems.map((category, index) => (
+            {currentItems.map((category, index) => (
               <tr
                 key={category.id}
                 className="border-b text-sm border-gray-300 last:border-b-0"
@@ -365,14 +360,14 @@ const Category = () => {
             ))
             }
           </tbody>
-          
+
           }
         </table>
-      </div>: <div className="h-30 flex justify-center items-center text-neutral-500">No category to show</div> :
+      </div> : <div className="h-30 flex justify-center items-center text-neutral-500">No category to show</div> :
         <div className="h-30 flex justify-center items-center">
-        Loading...
-      </div>
-        }
+          Loading...
+        </div>
+      }
 
       {data?.data?.length > 0 && !isLoading && <div className="mt-4 flex justify-between items-center">
         <div>

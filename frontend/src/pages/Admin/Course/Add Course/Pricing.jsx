@@ -4,7 +4,6 @@ import Button from "../../../../components/Button/Button";
 import ButtonLoading from "../../../../components/Button/ButtonLoading";
 
 const Pricing = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => {
-  console.log("is courseupdate: ", editMode);
   
   const {
     register,

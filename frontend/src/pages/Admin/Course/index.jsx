@@ -15,23 +15,23 @@ import { toast } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const AddCourse = () => {
-  const [uploadCourse , {isLoading, errors}] = useUploadCourseMutation()
+  const [uploadCourse, { isLoading, errors }] = useUploadCourseMutation()
   const [currentStep, setCurrentStep] = useState(0);
-  
+
   const location = useLocation();
   const course = location.state || null;
   const editMode = Boolean(course);
-  const [updateCourse, {isLoading: isCourseUpdate, errors: isUpdateError}] = useUpdateCourseDetailsMutation();
+  const [updateCourse, { isLoading: isCourseUpdate, errors: isUpdateError }] = useUpdateCourseDetailsMutation();
   console.log("edit mode: ", editMode);
   const navigate = useNavigate();
-  
+
   const { data: loadCourse, isLoading: isCourseLoading, isError } = useGetFullCourseDetailsQuery(
     course?.course?._id,
     { skip: !editMode }
   );
   useEffect(() => {
     if (isError) {
-      console.error("Error fetching course details:", loadCourse?.data.data); 
+      console.error("Error fetching course details:", loadCourse?.data.data);
     }
     if (!isError && loadCourse) {
       console.log("Update course all: ", loadCourse);
@@ -71,7 +71,7 @@ const AddCourse = () => {
         },
       };
     }
-  
+
     return {
       title: "",
       subtitle: "",
@@ -93,14 +93,14 @@ const AddCourse = () => {
       },
     };
   }, [loadCourse]);
-  
+
   const methods = useForm({
     resolver,
     mode: "onChange",
     defaultValues,
   });
   useEffect(() => {
-    
+
     if (loadCourse?.data && !isCourseLoading) {
       const courseData = {
         ...loadCourse.data,
@@ -117,14 +117,14 @@ const AddCourse = () => {
           finalPrice: loadCourse.data.price?.finalPrice || 0,
         },
       };
-      methods.reset(courseData); 
+      methods.reset(courseData);
     }
   }, [loadCourse, isCourseLoading, methods]);
 
   const handleNext = async () => {
     const isValid = await methods.trigger();
     if (!isValid) return;
-  
+
     if (editMode && currentStep === 1) {
       // Skip Step 2 when in edit mode
       setCurrentStep(3);
@@ -132,15 +132,15 @@ const AddCourse = () => {
       setCurrentStep((prev) => prev + 1);
     }
   };
-  
+
   const handlePrev = () => {
     setCurrentStep((prev) => prev - 1);
   };
 
   const onSubmit = async (formData) => {
     console.log("Form data: ", formData._id);
-    
-    try{
+
+    try {
       const { tags } = formData;
       const newTags = tags.map((tag) => tag.value);
       const data = { ...formData, tags: newTags };
@@ -149,11 +149,8 @@ const AddCourse = () => {
         courseId: data._id,
         data
       }) : await uploadCourse(data);
-      console.log("REsponse", result)
-      if(result.error)
-      {
-        if(result.error.status === 400)
-        {
+      if (result.error) {
+        if (result.error.status === 400) {
           toast.error("Please fill all steps before submitting!")
         }
         throw new Error(result.error.data.message)
@@ -161,8 +158,7 @@ const AddCourse = () => {
       methods.reset();
       toast.success(editMode ? "Course updated successfully" : "Course published successfully!")
       navigate("/dashboard/manage-course", { replace: true });
-    }catch(err)
-    {
+    } catch (err) {
       console.log("Error", err)
     }
   };
@@ -177,39 +173,35 @@ const AddCourse = () => {
         <div className="bg-[#D0DAF1] rounded-lg text-xs md:text-sm flex justify-between items-center pr-3">
           <div
             onClick={() => setCurrentStep(0)}
-            className={`px-4 py-2 cursor-pointer ${
-              currentStep === 0 &&
+            className={`px-4 py-2 cursor-pointer ${currentStep === 0 &&
               "bg-[var(--color-primary)] text-white rounded-lg"
-            }`}
+              }`}
           >
             Course Details
           </div>
           <div
             onClick={() => setCurrentStep(1)}
-            className={`px-4 py-2 cursor-pointer ${
-              currentStep === 1 &&
+            className={`px-4 py-2 cursor-pointer ${currentStep === 1 &&
               "bg-[var(--color-primary)] text-white rounded-lg"
-            }`}
+              }`}
           >
             Additional Details
           </div>
-          {!editMode && 
+          {!editMode &&
             <div
-            onClick={() => setCurrentStep(2)}
-            className={`px-4 py-2 cursor-pointer ${
-              currentStep === 2 && 
-              "bg-[var(--color-primary)] text-white rounded-lg"
-            }`}
-          >
-            Course Structure
-          </div>
+              onClick={() => setCurrentStep(2)}
+              className={`px-4 py-2 cursor-pointer ${currentStep === 2 &&
+                "bg-[var(--color-primary)] text-white rounded-lg"
+                }`}
+            >
+              Course Structure
+            </div>
           }
           <div
             onClick={() => setCurrentStep(3)}
-            className={`px-4 py-2 cursor-pointer ${
-              currentStep === 3 &&
+            className={`px-4 py-2 cursor-pointer ${currentStep === 3 &&
               "bg-[var(--color-primary)] text-white rounded-lg"
-            }`}
+              }`}
           >
             Pricing & Publish
           </div>
@@ -224,7 +216,7 @@ const AddCourse = () => {
               handlePrev={handlePrev}
             />
           )}
-          {currentStep === 2 &&  (
+          {currentStep === 2 && (
             <CourseStructure handleNext={handleNext} handlePrev={handlePrev} />
           )}
           {currentStep === 3 && <Pricing isLoading={isLoading} isCourseUpdate={isCourseUpdate} editMode={editMode} handlePrev={handlePrev} />}

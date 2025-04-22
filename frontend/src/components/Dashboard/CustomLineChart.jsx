@@ -1,9 +1,9 @@
 import React from 'react';
 import { CardContent, Box } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { useAppTheme } from '../context/ThemeContext';
+import { useAppTheme } from '../../context/ThemeContext';
 
-const GenericLineChart = ({ data }) => {
+const CustomLineChart = ({ data }) => {
   const { colors } = useAppTheme();
   return (
     <Box sx={{ height: '100%', height: '220px'}}>
@@ -37,4 +37,4 @@ const GenericLineChart = ({ data }) => {
   );
 };
 
-export default GenericLineChart;
+export default CustomLineChart;
