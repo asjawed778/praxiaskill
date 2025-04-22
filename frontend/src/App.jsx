@@ -8,8 +8,9 @@ import LazyComponent from "./components/LazyComponent";
 import PageNotFound from "./pages/pagenotfound";
 import AdminLayout from "./layouts/AdminLayout";
 import CategoryManagement from "./pages/Admin/Category/CategoryManagement";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SplashScreen from "./components/SplashScreen";
+import { setSplashShown } from "./store/reducers/splashScreenReducer";
 const ViewCategories = lazy(() =>
   import("./pages/Admin/Category/ViewCategories")
 );
@@ -264,11 +265,19 @@ const courseLectureRoute = [
 
 function App() {
   const { accessToken, user } = useSelector((store) => store.auth);
-  const [showSplash, setShowSplash] = useState(true);
-    useEffect(() => {
-    const timer = setTimeout(() => setShowSplash(false), 1500);
-    return () => clearTimeout(timer);
-  }, []);
+  const dispatch = useDispatch();
+  const hasShown = useSelector((state) => state.splashScreen.hasShown);
+  const [showSplash, setShowSplash] = useState(!hasShown);
+
+  useEffect(() => {
+    if (!hasShown) {
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+        dispatch(setSplashShown());
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [hasShown, dispatch]);
 
   if (showSplash) {
     return <SplashScreen />;

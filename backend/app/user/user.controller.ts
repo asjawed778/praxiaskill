@@ -10,7 +10,6 @@ import { sendEmail } from "../common/services/email.service";
 import { resetPasswordEmailTemplate } from "../common/template/mail.template";
 import * as jwthelper from "../common/helper/jwt.helper";
 import { loadConfig } from "../common/helper/config.hepler";
-import jwt from "jsonwebtoken";
 import { UserRole } from "./user.schema";
 import * as OTPSrvice from '../common/services/OTP.service';
 import { emailQueue } from "../common/queue/queues/email.queue";
@@ -129,15 +128,13 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
 
 export const logout = asyncHandler(async (req: Request, res: Response) => {
   const user = req.user;
-  if (!user) {
-    throw createHttpError(401, "User not found, please login again");
+  if (user) {
+    await userService.deleteRefreshToken(user._id);
   }
-  await userService.deleteRefreshToken(user._id);
   res.clearCookie("accessToken");
   res.clearCookie("refreshToken");
   res.send(createResponse({}, "User logged out successfully"));
 });
-
 
 export const updateAccessToken = asyncHandler(async (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken || req.headers.authorization?.split(" ")[1];
@@ -180,7 +177,6 @@ export const updateAccessToken = asyncHandler(async (req: Request, res: Response
 
   res.send(createResponse({ user: result, accessToken, refreshToken: newRefreshToken }, "Access token updated successfully"));
 });
-
 
 export const updatePassword = asyncHandler(async (req: Request, res: Response) => {
   const user = req.user;

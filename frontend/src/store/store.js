@@ -7,7 +7,7 @@ import adminCategoryReducer from "./reducers/adminCategoryReducer";
 import authReducer from "./reducers/authReducer";
 import coursesReducer from "./reducers/coursesReducer";
 import sidebarReducer from "../store/reducers/sidebarSlice"
-
+import splashScreenReducer from "./reducers/splashScreenReducer";
 
 // Importing Apis
 import { apiAuth } from "../services/auth.api";
@@ -19,7 +19,7 @@ import { contactApi } from "../services/contactApi"
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth"], // Persist only the auth slice
+  whitelist: ["auth"],
 };
 
 // Combine all the reducers
@@ -28,6 +28,8 @@ const rootReducer = combineReducers({
   categories: adminCategoryReducer,
   courses: coursesReducer,
   sidebar: sidebarReducer,
+  splashScreen: splashScreenReducer,
+
   [apiAuth.reducerPath]: apiAuth.reducer,
   [apiCourse.reducerPath]: apiCourse.reducer,
   [paymentApi.reducerPath]: paymentApi.reducer,

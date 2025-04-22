@@ -1,9 +1,9 @@
 import React from 'react';
 import { CardContent, Box } from '@mui/material';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { useAppTheme } from '../context/ThemeContext';
+import { useAppTheme } from '../../context/ThemeContext';
 
-const GenericBarChart = ({ data }) => {
+const CustomBarChart = ({ data }) => {
   const { colors } = useAppTheme();
   return (
     <Box sx={{ height: '220px', width: '100%'}}>
@@ -29,4 +29,4 @@ const GenericBarChart = ({ data }) => {
   );
 };
 
-export default GenericBarChart;
+export default CustomBarChart;

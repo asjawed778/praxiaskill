@@ -8,7 +8,6 @@ import { BiBell } from "react-icons/bi";
 import Curriculum from "./Curriculum";
 import { GoDotFill } from "react-icons/go";
 
-import { NAVS } from "../../Dummy Data/Course Landing Page/data";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetFullCourseDetailsQuery } from "../../services/course.api";
@@ -91,17 +90,6 @@ const Course = () => {
 
           {/* absolute position div  */}
           <CourseDetails />
-        </div>
-
-        <div className="w-full md:w-4/5 lg:w-3/4 flex py-2 gap-5 md:gap-14 border-b-2 border-neutral-200 mb-10">
-          {NAVS.map((item, index) => (
-            <a key={index}
-              className="text-sm font-semibold px-2 py-2 rounded-sm focus:text-primary focus:underline focus:bg-neutral-100 capitalize"
-              href={`#${item}`}
-            >
-              {item}
-            </a>
-          ))}
         </div>
 
         <div

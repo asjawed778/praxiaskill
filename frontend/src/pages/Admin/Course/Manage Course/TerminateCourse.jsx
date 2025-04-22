@@ -10,7 +10,6 @@ const TerminateCourseModal = ({ open, onClose, course }) => {
   const handleConfirm = async () => {
     try {
       setIsLoading(true);
-      console.log("Course id: ",course._id);
       
       await terminateCourse({courseId: course._id}).unwrap(); 
       toast.success(`Course terminated successfully`);

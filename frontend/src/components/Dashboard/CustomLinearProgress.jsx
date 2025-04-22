@@ -1,8 +1,8 @@
 import React from 'react';
 import { CardContent, Typography, Box, LinearProgress } from '@mui/material';
-import { useAppTheme } from '../context/ThemeContext';
+import { useAppTheme } from '../../context/ThemeContext';
 
-const GenericLinearProgress = ({ data }) => {
+const CustomLinearProgress = ({ data }) => {
   const { colors } = useAppTheme();
   return (
     <Box sx={{ height: '220px'  }}>
@@ -46,4 +46,4 @@ const GenericLinearProgress = ({ data }) => {
   );
 };
 
-export default GenericLinearProgress;
+export default CustomLinearProgress;

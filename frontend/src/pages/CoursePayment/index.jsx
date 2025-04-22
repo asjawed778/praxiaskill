@@ -60,7 +60,6 @@ const CoursePayment = () => {
   const [couponError, setCouponError] = useState("");
   const [isCouponApplied, setIsCouponApplied] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState("all");
-  // console.log("Final: ", finalPrice);
 
   // Calculate discount when orderData is available
   useEffect(() => {
@@ -133,7 +132,6 @@ const CoursePayment = () => {
           };
 
           const verifyRes = await verifyPayment(verificationData);
-          console.log("verify response", verifyRes);
 
           if (verifyRes?.data?.success) {
             toast.success("Payment successful!");
