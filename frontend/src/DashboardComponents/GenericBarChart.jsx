@@ -1,8 +1,10 @@
 import React from 'react';
 import { CardContent, Box } from '@mui/material';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useAppTheme } from '../context/ThemeContext';
 
 const GenericBarChart = ({ data }) => {
+  const { colors } = useAppTheme();
   return (
     <Box sx={{ height: '220px', width: '100%'}}>
       <CardContent>
@@ -18,7 +20,7 @@ const GenericBarChart = ({ data }) => {
               <XAxis dataKey="course" axisLine={false} tickLine={false} />
               <YAxis axisLine={false} tickLine={false} />
               <Tooltip />
-              <Bar dataKey="count" fill="#3B82F6" barSize={40} radius={[5, 5, 0, 0]} />
+              <Bar dataKey="count" fill = {colors.barChartColor} barSize={40} radius={[5, 5, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </Box>

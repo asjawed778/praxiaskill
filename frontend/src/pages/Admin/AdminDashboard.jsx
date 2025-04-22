@@ -10,10 +10,12 @@ import ChartWrapper from "../../DashboardComponents/ChartWrapper";
 import GenericPieChart from "../../DashboardComponents/GenericPieChart";
 import GenericBarChart from "../../DashboardComponents/GenericBarChart";
 import GenericLinearProgress from "../../DashboardComponents/GenericLinearProgress";
+import { useAppTheme } from "../../context/ThemeContext"
 
 const AdminDashboard = () => {
+  const { colors } = useAppTheme();
   return (
-    <Box sx={{ padding: 3, backgroundColor: "#f5f7fb", minHeight: "100vh" }}>
+    <Box sx={{ padding: 3, backgroundColor: colors.dashboardBackground, minHeight: "100vh" }}>
       <Grid container spacing={3} >
           {cardData.map((card, index) => (
            <Grid size={{ xs: 6, md : 3 }} key={index}>
@@ -28,13 +30,13 @@ const AdminDashboard = () => {
             data={revenueData}
             title="Monthly Revenue"
             yAxisLabel="Revenue ($)"
-            lineColor="#4CAF50"
+            // lineColor="#4CAF50"
             />
           </ChartWrapper>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
         <ChartWrapper title="User Analytics">
-          <GenericPieChart data={userData} />
+          <GenericPieChart data={userData} colors = {[ colors.pieChartColor1, colors.pieChartColor2]} />
           </ChartWrapper>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>

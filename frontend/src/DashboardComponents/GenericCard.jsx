@@ -1,7 +1,9 @@
 import React from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
+import { useAppTheme } from '../context/ThemeContext';
 
 const GenericCard = ({ title, value }) => {
+  const { colors } = useAppTheme()
   return (
     <Card 
       sx={{ 
@@ -9,8 +11,8 @@ const GenericCard = ({ title, value }) => {
         width: '100%',
         display: 'flex', 
         flexDirection: 'column',
-        bgcolor: '#14335F',
-        color: 'white',
+        backgroundColor: colors.cardBackground,
+        color: colors.cardText,
         textAlign: 'center',
         borderRadius: '10px',
         px: 2

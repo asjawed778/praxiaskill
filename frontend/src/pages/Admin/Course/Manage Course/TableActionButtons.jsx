@@ -30,7 +30,8 @@ const TableActionButtons = ({menuStyles, setOpenMenu, setMenuStyles, courses, op
       // setCourse(courses[openMenu]);
       setEditMode(true);
       navigate("/dashboard/add-course", {
-        state: {course: courses[openMenu], editMode: true}
+        state: {course: courses[openMenu], editMode: true},
+        replace: false
       });
     };
   return (
@@ -68,7 +69,7 @@ const TableActionButtons = ({menuStyles, setOpenMenu, setMenuStyles, courses, op
             <button className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 rounded-md hover:cursor-pointer"
             onClick={handleCourseEdit}
             >
-              <MdEdit className="mr-2" /> Edit
+              <MdEdit className="mr-2" /> Update Course
             </button>
             <button className="flex items-center w-full px-3 py-2 text-sm text-left text-red-600 hover:cursor-pointer hover:bg-gray-100 rounded-md"
             onClick={() => handleTeminateCourse(courses[openMenu])}

@@ -24,8 +24,14 @@ export const Colors = {
     sidebarActiveIcon: "#ffffff",
 
     // Dashboard
-    cardBackgroundColor: "#ed1c24",
+    dashboardBackground: "#f5f7fb",
+    cardBackground: "#14335F",
     cardText: "#ffffff",
+    barChartColor: "#3B82F6",
+    lineProgressBackground: "#3B82F6",
+    lineChartStroke: "#3B82F6",
+    pieChartColor1: "#0088FE",
+    pieChartColor2: "#00C49F",
 
     // Borders & Dividers
     border: "#DEE2E6",

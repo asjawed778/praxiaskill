@@ -13,7 +13,7 @@ import sidebarReducer from "../store/reducers/sidebarSlice"
 import { apiAuth } from "../services/auth.api";
 import { apiCourse } from "../services/course.api";
 import { paymentApi } from "../services/payment.api";
-import { contactApi } from "../services/contactApi";
+import { contactApi } from "../services/contactApi"
 
 // Persist configuration
 const persistConfig = {

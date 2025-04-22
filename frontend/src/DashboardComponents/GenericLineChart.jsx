@@ -1,8 +1,10 @@
 import React from 'react';
 import { CardContent, Box } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useAppTheme } from '../context/ThemeContext';
 
 const GenericLineChart = ({ data }) => {
+  const { colors } = useAppTheme();
   return (
     <Box sx={{ height: '100%', height: '220px'}}>
       <CardContent>
@@ -21,7 +23,7 @@ const GenericLineChart = ({ data }) => {
               <Line 
                 type="monotone" 
                 dataKey="value" 
-                stroke="#3B82F6" 
+                stroke={colors.lineChartStroke} 
                 strokeWidth={3}
                 dot={{ r: 0 }}
                 activeDot={{ r: 8 }}

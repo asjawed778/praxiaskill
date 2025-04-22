@@ -1,7 +1,9 @@
 import React from 'react';
 import { CardContent, Typography, Box, LinearProgress } from '@mui/material';
+import { useAppTheme } from '../context/ThemeContext';
 
 const GenericLinearProgress = ({ data }) => {
+  const { colors } = useAppTheme();
   return (
     <Box sx={{ height: '220px'  }}>
       <CardContent>
@@ -32,7 +34,7 @@ const GenericLinearProgress = ({ data }) => {
                   backgroundColor: '#EDF2F7',
                   '& .MuiLinearProgress-bar': {
                     borderRadius: 5,
-                    backgroundColor: '#3B82F6',
+                    backgroundColor: colors.lineProgressBackground,
                   },
                 }}
               />
