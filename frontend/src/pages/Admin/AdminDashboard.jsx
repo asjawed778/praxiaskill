@@ -1,27 +1,54 @@
-import React from 'react';
-import { Box, Fade, Grid, keyframes } from '@mui/material';
-import SchoolIcon from '@mui/icons-material/School';
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import PeopleIcon from '@mui/icons-material/People';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import GenericCard from '../../DashboardComponents/GenericCard';
-import { cardsData, lineChartData } from '../../data';
-import GenericLineChart from '../../DashboardComponents/GeneticLineChart';
-
-
+import React from "react";
+import {
+  Box,
+  Grid,
+} from "@mui/material";
+import GenericCard from "../../DashboardComponents/GenericCard";
+import { cardData, enrollments, revenueData, topCourses, userData } from "../../data";
+import GenericLineChart from "../../DashboardComponents/GenericLineChart";
+import ChartWrapper from "../../DashboardComponents/ChartWrapper";
+import GenericPieChart from "../../DashboardComponents/GenericPieChart";
+import GenericBarChart from "../../DashboardComponents/GenericBarChart";
+import GenericLinearProgress from "../../DashboardComponents/GenericLinearProgress";
+import { useAppTheme } from "../../context/ThemeContext"
 
 const AdminDashboard = () => {
+  const { colors } = useAppTheme();
   return (
-    <Box sx={{ padding: 3, backgroundColor: '#f5f7fb', minHeight: '100vh' }}>
-      {/* Summary Cards */}
-      <Grid container spacing={3}>
-        
-                <GenericCard
-                  cards={cardsData}
-                />
-                <GenericLineChart data={lineChartData} xKey="name" yKey="value" color="#1976d2"  />
+    <Box sx={{ padding: 3, backgroundColor: colors.dashboardBackground, minHeight: "100vh" }}>
+      <Grid container spacing={3} >
+          {cardData.map((card, index) => (
+           <Grid size={{ xs: 6, md : 3 }} key={index}>
+           <GenericCard value={card.value} title={card.title} />
+         </Grid>
+          ))}
+      </Grid>
+      <Grid container spacing={3} sx={{ mt: 3 }}>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <ChartWrapper title="Monthly Revenue">
+            <GenericLineChart 
+            data={revenueData}
+            title="Monthly Revenue"
+            yAxisLabel="Revenue ($)"
+            // lineColor="#4CAF50"
+            />
+          </ChartWrapper>
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+        <ChartWrapper title="User Analytics">
+          <GenericPieChart data={userData} colors = {[ colors.pieChartColor1, colors.pieChartColor2]} />
+          </ChartWrapper>
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+        <ChartWrapper title="Course Enrollments">
+          <GenericBarChart data={enrollments} />
+          </ChartWrapper>
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+        <ChartWrapper title="Top Courses">
+          <GenericLinearProgress data={topCourses} />
+          </ChartWrapper>
+        </Grid>
       </Grid>
     </Box>
   );

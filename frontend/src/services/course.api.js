@@ -207,6 +207,15 @@ export const apiCourse = createApi({
         method: "PATCH",
       })
     }),
+
+    updateCourseDetails: builder.mutation({
+      query: ({courseId, data}) => ({
+        url: `course/details/${courseId}`,
+        method: "PUT",  
+        body: data,
+        credentials: "include"
+      }),
+    }),
   }),
 });
 
@@ -235,4 +244,5 @@ export const {
   useGetLectureVideoQuery,
   useGetMyCoursesQuery,
   useTerminateCourseMutation,
+  useUpdateCourseDetailsMutation,
 } = apiCourse;

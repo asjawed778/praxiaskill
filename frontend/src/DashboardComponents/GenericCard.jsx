@@ -1,58 +1,33 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
-import {useAppTheme} from "../context/ThemeContext"
+import React from 'react';
+import { Card, CardContent, Typography } from '@mui/material';
+import { useAppTheme } from '../context/ThemeContext';
 
-const GenericCard = ({ cards = [] }) => {
-  if (!Array.isArray(cards)) return null;
-  const { colors } = useAppTheme();
-
+const GenericCard = ({ title, value }) => {
+  const { colors } = useAppTheme()
   return (
-    <Box
-      sx={{
+    <Card 
+      sx={{ 
+        height: '100%', 
         width: '100%',
-        display: 'grid',
-        // justifyContent: cards.length <= 2 ? 'center' : 'flex-start',
-        justifyContent: "center",
-        gap: 1.5,
-        gridTemplateColumns: {
-          xs: 'repeat(auto-fit, minmax(140px, 1fr))', // allows shrinking on small screens
-          md: 'repeat(4, 1fr)',
-        }
+        display: 'flex', 
+        flexDirection: 'column',
+        backgroundColor: colors.cardBackground,
+        color: colors.cardText,
+        textAlign: 'center',
+        borderRadius: '10px',
+        px: 2
       }}
     >
-      {cards.length === 0 ? (
-        <Typography variant="h6" textAlign="center" width="100%">
-          No cards available
+      <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <Typography variant="h4" component="div" fontWeight="bold" gutterBottom>
+          {value}
         </Typography>
-      ) : (
-        cards.map((card, index) => (
-          <Card
-            key={index}
-            sx={{
-              display: 'grid',
-              justifyContent: "center",
-              borderRadius: 4,
-              backgroundColor: colors.cardBackgroundColor,
-              color: colors.cardText,
-              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-              '&:hover': {
-                transform: 'translateY(-4px)',
-                boxShadow: 6,
-              },
-            }}
-          >
-            <CardContent>
-              <Typography variant="h5" component="div">
-                {card.value}
-              </Typography>
-              <Typography variant="body2" >
-                {card.label}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))
-      )}
-    </Box>
+        <Typography variant="body1" color="inherit">
+          {title}
+        </Typography>
+      </CardContent>
+    </Card>
   );
 };
 
-export default GenericCard;
+export default GenericCard
