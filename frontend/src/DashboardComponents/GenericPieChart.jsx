@@ -1,12 +1,7 @@
 import React from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import PropTypes from 'prop-types';
+import { Box } from '@mui/material';
 
-/**
- * Generic Pie Chart component that can be used anywhere in your application
- * 
- * @param {Object} props - Component props
- */
 const GenericPieChart = (props) => {
   const {
     data,
@@ -14,7 +9,7 @@ const GenericPieChart = (props) => {
     nameKey = 'name',
     colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FF6B6B', '#6C8EBF'],
     width = '100%',
-    height = 300,
+    height = '220px',
     innerRadius = 0,
     outerRadius = '80%',
     showLabel = true,
@@ -25,7 +20,6 @@ const GenericPieChart = (props) => {
     containerStyle = {},
   } = props;
 
-  // Default label rendering function
   const renderCustomizedLabel = (props) => {
     const { cx, cy, midAngle, innerRadius, outerRadius, percent, name } = props;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -33,13 +27,9 @@ const GenericPieChart = (props) => {
     const y = cy + radius * Math.sin(-midAngle * Math.PI / 180);
 
     if (!showLabel) return null;
-
-    // Use custom formatter if provided
     if (labelFormatter) {
       return labelFormatter(props);
     }
-
-    // Only display label if segment is big enough
     if (percent < 0.05) return null;
 
     return (
@@ -55,11 +45,9 @@ const GenericPieChart = (props) => {
       </text>
     );
   };
-
-  // Handle empty or invalid data
   if (!data || !Array.isArray(data) || data.length === 0) {
     return (
-      <div style={{ 
+      <Box sx={{ 
         height, 
         width, 
         display: 'flex', 
@@ -68,12 +56,12 @@ const GenericPieChart = (props) => {
         ...containerStyle
       }}>
         No data available
-      </div>
+      </Box>
     );
   }
 
   return (
-    <div style={{ width, height, ...containerStyle }}>
+    <Box sx={{ height: '220px', }}>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
@@ -106,32 +94,10 @@ const GenericPieChart = (props) => {
           )}
         </PieChart>
       </ResponsiveContainer>
-    </div>
+    </Box>
   );
 };
 
-// PropTypes for component documentation and validation
-GenericPieChart.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      value: PropTypes.number.isRequired,
-      color: PropTypes.string,
-    })
-  ).isRequired,
-  dataKey: PropTypes.string,
-  nameKey: PropTypes.string,
-  colors: PropTypes.arrayOf(PropTypes.string),
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  innerRadius: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  outerRadius: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  showLabel: PropTypes.bool,
-  showLegend: PropTypes.bool,
-  labelFormatter: PropTypes.func,
-  tooltipFormatter: PropTypes.func,
-  legendFormatter: PropTypes.func,
-  containerStyle: PropTypes.object,
-};
-
 export default GenericPieChart;
+
+

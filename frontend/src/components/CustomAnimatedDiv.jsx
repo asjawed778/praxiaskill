@@ -1,17 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-interface AnimatedDivProps {
-  children: React.ReactNode;
-  animationType: "fade" | "slide" | "zoom" | "rotate" | "bounce" | "flip";
-  duration?: number;
-  delay?: number;
-  loop?: boolean; 
-  repeat?: number;
-  trigger?: "hover" | "tap" | "scroll"; 
-  sx?: object;
-}
-
 const animationVariants = {
   fade: {
     hidden: { opacity: 0 },
@@ -43,7 +32,7 @@ const animationVariants = {
   },
 };
 
-const CustomAnimatedDiv: React.FC<AnimatedDivProps> = ({
+const CustomAnimatedDiv = ({
   children,
   animationType = "fade",
   duration = 0.5,
@@ -53,7 +42,7 @@ const CustomAnimatedDiv: React.FC<AnimatedDivProps> = ({
   trigger,
   sx = {},
 }) => {
-  const animationProps: any = {
+  const animationProps = {
     initial: "hidden",
     animate: "visible",
     variants: animationVariants[animationType],
