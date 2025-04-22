@@ -92,9 +92,6 @@ const AddCourse = () => {
     };
   }, [updateCourse]);
   
-  
-  
-
   const methods = useForm({
     resolver,
     mode: "onChange",

@@ -1,29 +1,39 @@
-export const cardsData = [
-    {
-      id: 1,
-      value: '12.5k',
-      label: "Total User"
-    },
-    {
-      id: 2,
-      value: 1200,
-      label: "Active User"
-    },
-    {
-      id: 3,
-      value: '$3,480',
-      label: "Total Sales"
-    },
-    {
-      id: 4,
-       value: '$3,480',
-      label: "Mondthly Revenue"
-    },
-  ];
+export const cardData = [
+    { title: 'Total Users', value: '12.5K' },
+    { title: 'Active Courses', value: '1,200' },
+    { title: 'Total Sales', value: '$3,480' },
+    { title: 'Monthly Revenue', value: '$120' },
+  ]
 
- export const lineChartData = [
-    { name: 'Jan', value: 400 },
-    { name: 'Feb', value: 600 },
-    { name: 'Mar', value: 300 },
-    { name: 'Apr', value: 700 },
+  export const revenueData = [
+    { month: 'Jan', value: 200 },
+    { month: 'Feb', value: 600 },
+    { month: 'Mar', value: 1200 },
+    { month: 'Apr', value: 1300 },
+    { month: 'May', value: 2000 },
   ];
+  
+  export const userData = [
+    { name: "New Users", value: 65 },
+    { name: "Returning Users", value: 35 },
+  ];
+  
+  export const enrollments = [
+    { course: 'B', count: 300 },
+    { course: 'C', count: 400 },
+    { course: 'D', count: 550 },
+    { course: 'E', count: 700 },
+  ];
+  
+  // export const topCourses = [
+  //   { name: "Course B", progress: 90 },
+  //   { name: "Course D", progress: 70 },
+  //   { name: "Course A", progress: 60 },
+  //   { name: "Course C", progress: 65 },
+  // ];
+  export const topCourses = [
+    { name: 'Course B', popularity: 95 },
+    { name: 'Course D', popularity: 90 },
+    { name: 'Course A', popularity: 85 },
+    { name: 'Course C', popularity: 80 },
+  ]

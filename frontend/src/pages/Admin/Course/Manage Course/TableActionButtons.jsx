@@ -19,7 +19,7 @@ const TableActionButtons = ({menuStyles, setOpenMenu, setMenuStyles, courses, op
 
     const handleCloseOnClick = () => {
         setOpenMenu(null);
-        setMenuStyles({...menuStyles, display:"none"}); //to avoid flickering Action menu
+        setMenuStyles({...menuStyles, display:"none"}); 
     }
 
     const handleTeminateCourse = (course) => {
