@@ -250,3 +250,37 @@ export const resetPassword = asyncHandler(
     res.send(createResponse(200, "Password reset successfully"));
   }
 );
+
+export const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
+  const { pageNo, limit, search, active } = req.query;
+  const page = Number(pageNo) || 1;
+  const limitNumber = Number(limit) || 10;
+  const searchQuery = typeof search === 'string' ? search : undefined;
+  const activeFilter = typeof active === 'string' ? active === 'true' : undefined;
+
+  const users = await userService.getAllUsers(page, limitNumber, searchQuery, activeFilter);
+  res.send(createResponse(users, "All users fetched successfully"));
+});
+
+export const updateUserStatus = asyncHandler(async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+
+  const user = await userService.updateUserStatus(userId);
+  if (!user) {
+    throw createHttpError(404, "User not found");
+  }
+
+  res.send(createResponse(user, "User status updated successfully"));
+});
+
+export const getMe = asyncHandler(async (req: Request, res: Response) => {
+  const user = req.user;
+  if (!user) {
+    throw createHttpError(404, "User not found, please login again");
+  }
+  const result = await userService.getMe(user._id);
+  if (!result) {
+    throw createHttpError(404, "User not found, please login again");
+  }
+  res.send(createResponse(result, "User fetched successfully"));
+});

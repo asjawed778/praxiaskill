@@ -72,7 +72,7 @@ export const getUserByEmail = async (email: string) => {
 };
 
 
-export const updateRefreshToken = async (id: string, refreshToken: string): Promise<Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> | null>  => {
+export const updateRefreshToken = async (id: string, refreshToken: string): Promise<Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> | null> => {
     const user = await UserSchema.findByIdAndUpdate(id,
         { refreshToken },
         { new: true }
@@ -80,10 +80,13 @@ export const updateRefreshToken = async (id: string, refreshToken: string): Prom
     return omit(user?.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
 }
 
+export const getMe = async (id: string) => {
+    const result = await UserSchema.findById(id).select("-password -refreshToken -resetPasswordToken").lean();
+    return result as Omit<IUser, "password" | "refreshToken" | "resetPasswordToken">;
+}
 
 export const getUserById = async (id: string) => {
     const result = await UserSchema.findById(id).lean();
-
     return result;
 }
 
@@ -94,32 +97,32 @@ export const deleteRefreshToken = async (id: string): Promise<Omit<IUser, "passw
 }
 
 
-export const updatePassword = async(userId: string, newPassword: string): Promise<Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> | null> => {
-    
+export const updatePassword = async (userId: string, newPassword: string): Promise<Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> | null> => {
+
     const hashedPass = await hashPassword(newPassword);
-     
-    const user = await UserSchema.findByIdAndUpdate(userId, {password: hashedPass});
+
+    const user = await UserSchema.findByIdAndUpdate(userId, { password: hashedPass });
     return omit(user?.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
 }
 
 export const getInstructorList = async (): Promise<Pick<IUser, "_id" | "name" | "email" | "role" | "profilePic">[]> => {
     const instructors = await UserSchema.find({ role: "INSTRUCTOR" })
         .select("_id name email role profilePic")
-        .lean(); 
+        .lean();
 
     return instructors as Pick<IUser, "_id" | "name" | "email" | "role" | "profilePic">[];
 };
 
 export const getInstructorById = async (instructorId: string): Promise<Pick<IUser, "_id" | "name" | "email" | "role" | "profilePic"> | null> => {
     const instructor = await UserSchema.findOne(
-      { _id: instructorId, role: "INSTRUCTOR" } 
+        { _id: instructorId, role: "INSTRUCTOR" }
     )
-      .select("_id name email role profilePic")
-      .lean();
-  
+        .select("_id name email role profilePic")
+        .lean();
+
     return instructor;
 };
-  
+
 
 /**
  * Updates the reset password token for a user.
@@ -128,8 +131,8 @@ export const getInstructorById = async (instructorId: string): Promise<Pick<IUse
  * @param {string} token - The reset password token to be stored in the database.
  * @returns {Promise<void>} A promise that resolves when the token is updated.
  */
-export const updateResetToken = async(userId: string, token: string) => {
-    await UserSchema.findByIdAndUpdate(userId, {resetPasswordToken: token});
+export const updateResetToken = async (userId: string, token: string) => {
+    await UserSchema.findByIdAndUpdate(userId, { resetPasswordToken: token });
 }
 
 
@@ -142,18 +145,100 @@ export const updateResetToken = async(userId: string, token: string) => {
  * @throws {HttpError} Throws an error if the reset token is invalid or expired.
  * @returns {Promise<User | null>} A promise that resolves to the updated user document, or null if the user is not found.
  */
-export const resetPassword = async(userId: string, token: string, newPassword: string) => {
+export const resetPassword = async (userId: string, token: string, newPassword: string) => {
     const user = await UserSchema.findById(userId);
-    if(!user?.resetPasswordToken) {
+    if (!user?.resetPasswordToken) {
         throw createHttpError(401, "Token expired or invalid");
     }
     const hashPass = await bcrypt.hash(newPassword, 12);
-    const newUser = await UserSchema.findByIdAndUpdate(userId, 
+    const newUser = await UserSchema.findByIdAndUpdate(userId,
         {
             password: hashPass, resetPasswordToken: null
-        }, {new: true}
+        }, { new: true }
     );
 
     return newUser;
 }
+
+function escapeRegex(text: string): string {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
+export const getAllUsers = async (
+    pageNo: number,
+    limit: number,
+    search?: string,
+    active?: boolean 
+): Promise<{
+    users: Pick<IUser, "_id" | "name" | "email" | "role" | "profilePic" | "active">[];
+    totalDocs: number;
+    currentPage: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+}> => {
+    const skip = (pageNo - 1) * limit;
+
+    // Base query always excludes SUPER_ADMIN
+    const baseQuery: Record<string, any> = {
+        role: { $ne: "SUPER_ADMIN" }
+    };
+
+    // Add active status filter if provided
+    if (typeof active === 'boolean') {
+        baseQuery.active = active;
+    }
+
+    // Enhanced search query
+    const finalQuery = search ? {
+        $and: [
+            baseQuery,
+            {
+                $or: [
+                    { name: { $regex: escapeRegex(search), $options: 'i' } },
+                    { email: { $regex: escapeRegex(search), $options: 'i' } }
+                ]
+            }
+        ]
+    } : baseQuery;
+
+    const usersQuery = UserSchema.find(finalQuery)
+        .select("_id name email role profilePic active")
+        .skip(skip)
+        .limit(limit)
+        .lean();
+
+    const totalDocs = await UserSchema.countDocuments(finalQuery);
+
+    const users = await usersQuery;
+
+    const totalPages = Math.ceil(totalDocs / limit);
+    const currentPage = pageNo;
+    const hasNext = currentPage < totalPages;
+    const hasPrev = currentPage > 1;
+
+    return {
+        users: users as Pick<IUser, "_id" | "name" | "email" | "role" | "profilePic" | "active">[],
+        totalDocs,
+        currentPage,
+        totalPages,
+        hasNext,
+        hasPrev
+    };
+};
+
+export const updateUserStatus = async (userId: string) => {
+    const user = await UserSchema.findById(userId);
+    if (!user) {
+        throw createHttpError(404, "User not found");
+    }
+
+    const updatedUser = await UserSchema.findByIdAndUpdate(
+        userId,
+        { active: !user.active },
+        { new: true }
+    );
+
+    return omit(updatedUser?.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
+};
 
