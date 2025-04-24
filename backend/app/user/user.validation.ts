@@ -35,10 +35,9 @@ export const loginUser = [
         .isEmail().withMessage('Invalid email format'),
 
     body('password')
-    .notEmpty().withMessage('password is required')
-    .isString().withMessage('password must be a string')
+        .notEmpty().withMessage('password is required')
+        .isString().withMessage('password must be a string')
 ];
-
 
 export const updatePassword = [
     body('oldPassword')
@@ -54,7 +53,6 @@ export const updatePassword = [
         .matches(/[0-9]/).withMessage('New password must contain at least one number')
         .matches(/[\W_]/).withMessage('New password must contain at least one special character'),
 ];
-
 
 export const forgotPassword = [
     body('email')
@@ -76,6 +74,12 @@ export const resetPassword = [
         .matches(/[a-z]/).withMessage('Password must contain at least one lowercase letter')
         .matches(/\d/).withMessage('Password must contain at least one number')
         .matches(/[\W_]/).withMessage('Password must contain at least one special character'),
+];
+
+export const updateUserStatus = [
+    param('userId')
+        .notEmpty().withMessage('User ID is required')
+        .isString().withMessage('User ID must be a string'),
 ];
 
 
