@@ -21,14 +21,12 @@ export const clearTempUser = async (email: string) => {
     await TempUserSchema.deleteMany({ email });
 };
 
-
 export const createTempUser = async (data: ITempUser): Promise<Omit<ITempUser, "password">> => {
     const hashedPass = await hashPassword(data.password);
     const result = await TempUserSchema.create({ ...data, password: hashedPass });
 
     return omit(result.toObject() as ITempUser, ["password"]);
 };
-
 
 export const createUserByAdmin = async (data: ICreateUser): Promise<ICreateUserResponse> => {
     const hashedPass = await hashPassword("Praxia@123");
@@ -88,12 +86,10 @@ export const authenticateUserById = async (id: string, password: string): Promis
     return omit(user.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
 }
 
-
 export const getUserByEmail = async (email: string) => {
     const result = await UserSchema.findOne({ email }).lean();
     return result as IUser;
 };
-
 
 export const updateRefreshToken = async (id: string, refreshToken: string): Promise<Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> | null> => {
     const user = await UserSchema.findByIdAndUpdate(id,
@@ -101,24 +97,22 @@ export const updateRefreshToken = async (id: string, refreshToken: string): Prom
         { new: true }
     );
     return omit(user?.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
-}
+};
 
 export const getMe = async (id: string) => {
     const result = await UserSchema.findById(id).select("-password -refreshToken -resetPasswordToken").lean();
     return result as Omit<IUser, "password" | "refreshToken" | "resetPasswordToken">;
-}
+};
 
 export const getUserById = async (id: string) => {
     const result = await UserSchema.findById(id).lean();
     return result;
-}
-
+};
 
 export const deleteRefreshToken = async (id: string): Promise<Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> | null> => {
     const user = await UserSchema.findByIdAndUpdate(id, { refreshToken: '' });
     return omit(user?.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
-}
-
+};
 
 export const updatePassword = async (userId: string, newPassword: string): Promise<Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> | null> => {
 
@@ -126,7 +120,7 @@ export const updatePassword = async (userId: string, newPassword: string): Promi
 
     const user = await UserSchema.findByIdAndUpdate(userId, { password: hashedPass });
     return omit(user?.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
-}
+};
 
 export const getInstructorList = async (): Promise<Pick<IUser, "_id" | "name" | "email" | "role" | "profilePic">[]> => {
     const instructors = await UserSchema.find({ role: "INSTRUCTOR" })
@@ -156,7 +150,7 @@ export const getInstructorById = async (instructorId: string): Promise<Pick<IUse
  */
 export const updateResetToken = async (userId: string, token: string) => {
     await UserSchema.findByIdAndUpdate(userId, { resetPasswordToken: token });
-}
+};
 
 
 /**
@@ -181,11 +175,11 @@ export const resetPassword = async (userId: string, token: string, newPassword: 
     );
 
     return newUser;
-}
+};
 
 function escapeRegex(text: string): string {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-}
+};
 
 export const getAllUsers = async (
     pageNo: number,
