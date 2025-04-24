@@ -2,7 +2,7 @@ import * as userService from "./user.service";
 import { createResponse } from "../common/helper/response.hepler";
 import asyncHandler from "express-async-handler";
 import { type Request, type Response } from "express";
-import { ITempUser, IUser } from "./user.dto";
+import { ICreateUser, ITempUser, IUser } from "./user.dto";
 import createHttpError from "http-errors";
 import { Payload } from "./user.dto";
 import bcrypt from "bcryptjs";
@@ -13,6 +13,8 @@ import { loadConfig } from "../common/helper/config.hepler";
 import { UserRole } from "./user.schema";
 import * as OTPSrvice from '../common/services/OTP.service';
 import { emailQueue } from "../common/queue/queues/email.queue";
+import * as CourseService from "../course/course.service";
+import enrollmentSchema from "../course/enrollment.schema";
 
 loadConfig();
 
@@ -259,7 +261,14 @@ export const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
   const activeFilter = typeof active === 'string' ? active === 'true' : undefined;
 
   const users = await userService.getAllUsers(page, limitNumber, searchQuery, activeFilter);
-  res.send(createResponse(users, "All users fetched successfully"));
+  const result = await Promise.all(users.users.map(async (user) => {
+    const coursesEnrolled = await enrollmentSchema.countDocuments({ userId: user._id });
+    return {
+      ...user,
+      coursesEnrolled
+    };
+  }));
+  res.send(createResponse({ ...users, users: result }, "All users fetched successfully"));
 });
 
 export const updateUserStatus = asyncHandler(async (req: Request, res: Response) => {
@@ -284,3 +293,53 @@ export const getMe = asyncHandler(async (req: Request, res: Response) => {
   }
   res.send(createResponse(result, "User fetched successfully"));
 });
+
+export const addUserByAdmin = asyncHandler(async (req: Request, res: Response) => {
+  const data: ICreateUser = req.body;
+
+  const existingUser = await userService.getUserByEmail(data.email);
+  if (existingUser) {
+    throw createHttpError(409, "User already Exits");
+  }
+
+  if ("role" in data) {
+    if (![UserRole.USER, UserRole.INSTRUCTOR].includes(data.role)) {
+      throw createHttpError(400, "Invalid role. Role must be either USER or INSTRUCTOR.");
+    }
+  }
+
+  const result = await userService.createUserByAdmin(data);
+
+  const user = { ...result, coursesEnrolled: 0 };
+
+  const resetToken = await jwthelper.generatePasswordRestToken(user._id);
+
+  await userService.updateResetToken(user._id, resetToken);
+
+  const resetLink = `${BASE_URL}/reset-password/${resetToken}`;
+  const emailContent = resetPasswordEmailTemplate(resetLink);
+
+  await emailQueue.add('sendEmail', {
+    from: process.env.MAIL_USER,
+    to: user.email,
+    subject: "Password reset Link",
+    html: emailContent,
+  });
+  res.send(createResponse(user, "User created successfully"));
+});
+
+export const updateUserByAdmin = asyncHandler(async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const data: ICreateUser = req.body;
+
+  if ("role" in data) {
+    if (![UserRole.USER, UserRole.INSTRUCTOR].includes(data.role)) {
+      throw createHttpError(400, "Invalid role. Role must be either USER or INSTRUCTOR.");
+    }
+  }
+
+  const result = await userService.updateUserByAdmin(userId, data);
+
+  res.send(createResponse(result, "User updated successfully"));
+}
+);

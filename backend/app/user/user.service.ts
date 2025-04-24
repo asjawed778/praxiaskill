@@ -1,4 +1,4 @@
-import { ITempUser, type IUser } from "./user.dto";
+import { ICreateUser, ICreateUserResponse, IGetUserResponse, ITempUser, type IUser } from "./user.dto";
 import UserSchema from "./user.schema";
 import bcrypt from 'bcryptjs';
 import * as jwthelper from '../common/helper/jwt.helper';
@@ -30,10 +30,33 @@ export const createTempUser = async (data: ITempUser): Promise<Omit<ITempUser, "
 };
 
 
+export const createUserByAdmin = async (data: ICreateUser): Promise<ICreateUserResponse> => {
+    const hashedPass = await hashPassword("Praxia@123");
+    const profilePic = data.profilePic || `${process.env.PROFILE_URL}${data.name}`;
+    const result = await UserSchema.create({ ...data, password: hashedPass, profilePic });
+    const userResponse = omit(result.toObject(), ["password", "refreshToken", "resetPasswordToken"]) as Partial<ICreateUserResponse>;
+    if (!userResponse._id || !userResponse.name || !userResponse.email || !userResponse.role) {
+        throw createHttpError(500, "User creation failed: Missing required fields");
+    }
+    return userResponse as ICreateUserResponse;
+};
+
+export const updateUserByAdmin = async (userId: string, data: ICreateUser): Promise<ICreateUserResponse> => {
+    const user = await UserSchema.findByIdAndUpdate(userId, data, { new: true });
+    if (!user) {
+        throw createHttpError(404, "User not found");
+    }
+    const userResponse = omit(user.toObject(), ["password", "refreshToken", "resetPasswordToken"]) as Partial<ICreateUserResponse>;
+    if (!userResponse._id || !userResponse.name || !userResponse.email || !userResponse.role) {
+        throw createHttpError(500, "User update failed: Missing required fields");
+    }
+    return userResponse as ICreateUserResponse;
+};
+
 export const getTempUserByEmail = async (email: string): Promise<ITempUser> => {
     const result = await TempUserSchema.findOne({ email }).lean();
     return result as ITempUser;
-}
+};
 
 export const createUser = async (tempUser: ITempUser): Promise<Omit<IUser, "password" | "refreshToken" | "resetPasswordToken">> => {
     const profilePic = `${process.env.PROFILE_URL}${tempUser.name}`;
@@ -170,7 +193,7 @@ export const getAllUsers = async (
     search?: string,
     active?: boolean 
 ): Promise<{
-    users: Pick<IUser, "_id" | "name" | "email" | "role" | "profilePic" | "active">[];
+    users: IGetUserResponse[];
     totalDocs: number;
     currentPage: number;
     totalPages: number;
@@ -218,7 +241,7 @@ export const getAllUsers = async (
     const hasPrev = currentPage > 1;
 
     return {
-        users: users as Pick<IUser, "_id" | "name" | "email" | "role" | "profilePic" | "active">[],
+        users: users as IGetUserResponse[],
         totalDocs,
         currentPage,
         totalPages,
@@ -241,4 +264,3 @@ export const updateUserStatus = async (userId: string) => {
 
     return omit(updatedUser?.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
 };
-
