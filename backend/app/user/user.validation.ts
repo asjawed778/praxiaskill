@@ -82,6 +82,33 @@ export const updateUserStatus = [
         .isString().withMessage('User ID must be a string'),
 ];
 
+export const addUserByAdmin = [
+    body('name')
+        .notEmpty().withMessage('Name is required')
+        .isString().withMessage('Name must be a string'),
+
+    body('email')
+        .notEmpty().withMessage('Email is required')
+        .isEmail().withMessage('Invalid email format'),
+
+    body('profilePic')
+        .optional()
+        .isString().withMessage('Profile picture URL must be a string'),
+
+    body('role')
+        .notEmpty().withMessage('Role is required')
+        .isString().withMessage('Role must be a string')
+        .isIn(['INSTRUCTOR', 'USER']).withMessage('Invalid role'),
+];
+
+export const updateUserByAdmin = [
+    param('userId')
+        .notEmpty().withMessage('User ID is required')
+        .isString().withMessage('User ID must be a string'),
+
+    ...addUserByAdmin
+];
+
 
 
 

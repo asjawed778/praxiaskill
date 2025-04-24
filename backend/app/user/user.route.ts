@@ -19,5 +19,7 @@ router
         .post('/reset-password/:token', userValidator.resetPassword, catchError, userController.resetPassword)
         .patch('/update-password', authMiddlerware.auth, userValidator.updatePassword, catchError, userController.updatePassword)
         .patch('/status/:userId', authMiddlerware.auth, authMiddlerware.isSuperAdmin, userValidator.updateUserStatus, catchError, userController.updateUserStatus)
+        .post('/add', authMiddlerware.auth, authMiddlerware.isSuperAdmin, userValidator.addUserByAdmin, catchError, userController.addUserByAdmin)
+        .put('/:userId', authMiddlerware.auth, authMiddlerware.isSuperAdmin, userValidator.updateUserByAdmin, catchError, userController.updateUserByAdmin)
 export default router;
 
