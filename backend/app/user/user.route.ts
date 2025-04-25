@@ -21,5 +21,6 @@ router
         .patch('/status/:userId', authMiddlerware.auth, authMiddlerware.isSuperAdmin, userValidator.updateUserStatus, catchError, userController.updateUserStatus)
         .post('/add', authMiddlerware.auth, authMiddlerware.isSuperAdmin, userValidator.addUserByAdmin, catchError, userController.addUserByAdmin)
         .put('/:userId', authMiddlerware.auth, authMiddlerware.isSuperAdmin, userValidator.updateUserByAdmin, catchError, userController.updateUserByAdmin)
+        .post('/assign-course', authMiddlerware.auth, authMiddlerware.isSuperAdmin, userValidator.assignCourseByAdmin, catchError, userController.assignCourseByAdmin)
 export default router;
 

@@ -518,10 +518,10 @@ export const isAlreadyEnrolledInCourse = async (userId: string, courseId: string
     return await enrollmentSchema.exists({
         userId,
         courseId,
-        status: courseEnum.Status.ACTIVE, 
+        status: courseEnum.Status.ACTIVE,
         $or: [
             { expiresAt: null },
-            { expiresAt: { $gt: new Date() } } 
+            { expiresAt: { $gt: new Date() } }
         ]
     });
 };
@@ -631,3 +631,24 @@ export const getMyCourses = async (userId: string, pageNo: number = 1, pageSize:
     };
 };
 
+
+export const assignCourseByAdmin = async (userId: string, courseId: string) => {
+    const course = await courseSchema.findById(courseId);
+    if (!course) {
+        throw createHttpError(404, "Course not found");
+    }
+    const enrollment = await enrollmentSchema.findOne({
+        userId,
+        courseId,
+        status: courseEnum.Status.ACTIVE,
+        $or: [
+            { expiresAt: null },
+            { expiresAt: { $gt: new Date() } }
+        ]
+    });
+    if (enrollment) {
+        throw createHttpError(400, "User already enrolled in this course");
+    }
+    const newEnrollment = await enrollmentSchema.create({ userId, courseId });
+    return { course, enrollment: newEnrollment };
+};

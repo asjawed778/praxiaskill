@@ -109,6 +109,16 @@ export const updateUserByAdmin = [
     ...addUserByAdmin
 ];
 
+export const assignCourseByAdmin = [
+    body('courseId')
+        .notEmpty().withMessage('Course ID is required')
+        .isString().withMessage('Course ID must be a string'),
+
+    body('userId')
+        .notEmpty().withMessage('User ID is required')
+        .isString().withMessage('User ID must be a string'),
+];
+
 
 
 

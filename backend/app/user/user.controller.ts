@@ -15,6 +15,7 @@ import * as OTPSrvice from '../common/services/OTP.service';
 import { emailQueue } from "../common/queue/queues/email.queue";
 import * as CourseService from "../course/course.service";
 import enrollmentSchema from "../course/enrollment.schema";
+import { courseAssignmentEmailTemplate } from "../common/template/courseAssignmentEmailTemplate";
 
 loadConfig();
 
@@ -343,3 +344,24 @@ export const updateUserByAdmin = asyncHandler(async (req: Request, res: Response
   res.send(createResponse(result, "User updated successfully"));
 }
 );
+
+export const assignCourseByAdmin = asyncHandler(async (req: Request, res: Response) => {
+  const { courseId, userId } = req.body;
+  const user = await userService.getUserById(userId);
+  if (!user) {
+    throw createHttpError(404, "User not found");
+  }
+  const { course } = await CourseService.assignCourseByAdmin(userId, courseId);
+  if (!course) {
+    throw createHttpError(404, "Course not found");
+  }
+  const courseLink = `${BASE_URL}/my-courses`;
+  const emailTemplate = courseAssignmentEmailTemplate(user.name, course.title, course.subtitle, course.thumbnail, courseLink);
+  await emailQueue.add('sendEmail', {
+    from: process.env.MAIL_USER,
+    to: user.email,
+    subject: "Course Assigned",
+    html: emailTemplate,
+  });
+  res.send(createResponse({}, "Course assigned successfully"));
+});
