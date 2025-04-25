@@ -1,4 +1,4 @@
-import { ITempUser, type IUser } from "./user.dto";
+import { ICreateUser, ICreateUserResponse, IGetUserResponse, ITempUser, type IUser } from "./user.dto";
 import UserSchema from "./user.schema";
 import bcrypt from 'bcryptjs';
 import * as jwthelper from '../common/helper/jwt.helper';
@@ -21,7 +21,6 @@ export const clearTempUser = async (email: string) => {
     await TempUserSchema.deleteMany({ email });
 };
 
-
 export const createTempUser = async (data: ITempUser): Promise<Omit<ITempUser, "password">> => {
     const hashedPass = await hashPassword(data.password);
     const result = await TempUserSchema.create({ ...data, password: hashedPass });
@@ -29,11 +28,33 @@ export const createTempUser = async (data: ITempUser): Promise<Omit<ITempUser, "
     return omit(result.toObject() as ITempUser, ["password"]);
 };
 
+export const createUserByAdmin = async (data: ICreateUser): Promise<ICreateUserResponse> => {
+    const hashedPass = await hashPassword("Praxia@123");
+    const profilePic = data.profilePic || `${process.env.PROFILE_URL}${data.name}`;
+    const result = await UserSchema.create({ ...data, password: hashedPass, profilePic });
+    const userResponse = omit(result.toObject(), ["password", "refreshToken", "resetPasswordToken"]) as Partial<ICreateUserResponse>;
+    if (!userResponse._id || !userResponse.name || !userResponse.email || !userResponse.role) {
+        throw createHttpError(500, "User creation failed: Missing required fields");
+    }
+    return userResponse as ICreateUserResponse;
+};
+
+export const updateUserByAdmin = async (userId: string, data: ICreateUser): Promise<ICreateUserResponse> => {
+    const user = await UserSchema.findByIdAndUpdate(userId, data, { new: true });
+    if (!user) {
+        throw createHttpError(404, "User not found");
+    }
+    const userResponse = omit(user.toObject(), ["password", "refreshToken", "resetPasswordToken"]) as Partial<ICreateUserResponse>;
+    if (!userResponse._id || !userResponse.name || !userResponse.email || !userResponse.role) {
+        throw createHttpError(500, "User update failed: Missing required fields");
+    }
+    return userResponse as ICreateUserResponse;
+};
 
 export const getTempUserByEmail = async (email: string): Promise<ITempUser> => {
     const result = await TempUserSchema.findOne({ email }).lean();
     return result as ITempUser;
-}
+};
 
 export const createUser = async (tempUser: ITempUser): Promise<Omit<IUser, "password" | "refreshToken" | "resetPasswordToken">> => {
     const profilePic = `${process.env.PROFILE_URL}${tempUser.name}`;
@@ -65,12 +86,10 @@ export const authenticateUserById = async (id: string, password: string): Promis
     return omit(user.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
 }
 
-
 export const getUserByEmail = async (email: string) => {
     const result = await UserSchema.findOne({ email }).lean();
     return result as IUser;
 };
-
 
 export const updateRefreshToken = async (id: string, refreshToken: string): Promise<Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> | null> => {
     const user = await UserSchema.findByIdAndUpdate(id,
@@ -78,24 +97,22 @@ export const updateRefreshToken = async (id: string, refreshToken: string): Prom
         { new: true }
     );
     return omit(user?.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
-}
+};
 
 export const getMe = async (id: string) => {
     const result = await UserSchema.findById(id).select("-password -refreshToken -resetPasswordToken").lean();
     return result as Omit<IUser, "password" | "refreshToken" | "resetPasswordToken">;
-}
+};
 
 export const getUserById = async (id: string) => {
     const result = await UserSchema.findById(id).lean();
     return result;
-}
-
+};
 
 export const deleteRefreshToken = async (id: string): Promise<Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> | null> => {
     const user = await UserSchema.findByIdAndUpdate(id, { refreshToken: '' });
     return omit(user?.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
-}
-
+};
 
 export const updatePassword = async (userId: string, newPassword: string): Promise<Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> | null> => {
 
@@ -103,7 +120,7 @@ export const updatePassword = async (userId: string, newPassword: string): Promi
 
     const user = await UserSchema.findByIdAndUpdate(userId, { password: hashedPass });
     return omit(user?.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
-}
+};
 
 export const getInstructorList = async (): Promise<Pick<IUser, "_id" | "name" | "email" | "role" | "profilePic">[]> => {
     const instructors = await UserSchema.find({ role: "INSTRUCTOR" })
@@ -133,7 +150,7 @@ export const getInstructorById = async (instructorId: string): Promise<Pick<IUse
  */
 export const updateResetToken = async (userId: string, token: string) => {
     await UserSchema.findByIdAndUpdate(userId, { resetPasswordToken: token });
-}
+};
 
 
 /**
@@ -158,11 +175,11 @@ export const resetPassword = async (userId: string, token: string, newPassword: 
     );
 
     return newUser;
-}
+};
 
 function escapeRegex(text: string): string {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-}
+};
 
 export const getAllUsers = async (
     pageNo: number,
@@ -170,7 +187,7 @@ export const getAllUsers = async (
     search?: string,
     active?: boolean 
 ): Promise<{
-    users: Pick<IUser, "_id" | "name" | "email" | "role" | "profilePic" | "active">[];
+    users: IGetUserResponse[];
     totalDocs: number;
     currentPage: number;
     totalPages: number;
@@ -218,7 +235,7 @@ export const getAllUsers = async (
     const hasPrev = currentPage > 1;
 
     return {
-        users: users as Pick<IUser, "_id" | "name" | "email" | "role" | "profilePic" | "active">[],
+        users: users as IGetUserResponse[],
         totalDocs,
         currentPage,
         totalPages,
@@ -241,4 +258,3 @@ export const updateUserStatus = async (userId: string) => {
 
     return omit(updatedUser?.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
 };
-

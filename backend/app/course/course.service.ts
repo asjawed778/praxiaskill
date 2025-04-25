@@ -107,6 +107,11 @@ export const getCourseContent = async (courseId: string): Promise<any> => {
     return coursesContent;
 };
 
+export const getEnrolledCourseCountByUser = async (userId: string): Promise<number> => {
+    const count = await enrollmentSchema.countDocuments({ userId });
+    return count;
+};
+
 
 /**
  * Moves a course to draft by updating its status to "DRAFT".
