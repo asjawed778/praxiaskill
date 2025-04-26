@@ -78,14 +78,14 @@ const Header = () => {
           >
             {/* Logo and Nav */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-              <Link href="/" underline="none">
+              <NavLink to="/" underline="none">
                 <Box
                   component="img"
                   src={logo}
                   alt="Logo"
                   sx={{ height: 40, cursor: "pointer" }}
                 />
-              </Link>
+              </NavLink>
 
               {!isMobile && (
                 <Box sx={{ display: "flex", gap: 4, fontSize: "14px" }}>

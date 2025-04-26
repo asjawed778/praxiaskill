@@ -14,26 +14,25 @@ import UpdatePasswordModal from "../modals/UpdatePasswordModal";
 import { Link, useNavigate } from "react-router-dom";
 
 // Initial Page on Screen
-function AuthPage({reset=false}) {
+function AuthPage({ reset = false }) {
   const navigate = useNavigate()
 
   const [signupModal, setSignupModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
   const [otpModal, setOtpModal] = useState(false);
   const [signupData, setSignupData] = useState(null);
-  
+
   const [resetModal, setResetModal] = useState(false);
   const [updatePasswordModal, setUpdatePasswordModal] = useState(false);
 
   //to invoke the reset passoword modal
-  
+
   useEffect(() => {
-    if(reset)
-    {
+    if (reset) {
       setResetModal(false);
       setUpdatePasswordModal(true);
     }
-  },[reset])
+  }, [reset])
 
   // email to send while changing password
   const [email, setEmail] = useState("");
@@ -48,6 +47,9 @@ function AuthPage({reset=false}) {
   const loginAccountHandler = () => {
     setLoginModal(true);
   };
+  useEffect(() => {
+    console.log("signupData in auth page: ", signupData);
+  }, [signupData])
 
   return (
     <>
@@ -115,18 +117,18 @@ function AuthPage({reset=false}) {
           </button>
         </div>
       </div>
-
-      <SignupModal
-        signupModal={signupModal}
-        setSignupModal={setSignupModal}
-        setOtpModal={setOtpModal}
-        setSignupData={setSignupData}
-        setLoginModal={setLoginModal}
-      />
       <OTPModal
         otpModal={otpModal}
         setOtpModal={setOtpModal}
         signupData={signupData}
+      />
+      <SignupModal
+        signupModal={signupModal}
+        setSignupModal={setSignupModal}
+        setOtpModal={setOtpModal}
+        signupData={signupData}
+        setSignupData={setSignupData}
+        setLoginModal={setLoginModal}
       />
       <LoginModal
         loginModal={loginModal}

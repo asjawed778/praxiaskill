@@ -32,7 +32,7 @@ const sidebarItems = [
     ],
   },
   {
-    path: "users",
+    path: "/dashboard/users",
     label: "Users",
     icon: "GroupOutlined",
   },
