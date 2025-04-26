@@ -16,6 +16,9 @@ import { emailQueue } from "../common/queue/queues/email.queue";
 import * as CourseService from "../course/course.service";
 import enrollmentSchema from "../course/enrollment.schema";
 import { courseAssignmentEmailTemplate } from "../common/template/courseAssignmentEmailTemplate";
+import { UploadedFile } from "express-fileupload";
+import * as AWSService from "../common/services/AWS.service";
+import path from 'path';
 
 loadConfig();
 
@@ -364,4 +367,42 @@ export const assignCourseByAdmin = asyncHandler(async (req: Request, res: Respon
     html: emailTemplate,
   });
   res.send(createResponse({}, "Course assigned successfully"));
+});
+
+export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
+  const userId = req.query.userId || req.user?._id;
+  
+  if (!userId) {
+    throw createHttpError(400, "User ID is required");
+  }
+
+  if (!req.files || !req.files.file) {
+    throw createHttpError(400, "No file was uploaded");
+  }
+
+  const file = req.files.file as UploadedFile;
+
+  // Validate file type
+  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  if (!allowedMimeTypes.includes(file.mimetype)) {
+    throw createHttpError(400, "Only JPEG, PNG, and GIF images are allowed");
+  }
+
+  // Validate file size (e.g., 5MB max)
+  const maxSize = 5 * 1024 * 1024;
+  if (file.size > maxSize) {
+    throw createHttpError(400, "File size exceeds 5MB limit");
+  }
+
+  // Create a unique filename to prevent collisions
+  const fileExt = path.extname(file.name);
+  const uniqueFilename = `${Date.now()}-${Math.round(Math.random() * 1e9)}${fileExt}`;
+  const uploadPath = `public/images/${uniqueFilename}`;
+
+  try {
+    const result = await AWSService.putObject(file, uploadPath);
+    res.send(createResponse(result, "Image uploaded successfully"));
+  } catch (error) {
+    throw createHttpError(500, "Failed to upload image to storage");
+  }
 });

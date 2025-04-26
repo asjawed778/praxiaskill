@@ -116,3 +116,23 @@ export const validateChunkUpload = (req: Request, res: Response, next: NextFunct
 
     next();
 };
+
+// export const imageUpload = (req: Request, res: Response, next: NextFunction) => {
+//     if (!req.files || !req.files.file) {
+//         throw createHttpError(400, "file is required");
+//     }
+
+//     const file = req.files.thumbnail as fileUpload.UploadedFile;
+//     const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+//     const maxSize = 5 * 1024 * 1024;
+
+//     if (!allowedTypes.includes(file.mimetype)) {
+//         throw createHttpError(400, "Thumbnail must be an image (jpg, jpeg, png)");
+//     }
+
+//     if (file.size > maxSize) {
+//         throw createHttpError(400, "Thumbnail must be less than 5MB");
+//     }
+
+//     next();
+// };

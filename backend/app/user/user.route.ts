@@ -4,7 +4,7 @@ import { catchError } from "../common/middleware/cath-error.middleware";
 import * as userController from "./user.controller";
 import * as userValidator from "./user.validation";
 import * as authMiddlerware from "../common/middleware/auth.middleware";
-
+import * as fileUploadMiddleware from "../common/middleware/fileUpload.middleware";
 const router = Router();
 
 router
@@ -22,5 +22,6 @@ router
         .post('/add', authMiddlerware.auth, authMiddlerware.isSuperAdmin, userValidator.addUserByAdmin, catchError, userController.addUserByAdmin)
         .put('/:userId', authMiddlerware.auth, authMiddlerware.isSuperAdmin, userValidator.updateUserByAdmin, catchError, userController.updateUserByAdmin)
         .post('/assign-course', authMiddlerware.auth, authMiddlerware.isSuperAdmin, userValidator.assignCourseByAdmin, catchError, userController.assignCourseByAdmin)
+        // .post('/profile-image', authMiddlerware.auth, fileUploadMiddleware.thumbnailUpload)
 export default router;
 
