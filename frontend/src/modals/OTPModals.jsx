@@ -18,7 +18,7 @@ import { login as loginReducer } from "../store/reducers/authReducer";
  */
 function OTPModal({ otpModal, setOtpModal, signupData }) {
   const [verifySignupOtp, { isLoading, error }] = useVerifySignupOtpMutation();
-
+  const [email, setEmail] = useState(null);
   const otpInputRefs = useRef([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,8 +31,6 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
       otpInputRefs.current[0]?.focus();
     }
   }, [otpModal]);
-
-  if (!otpModal) return null;
 
   /**
    * Closes the OTP modal.
@@ -95,7 +93,6 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
   const otpSubmitHandler = async (e) => {
     e.preventDefault();
     const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
-    const {email} = signupData
     const userRegisterData = { email, otp: otpValues };
     try {
       const res = await verifySignupOtp(userRegisterData);
@@ -122,6 +119,13 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
       }
     }
   };
+  useEffect(() => {
+    if(signupData) {
+      setEmail(signupData.email);
+    }
+  }, [signupData]);
+
+  if (!otpModal) return null;
 
   return (
     <div
