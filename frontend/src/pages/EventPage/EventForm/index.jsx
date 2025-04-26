@@ -58,7 +58,6 @@ const MultiStepForm = () => {
 
   // const methods = useForm();
   const onSubmit = async (data) => {
-    console.log("Step Data:", data);
 
     const isValid = await methods.trigger();
     if (!isValid) return;

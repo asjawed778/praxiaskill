@@ -3,7 +3,8 @@ import { useFormContext, Controller } from "react-hook-form";
 import Button from "../../../../components/Button/Button";
 import ButtonLoading from "../../../../components/Button/ButtonLoading";
 
-const Pricing = ({ handlePrev, isLoading }) => {
+const Pricing = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => {
+  
   const {
     register,
     control,
@@ -41,7 +42,9 @@ const Pricing = ({ handlePrev, isLoading }) => {
           placeholder="Enter actual price"
         />
         {errors.price?.actualPrice && (
-          <p className="text-red-500 text-sm">{errors.price.actualPrice.message}</p>
+          <p className="text-red-500 text-sm">
+            {errors.price.actualPrice.message}
+          </p>
         )}
       </div>
 
@@ -70,7 +73,6 @@ const Pricing = ({ handlePrev, isLoading }) => {
         )}
       </div>
 
-
       {/* Final Price Display */}
       <div className="mb-4">
         <label className="block text-sm font-medium">Final Price:</label>
@@ -79,16 +81,22 @@ const Pricing = ({ handlePrev, isLoading }) => {
 
       <div className="flex gap-5 justify-between">
         <Button onClick={handlePrev}>Previous</Button>
-      
+
         <Button
-            type="submit"
-            className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${
-              isLoading && "cursor-not-allowed"
-            }`}
-            disabled={isLoading}
-          >
-            {isLoading ? <ButtonLoading /> : <p>Publish</p>}
-          </Button>
+          type="submit"
+          className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${
+            isLoading && "cursor-not-allowed"
+          }`}
+          disabled={isLoading || isCourseUpdate}
+        >
+          {isLoading || isCourseUpdate ? (
+            <ButtonLoading />
+          ) : editMode ? (
+            "update"
+          ) : (
+            "Publish"
+          )}
+        </Button>
       </div>
     </div>
   );

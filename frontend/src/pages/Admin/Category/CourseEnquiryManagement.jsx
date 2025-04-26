@@ -157,7 +157,6 @@ const CourseEnqueryManagement = () => {
   useEffect(() => {
     if (openMenu !== null) {
       const button = buttonRefs.current[openMenu];
-      console.log("rect");
 
       if (button) {
         const rect = button.getBoundingClientRect();

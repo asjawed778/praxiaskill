@@ -15,7 +15,7 @@ import {
   Logout,
   Dashboard,
 } from '@mui/icons-material';
-import MenuBookIcon from '@mui/icons-material/MenuBook'; // ✅ Import here
+import MenuBookIcon from '@mui/icons-material/MenuBook'; 
 import { useNavigate } from 'react-router-dom';
 import { logout } from '@/store/reducers/authReducer';
 import toast from 'react-hot-toast';
@@ -54,14 +54,18 @@ const Profile = () => {
     user?.role === 'SUPER_ADMIN'
       ? { icon: <Dashboard />, label: 'Dashboard', to: '/dashboard' }
       : { icon: <MenuBookIcon />, label: 'My Courses', to: '/my-courses' },
-    { icon: <Person />, label: 'Profile', to: '/profile' },
-    { icon: <Settings />, label: 'Settings', to: '/settings' },
+    // { icon: <Person />, label: 'Profile', to: '/profile' },
+    // { icon: <Settings />, label: 'Settings', to: '/settings' },
   ];
 
   return (
     <>
       <IconButton onClick={handleOpen}>
-        <Avatar src={user?.profilePic} alt="profile" />
+        <Avatar src={user?.profilePic} alt="profile" sx={{
+      width: { xs: 28, sm: 32, md: 36 }, 
+      height: { xs: 28, sm: 32, md: 36 },
+      border: "2px solid white",
+    }}/>
       </IconButton>
 
       <Menu

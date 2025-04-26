@@ -48,7 +48,6 @@ function ResetPasswordModal({
       const { email } = userEmail;
       setEmail(email);
       const res = await sendForgotPasswordOtp(userEmail);
-      console.log("reset password result", res)
       if (res?.error) {
         throw new Error(JSON.stringify(res.error));
       }

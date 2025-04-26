@@ -23,6 +23,16 @@ export const Colors = {
     sidebarActiveText: "#ffffff",
     sidebarActiveIcon: "#ffffff",
 
+    // Dashboard
+    dashboardBackground: "#f5f7fb",
+    cardBackground: "#14335F",
+    cardText: "#ffffff",
+    barChartColor: "#3B82F6",
+    lineProgressBackground: "#3B82F6",
+    lineChartStroke: "#3B82F6",
+    pieChartColor1: "#0088FE",
+    pieChartColor2: "#00C49F",
+
     // Borders & Dividers
     border: "#DEE2E6",
 
@@ -86,6 +96,10 @@ export const Colors = {
     sidebarActiveIcon: "#ffffff",
     // Borders & Dividers
     border: "#d6ced2",
+
+    // Dashboard
+    cardBackgroundColor: "#ed1c24",
+    cardText: "#ffffff",
 
     // Upload File Box
     uploadFileHover: "#e9ecf0",

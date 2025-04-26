@@ -10,32 +10,34 @@ import firstStepValidationSchema from "./Add Course/Schema/firstStepValidationSc
 import secondStepValidationSchema from "./Add Course/Schema/secondStepValidationSchema";
 import thirdStepValidationSchema from "./Add Course/Schema/thirdStepValidationSchema";
 import fifthStepValidationSchema from "./Add Course/Schema/fifthStepValidationSchema";
-import { useGetFullCourseDetailsQuery, useUploadCourseMutation } from "../../../services/course.api";
+import { useGetFullCourseDetailsQuery, useUpdateCourseDetailsMutation, useUploadCourseMutation } from "../../../services/course.api";
 import { toast } from "react-hot-toast";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AddCourse = () => {
-  const [uploadCourse , {isLoading, errors}] = useUploadCourseMutation()
+  const [uploadCourse, { isLoading, errors }] = useUploadCourseMutation()
   const [currentStep, setCurrentStep] = useState(0);
 
   const location = useLocation();
   const course = location.state || null;
   const editMode = Boolean(course);
-  console.log("Course to be edit: ", course?.course._id);
+  const [updateCourse, { isLoading: isCourseUpdate, errors: isUpdateError }] = useUpdateCourseDetailsMutation();
+  console.log("edit mode: ", editMode);
+  const navigate = useNavigate();
 
-  const { data: updateCourse, isLoading: isCourseLoading, isError } = useGetFullCourseDetailsQuery(
+  const { data: loadCourse, isLoading: isCourseLoading, isError } = useGetFullCourseDetailsQuery(
     course?.course?._id,
     { skip: !editMode }
   );
   useEffect(() => {
     if (isError) {
-      console.error("Error fetching course details:", updateCourse?.data.data); 
+      console.error("Error fetching course details:", loadCourse?.data.data);
     }
-    if (!isError && updateCourse) {
-      console.log("Update course all: ", updateCourse);
-      console.log("Need value: ", updateCourse.data.category.name);
+    if (!isError && loadCourse) {
+      console.log("Update course all: ", loadCourse);
+      console.log("Need value: ", loadCourse.data?.category?.name);
     }
-  }, [updateCourse, isError]);
+  }, [loadCourse, isError]);
   const resolver = useMemo(() => {
     switch (currentStep) {
       case 0:
@@ -52,24 +54,24 @@ const AddCourse = () => {
   }, [currentStep]);
 
   const defaultValues = useMemo(() => {
-    if (updateCourse?.data) {
+    if (loadCourse?.data) {
       return {
-        ...updateCourse.data,
-        category: updateCourse.data.category?._id || "",
-        instructor: updateCourse.data.instructor?.name || "",
-        tags: updateCourse.data.tags?.map((tag) => ({ label: tag, value: tag })) || [],
-        keypoints: updateCourse.data.keypoints || [""],
-        sections: updateCourse.data.sections?.length
-          ? updateCourse.data.sections
+        ...loadCourse.data,
+        category: loadCourse.data.category?._id || "",
+        instructor: loadCourse.data.instructor?._id || "",
+        tags: loadCourse.data.tags?.map((tag) => ({ label: tag, value: tag })) || [],
+        keypoints: loadCourse.data.keypoints || [""],
+        sections: loadCourse.data.sections?.length
+          ? loadCourse.data.sections
           : [{ title: "", description: "", subSections: [{ title: "" }] }],
         price: {
-          actualPrice: updateCourse.data.price?.actualPrice || "",
-          discountPercentage: updateCourse.data.price?.discountPercentage || 0,
-          finalPrice: updateCourse.data.price?.finalPrice || 0,
+          actualPrice: loadCourse.data.price?.actualPrice || "",
+          discountPercentage: loadCourse.data.price?.discountPercentage || 0,
+          finalPrice: loadCourse.data.price?.finalPrice || 0,
         },
       };
     }
-  
+
     return {
       title: "",
       subtitle: "",
@@ -90,61 +92,43 @@ const AddCourse = () => {
         finalPrice: 0,
       },
     };
-  }, [updateCourse]);
-  
-  
-  
+  }, [loadCourse]);
 
   const methods = useForm({
     resolver,
     mode: "onChange",
-    // defaultValues: {
-    //       title: "",
-    //       subtitle: "",
-    //       language: "",
-    //       category: "",
-    //       instructor: "",
-    //       courseMode: "",
-    //       thumbnail: "",
-    //       keypoints: [""],
-    //       tags: [],
-    //       description: "",
-    //       duration: "",
-    //       totalLectures: "",
-    //       sections: [{ title: "", description: "", subSections: [{ title: "" }] }],
-    //       price: {
-    //         actualPrice: "",
-    //         discountPercentage: 0,
-    //         finalPrice: 0,
-    //       },
-    //     },
     defaultValues,
   });
-
   useEffect(() => {
-    if (updateCourse?.data && !isCourseLoading) {
+
+    if (loadCourse?.data && !isCourseLoading) {
       const courseData = {
-        ...updateCourse.data,
-        category: updateCourse.data.category?.name || "",
-        instructor: updateCourse.data.instructor?.name || "",
-        tags: updateCourse.data.tags?.map((tag) => ({ label: tag, value: tag })) || [],
-        keypoints: updateCourse.data.keypoints || [""],
-        sections: updateCourse.data.sections?.length
-          ? updateCourse.data.sections
+        ...loadCourse.data,
+        category: loadCourse.data.category?._id || "",
+        instructor: loadCourse.data.instructor?._id || "",
+        tags: loadCourse.data.tags?.map((tag) => ({ label: tag, value: tag })) || [],
+        keypoints: loadCourse.data.keypoints || [""],
+        sections: loadCourse.data.sections?.length
+          ? loadCourse.data.sections
           : [{ title: "", description: "", subSections: [{ title: "" }] }],
         price: {
-          actualPrice: updateCourse.data.price?.actualPrice || "",
-          discountPercentage: updateCourse.data.price?.discountPercentage || 0,
-          finalPrice: updateCourse.data.price?.finalPrice || 0,
+          actualPrice: loadCourse.data.price?.actualPrice || "",
+          discountPercentage: loadCourse.data.price?.discountPercentage || 0,
+          finalPrice: loadCourse.data.price?.finalPrice || 0,
         },
       };
-      methods.reset(courseData); // This will update the form once the data is fetched
+      methods.reset(courseData);
     }
-  }, [updateCourse, isCourseLoading, methods]);
+  }, [loadCourse, isCourseLoading, methods]);
 
   const handleNext = async () => {
     const isValid = await methods.trigger();
-    if (isValid && currentStep < 3) {
+    if (!isValid) return;
+
+    if (editMode && currentStep === 1) {
+      // Skip Step 2 when in edit mode
+      setCurrentStep(3);
+    } else if (currentStep < 3) {
       setCurrentStep((prev) => prev + 1);
     }
   };
@@ -154,26 +138,27 @@ const AddCourse = () => {
   };
 
   const onSubmit = async (formData) => {
-    try{
+    console.log("Form data: ", formData._id);
+
+    try {
       const { tags } = formData;
       const newTags = tags.map((tag) => tag.value);
       const data = { ...formData, tags: newTags };
-      console.log("Final Form Data:", data);
-      const result = await uploadCourse(data);
-      // const result = editMode ? await EditCourse(data) : await uploadCourse(data);
-      console.log("Result", result)
-      if(result.error)
-      {
-        if(result.error.status === 400)
-        {
+      // const result = await uploadCourse(data);
+      const result = editMode ? await updateCourse({
+        courseId: data._id,
+        data
+      }) : await uploadCourse(data);
+      if (result.error) {
+        if (result.error.status === 400) {
           toast.error("Please fill all steps before submitting!")
         }
         throw new Error(result.error.data.message)
       }
       methods.reset();
       toast.success(editMode ? "Course updated successfully" : "Course published successfully!")
-    }catch(err)
-    {
+      navigate("/dashboard/manage-course", { replace: true });
+    } catch (err) {
       console.log("Error", err)
     }
   };
@@ -188,37 +173,35 @@ const AddCourse = () => {
         <div className="bg-[#D0DAF1] rounded-lg text-xs md:text-sm flex justify-between items-center pr-3">
           <div
             onClick={() => setCurrentStep(0)}
-            className={`px-4 py-2 cursor-pointer ${
-              currentStep === 0 &&
+            className={`px-4 py-2 cursor-pointer ${currentStep === 0 &&
               "bg-[var(--color-primary)] text-white rounded-lg"
-            }`}
+              }`}
           >
             Course Details
           </div>
           <div
             onClick={() => setCurrentStep(1)}
-            className={`px-4 py-2 cursor-pointer ${
-              currentStep === 1 &&
+            className={`px-4 py-2 cursor-pointer ${currentStep === 1 &&
               "bg-[var(--color-primary)] text-white rounded-lg"
-            }`}
+              }`}
           >
             Additional Details
           </div>
-          <div
-            onClick={() => setCurrentStep(2)}
-            className={`px-4 py-2 cursor-pointer ${
-              currentStep === 2 &&
-              "bg-[var(--color-primary)] text-white rounded-lg"
-            }`}
-          >
-            Course Structure
-          </div>
+          {!editMode &&
+            <div
+              onClick={() => setCurrentStep(2)}
+              className={`px-4 py-2 cursor-pointer ${currentStep === 2 &&
+                "bg-[var(--color-primary)] text-white rounded-lg"
+                }`}
+            >
+              Course Structure
+            </div>
+          }
           <div
             onClick={() => setCurrentStep(3)}
-            className={`px-4 py-2 cursor-pointer ${
-              currentStep === 3 &&
+            className={`px-4 py-2 cursor-pointer ${currentStep === 3 &&
               "bg-[var(--color-primary)] text-white rounded-lg"
-            }`}
+              }`}
           >
             Pricing & Publish
           </div>
@@ -236,7 +219,7 @@ const AddCourse = () => {
           {currentStep === 2 && (
             <CourseStructure handleNext={handleNext} handlePrev={handlePrev} />
           )}
-          {currentStep === 3 && <Pricing isLoading={isLoading} handlePrev={handlePrev} />}
+          {currentStep === 3 && <Pricing isLoading={isLoading} isCourseUpdate={isCourseUpdate} editMode={editMode} handlePrev={handlePrev} />}
         </div>
       </form>
     </FormProvider>
