@@ -7,19 +7,20 @@ import adminCategoryReducer from "./reducers/adminCategoryReducer";
 import authReducer from "./reducers/authReducer";
 import coursesReducer from "./reducers/coursesReducer";
 import sidebarReducer from "../store/reducers/sidebarSlice"
-
+import splashScreenReducer from "./reducers/splashScreenReducer";
 
 // Importing Apis
 import { apiAuth } from "../services/auth.api";
 import { apiCourse } from "../services/course.api";
 import { paymentApi } from "../services/payment.api";
-import { contactApi } from "../services/contactApi";
+import { contactApi } from "../services/contactApi"
+import { usersApi } from "../services/usersApi";
 
 // Persist configuration
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth"], // Persist only the auth slice
+  whitelist: ["auth"],
 };
 
 // Combine all the reducers
@@ -28,10 +29,13 @@ const rootReducer = combineReducers({
   categories: adminCategoryReducer,
   courses: coursesReducer,
   sidebar: sidebarReducer,
+  splashScreen: splashScreenReducer,
+
   [apiAuth.reducerPath]: apiAuth.reducer,
   [apiCourse.reducerPath]: apiCourse.reducer,
   [paymentApi.reducerPath]: paymentApi.reducer,
   [contactApi.reducerPath]: contactApi.reducer,
+  [usersApi.reducerPath]: usersApi.reducer,
 });
 
 // Create a persisted reducer
@@ -50,6 +54,7 @@ export const store = configureStore({
       apiCourse.middleware,
       paymentApi.middleware,
       contactApi.middleware,
+      usersApi.middleware,
     ),
 });
 

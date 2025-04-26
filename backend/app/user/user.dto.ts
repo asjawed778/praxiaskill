@@ -13,6 +13,14 @@ export interface IUser extends BaseSchema {
         active: boolean;
 }
 
+export interface ICreateUser extends Omit<IUser, "_id" | "createdAt" | "updatedAt" | "active" | "refreshToken" | "resetPasswordToken"> {}
+export interface ICreateUserResponse extends Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> {
+        coursesEnrolled?: Number;
+}
+export interface IGetUserResponse extends Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> {
+        coursesEnrolled?: Number;
+};
+
 export interface ITempUser extends BaseSchema {
         name: string;
         email: string;

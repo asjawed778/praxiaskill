@@ -125,7 +125,7 @@ const SplashScreen = () => {
         </div>
       </div>
       
-      <style jsx>{`
+      <style>{`
         @keyframes float-particle {
           0% {
             transform: translateY(0) translateX(0);

@@ -9,7 +9,7 @@ import { FiEyeOff } from "react-icons/fi";
 
 import { useForm } from "react-hook-form";
 import validator from "validator";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import ButtonLoading from "../components/Button/ButtonLoading";
@@ -18,6 +18,7 @@ import { useSendSignupOtpMutation } from "../services/auth.api";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signupSchema } from "../utils/formValidationSchema";
 import Button from "../components/Button/Button";
+import { use } from "react";
 
 /**
  * SignupModal Component
@@ -55,7 +56,6 @@ function SignupModal({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  if (!signupModal) return null;
 
   /**
    * Closes the signup modal.
@@ -80,8 +80,9 @@ function SignupModal({
    */
 
   const signupFormSubmitHandler = async (data) => {
+    setSignupData(data);
     try {
-      const result = await sendSignupOtp(data);
+      const result = await sendSignupOtp(data).unwrap();
       setSignupData(data);
       if (result?.error) {
         throw new Error(JSON.stringify(result.error));
@@ -100,6 +101,7 @@ function SignupModal({
       }
     }
   };
+  if (!signupModal) return null;
 
   return (
     <div
@@ -195,14 +197,13 @@ function SignupModal({
                 </p>
               )}
             </div>
-            
+
             <div className="flex items-center justify-between mt-3">
               <Button
                 type="submit"
                 disabled={isLoading}
-                className={`flex items-center justify-center gap-2 py-2 h-8 w-full  text-xs text-white rounded-md  disabled:bg-gray-400 ${
-                  isLoading && "cursor-not-allowed"
-                } cursor-pointer`}
+                className={`flex items-center justify-center gap-2 py-2 h-8 w-full  text-xs text-white rounded-md  disabled:bg-gray-400 ${isLoading && "cursor-not-allowed"
+                  } cursor-pointer`}
               >
                 {isLoading ? (
                   <>
@@ -214,20 +215,20 @@ function SignupModal({
               </Button>
             </div>
             <div className="text-xs mb-4">
-            <span>Already have an account?</span>{" "}
-            <span
-              onClick={() => {
-                setSignupModal(false);
-                setLoginModal(true);
-              }}
-              className="text-blue-600 cursor-pointer hover:underline"
-            >
-              Sign in
-            </span>
-          </div>
+              <span>Already have an account?</span>{" "}
+              <span
+                onClick={() => {
+                  setSignupModal(false);
+                  setLoginModal(true);
+                }}
+                className="text-blue-600 cursor-pointer hover:underline"
+              >
+                Sign in
+              </span>
+            </div>
           </form>
 
-            {/* temporirily it has been diactivated */}
+          {/* temporirily it has been diactivated */}
           {/* <div className="h-10 w-full flex items-center relative">
             <div className="border-b border-neutral-300 w-full"></div>
             <span className="absolute text-xs text-neutral-700 bg-white p-2 left-1/2 -translate-x-1/2">
@@ -252,7 +253,7 @@ function SignupModal({
             </div>
           </div> */}
 
-          
+
         </div>
       </div>
     </div>

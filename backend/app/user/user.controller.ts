@@ -2,7 +2,7 @@ import * as userService from "./user.service";
 import { createResponse } from "../common/helper/response.hepler";
 import asyncHandler from "express-async-handler";
 import { type Request, type Response } from "express";
-import { ITempUser, IUser } from "./user.dto";
+import { ICreateUser, ITempUser, IUser } from "./user.dto";
 import createHttpError from "http-errors";
 import { Payload } from "./user.dto";
 import bcrypt from "bcryptjs";
@@ -10,10 +10,15 @@ import { sendEmail } from "../common/services/email.service";
 import { resetPasswordEmailTemplate } from "../common/template/mail.template";
 import * as jwthelper from "../common/helper/jwt.helper";
 import { loadConfig } from "../common/helper/config.hepler";
-import jwt from "jsonwebtoken";
 import { UserRole } from "./user.schema";
 import * as OTPSrvice from '../common/services/OTP.service';
 import { emailQueue } from "../common/queue/queues/email.queue";
+import * as CourseService from "../course/course.service";
+import enrollmentSchema from "../course/enrollment.schema";
+import { courseAssignmentEmailTemplate } from "../common/template/courseAssignmentEmailTemplate";
+import { UploadedFile } from "express-fileupload";
+import * as AWSService from "../common/services/AWS.service";
+import path from 'path';
 
 loadConfig();
 
@@ -129,15 +134,13 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
 
 export const logout = asyncHandler(async (req: Request, res: Response) => {
   const user = req.user;
-  if (!user) {
-    throw createHttpError(401, "User not found, please login again");
+  if (user) {
+    await userService.deleteRefreshToken(user._id);
   }
-  await userService.deleteRefreshToken(user._id);
   res.clearCookie("accessToken");
   res.clearCookie("refreshToken");
   res.send(createResponse({}, "User logged out successfully"));
 });
-
 
 export const updateAccessToken = asyncHandler(async (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken || req.headers.authorization?.split(" ")[1];
@@ -180,7 +183,6 @@ export const updateAccessToken = asyncHandler(async (req: Request, res: Response
 
   res.send(createResponse({ user: result, accessToken, refreshToken: newRefreshToken }, "Access token updated successfully"));
 });
-
 
 export const updatePassword = asyncHandler(async (req: Request, res: Response) => {
   const user = req.user;
@@ -254,3 +256,153 @@ export const resetPassword = asyncHandler(
     res.send(createResponse(200, "Password reset successfully"));
   }
 );
+
+export const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
+  const { pageNo, limit, search, active } = req.query;
+  const page = Number(pageNo) || 1;
+  const limitNumber = Number(limit) || 10;
+  const searchQuery = typeof search === 'string' ? search : undefined;
+  const activeFilter = typeof active === 'string' ? active === 'true' : undefined;
+
+  const users = await userService.getAllUsers(page, limitNumber, searchQuery, activeFilter);
+  const result = await Promise.all(users.users.map(async (user) => {
+    const coursesEnrolled = await enrollmentSchema.countDocuments({ userId: user._id });
+    return {
+      ...user,
+      coursesEnrolled
+    };
+  }));
+  res.send(createResponse({ ...users, users: result }, "All users fetched successfully"));
+});
+
+export const updateUserStatus = asyncHandler(async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+
+  const user = await userService.updateUserStatus(userId);
+  if (!user) {
+    throw createHttpError(404, "User not found");
+  }
+
+  res.send(createResponse(user, "User status updated successfully"));
+});
+
+export const getMe = asyncHandler(async (req: Request, res: Response) => {
+  const user = req.user;
+  if (!user) {
+    throw createHttpError(404, "User not found, please login again");
+  }
+  const result = await userService.getMe(user._id);
+  if (!result) {
+    throw createHttpError(404, "User not found, please login again");
+  }
+  res.send(createResponse(result, "User fetched successfully"));
+});
+
+export const addUserByAdmin = asyncHandler(async (req: Request, res: Response) => {
+  const data: ICreateUser = req.body;
+
+  const existingUser = await userService.getUserByEmail(data.email);
+  if (existingUser) {
+    throw createHttpError(409, "User already Exits");
+  }
+
+  if ("role" in data) {
+    if (![UserRole.USER, UserRole.INSTRUCTOR].includes(data.role)) {
+      throw createHttpError(400, "Invalid role. Role must be either USER or INSTRUCTOR.");
+    }
+  }
+
+  const result = await userService.createUserByAdmin(data);
+
+  const user = { ...result, coursesEnrolled: 0 };
+
+  const resetToken = await jwthelper.generatePasswordRestToken(user._id);
+
+  await userService.updateResetToken(user._id, resetToken);
+
+  const resetLink = `${BASE_URL}/reset-password/${resetToken}`;
+  const emailContent = resetPasswordEmailTemplate(resetLink);
+
+  await emailQueue.add('sendEmail', {
+    from: process.env.MAIL_USER,
+    to: user.email,
+    subject: "Password reset Link",
+    html: emailContent,
+  });
+  res.send(createResponse(user, "User created successfully"));
+});
+
+export const updateUserByAdmin = asyncHandler(async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const data: ICreateUser = req.body;
+
+  if ("role" in data) {
+    if (![UserRole.USER, UserRole.INSTRUCTOR].includes(data.role)) {
+      throw createHttpError(400, "Invalid role. Role must be either USER or INSTRUCTOR.");
+    }
+  }
+
+  const result = await userService.updateUserByAdmin(userId, data);
+
+  res.send(createResponse(result, "User updated successfully"));
+}
+);
+
+export const assignCourseByAdmin = asyncHandler(async (req: Request, res: Response) => {
+  const { courseId, userId } = req.body;
+  const user = await userService.getUserById(userId);
+  if (!user) {
+    throw createHttpError(404, "User not found");
+  }
+  const { course } = await CourseService.assignCourseByAdmin(userId, courseId);
+  if (!course) {
+    throw createHttpError(404, "Course not found");
+  }
+  const courseLink = `${BASE_URL}/my-courses`;
+  const emailTemplate = courseAssignmentEmailTemplate(user.name, course.title, course.subtitle, course.thumbnail, courseLink);
+  await emailQueue.add('sendEmail', {
+    from: process.env.MAIL_USER,
+    to: user.email,
+    subject: "Course Assigned",
+    html: emailTemplate,
+  });
+  res.send(createResponse({}, "Course assigned successfully"));
+});
+
+export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
+  const userId = req.query.userId || req.user?._id;
+  
+  if (!userId) {
+    throw createHttpError(400, "User ID is required");
+  }
+
+  if (!req.files || !req.files.file) {
+    throw createHttpError(400, "No file was uploaded");
+  }
+
+  const file = req.files.file as UploadedFile;
+
+  // Validate file type
+  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  if (!allowedMimeTypes.includes(file.mimetype)) {
+    throw createHttpError(400, "Only JPEG, PNG, and GIF images are allowed");
+  }
+
+  // Validate file size (e.g., 5MB max)
+  const maxSize = 5 * 1024 * 1024;
+  if (file.size > maxSize) {
+    throw createHttpError(400, "File size exceeds 5MB limit");
+  }
+
+  // Create a unique filename to prevent collisions
+  const fileExt = path.extname(file.name);
+  const uniqueFilename = `${Date.now()}-${Math.round(Math.random() * 1e9)}${fileExt}`;
+  const uploadPath = `public/images/${uniqueFilename}`;
+
+  try {
+    const result = await AWSService.putObject(file, uploadPath);
+    res.send(createResponse(result, "Image uploaded successfully"));
+  } catch (error) {
+    throw createHttpError(500, "Failed to upload image to storage");
+  }
+});

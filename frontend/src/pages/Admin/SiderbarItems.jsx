@@ -31,6 +31,11 @@ const sidebarItems = [
       },
     ],
   },
+  {
+    path: "/dashboard/users",
+    label: "Users",
+    icon: "GroupOutlined",
+  },
 ];
 
 export default sidebarItems;
