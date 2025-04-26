@@ -24,16 +24,10 @@ export const cardData = [
     { course: 'D', count: 550 },
     { course: 'E', count: 700 },
   ];
-  
-  // export const topCourses = [
-  //   { name: "Course B", progress: 90 },
-  //   { name: "Course D", progress: 70 },
-  //   { name: "Course A", progress: 60 },
-  //   { name: "Course C", progress: 65 },
-  // ];
   export const topCourses = [
     { name: 'Course B', popularity: 95 },
     { name: 'Course D', popularity: 90 },
     { name: 'Course A', popularity: 85 },
     { name: 'Course C', popularity: 80 },
-  ]
+  ];
+

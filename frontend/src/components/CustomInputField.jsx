@@ -13,7 +13,7 @@ const CustomInputField = ({
   label,
   placeholder,
   type = "text",
-  size = "medium",
+  size = "small",
   startIcon,
   endIcon,
   control,

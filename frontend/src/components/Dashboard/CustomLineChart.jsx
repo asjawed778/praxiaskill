@@ -6,7 +6,7 @@ import { useAppTheme } from '../../context/ThemeContext';
 const CustomLineChart = ({ data }) => {
   const { colors } = useAppTheme();
   return (
-    <Box sx={{ height: '100%', height: '220px'}}>
+    <Box sx={{ height: '100%', maxHeight: '220px'}}>
       <CardContent>
         <Box sx={{ height: '220px', mt: 2 }}>
           <ResponsiveContainer width="100%" height="100%">

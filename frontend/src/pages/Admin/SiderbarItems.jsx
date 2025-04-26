@@ -31,6 +31,11 @@ const sidebarItems = [
       },
     ],
   },
+  {
+    path: "users",
+    label: "Users",
+    icon: "GroupOutlined",
+  },
 ];
 
 export default sidebarItems;
