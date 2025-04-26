@@ -12,6 +12,7 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import CustomButton from "../../components/CustomButton";
 import AddNewUser from "./AddNewUser";
 import DialogBoxWrapper from "../../components/DialogBoxWrapper";
+import AssignCourse from "./AssignCourse";
 
 const Users = () => {
   const [page, setPage] = useState(0);
@@ -22,7 +23,8 @@ const Users = () => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [addUserModal, setAddUserModal] = useState(false);
-  console.log("Statuse :", statusFilter);
+  const [openAssignCoureModal, setOpenAssignCoureModal] = useState(false);
+  // console.log("Statuse :", addUserModal);
 
   const { data, isLoading, isFetching, refetch } = useGetAllUsersQuery({
     page: page + 1,
@@ -72,7 +74,9 @@ const Users = () => {
         }
         break;
       case "assign":
-        alert(`Assign course to ${row.name}`);
+        setSelectedUser(row);
+        setOpenAssignCoureModal(true);
+        // alert(`Assign course to ${row.name}`);
         break;
       default:
         break;
@@ -175,6 +179,11 @@ const Users = () => {
           selectedUser?.active ? 
           `Are you sure you want to deactivate ${selectedUser?.name} account? After this user will no longer able to login or perform any action.` : 
           `Are you sure you want to activate ${selectedUser?.name}? After this user will be able to login or perform any action `}
+      />
+      <AssignCourse 
+        open={openAssignCoureModal}
+        onClose={() => setOpenAssignCoureModal(false)}
+        user={selectedUser}
       />
     </Box>
   );

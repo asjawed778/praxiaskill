@@ -22,8 +22,10 @@ const AddNewUser = ({ open, onClose }) => {
   return (
     <ModalWrapper open={open} onClose={onClose} title="Add New User">
       <form onSubmit={handleSubmit(onSubmit)} >
-        <Stack  spacing={2}>
-        <CustomInputField name="fullName" label="Full Name" control={control} />
+        <Stack  spacing={2} mt={2}>
+        <CustomInputField name="fullName" label="Full Name" control={control} 
+        sx={{mt:4}}
+        />
         <CustomInputField
           name="email"
           label="Email"

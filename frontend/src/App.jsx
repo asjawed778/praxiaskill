@@ -40,6 +40,7 @@ const CoursePayment = lazy(() => import("./pages/CoursePayment"));
 const CourseLectures = lazy(() => import("./pages/Course Lectures"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const Users = lazy(() => import("./pages/Users"));
+const StaticPage = lazy(() => import("./pages/StaticPage"));
 
 const publicRoutes = [
   {
@@ -113,6 +114,14 @@ const publicRoutes = [
     element: (
       <LazyComponent>
         <ContactUs />
+      </LazyComponent>
+    ),
+  },
+  {
+    path: "StaticPage",
+    element: (
+      <LazyComponent>
+        <StaticPage />
       </LazyComponent>
     ),
   },

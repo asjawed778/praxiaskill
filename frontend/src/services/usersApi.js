@@ -22,10 +22,22 @@ export const usersApi = createApi({
         method: "PATCH"
       })
     }),
+    assignCourse: builder.mutation({
+      query: ({courseId, userId}) =>({
+        url: `user/assign-course`,
+        body: {
+          courseId,
+          userId
+        },
+        method: "POST"
+      })
+    }),
   }),
 });
 
 
 export const { 
-  useGetAllUsersQuery, useUpdateStatusMutation
+  useGetAllUsersQuery, 
+  useUpdateStatusMutation,
+  useAssignCourseMutation,
 } = usersApi;
