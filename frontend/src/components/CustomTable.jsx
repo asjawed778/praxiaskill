@@ -149,22 +149,22 @@ export default function CustomTable({
         // }}
       >
         <MenuItem
-  onClick={() => handleAction("status")}
-  sx={{
-    color: selectedRow?.active ? "error.main" : "success.main",
-    fontWeight: 500,
-  }}
->
-  {selectedRow?.active ? "Deactivate" : "Activate"}
-</MenuItem>
+          onClick={() => handleAction("status")}
+          sx={{
+            color: selectedRow?.active ? "error.main" : "success.main",
+            fontWeight: 500,
+          }}
+        >
+          {selectedRow?.active ? "Deactivate" : "Activate"}
+        </MenuItem>
         <MenuItem onClick={() => handleAction("assign")}>
           Assign Course
         </MenuItem>
-        <MenuItem onClick={() => handleAction("track")}>
+        {/* <MenuItem onClick={() => handleAction("track")}>
           Track Progress
-        </MenuItem>
-        <MenuItem onClick={() => handleAction("details")}>
-          User Details
+        </MenuItem> */}
+        <MenuItem onClick={() => handleAction("updateUserDetails")}>
+          Update User Details
         </MenuItem>
       </Menu>
     </TableContainer>

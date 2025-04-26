@@ -16,7 +16,7 @@ import AssignCourse from "./AssignCourse";
 
 const Users = () => {
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(10);
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
@@ -24,7 +24,7 @@ const Users = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [addUserModal, setAddUserModal] = useState(false);
   const [openAssignCoureModal, setOpenAssignCoureModal] = useState(false);
-  // console.log("Statuse :", addUserModal);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const { data, isLoading, isFetching, refetch } = useGetAllUsersQuery({
     page: page + 1,
@@ -65,14 +65,14 @@ const Users = () => {
         setOpenConfirmDialog(true);
         // alert(`Open update modal for ${row.name}`);
         break;
-      case "delete":
-        if (window.confirm(`Delete ${row.name}?`)) {
-          await fetch(`http://localhost:5000/users/${row.id}`, {
-            method: "DELETE",
-          });
-          refetch();
-        }
+      case "updateUserDetails":
+        setIsEditMode(true);
+        setAddUserModal(true);
+        setSelectedUser(row);
+        refetch();
+        // alert(`Open update user details modal for ${row.name}`);
         break;
+
       case "assign":
         setSelectedUser(row);
         setOpenAssignCoureModal(true);
@@ -101,6 +101,7 @@ const Users = () => {
   const handleAddUser = () => {
     // alert("Add user")
     setAddUserModal(true);
+    refetch();
   };
   const columns = [
     { id: "sno.", label: "S No." },
@@ -134,7 +135,7 @@ const Users = () => {
           </Typography>
           <CustomDropdown
             label="Status"
-            value={statusFilter}
+            value={statusFilter || "All"}
             onChange={(val) => {
               setStatusFilter(val);
               setPage(0);
@@ -148,6 +149,7 @@ const Users = () => {
           <CustomButton
             variant="outlined"
             label="Add User"
+            fullWidth={true}
             // color="primary"
             startIcon={<PersonAdd />}
             onClick={handleAddUser}
@@ -167,7 +169,17 @@ const Users = () => {
         isLoading={isLoading || isFetching}
         cellHeight={40}
       />
-      <AddNewUser open={addUserModal} onClose={() => setAddUserModal(false)} />
+      <AddNewUser 
+        open={addUserModal} 
+        onClose={() => {
+          setAddUserModal(false);
+          setIsEditMode(false);
+          setSelectedUser(null);
+          refetch();
+        }} 
+        isEditMode={isEditMode}
+        userData={selectedUser}
+      />
       <DialogBoxWrapper
         open={openConfirmDialog}
         onClose={() => setOpenConfirmDialog(false)}

@@ -30,8 +30,22 @@ export const usersApi = createApi({
           userId
         },
         method: "POST"
+      }),
+    }),
+    addNewUser: builder.mutation({
+      query: (data) => ({
+        url: `user/add`,
+        body: data,
+        method: "POST"
       })
     }),
+    updateUserDetails: builder.mutation({
+      query: ({userId, updatedData}) => ({
+        url: `user/${userId}`,
+        body: updatedData,
+        method: "PUT"
+      })
+    })
   }),
 });
 
@@ -40,4 +54,6 @@ export const {
   useGetAllUsersQuery, 
   useUpdateStatusMutation,
   useAssignCourseMutation,
+  useAddNewUserMutation,
+  useUpdateUserDetailsMutation,
 } = usersApi;
