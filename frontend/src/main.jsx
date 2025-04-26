@@ -14,14 +14,14 @@ import { ThemeProvider } from "./context/ThemeContext.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <HelmetProvider>
-        <ErrorBoundary>
-      <ThemeProvider>
-      <Provider store={store}>
-          <Toaster />
-          <App />
-      </Provider>
-      </ThemeProvider>
-        </ErrorBoundary>
+      <ErrorBoundary>
+        <ThemeProvider>
+          <Provider store={store}>
+            <Toaster />
+            <App />
+          </Provider>
+        </ThemeProvider>
+      </ErrorBoundary>
     </HelmetProvider>
   </StrictMode>
 );
