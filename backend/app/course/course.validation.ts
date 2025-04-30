@@ -1,4 +1,4 @@
-import { body, param } from "express-validator";
+import { body, param, query } from "express-validator";
 import * as CourseEnum from "./course.enum";
 
 const allowedVideoTypes = [
@@ -415,4 +415,128 @@ export const courseContentPresignedUrl = [
         .notEmpty().withMessage('subSectionId is required')
         .isMongoId().withMessage('Invalid subSectionId. Must be a valid MongoDB ObjectId'),
 
+];
+
+export const createQna = [
+    query('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+
+    query('sectionId')
+        .optional()
+        .isMongoId().withMessage('Invalid sectionId. Must be a valid MongoDB ObjectId'),
+
+    query('subSectionId')
+        .optional()
+        .isMongoId().withMessage('Invalid subSectionId. Must be a valid MongoDB ObjectId'),
+
+    body('title')
+        .notEmpty().withMessage('Title is required')
+        .isString().withMessage('Title must be a string')
+        .trim()
+        .isLength({ min: 5 }).withMessage('Title must be at least 5 characters long'),
+
+    body('description')
+        .optional()
+        .isString().withMessage('Description must be a string')
+        .trim()
+];
+
+export const addReplyToQna = [
+    param('qnaId')
+        .notEmpty().withMessage('qnaId is required')
+        .isMongoId().withMessage('Invalid qnaId. Must be a valid MongoDB ObjectId'),
+
+    body('answer')
+        .notEmpty().withMessage('Answer is required')
+        .isString().withMessage('Answer must be a string')
+        .trim()
+        .isLength({ min: 5 }).withMessage('Answer must be at least 5 characters long')
+];
+
+export const editQnaQuestion = [
+    param('qnaId')
+        .notEmpty().withMessage('qnaId is required')
+        .isMongoId().withMessage('Invalid qnaId. Must be a valid MongoDB ObjectId'),
+
+    body('title')
+        .notEmpty().withMessage('Title is required')
+        .isString().withMessage('Title must be a string')
+        .trim()
+        .isLength({ min: 5 }).withMessage('Title must be at least 5 characters long'),
+
+    body('description')
+        .optional()
+        .isString().withMessage('Description must be a string')
+        .trim()
+];
+
+export const editQnaAnswer = [
+    param('qnaId')
+        .notEmpty().withMessage('qnaId is required')
+        .isMongoId().withMessage('Invalid qnaId. Must be a valid MongoDB ObjectId'),
+
+    param('answerIndex')
+        .notEmpty().withMessage('answerIndex is required')
+        .isInt({ min: 0 }).withMessage('answerIndex must be a non-negative integer'),
+
+    body('answer')
+        .notEmpty().withMessage('Answer is required')
+        .isString().withMessage('Answer must be a string')
+        .trim()
+        .isLength({ min: 5 }).withMessage('Answer must be at least 5 characters long')
+];
+
+export const deleteQnaQuestion = [
+    param('qnaId')
+        .notEmpty().withMessage('qnaId is required')
+        .isMongoId().withMessage('Invalid qnaId. Must be a valid MongoDB ObjectId')
+];
+
+export const deleteQnaAnswer = [
+    param('qnaId')
+        .notEmpty().withMessage('qnaId is required')
+        .isMongoId().withMessage('Invalid qnaId. Must be a valid MongoDB ObjectId'),
+
+    param('answerIndex')
+        .notEmpty().withMessage('answerIndex is required')
+        .isInt({ min: 0 }).withMessage('answerIndex must be a non-negative integer')
+];
+
+export const getQnas = [
+    query('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId'),
+
+    query('sectionId')
+        .optional()
+        .isMongoId().withMessage('Invalid sectionId'),
+
+    query('subSectionId')
+        .optional()
+        .isMongoId().withMessage('Invalid subSectionId'),
+
+    query('search')
+        .optional()
+        .isString().withMessage('Search query must be a string')
+        .trim(),
+
+    query('sort')
+        .optional()
+        .isIn(['latest', 'oldest']).withMessage('Sort must be either "latest" or "oldest"'),
+
+    query('upvote')
+        .optional()
+        .isBoolean().withMessage('Upvote must be a boolean')
+        .toBoolean(),
+
+    query('page')
+        .optional()
+        .isInt({ min: 1 }).withMessage('Page must be a positive integer')
+        .toInt(),
+
+    query('limit')
+        .optional()
+        .isInt({ min: 1, max: 100 }).withMessage('PerPage must be between 1 and 100')
+        .toInt()
 ];
