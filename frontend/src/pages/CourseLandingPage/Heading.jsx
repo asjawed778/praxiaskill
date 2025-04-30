@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 const Heading = ({specificCourse}) => {
   const navigate = useNavigate()
   return (
-    <div className="flex gap-3 items-center">
+    <div className="flex gap-3 items-center mt-2">
         <GoHome className='cursor-pointer' onClick={() => navigate("/")} size={20} />
         <RiArrowRightWideLine color="grey" size={20}  />
         <h1 onClick={() => navigate("/courses")} className="text-gray-600 font-semibold cursor-pointer">Courses</h1>
