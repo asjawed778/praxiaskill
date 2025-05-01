@@ -445,3 +445,222 @@ export const getMyCourses = asyncHandler(async(req:Request, res:Response) => {
 
     res.send(createResponse(result, "My Course fetched successfull"));
 });
+
+export const createQna = asyncHandler(async(req:Request, res:Response) => {
+    if(!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+    const userId = req.user._id;
+    const courseId = req.query.courseId as string | undefined;
+    const sectionId = req.query.sectionId as string | undefined;
+    const subSectionId = req.query.subSectionId as string | undefined;
+
+    if (!courseId) {
+        throw createHttpError(400, "Course ID is required");
+    }
+    const data = req.body;
+
+    if(sectionId) {
+        await courseService.isValidSectionSubsectionId(courseId, sectionId, subSectionId);
+    }
+    const isCourseExist = await courseService.isCourseExist(courseId);
+    if(!isCourseExist) {
+        throw createHttpError(404, "Course id is invalid, Not found");
+    }
+    const isPurchased = await courseService.isUserCoursePurchased(courseId, userId);
+    const isInstructor = await courseService.isInstructor(courseId, userId);
+    if(!isPurchased && !isInstructor) {
+        throw createHttpError(401, "Unauthorized user, course not purchased or instructor");
+    }
+    console.log("courseId", courseId, "sectionId", sectionId, "subSectionId", subSectionId);
+
+    const result = await courseService.createQna(userId, courseId, sectionId, subSectionId, data);
+    res.send(createResponse(result, "QnA created successfully"));
+});
+
+export const addReplyToQna = asyncHandler(async(req: Request, res: Response) => {
+    if (!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+    
+    const userId = req.user._id;
+    const qnaId = req.params.qnaId;
+    const { answer } = req.body;
+
+    const qna = await courseService.getQnaById(qnaId);
+    if (!qna) {
+        throw createHttpError(404, "QnA not found");
+    }
+
+    const isPurchased = await courseService.isUserCoursePurchased(userId, qna.courseId.toString());
+    const isInstructor = await courseService.isInstructor(qna.courseId.toString(), userId);
+
+    if (!isPurchased && !isInstructor) {
+        throw createHttpError(401, "Unauthorized user, course not purchased or not instructor");
+    }
+
+    const result = await courseService.addReplyToQna(qnaId, userId, answer);
+    res.send(createResponse(result, "Reply added successfully"));
+});
+
+export const editQnaQuestion = asyncHandler(async(req: Request, res: Response) => {
+    if (!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+    
+    const userId = req.user._id;
+    const qnaId = req.params.qnaId;
+    const { title, description } = req.body;
+
+    if (!title) {
+        throw createHttpError(400, "Title is required");
+    }
+
+    // Check if QnA exists and user is the owner
+    const qna = await courseService.getQnaById(qnaId);
+    if (!qna) {
+        throw createHttpError(404, "QnA not found");
+    }
+
+    // Verify the user is the one who asked the question
+    if (qna.userId.toString() !== userId.toString()) {
+        throw createHttpError(403, "Only the question owner can edit this question");
+    }
+
+    const result = await courseService.editQnaQuestion(qnaId, { title, description });
+    res.send(createResponse(result, "QnA question updated successfully"));
+});
+
+export const editQnaAnswer = asyncHandler(async(req: Request, res: Response) => {
+    if (!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+    
+    const userId = req.user._id;
+    const qnaId = req.params.qnaId;
+    const answerIndex = parseInt(req.params.answerIndex);
+    const { answer } = req.body;
+
+    if (isNaN(answerIndex)) {
+        throw createHttpError(400, "Invalid answer index");
+    }
+
+    if (!answer) {
+        throw createHttpError(400, "Answer content is required");
+    }
+
+    // Get the QnA document
+    const qna = await courseService.getQnaById(qnaId);
+    if (!qna) {
+        throw createHttpError(404, "QnA not found");
+    }
+
+    // Check if answer exists at the given index
+    if (!qna.answers || answerIndex < 0 || answerIndex >= qna.answers.length) {
+        throw createHttpError(404, "Answer not found at the specified index");
+    }
+
+    // Check if user is the owner of the answer
+    if (qna.answers[answerIndex].userId.toString() !== userId.toString()) {
+        throw createHttpError(403, "Only the answer owner can edit this answer");
+    }
+
+    const result = await courseService.editQnaAnswer(qnaId, answerIndex, answer);
+    res.send(createResponse(result, "Answer updated successfully"));
+});
+
+export const deleteQnaQuestion = asyncHandler(async(req: Request, res: Response) => {
+    if (!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+    
+    const userId = req.user._id;
+    const qnaId = req.params.qnaId;
+
+    // Check if QnA exists
+    const qna = await courseService.getQnaById(qnaId);
+    if (!qna) {
+        throw createHttpError(404, "QnA not found");
+    }
+
+    // Verify the user is either the question owner or course instructor
+    const isOwner = qna.userId.toString() === userId.toString();
+    const isInstructor = await courseService.isInstructor(qna.courseId.toString(), userId);
+
+    if (!isOwner && !isInstructor) {
+        throw createHttpError(403, "Only question owner or course instructor can delete this question");
+    }
+
+    const result = await courseService.deleteQnaQuestion(qnaId);
+    res.send(createResponse(result, "QnA question deleted successfully"));
+});
+
+export const deleteQnaAnswer = asyncHandler(async(req: Request, res: Response) => {
+    if (!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+    
+    const userId = req.user._id;
+    const qnaId = req.params.qnaId;
+    const answerIndex = parseInt(req.params.answerIndex);
+
+    if (isNaN(answerIndex)) {
+        throw createHttpError(400, "Invalid answer index");
+    }
+
+    // Get the QnA document
+    const qna = await courseService.getQnaById(qnaId);
+    if (!qna) {
+        throw createHttpError(404, "QnA not found");
+    }
+
+    // Check if answer exists at the given index
+    if (!qna.answers || answerIndex < 0 || answerIndex >= qna.answers.length) {
+        throw createHttpError(404, "Answer not found at the specified index");
+    }
+
+    // Check authorization: answer owner, question owner, or instructor
+    const isAnswerOwner = qna.answers[answerIndex].userId.toString() === userId.toString();
+    const isQuestionOwner = qna.userId.toString() === userId.toString();
+    const isInstructor = await courseService.isInstructor(qna.courseId.toString(), userId);
+
+    if (!isAnswerOwner && !isQuestionOwner && !isInstructor) {
+        throw createHttpError(403, "Only answer owner, question owner, or instructor can delete this answer");
+    }
+
+    const result = await courseService.deleteQnaAnswer(qnaId, answerIndex);
+    res.send(createResponse(result, "Answer deleted successfully"));
+});
+
+export const getQnas = asyncHandler(async (req: Request, res: Response) => {
+    console.log("getQnas called");
+    const {
+        courseId, 
+        sectionId, 
+        subSectionId, 
+        search, 
+        sort, 
+        upvote,
+        page = 1,
+        limit = 10
+    } = req.query;
+    console.log("courseId", courseId, "sectionId", sectionId, "subSectionId", subSectionId, "search", search, "sort", sort, "upvote", upvote, "page", page, "limit", limit);
+
+    if (!courseId) {
+        throw createHttpError(400, "Course ID is required");
+    }
+
+    const result = await courseService.getQnas({
+        courseId: courseId as string,
+        sectionId: sectionId as string | undefined,
+        subSectionId: subSectionId as string | undefined,
+        search: search as string | undefined,
+        sort: sort as 'latest' | 'oldest' | undefined,
+        upvote: upvote === 'true',
+        page: Number(page),
+        limit: Number(limit)
+    });
+
+    res.send(createResponse("result", "QnAs fetched successfully"));
+});
+

@@ -8,6 +8,8 @@ import * as courseEnum from "./course.enum";
 import ratingAndReviewSchema from "./ratingAndReview.schema";
 import enrollmentSchema from "./enrollment.schema";
 import createHttpError from "http-errors";
+import { ExpressValidator } from "express-validator";
+import qnaSchema from "./qna.schema";
 
 /**
  * Checks whether a course exists in the database.
@@ -443,6 +445,14 @@ export const isUserCoursePurchased = async (courseId: string, userId: string): P
     return isPurchased !== null;
 };
 
+export const isInstructor = async (courseId: string, userId: string): Promise<boolean> => {
+    const course = await courseSchema.findById(courseId);
+    if (!course) {
+        throw createHttpError(404, "Course not found");
+    }
+    return course.instructor.toString() === userId;
+};
+
 export const isUserCourseActive = async (courseId: string, userId: string): Promise<boolean> => {
     const enrollment = await enrollmentSchema.findOne({ courseId, userId });
     if (!enrollment) return false;
@@ -651,4 +661,323 @@ export const assignCourseByAdmin = async (userId: string, courseId: string) => {
     }
     const newEnrollment = await enrollmentSchema.create({ userId, courseId });
     return { course, enrollment: newEnrollment };
+};
+
+export const createQna = async (userId: string, courseId: string, sectionId: string | undefined, subSectionId: string | undefined, data: { title: string, description: string }) => {
+    const qnaData: CourseDTO.ICreateQna = {
+        userId: new mongoose.Types.ObjectId(userId) as unknown as mongoose.Schema.Types.ObjectId,
+        courseId: new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId,
+        question: {
+            title: data.title,
+            description: data.description,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        }
+    };
+
+    if (sectionId) {
+        qnaData.sectionId = new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Schema.Types.ObjectId;
+    }
+
+    if (subSectionId) {
+        qnaData.subSectionId = new mongoose.Types.ObjectId(subSectionId) as unknown as mongoose.Schema.Types.ObjectId;
+    }
+
+    const result = await qnaSchema.create(qnaData);
+    return result;
+};
+
+export const getQnaById = async (qnaId: string) => {
+    return await qnaSchema.findById(qnaId).exec();
+};
+
+export const addReplyToQna = async (qnaId: string, userId: string, answer: string) => {
+    const reply = {
+        userId: new mongoose.Types.ObjectId(userId) as unknown as mongoose.Schema.Types.ObjectId,
+        answer,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    };
+
+    const updatedQna = await qnaSchema.findByIdAndUpdate(
+        qnaId,
+        {
+            $push: { answers: reply },
+            $set: { 'question.updatedAt': new Date() }
+        },
+        { new: true }
+    ).exec();
+
+    if (!updatedQna) {
+        throw createHttpError(404, "QnA not found");
+    }
+
+    return updatedQna;
+};
+
+export const editQnaQuestion = async (
+    qnaId: string,
+    data: { title: string; description?: string }
+) => {
+    const updateData: { 'question.title': string; 'question.updatedAt': Date; 'question.description'?: string } = {
+        'question.title': data.title,
+        'question.updatedAt': new Date()
+    };
+
+    // Only add description if it's provided
+    if (data.description !== undefined) {
+        updateData['question.description'] = data.description;
+    }
+
+    const updatedQna = await qnaSchema.findByIdAndUpdate(
+        qnaId,
+        { $set: updateData },
+        { new: true }
+    ).exec();
+
+    if (!updatedQna) {
+        throw createHttpError(404, "QnA not found");
+    }
+
+    return updatedQna;
+};
+
+export const editQnaAnswer = async (
+    qnaId: string,
+    answerIndex: number,
+    newAnswer: string
+) => {
+    const qna = await qnaSchema.findById(qnaId);
+    if (!qna || !qna.answers || answerIndex < 0 || answerIndex >= qna.answers.length) {
+        throw createHttpError(404, "QnA or answer not found");
+    }
+
+    // Construct the update object using array index
+    const updateObject = {
+        [`answers.${answerIndex}.answer`]: newAnswer,
+        [`answers.${answerIndex}.updatedAt`]: new Date(),
+        "question.updatedAt": new Date()
+    };
+
+    const updatedQna = await qnaSchema.findByIdAndUpdate(
+        qnaId,
+        { $set: updateObject },
+        { new: true }
+    ).exec();
+
+    if (!updatedQna) {
+        throw createHttpError(404, "QnA not found after update attempt");
+    }
+
+    return updatedQna;
+};
+
+export const deleteQnaQuestion = async (qnaId: string) => {
+    const deletedQna = await qnaSchema.findByIdAndDelete(qnaId).exec();
+
+    if (!deletedQna) {
+        throw createHttpError(404, "QnA not found");
+    }
+
+    return deletedQna;
+};
+
+export const deleteQnaAnswer = async (
+    qnaId: string,
+    answerIndex: number
+) => {
+    // First verify the answer exists at the given index
+    const qna = await qnaSchema.findById(qnaId);
+    if (!qna || !qna.answers || answerIndex < 0 || answerIndex >= qna.answers.length) {
+        throw createHttpError(404, "QnA or answer not found");
+    }
+
+    // Remove the answer from the array
+    const updatedQna = await qnaSchema.findByIdAndUpdate(
+        qnaId,
+        {
+            $pull: { answers: { $exists: true } }, // Temporary pull all to access by index
+            $set: { "question.updatedAt": new Date() }
+        },
+        { new: true }
+    );
+
+    // Rebuild the answers array without the deleted answer
+    if (updatedQna && updatedQna.answers) {
+        const newAnswers = [...updatedQna.answers];
+        newAnswers.splice(answerIndex, 1);
+
+        updatedQna.answers = newAnswers;
+        await updatedQna.save();
+    }
+
+    return updatedQna;
+};
+
+interface GetQnasParams {
+    courseId: string;
+    sectionId?: string;
+    subSectionId?: string;
+    search?: string;
+    sort?: 'latest' | 'oldest';
+    upvote?: boolean;
+    page?: number;
+    limit?: number;
+}
+
+export const getQnas = async ({
+    courseId,
+    sectionId,
+    subSectionId,
+    search,
+    sort,
+    upvote,
+    page = 1,
+    limit = 10
+}: GetQnasParams) => {
+    const pageNum = Math.max(1, Number(page));
+    const perPageNum = Math.max(1, Number(limit));
+    console.log("$$$$$$$$$$$$$$$$");
+
+    // Base query
+    const query: any = {
+        courseId: new mongoose.Types.ObjectId(courseId)
+    };
+
+    // Add section/subsection filters if provided
+    if (sectionId) {
+        query.sectionId = new mongoose.Types.ObjectId(sectionId);
+
+        if (subSectionId) {
+            query.subSectionId = new mongoose.Types.ObjectId(subSectionId);
+        }
+    }
+
+    // Add search filter if provided
+    if (search) {
+        query.$or = [
+            { 'question.title': { $regex: search, $options: 'i' } },
+            { 'question.description': { $regex: search, $options: 'i' } },
+            { 'answers.answer': { $regex: search, $options: 'i' } }
+        ];
+    }
+
+    // Build sort options
+    let sortOptions: any = {};
+    if (upvote) {
+        sortOptions = { upvotesCount: -1 };
+    } else if (sort === 'latest') {
+        sortOptions = { createdAt: -1 };
+    } else if (sort === 'oldest') {
+        sortOptions = { createdAt: 1 };
+    }
+
+    // Get total count for pagination
+    const totalItems = await qnaSchema.countDocuments(query);
+
+    // Calculate pagination values
+    const totalPages = Math.ceil(totalItems / perPageNum);
+    const hasNext = pageNum < totalPages;
+    const hasPrev = pageNum > 1;
+    const skip = (pageNum - 1) * perPageNum;
+
+    // Enhanced aggregation pipeline with user details
+    const aggregationPipeline: any[] = [
+        { $match: query },
+        { $addFields: { upvotesCount: { $size: "$upvotes" } } },
+        { $sort: sortOptions },
+        { $skip: skip },
+        { $limit: perPageNum },
+        // Populate question author details
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'userId',
+                foreignField: '_id',
+                as: 'userDetails',
+                pipeline: [{
+                    $project: {
+                        _id: 1,
+                        name: 1,
+                        role: 1,
+                        profilePic: 1,
+                        email: 1
+                    }
+                }]
+            }
+        },
+        { $unwind: '$userDetails' },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'answers.userId',
+                foreignField: '_id',
+                as: 'answerUserDetails',
+                pipeline: [{
+                    $project: {
+                        _id: 1,
+                        name: 1,
+                        role: 1,
+                        profilePic: 1,
+                    }
+                }]
+            }
+        },
+        {
+            $addFields: {
+                answers: {
+                    $map: {
+                        input: "$answers",
+                        as: "answer",
+                        in: {
+                            $mergeObjects: [
+                                "$$answer",
+                                {
+                                    userDetails: {
+                                        $arrayElemAt: [
+                                            {
+                                                $filter: {
+                                                    input: "$answerUserDetails",
+                                                    as: "user",
+                                                    cond: { $eq: ["$$user._id", "$$answer.userId"] }
+                                                }
+                                            },
+                                            0
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        {
+            $project: {
+                courseId: 1,
+                sectionId: 1,
+                subSectionId: 1,
+                question: 1,
+                answers: 1,
+                upvotes: 1,
+                upvotesCount: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                userDetails: 1,
+                answerUserDetails: 0
+            }
+        }
+    ];
+
+    const data = await qnaSchema.aggregate(aggregationPipeline).exec();
+
+    return {
+        data,
+        currentPage: pageNum,
+        perPage: perPageNum,
+        totalItems,
+        totalPages,
+        hasNext,
+        hasPrev
+    };
 };
