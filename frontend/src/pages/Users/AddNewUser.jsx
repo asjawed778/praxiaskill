@@ -49,7 +49,6 @@ const AddNewUser = ({ open, onClose, userData, isEditMode }) => {
   
 
   const onSubmit = async (data) => {
-    console.log("User data edit: ", data);
     try {
       if (isEditMode) {
         await updateUser({ userId: userData?._id, updatedData: data }).unwrap();
@@ -65,8 +64,6 @@ const AddNewUser = ({ open, onClose, userData, isEditMode }) => {
       toast.error(error?.data?.message || "Something went wrong!");
     }
   };
-
-  console.log("Options: ", roleOptions);
 
   return (
     <ModalWrapper open={open} onClose={onClose} title={isEditMode ? "Update User Details" : "Add New User"}>

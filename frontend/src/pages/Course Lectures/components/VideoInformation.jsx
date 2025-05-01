@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Sections from "./Sections";
 import Overview from "./Video Information/Overview";
+import QnASection from "./Video Information/QnASection";
+import NotesSection from "./Video Information/NotesSection";
 
 const SECTIONS = [
   "Overview",
@@ -61,7 +63,7 @@ const VideoInformation = ({
         {/* i have made this just to show a div  */}
         {SECTIONS.map(
           (section, index) =>
-            activeSection === section && activeSection !== "Overview" && (
+            activeSection === section && activeSection !== "Overview" &&activeSection !== "Q&A" && activeSection !== "Notes" && (
               <div
                 key={index}
                 className="h-96 flex justify-center items-center text-neutral-500"
@@ -84,6 +86,13 @@ const VideoInformation = ({
             <Overview
               courseContent={courseContent}
             />
+        )}
+
+        {activeSection === "Q&A" && (
+          <QnASection />
+        )}
+        {activeSection === "Notes" && (
+          <NotesSection />
         )}
       </div>
     </div>

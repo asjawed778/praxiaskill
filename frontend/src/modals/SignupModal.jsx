@@ -1,4 +1,5 @@
-import logo from "/logopng.png";
+// import logo from "/logopng.png";
+import logo from "../assets/logo-red-transparent-bg.png";
 import google from "/imgs/google.svg";
 import apple from "/imgs/apple.svg";
 
@@ -113,7 +114,7 @@ function SignupModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center">
-          <div className="relative h-12 w-34">
+          <div className="relative h-8 w-34">
             <img src={logo} className="h-full w-full absolute" alt="logo" />
           </div>
           <RxCross2

@@ -33,8 +33,6 @@ const Users = () => {
     active: statusFilter,
   });
   const [updateStatus] = useUpdateStatusMutation();
-
-  console.log("Data :", data);
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
@@ -57,8 +55,6 @@ const Users = () => {
   }, [search, debouncedSearch]);
 
   const handleActionClick = async (action, row) => {
-    console.log("action and row: ", action, row._id);
-
     switch (action) {
       case "status":
         setSelectedUser(row);

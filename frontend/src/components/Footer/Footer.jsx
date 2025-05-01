@@ -1,5 +1,4 @@
-// import logo from "../../aassets/logo.png";
-import logo from "../../assets/logo-red-transparent-bg.png";
+import logo from "../../assets/logo-white-transparent-bg.png";
 
 const Footer = () => {
   return (

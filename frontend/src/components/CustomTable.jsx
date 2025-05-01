@@ -48,8 +48,6 @@ export default function CustomTable({
     onActionClick(action, selectedRow);
     handleCloseMenu();
   };
-  console.log("Selected row: ", selectedRow?.active);
-
   return (
     <TableContainer component={Paper}>
       <Table size="small">

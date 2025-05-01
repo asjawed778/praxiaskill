@@ -22,7 +22,6 @@ const AddCourse = () => {
   const course = location.state || null;
   const editMode = Boolean(course);
   const [updateCourse, { isLoading: isCourseUpdate, errors: isUpdateError }] = useUpdateCourseDetailsMutation();
-  console.log("edit mode: ", editMode);
   const navigate = useNavigate();
 
   const { data: loadCourse, isLoading: isCourseLoading, isError } = useGetFullCourseDetailsQuery(
@@ -138,7 +137,7 @@ const AddCourse = () => {
   };
 
   const onSubmit = async (formData) => {
-    console.log("Form data: ", formData._id);
+    console.log("Form data: ", formData);
 
     try {
       const { tags } = formData;

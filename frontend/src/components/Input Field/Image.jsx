@@ -31,7 +31,6 @@ const Image = forwardRef(
           formData,
           accessToken,
         }).unwrap();
-        console.log(result)
         const thumbnailUrl = result?.data?.url;
         setvalue("thumbnail", thumbnailUrl);
       } catch (err) {
