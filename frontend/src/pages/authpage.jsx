@@ -47,9 +47,6 @@ function AuthPage({ reset = false }) {
   const loginAccountHandler = () => {
     setLoginModal(true);
   };
-  useEffect(() => {
-    console.log("signupData in auth page: ", signupData);
-  }, [signupData])
 
   return (
     <>

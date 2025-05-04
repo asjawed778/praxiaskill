@@ -19,7 +19,7 @@ const Users = () => {
   const [limit, setLimit] = useState(10);
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [addUserModal, setAddUserModal] = useState(false);
@@ -33,8 +33,6 @@ const Users = () => {
     active: statusFilter,
   });
   const [updateStatus] = useUpdateStatusMutation();
-
-  console.log("Data :", data);
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
@@ -57,26 +55,21 @@ const Users = () => {
   }, [search, debouncedSearch]);
 
   const handleActionClick = async (action, row) => {
-    console.log("action and row: ", action, row._id);
-
     switch (action) {
       case "status":
         setSelectedUser(row);
         setOpenConfirmDialog(true);
-        // alert(`Open update modal for ${row.name}`);
         break;
       case "updateUserDetails":
         setIsEditMode(true);
         setAddUserModal(true);
         setSelectedUser(row);
         refetch();
-        // alert(`Open update user details modal for ${row.name}`);
         break;
 
       case "assign":
         setSelectedUser(row);
         setOpenAssignCoureModal(true);
-        // alert(`Assign course to ${row.name}`);
         break;
       default:
         break;
@@ -101,7 +94,7 @@ const Users = () => {
   const handleAddUser = () => {
     // alert("Add user")
     setAddUserModal(true);
-    refetch();
+    // refetch();
   };
   const columns = [
     { id: "sno.", label: "S No." },
@@ -135,7 +128,8 @@ const Users = () => {
           </Typography>
           <CustomDropdown
             label="Status"
-            value={statusFilter || "All"}
+            required={false}
+            value={statusFilter}
             onChange={(val) => {
               setStatusFilter(val);
               setPage(0);
@@ -175,8 +169,9 @@ const Users = () => {
           setAddUserModal(false);
           setIsEditMode(false);
           setSelectedUser(null);
-          refetch();
+          // refetch();
         }} 
+        refetch={refetch}
         isEditMode={isEditMode}
         userData={selectedUser}
       />

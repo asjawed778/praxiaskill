@@ -3,10 +3,10 @@ import Button from "../Button/Button";
 import { FaCheck } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { schemaValidation } from "./Schema/schemaValidation";
 import { useSendEnquiryMutation } from "../../services/course.api";
 import ButtonLoading from "../Button/ButtonLoading";
 import { toast } from "react-hot-toast";
+import { EnquirySchema } from "../../../yup";
 
 export default function BookDemoClass() {
   const {
@@ -16,7 +16,7 @@ export default function BookDemoClass() {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schemaValidation),
+    resolver: yupResolver(EnquirySchema),
   });
   const [sendEnquiry, { isLoading, error }] = useSendEnquiryMutation();
   const [isChecked, setIsChecked] = useState(false);
