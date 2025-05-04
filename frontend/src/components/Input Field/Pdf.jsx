@@ -24,7 +24,6 @@ const Pdf = forwardRef(
           formData,
           accessToken,
         }).unwrap();
-        console.log(result);
         const brouchureUrl = result?.data?.url;
         setvalue("brouchure", brouchureUrl);
       } catch (err) {

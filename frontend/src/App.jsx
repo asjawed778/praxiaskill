@@ -41,6 +41,8 @@ const CourseLectures = lazy(() => import("./pages/Course Lectures"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const Users = lazy(() => import("./pages/Users"));
 const StaticPage = lazy(() => import("./pages/StaticPage"));
+const FullStackDevelopment = lazy(() => import("./pages/CourseLanding/FullStackDevelopment"));
+const DigitalMarketing = lazy(() => import("./pages/CourseLanding/DigitalMarketing"));
 
 const publicRoutes = [
   {
@@ -125,6 +127,22 @@ const publicRoutes = [
       </LazyComponent>
     ),
   },
+  {
+    path: "full-stack-development",
+    element: (
+      <LazyComponent>
+        <FullStackDevelopment />
+      </LazyComponent>
+    )
+  },
+  {
+    path: "ai-power-digital-marketing",
+    element: (
+      <LazyComponent>
+        <DigitalMarketing />
+      </LazyComponent>
+    )
+  }
 ];
 
 const authRoutes = [

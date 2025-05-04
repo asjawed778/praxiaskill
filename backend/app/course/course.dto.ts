@@ -85,4 +85,26 @@ export interface ICourseEnquiry extends BaseSchema {
     whatsAppOptIn: boolean;
 }
 
+export interface IQna extends BaseSchema {
+    userId: mongoose.Schema.Types.ObjectId;
+    courseId: mongoose.Schema.Types.ObjectId;
+    sectionId?: mongoose.Schema.Types.ObjectId;
+    subSectionId?: mongoose.Schema.Types.ObjectId;
+    question: {
+        title: string;
+        description?: string;
+        createdAt: Date;
+        updatedAt: Date;
+    };
+    answers?: {
+        userId: mongoose.Schema.Types.ObjectId;
+        answer: string;
+        createdAt: Date;
+        updatedAt: Date;
+    }[];
+    upvotes?: mongoose.Schema.Types.ObjectId[];
+}
+
+export interface ICreateQna extends Omit<IQna , "createdAt" | "updatedAt" | "_id" | "answers"> {}
+
 
