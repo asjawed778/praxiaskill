@@ -37,10 +37,10 @@ router
 
 
     .post("/qna", authMiddlerware.auth, courseValidation.createQna, catchError, courseController.createQna)
-    .get("/qna", authMiddlerware.auth, courseValidation.getQnas, catchError, courseController.getQnas)
+    .get("/qna/all", authMiddlerware.auth, courseValidation.getQnas, catchError, courseController.getQnas)
     .put("/qna/:qnaId", authMiddlerware.auth, courseValidation.editQnaQuestion, catchError, courseController.editQnaQuestion)
     .delete("/qna/:qnaId", authMiddlerware.auth, courseValidation.deleteQnaQuestion, catchError, courseController.deleteQnaQuestion)
-    .post("/qna/:qnaId/reply", authMiddlerware.auth, courseValidation.addReplyToQna, catchError, courseController.addReplyToQna)
+    .post("/qna/:qnaId/answer", authMiddlerware.auth, courseValidation.addReplyToQna, catchError, courseController.addReplyToQna)
     .put("/qna/:qnaId/answers/:answerIndex", authMiddlerware.auth, courseValidation.editQnaAnswer, catchError, courseController.editQnaAnswer)
     .delete("/qna/:qnaId/answers/:answerIndex", authMiddlerware.auth, courseValidation.deleteQnaAnswer, catchError, courseController.deleteQnaAnswer)
 

@@ -830,7 +830,7 @@ export const getQnas = async ({
     sectionId,
     subSectionId,
     search,
-    sort,
+    sort='latest',
     upvote,
     page = 1,
     limit = 10
@@ -964,7 +964,7 @@ export const getQnas = async ({
                 createdAt: 1,
                 updatedAt: 1,
                 userDetails: 1,
-                answerUserDetails: 0
+                // answerUserDetails: 0
             }
         }
     ];
