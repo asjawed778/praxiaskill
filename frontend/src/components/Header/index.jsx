@@ -36,9 +36,10 @@ const Header = () => {
         fontWeight: 500,
         paddingBottom: "4px",
         borderBottom: "2px solid transparent",
-        transition: "all 0.3s ease",
+        transition: "all 0.2s ease",
         "&:hover": {
           color: colors.secondary,
+          transform: "scale(1.1)",
         },
       }}
     >
@@ -70,7 +71,7 @@ const Header = () => {
         <Toolbar>
           <Box
             sx={{
-              display: "flex", 
+              display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               width: "100%",
@@ -97,14 +98,20 @@ const Header = () => {
             </Box>
 
             {/* Right side */}
-            <Box sx={{ display: "flex", gap: { xs: 0.5, sm: 1, md: 2 }, alignItems: "center",  }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: { xs: 0.5, sm: 1, md: 2 },
+                alignItems: "center",
+              }}
+            >
               {!isMobile && (
                 <Link
                   href="tel:+919123735554"
                   underline="none"
                   sx={{
                     color: colors.primary,
-                    fontSize : "14px",
+                    fontSize: "14px",
                     "&:hover": {
                       color: colors.secondary,
                     },
