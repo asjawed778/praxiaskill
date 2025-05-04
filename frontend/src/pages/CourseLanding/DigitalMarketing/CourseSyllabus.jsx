@@ -203,14 +203,13 @@ const CourseSyllabus = () => {
     >
       <Container maxWidth="md">
         <Typography
-          variant="h2"
-          component="h1"
+          component="h2"
+          color= "#00e676"
+          fontWeight="bold"
+          textAlign= "center"
           sx={{
-            color: "#00e676",
-            textAlign: "center",
-            mb: { xs: 4, sm: 6 },
-            fontWeight: 600,
-            fontSize: { xs: 28, sm: 36, md: 48 },
+            mb: {xs: 4, md: 8},
+            fontSize: { xs: '28px', sm: '36px', md: '44px' },
           }}
         >
           Course Syllabus
