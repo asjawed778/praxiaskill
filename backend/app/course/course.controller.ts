@@ -635,9 +635,9 @@ export const deleteQnaAnswer = asyncHandler(async(req: Request, res: Response) =
 export const getQnas = asyncHandler(async (req: Request, res: Response) => {
     console.log("getQnas called");
     const {
-        courseId, 
-        sectionId, 
-        subSectionId, 
+        courseId,
+        sectionId,
+        subSectionId,
         search, 
         sort, 
         upvote,
@@ -661,6 +661,6 @@ export const getQnas = asyncHandler(async (req: Request, res: Response) => {
         limit: Number(limit)
     });
 
-    res.send(createResponse("result", "QnAs fetched successfully"));
+    res.send(createResponse(result, "QnAs fetched successfully"));
 });
 
