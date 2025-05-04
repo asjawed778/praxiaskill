@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { addNewUserSchema } from "../../../yup";
 
-const AddNewUser = ({ open, onClose, userData, isEditMode }) => {
+const AddNewUser = ({ open, onClose, userData, isEditMode, refetch }) => {
   const [addNewUser, { isLoading }] = useAddNewUserMutation();
   const [updateUser, {isLoading: isUpdating}] = useUpdateUserDetailsMutation();
   
@@ -49,7 +49,6 @@ const AddNewUser = ({ open, onClose, userData, isEditMode }) => {
   
 
   const onSubmit = async (data) => {
-    console.log("User data edit: ", data);
     try {
       if (isEditMode) {
         await updateUser({ userId: userData?._id, updatedData: data }).unwrap();
@@ -58,6 +57,7 @@ const AddNewUser = ({ open, onClose, userData, isEditMode }) => {
         await addNewUser(data).unwrap();
         toast.success("New user added successfully!");
       }
+      refetch();
       onClose();
       reset();
     } catch (error) {
@@ -65,8 +65,6 @@ const AddNewUser = ({ open, onClose, userData, isEditMode }) => {
       toast.error(error?.data?.message || "Something went wrong!");
     }
   };
-
-  console.log("Options: ", roleOptions);
 
   return (
     <ModalWrapper open={open} onClose={onClose} title={isEditMode ? "Update User Details" : "Add New User"}>

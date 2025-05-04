@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Sections from "./Sections";
 import Overview from "./Video Information/Overview";
+import NotesSection from "./Video Information/NotesSection";
+import QnASection from "./Video Information/QnASection";
+import ReviewSection from "./Video Information/ReviewSection";
+import AnnouncementSection from "./Video Information/AnnouncementSection";
 
 const SECTIONS = [
   "Overview",
@@ -21,7 +25,7 @@ const VideoInformation = ({
   expandedLessons,
 }) => {
   const [activeSection, setActiveSection] = useState("Overview");
-
+  
   useEffect(() => {
     if (isSidebarOpen && window.innerWidth >= 1024) {
       setActiveSection("Overview");
@@ -61,7 +65,7 @@ const VideoInformation = ({
         {/* i have made this just to show a div  */}
         {SECTIONS.map(
           (section, index) =>
-            activeSection === section && activeSection !== "Overview" && (
+            activeSection === section && activeSection !== "Overview" &&activeSection !== "Q&A" && activeSection !== "Notes" && activeSection !== "Reviews" && activeSection !== "Announcements" && (
               <div
                 key={index}
                 className="h-96 flex justify-center items-center text-neutral-500"
@@ -84,6 +88,19 @@ const VideoInformation = ({
             <Overview
               courseContent={courseContent}
             />
+        )}
+
+        {activeSection === "Q&A" && (
+          <QnASection course={courseContent} />
+        )}
+        {activeSection === "Notes" && (
+          <NotesSection />
+        )}
+        {activeSection === "Reviews" && (
+          <ReviewSection />
+        )}
+        {activeSection === "Announcements" && (
+          <AnnouncementSection />
         )}
       </div>
     </div>

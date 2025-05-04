@@ -57,6 +57,7 @@ const CustomInputField = ({
       variant="outlined"
       error={!!error}
       helperText={error?.message}
+      margin="normal"
       sx={{
         "& .MuiOutlinedInput-root": {
           borderRadius: "8px",
@@ -64,6 +65,7 @@ const CustomInputField = ({
           "&:hover": { borderColor: colors.inputHover },
           "&.Mui-focused": { borderColor: colors.inputFocus },
         },
+        
         ...sx,
       }}
       InputProps={{

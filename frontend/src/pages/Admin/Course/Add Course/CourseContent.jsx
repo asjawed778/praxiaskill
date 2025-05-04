@@ -11,6 +11,8 @@ export default function CourseContent() {
     useGetFullCourseContentQuery(courseId);
   const data = courseContent?.data;
   const courseTitle = courseContent?.data?.title;
+  console.log("Data: ", data);
+  
 
   const [deletePopUpIds, setDeletePopIds] = useState(null);
 
