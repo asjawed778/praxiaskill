@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { addNewUserSchema } from "../../../yup";
 
-const AddNewUser = ({ open, onClose, userData, isEditMode }) => {
+const AddNewUser = ({ open, onClose, userData, isEditMode, refetch }) => {
   const [addNewUser, { isLoading }] = useAddNewUserMutation();
   const [updateUser, {isLoading: isUpdating}] = useUpdateUserDetailsMutation();
   
@@ -57,6 +57,7 @@ const AddNewUser = ({ open, onClose, userData, isEditMode }) => {
         await addNewUser(data).unwrap();
         toast.success("New user added successfully!");
       }
+      refetch();
       onClose();
       reset();
     } catch (error) {

@@ -36,7 +36,11 @@ const CustomDropdown = ({
       fullWidth={fullWidth}
       size={size}
       disabled={disabled}
-      sx={{ minWidth: 150, ...sx }}
+      sx={{ 
+        minWidth: 150, 
+        textAlign: 'left', 
+        ...sx 
+      }}
       error={!!error}
     >
       <InputLabel required={required}>{label}</InputLabel>

@@ -141,10 +141,6 @@ export default function CustomTable({
           vertical: "top",
           horizontal: "right",
         }}
-        // PaperProps={{
-        //   elevation: 2,
-        //   sx: { minWidth: 160 },
-        // }}
       >
         <MenuItem
           onClick={() => handleAction("status")}
