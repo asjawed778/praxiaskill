@@ -16,6 +16,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import AdsClickIcon from "@mui/icons-material/AdsClick";
 import EmailIcon from "@mui/icons-material/Email";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import InsightsIcon from "@mui/icons-material/Insights";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
+import ChatIcon from "@mui/icons-material/Chat";
 const tools = [
   { name: "ChatGPT", icon: <SmartToyIcon fontSize="large" /> },
   { name: "Jasper", icon: <AutoAwesomeIcon fontSize="large" /> },
