@@ -264,7 +264,7 @@ const CourseSyllabus = () => {
         bgcolor: "#0d0d0d",
         minHeight: "100vh",
         py: 4,
-        px: { xs: 2, sm: 3 },
+        px: { xs: 0.5 },
       }}
     >
       <Container maxWidth="md">
@@ -275,10 +275,10 @@ const CourseSyllabus = () => {
           textAlign= "center"
           sx={{
             mb: {xs: 4, md: 8},
-            fontSize: { xs: '28px', sm: '36px', md: '44px' },
+            fontSize: { xs: "24px", sm: "36px", md: "44px" },
           }}
         >
-          Course Syllabus
+          Course Curriculum
         </Typography>
 
         {syllabusData.map((module) => (

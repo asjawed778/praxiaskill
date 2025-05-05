@@ -1,65 +1,124 @@
 import React from "react";
-import {
-  Box,
-  Grid,
-  Typography,
-  Card,
-  CardContent,
-} from "@mui/material";
+import { Box, Grid, Typography, Card, CardContent } from "@mui/material";
 import CodeIcon from "@mui/icons-material/Code";
-import WebIcon from "@mui/icons-material/Web";
-import ViewQuiltIcon from "@mui/icons-material/ViewQuilt"; // closest to Next.js layout
-import DeveloperModeIcon from "@mui/icons-material/DeveloperMode";
-import IntegrationInstructionsIcon from "@mui/icons-material/IntegrationInstructions";
-import StorageIcon from "@mui/icons-material/Storage";
-import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
-import ApiIcon from "@mui/icons-material/Api";
-import DataObjectIcon from "@mui/icons-material/DataObject";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import SettingsIcon from "@mui/icons-material/Settings"; // for Docker
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch"; // for Vercel
-import CloudIcon from "@mui/icons-material/Cloud"; // Firebase, AWS
-import PaymentIcon from "@mui/icons-material/Payment";
-import BugReportIcon from "@mui/icons-material/BugReport"; // for Postman
-import TerminalIcon from "@mui/icons-material/Terminal"; // for ESLint / Prettier
-import SecurityIcon from "@mui/icons-material/Security"; // for Zod / Yup
-import AccountTreeIcon from "@mui/icons-material/AccountTree"; // for CI/CD
 
-const tools = [
-  { name: "HTML/CSS/JS", icon: <CodeIcon fontSize="large" /> },
-  { name: "React.js", icon: <WebIcon fontSize="large" /> },
-  { name: "Next.js", icon: <ViewQuiltIcon fontSize="large" /> },
-  { name: "Node.js", icon: <DeveloperModeIcon fontSize="large" /> },
-  { name: "Express.js", icon: <IntegrationInstructionsIcon fontSize="large" /> },
-  { name: "MongoDB", icon: <StorageIcon fontSize="large" /> },
-  { name: "PostgreSQL", icon: <StorageIcon fontSize="large" /> },
-  { name: "JWT Auth", icon: <VerifiedUserIcon fontSize="large" /> },
-  { name: "REST APIs", icon: <ApiIcon fontSize="large" /> },
-  { name: "GraphQL", icon: <DataObjectIcon fontSize="large" /> },
-  { name: "Git & GitHub", icon: <GitHubIcon fontSize="large" /> },
-  { name: "Docker", icon: <SettingsIcon fontSize="large" /> },
-  { name: "CI/CD", icon: <AccountTreeIcon fontSize="large" /> },
-  { name: "Firebase", icon: <CloudIcon fontSize="large" /> },
-  { name: "AWS", icon: <CloudIcon fontSize="large" /> },
-  { name: "Stripe", icon: <PaymentIcon fontSize="large" /> },
-  { name: "Postman", icon: <BugReportIcon fontSize="large" /> },
-  { name: "Vercel", icon: <RocketLaunchIcon fontSize="large" /> },
-  { name: "ESLint / Prettier", icon: <TerminalIcon fontSize="large" /> },
-  { name: "Zod / Yup", icon: <SecurityIcon fontSize="large" /> },
+import {
+  FaHtml5,
+  FaCss3Alt,
+  FaJsSquare,
+  FaReact,
+  FaNodeJs,
+  FaDocker,
+  FaGithub,
+  FaAws,
+} from "react-icons/fa";
+import {
+  SiNextdotjs,
+  SiExpress,
+  SiMongodb,
+  SiPostgresql,
+  SiJsonwebtokens,
+  SiGraphql,
+  SiFirebase,
+  SiPostman,
+  SiVercel,
+  SiEslint,
+  SiPrettier,
+  SiZod,
+  SiGithubactions,
+} from "react-icons/si";
+import { VscServer } from "react-icons/vsc";
+import { FaCheckCircle } from "react-icons/fa";
+
+const iconMap = {
+  HTML: <FaHtml5 size={40} color="#e34c26" />,
+  CSS: <FaCss3Alt size={40} color="#264de4" />,
+  JavaScript: <FaJsSquare size={40} color="#f0db4f" />,
+  "React.js": <FaReact size={40} color="#61DBFB" />,
+  "Next.js": <SiNextdotjs size={40} />,
+  "Node.js": <FaNodeJs size={40} color="#3c873a" />,
+  "Express.js": <SiExpress size={40} />,
+  MongoDB: <SiMongodb size={40} color="#47A248" />,
+  PostgreSQL: <SiPostgresql size={40} color="#336791" />,
+  "JWT Auth": <SiJsonwebtokens size={40} />,
+  "REST API": <VscServer size={40} />,
+  GraphQL: <SiGraphql size={40} color="#e535ab" />,
+  "Git & GitHub": <FaGithub size={40} />,
+  Docker: <FaDocker size={40} color="#0db7ed" />,
+  "CI/CD": <SiGithubactions size={40} />,
+  Firebase: <SiFirebase size={40} color="#FFCA28" />,
+  AWS: <FaAws size={40} />,
+  Postman: <SiPostman size={40} color="#ff6c37" />,
+  Vercel: <SiVercel size={40} />,
+  ESLint: <SiEslint size={40} color="#4B32C3" />,
+  Prettier: <SiPrettier size={40} color="#F7B93E" />,
+  Zod: <SiZod size={40} />,
+  Yup: <FaCheckCircle size={24} />,
+};
+
+const toolNames = [
+  "HTML",
+  "CSS",
+  "JavaScript",
+  "React.js",
+  "Next.js",
+  "Node.js",
+  "Express.js",
+  "MongoDB",
+  "PostgreSQL",
+  "JWT Auth",
+  "REST API",
+  "GraphQL",
+  "Git & GitHub",
+  "Docker",
+  "CI/CD",
+  "Firebase",
+  "AWS",
+  "Postman",
+  "Vercel",
+  "ESLint",
+  "Prettier",
+  "Zod",
+  "Yup",
 ];
-
 
 const ToolsGrid = () => {
   return (
-    <Box sx={{ backgroundColor: "#000", color: "#fff", py: 8, px: 2, textAlign: "center" }}>
-      <Typography variant="h4" fontWeight="bold" gutterBottom>
+    <Box
+      sx={{
+        backgroundColor: "#000",
+        color: "#fff",
+        px: 2,
+        textAlign: "center",
+      }}
+    >
+      <Typography
+        component="h2"
+        textAlign="center"
+        fontWeight="bold"
+        sx={{
+          mb: 4,
+          fontSize: { xs: "24px", sm: "36px", md: "44px" },
+        }}
+      >
         Master 20+ Tools
       </Typography>
 
-      <Grid container spacing={2} justifyContent="center" sx={{ mt: 4, mx: { xs: 1, sm: 2, md: 16 } }}>
-        {tools.map((tool, index) => (
-          <Grid  key={index} size={{xs:4, sm: 3, lg: 2}}>
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <Grid
+        container
+        spacing={2}
+        justifyContent="center"
+        sx={{ mt: 4, mx: { xs: 1, sm: 2, md: 16 } }}
+      >
+        {toolNames.map((name, index) => (
+          <Grid key={index} size={{ xs: 4, sm: 3, lg: 2 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
               <Card
                 sx={{
                   backgroundColor: "#150d1f",
@@ -76,11 +135,11 @@ const ToolsGrid = () => {
                 }}
                 elevation={4}
               >
-                {tool.icon}
+                {iconMap[name]}
               </Card>
               <CardContent sx={{ p: 1 }}>
                 <Typography variant="body2" fontWeight="medium" align="center">
-                  {tool.name}
+                  {name}
                 </Typography>
               </CardContent>
             </Box>

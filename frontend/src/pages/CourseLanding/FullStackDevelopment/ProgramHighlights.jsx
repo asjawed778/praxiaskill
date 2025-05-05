@@ -50,6 +50,7 @@ const ProgramHighlights = () => {
         bgcolor: "black",
         py: 4,
         color: "white",
+        // bgcolor:"pink"
       }}
     >
       <Container maxWidth="lg">
@@ -58,7 +59,7 @@ const ProgramHighlights = () => {
           textAlign="center"
           fontWeight="bold"
           sx={{
-            mb: 6,
+            mb: 4,
             fontSize: { xs: "24px", sm: "36px", md: "44px" },
           }}
         >
