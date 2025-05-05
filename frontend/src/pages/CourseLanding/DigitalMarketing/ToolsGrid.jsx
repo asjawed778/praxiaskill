@@ -1,58 +1,65 @@
 import React from "react";
-import {
-  Box,
-  Grid,
-  Typography,
-  Card,
-  CardContent,
-} from "@mui/material";
-import SmartToyIcon from '@mui/icons-material/SmartToy';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import BrushIcon from '@mui/icons-material/Brush';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import LanguageIcon from '@mui/icons-material/Language';
-import SearchIcon from '@mui/icons-material/Search';
-import CampaignIcon from '@mui/icons-material/Campaign';
-import AdsClickIcon from "@mui/icons-material/AdsClick";
-import EmailIcon from "@mui/icons-material/Email";
-import EditNoteIcon from "@mui/icons-material/EditNote";
-import InsightsIcon from "@mui/icons-material/Insights";
-import AssessmentIcon from "@mui/icons-material/Assessment";
-import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
-import ChatIcon from "@mui/icons-material/Chat";
+import { Box, Grid, Typography, Card, CardContent } from "@mui/material";
+import { SiOpenai, SiGrammarly, SiHubspot, SiZapier } from "react-icons/si";
+import { FaPaintBrush, FaGoogle, FaEnvelope, FaWordpress, FaChartLine, FaFacebook, FaBullhorn } from "react-icons/fa";
+import { AiOutlineAppstoreAdd, AiOutlineRobot, AiOutlineFundProjectionScreen } from "react-icons/ai";
+
 const tools = [
-  { name: "ChatGPT", icon: <SmartToyIcon fontSize="large" /> },
-  { name: "Jasper", icon: <AutoAwesomeIcon fontSize="large" /> },
-  { name: "Canva AI", icon: <BrushIcon fontSize="large" /> },
-  { name: "Google Ads", icon: <AdsClickIcon fontSize="large" /> }, // Renamed here
-  { name: "SurferSEO", icon: <TrendingUpIcon fontSize="large" /> },
-  { name: "Mailchimp", icon: <EmailIcon fontSize="large" /> },
-  { name: "GA4 (Google Analytics)", icon: <BarChartIcon fontSize="large" /> },
-  { name: "WordPress", icon: <LanguageIcon fontSize="large" /> },
-  { name: "SEMrush", icon: <SearchIcon fontSize="large" /> },
-  { name: "Meta Ads Manager", icon: <CampaignIcon fontSize="large" /> },
-  { name: "Copy.ai", icon: <EditNoteIcon fontSize="large" /> },
-  { name: "Frase", icon: <InsightsIcon fontSize="large" /> },
-  { name: "Pardot", icon: <AssessmentIcon fontSize="large" /> },
-  { name: "HubSpot", icon: <BusinessCenterIcon fontSize="large" /> },
-  { name: "Rasa", icon: <ChatIcon fontSize="large" /> },
-  { name: "AdRoll", icon: <AdsClickIcon fontSize="large" /> },
+  { name: "ChatGPT", icon: <SiOpenai size={40} color="#00B8D9" /> },
+  { name: "Jasper", icon: <SiGrammarly size={40} color="#60A917" /> },
+  { name: "Canva AI", icon: <FaPaintBrush size={40} color="#FF6F61" /> },
+  { name: "Google Ads", icon: <FaGoogle size={40} color="#4285F4" /> },
+  { name: "SurferSEO", icon: <FaChartLine size={40} color="#FF6F00" /> },
+  { name: "Mailchimp", icon: <FaEnvelope size={40} color="#FFE01B" /> },
+  { name: "Google Analytics", icon: <AiOutlineAppstoreAdd size={40} color="#FF6200" /> },
+  { name: "WordPress", icon: <FaWordpress size={40} color="#21759B" /> },
+  { name: "Zapier", icon: <SiZapier size={40} color="#FF8A00" /> },
+  { name: "Meta Ads Manager", icon: <FaFacebook size={40} color="#1877F2" /> },
+  { name: "Copy.ai", icon: <SiGrammarly size={40} color="#11B6F0" /> },
+  { name: "Frase", icon: <AiOutlineFundProjectionScreen size={40} color="#0F8C8C" /> },
+  { name: "Pardot", icon: <AiOutlineFundProjectionScreen size={40} color="#FFAC33" /> },
+  { name: "HubSpot", icon: <SiHubspot size={40} color="#FF7A59" /> },
+  { name: "Rasa", icon: <AiOutlineRobot size={40} color="#8A2BE2" /> },
+  { name: "AdRoll", icon: <FaBullhorn size={40} color="#FF5733" /> },
 ];
-
-
 
 const ToolsGrid = () => {
   return (
-    <Box sx={{ backgroundColor: "#000", color: "#fff", py: 8, px: 2, textAlign: "center" }}>
-      <Typography variant="h4" fontWeight="bold" gutterBottom>
+    <Box
+      sx={{
+        backgroundColor: "#000",
+        color: "#fff",
+        px: 2,
+        textAlign: "center",
+      }}
+    >
+      <Typography
+        component="h2"
+        textAlign="center"
+        fontWeight="bold"
+        sx={{
+          mb: 6,
+          fontSize: { xs: "24px", sm: "36px", md: "44px" },
+        }}
+      >
         Master 15+ Tools, Including AI-Powered Platforms
       </Typography>
 
-      <Grid container spacing={2} justifyContent="center" sx={{ mt: 4, mx: { xs: 1, sm: 2, md: 16 } }}>
+      <Grid
+        container
+        spacing={2}
+        justifyContent="center"
+        sx={{ mt: 4, mx: { xs: 1, sm: 2, md: 16 } }}
+      >
         {tools.map((tool, index) => (
-          <Grid  key={index} size={{xs:4, sm: 3, lg: 2}}>
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Grid key={index} size={{ xs: 4, sm: 3, lg: 2 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
               <Card
                 sx={{
                   backgroundColor: "#150d1f",

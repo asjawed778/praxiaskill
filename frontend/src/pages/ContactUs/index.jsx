@@ -28,30 +28,44 @@ function ContactPage() {
 }
 
 const PageHeader = () => (
-  <Box sx={{ textAlign: 'center', mb: 6 }}>
-    <Typography 
-      variant="h2" 
-      component="h1" 
-      sx={{ 
-        fontWeight: 700, 
-        color: "red",
-        fontSize: { xs: '1rem', md: '1.5rem' }
+  <Box
+    sx={{
+      textAlign: "center",
+      mb: { xs: 4, md: 6 },
+      px: { xs: 2, sm: 4 },
+    }}
+  >
+    <Typography
+      sx={{
+        fontWeight: 700,
+        fontSize: { xs: "1rem", sm: "1.5rem", md: "2rem" },
+        background: "linear-gradient(to right, #ff416c, #ff4b2b)",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        mb: 2,
       }}
     >
-      Get expert guidance
-      to accelerate your learning journey
+      Get expert guidance to accelerate your learning journey
     </Typography>
-    <Typography 
-      variant="body1" 
-      sx={{ 
-        maxWidth: 500, 
-        mx: 'auto',
-        color: '#d13838'
+
+    <Typography
+      variant="body1"
+      sx={{
+        maxWidth: 700,
+        mx: "auto",
+        fontSize: { xs: "0.8rem", md: "1rem" },
+        color: "text.secondary",
+        lineHeight: 1.75,
       }}
     >
-     "Talk with a Praxia Skill advisor to get personalized support in choosing the right course for your goals. Discover how our industry-relevant programs, hands-on learning, and expert mentorship can help you upskill faster and build a future-ready career."
+      "Talk with a <strong>Praxia Skill advisor</strong> to get personalized
+      support in choosing the right course for your goals. Discover how our
+      <strong> industry-relevant programs</strong>, <strong>hands-on learning</strong>, and
+      <strong> expert mentorship</strong> can help you upskill faster and build a
+      future-ready career."
     </Typography>
   </Box>
 );
+
 
 export default ContactPage;

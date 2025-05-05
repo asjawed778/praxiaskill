@@ -197,8 +197,8 @@ const CourseSyllabus = () => {
       sx={{
         bgcolor: "#0d0d0d",
         minHeight: "100vh",
-        py: 4,
-        px: { xs: 2, sm: 3 },
+        py: {xs:2, md: 4},
+        px: 0.5
       }}
     >
       <Container maxWidth="md">
@@ -212,7 +212,7 @@ const CourseSyllabus = () => {
             fontSize: { xs: '28px', sm: '36px', md: '44px' },
           }}
         >
-          Course Syllabus
+          Course Curriculum
         </Typography>
 
         {syllabusData.map((module) => (

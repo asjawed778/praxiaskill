@@ -130,7 +130,7 @@ const HeroSection = ({syllabusRef}) => {
                 />
 
                 <CustomButton
-                  label="View Syllabus"
+                  label="View Curriculum"
                   variant="outlined"
                   size="large"
                   color="inherit"
@@ -138,6 +138,7 @@ const HeroSection = ({syllabusRef}) => {
                   sx={{
                     fontWeight: 'bold',
                     height: "42px", 
+                    // size:"small",
                     fontSize: "14px",
                     borderColor: 'white',
                     borderRadius: 3,
