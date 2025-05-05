@@ -64,7 +64,6 @@ const Users = () => {
         setIsEditMode(true);
         setAddUserModal(true);
         setSelectedUser(row);
-        refetch();
         break;
 
       case "assign":

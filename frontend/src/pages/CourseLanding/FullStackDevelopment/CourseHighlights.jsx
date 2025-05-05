@@ -44,7 +44,7 @@ const CourseHighlights = () => {
           color="white"
           sx={{
             mb: {xs: 4, md: 8},
-            fontSize: { xs: '28px', sm: '36px', md: '44px' },
+            fontSize: { xs: "24px", sm: "36px", md: "44px" },
           }}
         >
           Course Highlights
