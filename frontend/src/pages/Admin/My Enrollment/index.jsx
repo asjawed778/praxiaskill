@@ -23,7 +23,7 @@ const index = () => {
   const endItem = category
     ? courses?.length
     : Math.min(startItem + itemsPerPage - 1, totalItems);
-
+  console.log("My courses: ", myCourses);
   const navigate = useNavigate();
   const handleClick = (courseId) => {
     navigate(`/course-lecture/${courseId}`);

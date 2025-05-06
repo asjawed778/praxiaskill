@@ -12,10 +12,14 @@ import CustomButton from "@/components/CustomButton";
 import ModalWrapper from "@/components/ModalWrapper";
 import EnquiryForm from "./EnquiryForm";
 import CourseHighlights from "./CourseHighlights";
+import { useSelector } from "react-redux";
 
-const FullStackDevelopment = () => {
+const FullStackDevelopment = ({ course }) => {
   const syllabusRef = useRef(null);
   const [showFloatingBtn, setShowFloatingBtn] = useState(false);
+  const courses = useSelector((state) => state.courses);
+  console.log("Course: ",course?.title);
+  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,7 +36,7 @@ const FullStackDevelopment = () => {
 
   return (
     <Box sx={{ bgcolor: "black", color: "white", position: "relative" }}>
-      <HeroSection syllabusRef={syllabusRef} />
+      <HeroSection syllabusRef={syllabusRef} course={course} />
       {/* <CourseHighlights /> */}
       <ProgramHighlights />
       <ToolsGrid />

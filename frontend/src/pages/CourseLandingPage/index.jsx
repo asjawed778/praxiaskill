@@ -14,12 +14,17 @@ import { useGetFullCourseDetailsQuery } from "../../services/course.api";
 import { setSpecificCourse } from "../../store/reducers/coursesReducer";
 import SEOHelmet from "../../SEO/SEOHelmet";
 import { generateOrganizationSchema } from "../../SEO/SEOHelper";
+import FullStackDevelopment from "@/pages/CourseLanding/FullStackDevelopment"
+import DigitalMarketing from "@/pages/CourseLanding/DigitalMarketing"
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 const Course = () => {
   const dispatch = useDispatch()
   const { courseId, courseTitle } = useParams();
   const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(courseId)
-
+  console.log("course details: ", courseDetails?.data);
+  console.log("course Title: ", courseTitle);
+  
   const navigate = useNavigate();
 
 
@@ -37,6 +42,34 @@ const Course = () => {
     url: `https://praxiaskill.com/course/${courseTitle}/${courseId}`,
     logo: specificCourse?.thumbnail,
   })
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        my={4}
+        // height="100vh"
+      >
+        <CircularProgress size={40} thickness={4} />
+        <Typography variant="h5" mt={2} color="text.primary">
+          Course is loading, please wait...
+        </Typography>
+      </Box>
+    );
+  }
+
+  if(courseTitle === "full-stack-web-development-pro-level"){
+    return(
+      <FullStackDevelopment course={courseDetails?.data} />
+    ) 
+  }
+  if(courseTitle === "ai-powered-digital-marketing"){
+    return(
+      <DigitalMarketing course={courseDetails?.data} />
+    )
+  }
   return (
     <>
       <SEOHelmet

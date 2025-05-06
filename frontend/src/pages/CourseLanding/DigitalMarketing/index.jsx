@@ -13,7 +13,7 @@ import ModalWrapper from "@/components/ModalWrapper";
 import EnquiryForm from "./EnquiryForm";
 import CourseHighlights from "./CourseHighlights";
 
-const DigitalMarketing = () => {
+const DigitalMarketing = ({ course }) => {
   const syllabusRef = useRef(null);
   const [showFloatingBtn, setShowFloatingBtn] = useState(false);
 
@@ -32,7 +32,7 @@ const DigitalMarketing = () => {
 
   return (
     <Box sx={{ bgcolor: "black", color: "white", position: "relative" }}>
-      <HeroSection syllabusRef={syllabusRef} />
+      <HeroSection syllabusRef={syllabusRef} course={course} />
       {/* <CourseHighlights /> */}
       <ProgramHighlights />
       <ToolsGrid />
