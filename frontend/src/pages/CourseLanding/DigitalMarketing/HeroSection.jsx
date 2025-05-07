@@ -5,9 +5,7 @@ import CustomButton from "@/components/CustomButton";
 import ModalWrapper from "@/components/ModalWrapper";
 import EnquiryForm from "./EnquiryForm";
 import CourseHighlights from "./CourseHighlights";
-import thumbnail from "@/assets/CourseThumbnail/ai-powered-digital-marketing.png";
-
-const HeroSection = ({ syllabusRef }) => {
+const HeroSection = ({ syllabusRef, course }) => {
   const [animateBadge, setAnimateBadge] = useState(false);
   const [openEnquiry, setOpenEnquiry] = useState(false);
 
@@ -79,7 +77,7 @@ const HeroSection = ({ syllabusRef }) => {
                   fontSize={{ xs: "24px", sm: "36px", md: "44px" }}
                   lineHeight={1.2}
                 >
-                  AI-Powered Digital Marketing
+                  {course?.title}
                 </Typography>
 
                 <Typography
@@ -87,8 +85,7 @@ const HeroSection = ({ syllabusRef }) => {
                   color="grey.300"
                   fontSize={{ xs: "16px", md: "18px" }}
                 >
-                  Learn from industry experts and become a master in AI-driven
-                  digital marketing.
+                  {course?.subtitle}
                 </Typography>
 
                 <Stack
@@ -202,7 +199,7 @@ const HeroSection = ({ syllabusRef }) => {
                 >
                   <Box
                     component="img"
-                    src={thumbnail}
+                    src={course?.thumbnail}
                     alt="Course Thumbnail"
                     sx={{
                       width: "100%",

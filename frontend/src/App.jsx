@@ -128,7 +128,7 @@ const publicRoutes = [
     ),
   },
   {
-    path: "full-stack-development",
+    path: "full-stack-web-development-pro-level",
     element: (
       <LazyComponent>
         <FullStackDevelopment />
@@ -136,7 +136,7 @@ const publicRoutes = [
     )
   },
   {
-    path: "ai-power-digital-marketing",
+    path: "ai-powered-digital-marketing",
     element: (
       <LazyComponent>
         <DigitalMarketing />
@@ -343,7 +343,7 @@ function App() {
         )}
 
         {/* Private routes  */}
-        {accessToken && user?.role === "USER" ? (
+        {accessToken ? (
           <Route element={<BasicLayout />}>
             {userPrivateRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />

@@ -13,7 +13,7 @@ import ModalWrapper from "@/components/ModalWrapper"
 import EnquiryForm from './EnquiryForm';
 import CourseHighlights from './CourseHighlights';
 
-const HeroSection = ({syllabusRef}) => {
+const HeroSection = ({syllabusRef, course}) => {
   const [animateBadge, setAnimateBadge] = useState(false);
   const [openEnquiry, setOpenEnquiry] = useState(false);
 
@@ -85,7 +85,7 @@ const HeroSection = ({syllabusRef}) => {
                 fontSize={{ xs: '24px', sm: '36px', md: '44px' }}
                 lineHeight={1.2}
               >
-                Full Stack Web Development Pro-Level
+                {course?.title}
               </Typography>
 
               <Typography 
@@ -93,7 +93,7 @@ const HeroSection = ({syllabusRef}) => {
                 color="grey.300" 
                 fontSize={{ xs: '16px', md: '18px' }}
               >
-                Hands-On Learning with Modern Tools, FrameWorks & Full Project Builds.
+                {course?.subtitle}
               </Typography>
 
               <Stack 
@@ -196,7 +196,7 @@ const HeroSection = ({syllabusRef}) => {
               {/* Thumbnail */}
               <Box
                 component="img"
-                src="https://praxiaskills.s3.ap-south-1.amazonaws.com/public/course/thumbnail/FullStackDevelopmentMasterclasspng-1745173387434"
+                src={course.thumbnail}
                 alt="Course Thumbnail"
                 sx={{
                   width: '100%',
