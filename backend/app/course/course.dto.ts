@@ -5,15 +5,15 @@ import * as CourseEnum from "./course.enum";
 export interface ICourse extends BaseSchema {
     title: string;
     subtitle: string;
-    keypoints: string[];
+    keypoints?: string[];
     description: string;
-    tags: string[];
-    whatWillYouLearn: string[];
+    tags?: string[];
+    whatWillYouLearn?: string[];
 
     brouchure?: string;
     thumbnail: string;
 
-    instructor: mongoose.Schema.Types.ObjectId;
+    instructor?: mongoose.Schema.Types.ObjectId;
     ratingAndReviews: mongoose.Schema.Types.ObjectId[];
     category: mongoose.Schema.Types.ObjectId;
     price: {
@@ -25,29 +25,41 @@ export interface ICourse extends BaseSchema {
     duration: string;
     totalLectures: number;
     validity: CourseEnum.CourseValidity;
-
     courseMode: CourseEnum.CourseMode;
+    prerequisites?: string[];
+    courseLevel?: string;
+    tools?: {
+        name: string;
+        url?: string;
+    }[];
+    faq?: {
+        question: string;
+        answer: string;
+        resourceUrl?: string;
+    }[];
 
     trailerVideo?: string;
-    
     sections: mongoose.Schema.Types.ObjectId[];
     courseStatus: CourseEnum.CourseStatus;
 }
 
-export interface IUpdateCourseDetails extends Omit<ICourse, "_id" | "createdAt" | "updatedAt" | "sections" | "ratingAndReviews"> {}
+export interface IUpdateCourseDetails extends Omit<ICourse, "_id" | "createdAt" | "updatedAt" | "sections" | "ratingAndReviews"> { }
 
 export interface ISection extends BaseSchema {
     title: string;
-    description: string;
+    description?: string;
+    assignments?: string[];
+    projects?: string[];
     subSections: mongoose.Schema.Types.ObjectId[];
     duration?: string;
 }
 
 export interface ISubSection extends BaseSchema {
     title: string;
+    description?: string;
     video?: {
         link: string;
-        duration: string;
+        duration?: string;
     };
     pdf?: string;
     image?: string;
@@ -105,6 +117,6 @@ export interface IQna extends BaseSchema {
     upvotes?: mongoose.Schema.Types.ObjectId[];
 }
 
-export interface ICreateQna extends Omit<IQna , "createdAt" | "updatedAt" | "_id" | "answers"> {}
+export interface ICreateQna extends Omit<IQna, "createdAt" | "updatedAt" | "_id" | "answers"> { }
 
 

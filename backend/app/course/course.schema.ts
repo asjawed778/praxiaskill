@@ -11,25 +11,9 @@ const courseSchema = new mongoose.Schema<ICourse>({
         type: String,
         required: true
     },
-    keypoints: [{
-        type: String,
-        required: true
-    }],
-    description: {
-        type: String,
-        required: true
-    },
-    tags: [{
-        type: String,
-        required: true
-    }],
-    whatWillYouLearn: [{
-        type: String,
-        required: true
-    }],
     brouchure: {
         type: String,
-        required: true
+        required: false
     },
     thumbnail: {
         type: String,
@@ -38,8 +22,56 @@ const courseSchema = new mongoose.Schema<ICourse>({
     instructor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user",
+        required: false
+    },
+    description: {
+        type: String,
         required: true
     },
+    keypoints: [{
+        type: String,
+        required: false
+    }],
+    tags: [{
+        type: String,
+        required: false
+    }],
+    whatWillYouLearn: [{
+        type: String,
+        required: false
+    }],
+    prerequisites: [{
+        type: String,
+        required: false
+    }],
+    courseLevel: {
+        type: String,
+        required: false,
+    },
+    tools: [{
+        name: {
+            type: String,
+            required: true
+        },
+        url: {
+            type: String,
+            required: false
+        }
+    }],
+    faq: [{
+        question: {
+            type: String,
+            required: true
+        },
+        answer: {
+            type: String,
+            required: true
+        },
+        resourceUrl: {
+            type: String,
+            required: false
+        }
+    }],
     ratingAndReviews: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "RatingAndReviews"
@@ -69,11 +101,11 @@ const courseSchema = new mongoose.Schema<ICourse>({
     },
     duration: {
         type: String,
-        required: true
+        required: false
     },
     totalLectures: {
         type: Number,
-        required: true
+        required: false
     },
     courseMode: {
         type: String,

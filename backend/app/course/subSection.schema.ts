@@ -6,6 +6,10 @@ const subSectionSchema = new mongoose.Schema<ISubSection>({
         type: String,
         required: true
     },
+    description: {
+        type: String,
+        required: false
+    },
     video: {
         link: {
             type: String,
