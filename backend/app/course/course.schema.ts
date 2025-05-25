@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { ICourse } from "./course.dto";
 import * as CourseEnum from "./course.enum";
 
-const courseSchema = new mongoose.Schema<ICourse>({ 
+const courseSchema = new mongoose.Schema<ICourse>({
     title: {
         type: String,
         required: true
@@ -52,6 +52,10 @@ const courseSchema = new mongoose.Schema<ICourse>({
         name: {
             type: String,
             required: true
+        },
+        iconName: {
+            type: String,
+            required: false
         },
         url: {
             type: String,

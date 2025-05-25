@@ -30,6 +30,7 @@ export interface ICourse extends BaseSchema {
     courseLevel?: string;
     tools?: {
         name: string;
+        iconName?: string;
         url?: string;
     }[];
     faq?: {
