@@ -165,8 +165,6 @@ export const getCourseDetails = async (courseId: string): Promise<any> => {
         totalAssignments += (section.assignments as any)?.length || 0;
     });
 
-
-
     return {...course, totalProjects, totalAssignments};
 };
 

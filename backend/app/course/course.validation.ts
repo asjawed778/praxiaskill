@@ -227,6 +227,12 @@ export const createCourse = [
         .isString().withMessage("Tool name must be a string")
         .trim(),
 
+    body("tools.*.iconName")
+        .if(body("tools").exists().isArray())
+        .optional()
+        .isString().withMessage("Tool icon name must be a string")
+        .trim(),
+
     body("tools.*.url")
         .if(body("tools").exists().isArray())
         .optional()
