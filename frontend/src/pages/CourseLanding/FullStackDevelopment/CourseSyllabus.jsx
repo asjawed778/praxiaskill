@@ -252,7 +252,7 @@ const syllabusData = [
 ];
 
 const CourseSyllabus = () => {
-  const [expanded, setExpanded] = useState("module1");
+  const [expanded, setExpanded] = useState("");
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);

@@ -40,7 +40,7 @@ const Users = () => {
     setLimit(newLimit);
     setPage(0);
   };
-
+  console.log("Table Data: ", data);
   const debouncedSearch = useMemo(
     () =>
       debounce((value) => {

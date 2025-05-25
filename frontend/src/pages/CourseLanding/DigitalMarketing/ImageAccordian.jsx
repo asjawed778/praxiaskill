@@ -72,7 +72,7 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
 }));
 
 export default function ImageAccordion() {
-  const [expanded, setExpanded] = useState('one');
+  const [expanded, setExpanded] = useState('');
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // <=600px
   const isTablet = useMediaQuery(theme.breakpoints.down('md')); // <=900px

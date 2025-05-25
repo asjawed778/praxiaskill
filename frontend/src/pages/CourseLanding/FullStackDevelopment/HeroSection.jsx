@@ -1,164 +1,150 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  Grid,
-  Typography,
-  Stack,
-  useTheme,
-  Fade,
-} from '@mui/material';
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import CustomButton from "@/components/CustomButton"
-import ModalWrapper from "@/components/ModalWrapper"
-import EnquiryForm from './EnquiryForm';
-import CourseHighlights from './CourseHighlights';
+import React, { useEffect, useState } from "react";
+import { Box, Grid, Typography, Stack, useTheme, Fade } from "@mui/material";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import CustomButton from "@/components/CustomButton";
+import ModalWrapper from "@/components/ModalWrapper";
+import EnquiryForm from "./EnquiryForm";
+import CourseHighlights from "./CourseHighlights";
 
-const HeroSection = ({syllabusRef, course}) => {
+const HeroSection = ({ syllabusRef, course }) => {
   const [animateBadge, setAnimateBadge] = useState(false);
   const [openEnquiry, setOpenEnquiry] = useState(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimateBadge(true);
-    }, 100); 
+    }, 100);
     return () => clearTimeout(timeout);
   }, []);
-  
+
   const handleScrollToSyllabus = () => {
     if (syllabusRef?.current) {
-      syllabusRef.current.scrollIntoView({ behavior: 'smooth' });
+      syllabusRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const handleEnquiry = () => {
     setOpenEnquiry(true);
-  }
-  
+  };
+
   const handleClose = () => setOpenEnquiry(false);
-  
+
   return (
     <Fade in={true} timeout={1000}>
       <Box>
-      <Box
-        sx={{
-          background: 'radial-gradient(circle at top left, #0f172a, #1e293b)',
-          color: 'white',
-          py: { xs: 6, sm: 8, md: 12 },
-          px: { xs: 2, sm: 4, md: 8, lg: 12 },
-          minHeight: { xs: 'auto' },
-          position: 'relative',
-          overflow: 'hidden',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        {/* Background glow */}
         <Box
           sx={{
-            position: 'absolute',
-            top: -100,
-            left: -100,
-            width: 300,
-            height: 300,
-            borderRadius: '50%',
-            background: 'rgba(255, 0, 80, 0.3)',
-            filter: 'blur(100px)',
-            zIndex: 0,
-          }}
-        />
-
-        <Grid 
-          container 
-          spacing={{ xs: 4, md: 8 }} 
-          alignItems="center" 
-          zIndex={2} 
-          position="relative"
-          sx={{ 
-            mx: { xs: 0, sm: 2, md: 4 }
+            background: "radial-gradient(circle at top left, #0f172a, #1e293b)",
+            color: "white",
+            py: { xs: 6, sm: 8, md: 12 },
+            px: { xs: 4, md: 10 },
+            // px: { xs: 2, sm: 4, md: 8, lg: 12 },
+            minHeight: { xs: "auto" },
+            position: "relative",
+            overflow: "hidden",
+            display: "flex",
+            alignItems: "center",
           }}
         >
-          {/* LEFT - Course Info */}
-          <Grid size={{xs: 12, md: 6}} order={{ xs: 2, md: 1 }}>
-            <Stack spacing={{ xs: 2, md: 3 }}>
-              <Typography 
-                fontWeight="bold" 
-                fontSize={{ xs: '24px', sm: '36px', md: '44px' }}
-                lineHeight={1.2}
-              >
-                {course?.title}
-              </Typography>
+          {/* Background glow */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: -100,
+              left: -100,
+              width: 300,
+              height: 300,
+              borderRadius: "50%",
+              background: "rgba(255, 0, 80, 0.3)",
+              filter: "blur(100px)",
+              zIndex: 0,
+            }}
+          />
 
-              <Typography 
-                variant="body1" 
-                color="grey.300" 
-                fontSize={{ xs: '16px', md: '18px' }}
-              >
-                {course?.subtitle}
-              </Typography>
+          <Grid
+            container
+            spacing={{ xs: 4, md: 8 }}
+            alignItems="center"
+            zIndex={2}
+            position="relative"
+          >
+            {/* LEFT - Course Info */}
+            <Grid size={{ xs: 12, md: 6 }} order={{ xs: 2, md: 1 }}>
+              <Stack spacing={{ xs: 2, md: 3 }}>
+                <Typography
+                  fontWeight="bold"
+                  fontSize={{ xs: "24px", sm: "36px", md: "44px" }}
+                  lineHeight={1.2}
+                >
+                  {course?.title}
+                </Typography>
 
-              <Stack 
-                direction={{ xs: 'column', sm: 'row' }} 
-                spacing={2} 
-                mt={{ xs: 1, md: 2 }}
-                sx={{ width: '100%' }}
-              >
-                <CustomButton
-                  label="Enquiry Now"
-                  variant="contained"
-                  onClick={handleEnquiry}
-                  sx={{
-                    height: "42px", 
-                    fontSize: "14px", 
-                    fontWeight: 'bold',
-                    background: 'linear-gradient(135deg, #ef4444, #f97316)',
-                    color: 'white',
-                    borderRadius: 3,
-                    boxShadow: '0 8px 30px rgba(239, 68, 68, 0.4)',
-                    textTransform: 'none',
-                    animation: 'pulse 2s infinite',
-                    '@keyframes pulse': {
-                      '0%': { boxShadow: '0 0 0 0 rgba(239, 68, 68, 0.5)' },
-                      '70%': { boxShadow: '0 0 0 15px rgba(239, 68, 68, 0)' },
-                      '100%': { boxShadow: '0 0 0 0 rgba(239, 68, 68, 0)' },
-                    },
-                    '&:hover': {
-                      transform: 'scale(1.05)',
-                      transition: '0.3s',
-                    },
-                    width: { xs: '100%', sm: 'auto' }
-                  }}
-                />
+                <Typography
+                  variant="body1"
+                  color="grey.300"
+                  fontSize={{ xs: "16px", md: "18px" }}
+                >
+                  {course?.subtitle}
+                </Typography>
 
-                <CustomButton
-                  label="View Curriculum"
-                  variant="outlined"
-                  size="large"
-                  color="inherit"
-                  onClick={handleScrollToSyllabus}
-                  sx={{
-                    fontWeight: 'bold',
-                    height: "42px", 
-                    // size:"small",
-                    fontSize: "14px",
-                    borderColor: 'white',
-                    borderRadius: 3,
-                    color: 'white',
-                    textTransform: 'none',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    },
-                    width: { xs: '100%', sm: 'auto' }
-                  }}
-                />
+                <Stack
+                  direction={{ xs: "column", sm: "row" }}
+                  spacing={2}
+                  mt={{ xs: 1, md: 2 }}
+                  sx={{ width: "100%" }}
+                >
+                  <CustomButton
+                    label="Enquiry Now"
+                    variant="contained"
+                    size="large"
+                    onClick={handleEnquiry}
+                    sx={{
+                      background: "linear-gradient(135deg, #ef4444, #f97316)",
+                      color: "white",
+                      boxShadow: "0 8px 30px rgba(239, 68, 68, 0.4)",
+                      textTransform: "none",
+                      animation: "pulse 2s infinite",
+                      "@keyframes pulse": {
+                        "0%": { boxShadow: "0 0 0 0 rgba(239, 68, 68, 0.5)" },
+                        "70%": { boxShadow: "0 0 0 15px rgba(239, 68, 68, 0)" },
+                        "100%": { boxShadow: "0 0 0 0 rgba(239, 68, 68, 0)" },
+                      },
+                      "&:hover": {
+                        transform: "scale(1.05)",
+                        transition: "0.3s",
+                      },
+                    }}
+                  />
+
+                  <CustomButton
+                    label="View Curriculum"
+                    variant="outlined"
+                    size="large"
+                    color="inherit"
+                    onClick={handleScrollToSyllabus}
+                  />
+                </Stack>
               </Stack>
-            </Stack>
-          </Grid>
+            </Grid>
 
-          {/* RIGHT - Thumbnail */}
-          <Grid size={{xs: 12, md: 6}} order={{ xs: 1, md: 2 }} sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Box sx={{ position: 'relative', width: '100%', maxWidth: '500px' }}>
-              {/* Show Offer Badge */}
-              {/* <Box
+            {/* RIGHT - Thumbnail */}
+            <Grid
+              size={{ xs: 12, md: 6 }}
+              order={{ xs: 1, md: 2 }}
+              sx={{
+                display: "flex",
+                justifyContent: { xs: "center", lg: "flex-end" },
+              }}
+            >
+              <Box
+                sx={{
+                  position: "relative",
+                  maxWidth: "500px",
+                  aspectRatio: "2 / 1",
+                }}
+              >
+                {/* Show Offer Badge */}
+                {/* <Box
                 sx={{
                   position: 'absolute',
                   top: { xs: 5, sm: 10 },
@@ -193,33 +179,32 @@ const HeroSection = ({syllabusRef, course}) => {
                 <LocalOfferIcon sx={{ fontSize: { xs: 16, sm: 18 } }} /> 30% OFF
               </Box> */}
 
-              {/* Thumbnail */}
-              <Box
-                component="img"
-                src={course.thumbnail}
-                alt="Course Thumbnail"
-                sx={{
-                  width: '100%',
-                  height: 'auto',
-                  aspectRatio: '500/220',
-                  objectFit: 'cover',
-                  borderRadius: 4,
-                  boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
-                  transition: 'transform 0.4s ease',
-                  '&:hover': {
-                    transform: 'scale(1.02)',
-                  },
-                }}
-              />
-            </Box>
+                {/* Thumbnail */}
+                <Box
+                  component="img"
+                  src={course.thumbnail}
+                  alt="Course Thumbnail"
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: 4,
+                    boxShadow: "0 20px 50px rgba(0,0,0,0.6)",
+                    transition: "transform 0.4s ease",
+                    "&:hover": {
+                      transform: "scale(1.02)",
+                    },
+                  }}
+                />
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-        
-        <ModalWrapper open={openEnquiry} onClose={handleClose} title="">
-          <EnquiryForm onClose={handleClose} />
-        </ModalWrapper>
-      </Box>
-      <CourseHighlights />
+
+          <ModalWrapper open={openEnquiry} onClose={handleClose} title="">
+            <EnquiryForm onClose={handleClose} />
+          </ModalWrapper>
+        </Box>
+        <CourseHighlights />
       </Box>
     </Fade>
   );

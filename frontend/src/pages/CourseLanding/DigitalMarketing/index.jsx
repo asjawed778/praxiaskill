@@ -42,7 +42,7 @@ const DigitalMarketing = ({ course }) => {
       </div>
       <ImageAccordian />
       <Testimonials />
-      <FaqSection />
+      {/* <FaqSection /> */}
 
       {/* Floating Enquiry Button */}
       <Zoom in={showFloatingBtn}>

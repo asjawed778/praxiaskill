@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import CourseFirstStep from "./Add Course/CourseFirstStep";
-import AdditionalDetails from "./Add Course/AdditionalDetails";
 import CourseStructure from "./Add Course/CourseStructure";
 import Pricing from "./Add Course/Pricing";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,6 +12,7 @@ import fifthStepValidationSchema from "./Add Course/Schema/fifthStepValidationSc
 import { useGetFullCourseDetailsQuery, useUpdateCourseDetailsMutation, useUploadCourseMutation } from "../../../services/course.api";
 import { toast } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
+import AdditionalDetails from "./Add Course/AdditionalDetails";
 
 const AddCourse = () => {
   const [uploadCourse, { isLoading, errors }] = useUploadCourseMutation()

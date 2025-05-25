@@ -3,11 +3,13 @@ import required from "/imgs/required.svg";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
 import { FaPlus } from "react-icons/fa6";
-import InputField from "../../../../components/Input Field";
-import Button from "../../../../components/Button/Button";
+import InputField from "../../../../../components/Input Field";
+import Button from "../../../../../components/Button/Button";
 import { useEffect, useRef } from "react";
 
 import JoditEditor from "jodit-react";
+import FAQSections from "./FAQSections";
+import ToolsGrid from "./ToolsGrid";
 
 const AdditionalDetails = ({ handleNext, handlePrev }) => {
   const { control, register, setValue, clearErrors, formState: { errors } } = useFormContext();
@@ -65,9 +67,9 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
   return (
     <div
       onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
-      className="flex flex-col gap-5"
+      className="flex flex-col gap-3"
     >
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-3">
         {/* KEYPOINT  */}
         <div className="flex flex-col gap-3">
           <div className="relative flex gap-1 w-fit">
@@ -82,7 +84,7 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
             {/* {keypoints.length === 0 && appendKeypoint("")} */}
             {keypoints.map((field, index) => (
               <div key={field.id}>
-                <div className="flex items-center gap-1 mt-2">
+                <div className="flex items-center gap-1">
                   <input
                     id={index}
                     {...register(`keypoints.${index}`)}
@@ -130,7 +132,7 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
             {/* {keypoints.length === 0 && appendKeypoint("")} */}
             {whatWillYouLearn.map((field, index) => (
               <div key={field.id}>
-                <div className="flex items-center gap-1 mt-2">
+                <div className="flex items-center gap-1">
                   <input
                     id={index}
                     {...register(`whatWillYouLearn.${index}`)}
@@ -319,6 +321,8 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
             />
           </InputField> */}
         </div>
+        <ToolsGrid />
+        <FAQSections />
       </div>
 
       {/* Buttons */}

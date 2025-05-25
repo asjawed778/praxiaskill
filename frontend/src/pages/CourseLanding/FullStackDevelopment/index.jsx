@@ -46,7 +46,7 @@ const FullStackDevelopment = ({ course }) => {
       </div>
       <ImageAccordian />
       <Testimonials />
-      <FaqSection />
+      {/* <FaqSection /> */}
 
       {/* Floating Enquiry Button */}
       <Zoom in={showFloatingBtn}>
@@ -61,14 +61,10 @@ const FullStackDevelopment = ({ course }) => {
           <CustomButton
             label="Enquiry Now"
             variant="contained"
+            size="large"
             onClick={handleOpen}
             sx={{
-              height: "42px",
-              fontSize: "14px",
-              fontWeight: "bold",
               background: "linear-gradient(135deg, #ef4444, #f97316)",
-              color: "white",
-              borderRadius: 3,
               boxShadow: "0 8px 30px rgba(239, 68, 68, 0.4)",
               textTransform: "none",
               animation: "pulse 2s infinite",

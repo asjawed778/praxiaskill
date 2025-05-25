@@ -20,8 +20,8 @@ const CourseEnquiryManagement = lazy(() =>
 const LearningPage = lazy(() => import("./pages/Learning/index"));
 const AddCategory = lazy(() => import("./pages/Admin/Category/AddCategory"));
 const AuthPage = lazy(() => import("./pages/authpage"));
-const HomePage = lazy(() => import("./pages/Home page/homepage"));
 const BlogPage = lazy(() => import("./pages/Blog/landingpage"));
+const HomePage = lazy(() => import("./pages/HomePage"));
 const AdminDashboard = lazy(() => import("./pages/Admin/AdminDashboard"));
 const CourseLandingPage = lazy(() =>
   import("./pages/CourseLandingPage/index")

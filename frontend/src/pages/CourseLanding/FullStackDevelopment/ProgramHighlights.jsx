@@ -50,7 +50,6 @@ const ProgramHighlights = () => {
         bgcolor: "black",
         py: 4,
         color: "white",
-        // bgcolor:"pink"
       }}
     >
       <Container maxWidth="lg">
