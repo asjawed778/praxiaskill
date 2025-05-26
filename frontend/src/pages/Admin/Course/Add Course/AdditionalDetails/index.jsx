@@ -88,7 +88,7 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
                   <input
                     id={index}
                     {...register(`keypoints.${index}`)}
-                    className={`border p-2 w-full rounded-lg bg-white border-neutral-300 outline-0`}
+                    className={`border p-2 w-full rounded-lg bg-white border-neutral-300 outline-0 mt-1 `}
                     placeholder={`Keypoint ${index + 1}`}
                   />
                   <button
@@ -136,7 +136,7 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
                   <input
                     id={index}
                     {...register(`whatWillYouLearn.${index}`)}
-                    className={`border p-2 w-full rounded-lg bg-white border-neutral-300 outline-0`}
+                    className={`border p-2 w-full rounded-lg bg-white border-neutral-300 outline-0 mt-1`}
                     placeholder={`whatWillYouLearn ${index + 1}`}
                   />
                   <button

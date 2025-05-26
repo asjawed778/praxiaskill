@@ -10,6 +10,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { useAppTheme } from "@/context/ThemeContext";
 import { CloudUploadOutlined } from "@mui/icons-material";
 import { useUploadThumbnailMutation } from "../services/course.api";
+import { useSelector } from "react-redux";
 
 const ImageUploader = ({
   name,
@@ -31,7 +32,7 @@ const ImageUploader = ({
   const [previewUrl, setPreviewUrl] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-//   const [uploadImage, { isLoading: isUploading }] = useUploadFileMutation();
+  const { accessToken } = useSelector((store) => store.auth);
 const [uploadImage, { isLoading: isUploading }] =
       useUploadThumbnailMutation();
 
@@ -70,10 +71,10 @@ const [uploadImage, { isLoading: isUploading }] =
       }
 
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("thumbnail", file);
 
       try {
-        const response = await uploadImage(formData).unwrap();
+        const response = await uploadImage({formData, accessToken}).unwrap();
         const uploadedUrl = response?.data?.url;
 
         if (uploadedUrl) {

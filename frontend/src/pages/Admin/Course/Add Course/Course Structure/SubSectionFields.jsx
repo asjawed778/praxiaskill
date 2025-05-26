@@ -13,9 +13,9 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
     control,
     name: `sections.${sectionIndex}.subSections`,
   });
-
+  
   return (
-    <div className="flex flex-col gap-3 mt-4">
+    <div className="flex flex-col gap-3 mt-2">
       <h1 className="font-medium">Subsections</h1>
 
       {subSectionFields?.map((_, subIndex) => (

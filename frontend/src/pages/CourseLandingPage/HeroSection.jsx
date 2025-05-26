@@ -4,7 +4,6 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import CustomButton from "@/components/CustomButton";
 import ModalWrapper from "@/components/ModalWrapper";
 import EnquiryForm from "./EnquiryForm";
-import CourseHighlights from "./CourseHighlights";
 
 const HeroSection = ({ syllabusRef, course }) => {
   const [animateBadge, setAnimateBadge] = useState(false);
@@ -37,8 +36,7 @@ const HeroSection = ({ syllabusRef, course }) => {
             background: "radial-gradient(circle at top left, #0f172a, #1e293b)",
             color: "white",
             py: { xs: 6, sm: 8, md: 12 },
-            px: { xs: 4, md: 8 },
-            // px: { xs: 2, sm: 4, md: 8, lg: 12 },
+            px: { xs: 4, md: 10 },
             minHeight: { xs: "auto" },
             position: "relative",
             overflow: "hidden",
@@ -46,7 +44,6 @@ const HeroSection = ({ syllabusRef, course }) => {
             alignItems: "center",
           }}
         >
-          {/* Background glow */}
           <Box
             sx={{
               position: "absolute",
@@ -143,46 +140,9 @@ const HeroSection = ({ syllabusRef, course }) => {
                   aspectRatio: "2 / 1",
                 }}
               >
-                {/* Show Offer Badge */}
-                {/* <Box
-                sx={{
-                  position: 'absolute',
-                  top: { xs: 5, sm: 10 },
-                  right: { xs: 5, sm: 10 },
-                  background: 'linear-gradient(135deg, #ef4444, #f97316)',
-                  color: 'white',
-                  px: { xs: 1.5, sm: 2 },
-                  py: 0.5,
-                  borderRadius: '999px',
-                  fontWeight: 'bold',
-                  fontSize: { xs: 12, sm: 14 },
-                  zIndex: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 0.5,
-                  animation: animateBadge
-                    ? 'bounceIn 0.7s ease-out forwards, bounce 2s 1s infinite'
-                    : 'none',
-                  opacity: 0,
-                  '@keyframes bounceIn': {
-                    '0%': { transform: 'scale(0.3)', opacity: 0 },
-                    '50%': { transform: 'scale(1.1)', opacity: 1 },
-                    '70%': { transform: 'scale(0.95)' },
-                    '100%': { transform: 'scale(1)', opacity: 1 },
-                  },
-                  '@keyframes bounce': {
-                    '0%, 100%': { transform: 'translateY(0)' },
-                    '50%': { transform: 'translateY(-5px)' },
-                  },
-                }}
-              >
-                <LocalOfferIcon sx={{ fontSize: { xs: 16, sm: 18 } }} /> 30% OFF
-              </Box> */}
-
-                {/* Thumbnail */}
                 <Box
                   component="img"
-                  src={course.thumbnail}
+                  src={course?.thumbnail}
                   alt="Course Thumbnail"
                   sx={{
                     width: "100%",
@@ -204,7 +164,6 @@ const HeroSection = ({ syllabusRef, course }) => {
             <EnquiryForm onClose={handleClose} />
           </ModalWrapper>
         </Box>
-        <CourseHighlights />
       </Box>
     </Fade>
   );

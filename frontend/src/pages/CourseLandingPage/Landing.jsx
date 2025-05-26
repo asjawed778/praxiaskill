@@ -1,25 +1,23 @@
-import HeroSection from "./HeroSection";
-import PricingSection from "./PricingSection";
-import ProgramHighlights from "./ProgramHighlights";
-import ToolsGrid from "./ToolsGrid";
 import { Box, Zoom } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import ImageAccordian from "./ImageAccordian";
-import Testimonials from "./Testimonials";
-import FaqSection from "./FaqSection";
-import CourseSyllabus from "./CourseSyllabus";
+
 import CustomButton from "@/components/CustomButton";
 import ModalWrapper from "@/components/ModalWrapper";
-import EnquiryForm from "./EnquiryForm";
-import CourseHighlights from "./CourseHighlights";
-import { useSelector } from "react-redux";
 
-const FullStackDevelopment = ({ course }) => {
+import { useSelector } from "react-redux";
+import EnquiryForm from "./EnquiryForm";
+import HeroSection from "./HeroSection";
+import ProgramHighlights from "./ProgramHighlights";
+import ToolsGrid from "./ToolsGrid";
+import CourseSyllabus from "./CourseSyllabus";
+import ImageAccordian from "./ImageAccordian";
+import Testimonials from "./Testimonials";
+import CourseHighlights from "./CourseHighlights";
+
+const Landing = ({ course }) => {
   const syllabusRef = useRef(null);
   const [showFloatingBtn, setShowFloatingBtn] = useState(false);
-  const courses = useSelector((state) => state.courses);
   console.log("Course: ",course?.title);
-  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,14 +35,14 @@ const FullStackDevelopment = ({ course }) => {
   return (
     <Box sx={{ bgcolor: "black", color: "white", position: "relative" }}>
       <HeroSection syllabusRef={syllabusRef} course={course} />
-      {/* <CourseHighlights /> */}
-      <ProgramHighlights />
-      <ToolsGrid />
+      <CourseHighlights course={course} />
+      <ProgramHighlights course={course}/>
+      <ToolsGrid course={course}/>
       {/* <PricingSection /> */}
       <div ref={syllabusRef}>
-        <CourseSyllabus />
+        <CourseSyllabus course={course} />
       </div>
-      <ImageAccordian />
+      <ImageAccordian course={course}/>
       <Testimonials />
       {/* <FaqSection /> */}
 
@@ -87,4 +85,5 @@ const FullStackDevelopment = ({ course }) => {
     </Box>
   );
 };
-export default FullStackDevelopment;
+export default Landing;
+

@@ -3,13 +3,13 @@ import CustomButton from "../../components/CustomButton";
 import CustomInputField from "../../components/CustomInputField";
 import ModalWrapper from "../../components/ModalWrapper";
 import { Box, Stack } from "@mui/material";
-import CustomDropdown from "../../components/CustomDropdown";
 import { UserRole } from "../../utils/enum";
 import { useAddNewUserMutation, useUpdateUserDetailsMutation } from "../../services/usersApi";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { addNewUserSchema } from "../../../yup";
+import CustomDropdownField from "../../components/CustomDropdownField";
 
 const AddNewUser = ({ open, onClose, userData, isEditMode, refetch }) => {
   const [addNewUser, { isLoading }] = useAddNewUserMutation();
@@ -81,7 +81,7 @@ const AddNewUser = ({ open, onClose, userData, isEditMode, refetch }) => {
             type="email"
             control={control}
           />
-          <CustomDropdown
+          <CustomDropdownField
             name="role"
             control={control}
             label="Role"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -13,6 +13,7 @@ import {
   useFieldArray,
   Controller,
   FormProvider,
+  useFormContext,
 } from "react-hook-form";
 import { AddCircleOutline, Close } from "@mui/icons-material";
 import CustomInputField from "@/components/CustomInputField";
@@ -28,11 +29,22 @@ const iconLibraries = {
 };
 
 const ToolsGrid = () => {
-  const methods = useForm({
-    defaultValues: { tools: [{ name: "", iconName: null, url: null }] },
+  // const methods = useForm({
+  //   defaultValues: { tools: [{ name: "", iconName: null, url: null }] },
+  // });
+  const { control, watch, getValues } = useFormContext();
+  const { fields, append, remove } = useFieldArray({ 
+    control, 
+    name: "tools" 
   });
-  const { control, watch } = methods;
-  const { fields, append, remove } = useFieldArray({ control, name: "tools" });
+  const initialized = useRef(false);
+  
+    useEffect(() => {
+      if (!initialized.current && fields.length === 0) {
+        append({ name: "", iconName: null, url: null });
+        initialized.current = true;
+      }
+    }, [fields, append]);
 
   const tools = watch("tools");
 
@@ -43,10 +55,9 @@ const ToolsGrid = () => {
     if (!lib || !lib[iconName]) return null;
     return lib[iconName];
   };
-  console.log("Tools: ", tools);
-
+ console.log("Tools: ", getValues);
+ 
   return (
-    <FormProvider {...methods}>
       <Box p={2}>
         <Typography variant="h6">Tools You Learn</Typography>
         <Divider sx={{ mb: 2 }} />
@@ -109,17 +120,16 @@ const ToolsGrid = () => {
 
                 <Grid size={{ xs: 12, md: 6 }}>
                   {!IconComponent && (
-                    <ImageUploader
+                    <ImageUploader 
                       name={`tools.${index}.url`}
-                      label=" Or Upload Icon"
-                      maxWidth={75}
-                      maxHeight={75}
+                      label="Or Upload Icon"
+                      maxWidth={100}
+                      minHeight={100}
                       width={120}
-                      height={120}
-                      required={false}
+                      height={100}
                     />
                   )}
-                </Grid>
+              </Grid>
               </Grid>
             </Box>
           );
@@ -133,7 +143,6 @@ const ToolsGrid = () => {
           Add More Tool
         </Button>
       </Box>
-    </FormProvider>
   );
 };
 

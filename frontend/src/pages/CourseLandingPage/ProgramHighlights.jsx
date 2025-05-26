@@ -9,42 +9,41 @@ import {
   Stack,
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
-
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
-import CampaignIcon from "@mui/icons-material/Campaign";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import WorkIcon from "@mui/icons-material/Work";
 import SchoolIcon from "@mui/icons-material/School";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 
-const digitalMarketingHighlights = [
-  {
-    icon: <CampaignIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
-    title: "50+ Live",
-    subtitle: "Marketing Sessions",
-  },
-  {
-    icon: <TrendingUpIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
-    title: "30+ Projects",
-    subtitle: "with Real Brands",
-  },
-  {
-    icon: <AutoStoriesIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
-    title: "15+ Core Modules",
-    subtitle: "incl. SEO, PPC, Analytics",
-  },
-  {
-    icon: <SchoolIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
-    title: "150+ Hours of",
-    subtitle: "Curated Content",
-  },
-  {
-    icon: <SmartToyIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
-    title: "15+ Marketing Tools",
-    subtitle: "incl. Google Ads, Meta, SEMrush",
-  },
-];
+const ProgramHighlights = ({ course }) => {
+  const fullStackHighlights = [
+    {
+      icon: <AutoStoriesIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
+      title: `${course?.totalLectures}+ Live`,
+      subtitle: "Mentorship Sessions",
+    },
+    {
+      icon: <AssignmentIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
+      title: `${course?.totalAssignments + course?.totalProjects}+ Projects`,
+      subtitle: "and Real-World Assignments",
+    },
+    {
+      icon: <WorkIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
+      title: `${course?.totalProjects} Major`,
+      subtitle: "Capstone Projects",
+    },
+    {
+      icon: <SchoolIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
+      title: "200+ Hours of",
+      subtitle: "Recorded Content",
+    },
+    {
+      icon: <SmartToyIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
+      title: `${Array.isArray(course?.tools) ? course.tools.length : 0}+ Tools`,
+      subtitle: "Learn and Explore",
+    },
+  ];
 
-const ProgramHighlights = () => {
   return (
     <Box
       sx={{
@@ -59,7 +58,7 @@ const ProgramHighlights = () => {
           textAlign="center"
           fontWeight="bold"
           sx={{
-            mb: 6,
+            mb: 4,
             fontSize: { xs: "24px", sm: "36px", md: "44px" },
           }}
         >
@@ -67,7 +66,7 @@ const ProgramHighlights = () => {
         </Typography>
 
         <Grid container spacing={2} justifyContent="center" sx={{ mb: 6 }}>
-          {digitalMarketingHighlights.map((item, index) => (
+          {fullStackHighlights.map((item, index) => (
             <Grid
               item
               xs={6}

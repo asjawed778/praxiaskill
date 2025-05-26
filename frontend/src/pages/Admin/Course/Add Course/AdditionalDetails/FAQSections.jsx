@@ -27,16 +27,17 @@ const FAQSections = () => {
     }
   }, [fields, append]);
   return (
-    <Box width="100%">
-      <Grid container spacing={2}>
-        <Grid size={{ xs: 12 }}>
+    <Box maxWidth="lg">
+      {/* <Grid container spacing={2}> */}
+        <Box sx={{ mb: 2 }}>
           <Typography variant="h6" gutterBottom fontWeight={500}>
             FAQ Details
           </Typography>
           <Divider />
-        </Grid>
+        </Box>
+        <Grid container spacing={3}>
         {fields.map((field, index) => (
-          <Grid
+         <Grid
             key={field.id}
             size={{ xs: 12 }}
             sx={{
@@ -60,7 +61,7 @@ const FAQSections = () => {
             )}
 
             <Grid container spacing={3}>
-              <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 6 }}>
                 <CustomInputField
                   name={`faq.${index}.question`}
                   label="Question"
@@ -73,7 +74,6 @@ const FAQSections = () => {
                   }}
                   required={false}
                 />
-
                 <CustomInputField
                   name={`faq.${index}.answer`}
                   label="Answer"
@@ -89,20 +89,23 @@ const FAQSections = () => {
                   required={false}
                 />
               </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <ImageUploader
-                  label="Upload Related Image"
-                  name={`faq.${index}.resourceUrl`}
-                  control={control}
-                  width={500}
-                  height={200}
-                  required={false}
-                />
-              </Grid>
+            
+             <Grid size={{ xs: 12, md: 6 }}>
+              <ImageUploader
+                label="Upload Related Image"
+                name={`faq.${index}.resourceUrl`}
+                control={control}
+                width={500}
+                height={200}
+                required={false}
+              />
             </Grid>
+            
+          </Grid>
           </Grid>
         ))}
-        <Grid size={{ xs: 12 }}>
+      <Grid size={{ xs: 12 }}>
+        
           <Button
             variant="outlined"
             startIcon={<AddCircleOutline />}
@@ -112,7 +115,7 @@ const FAQSections = () => {
           >
             Add More FAQ
           </Button>
-        </Grid>
+          </Grid>
       </Grid>
     </Box>
   );

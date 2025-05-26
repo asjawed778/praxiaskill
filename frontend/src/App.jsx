@@ -24,7 +24,7 @@ const BlogPage = lazy(() => import("./pages/Blog/landingpage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 const AdminDashboard = lazy(() => import("./pages/Admin/AdminDashboard"));
 const CourseLandingPage = lazy(() =>
-  import("./pages/CourseLandingPage/index")
+  import("./pages/CourseLandingPage")
 );
 // const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
 const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
@@ -41,8 +41,7 @@ const CourseLectures = lazy(() => import("./pages/Course Lectures"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const Users = lazy(() => import("./pages/Users"));
 const StaticPage = lazy(() => import("./pages/StaticPage"));
-const FullStackDevelopment = lazy(() => import("./pages/CourseLanding/FullStackDevelopment"));
-const DigitalMarketing = lazy(() => import("./pages/CourseLanding/DigitalMarketing"));
+
 
 const publicRoutes = [
   {
@@ -127,22 +126,22 @@ const publicRoutes = [
       </LazyComponent>
     ),
   },
-  {
-    path: "full-stack-web-development-pro-level",
-    element: (
-      <LazyComponent>
-        <FullStackDevelopment />
-      </LazyComponent>
-    )
-  },
-  {
-    path: "ai-powered-digital-marketing",
-    element: (
-      <LazyComponent>
-        <DigitalMarketing />
-      </LazyComponent>
-    )
-  }
+  // {
+  //   path: "full-stack-web-development-pro-level",
+  //   element: (
+  //     <LazyComponent>
+  //       <FullStackDevelopment />
+  //     </LazyComponent>
+  //   )
+  // },
+  // {
+  //   path: "ai-powered-digital-marketing",
+  //   element: (
+  //     <LazyComponent>
+  //       <DigitalMarketing />
+  //     </LazyComponent>
+  //   )
+  // }
 ];
 
 const authRoutes = [
