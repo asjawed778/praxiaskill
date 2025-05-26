@@ -11,6 +11,14 @@ const sectionSchema = new mongoose.Schema<ISection>({
         type: String,
         required: false
     },
+    assignments: [{
+        type: String,
+        required: false
+    }],
+    projects: [{
+        type: String,
+        required: false
+    }],
     subSections: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "SubSection"

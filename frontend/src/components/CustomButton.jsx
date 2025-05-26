@@ -31,10 +31,13 @@ const CustomButton = ({
       endIcon={!loading && endIcon}
       className={className}
       sx={{
-        borderRadius: 4,
-        ...sx
+        borderRadius: 2,
+        textTransform: "none",
+        "&:hover": {
+          backgroundColor: "rgba(255, 255, 255, 0.08)",
+        },
+        ...sx,
       }}
-      style={style}
       {...rest}
     >
       {loading ? <CircularProgress size={20} color="inherit" /> : label}

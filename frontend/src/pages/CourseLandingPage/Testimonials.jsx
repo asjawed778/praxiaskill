@@ -49,8 +49,6 @@ const TestimonialCard = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
   borderRadius: 16,
   flexShrink: 0,
-  position: 'relative',
-  transition: 'height 0.3s ease',
 }));
 
 export default function Testimonials() {

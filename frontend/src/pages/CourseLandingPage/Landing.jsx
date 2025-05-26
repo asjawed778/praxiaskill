@@ -1,19 +1,20 @@
-import HeroSection from "./HeroSection";
-import PricingSection from "./PricingSection";
-import ProgramHighlights from "./ProgramHighlights";
-import ToolsGrid from "./ToolsGrid";
 import { Box, Zoom } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import ImageAccordian from "./ImageAccordian";
-import Testimonials from "./Testimonials";
-import FaqSection from "./FaqSection";
-import CourseSyllabus from "./CourseSyllabus";
+
 import CustomButton from "@/components/CustomButton";
 import ModalWrapper from "@/components/ModalWrapper";
+
+import { useSelector } from "react-redux";
 import EnquiryForm from "./EnquiryForm";
+import HeroSection from "./HeroSection";
+import ProgramHighlights from "./ProgramHighlights";
+import ToolsGrid from "./ToolsGrid";
+import CourseSyllabus from "./CourseSyllabus";
+import ImageAccordian from "./ImageAccordian";
+import Testimonials from "./Testimonials";
 import CourseHighlights from "./CourseHighlights";
 
-const FullStackDevelopment = () => {
+const Landing = ({ course }) => {
   const syllabusRef = useRef(null);
   const [showFloatingBtn, setShowFloatingBtn] = useState(false);
 
@@ -32,17 +33,17 @@ const FullStackDevelopment = () => {
 
   return (
     <Box sx={{ bgcolor: "black", color: "white", position: "relative" }}>
-      <HeroSection syllabusRef={syllabusRef} />
-      {/* <CourseHighlights /> */}
-      <ProgramHighlights />
-      <ToolsGrid />
+      <HeroSection syllabusRef={syllabusRef} course={course} />
+      <CourseHighlights course={course} />
+      <ProgramHighlights course={course}/>
+      <ToolsGrid course={course}/>
       {/* <PricingSection /> */}
       <div ref={syllabusRef}>
-        <CourseSyllabus />
+        <CourseSyllabus course={course} />
       </div>
-      <ImageAccordian />
+      <ImageAccordian course={course}/>
       <Testimonials />
-      <FaqSection />
+      {/* <FaqSection /> */}
 
       {/* Floating Enquiry Button */}
       <Zoom in={showFloatingBtn}>
@@ -57,14 +58,10 @@ const FullStackDevelopment = () => {
           <CustomButton
             label="Enquiry Now"
             variant="contained"
+            size="large"
             onClick={handleOpen}
             sx={{
-              height: "42px",
-              fontSize: "14px",
-              fontWeight: "bold",
               background: "linear-gradient(135deg, #ef4444, #f97316)",
-              color: "white",
-              borderRadius: 3,
               boxShadow: "0 8px 30px rgba(239, 68, 68, 0.4)",
               textTransform: "none",
               animation: "pulse 2s infinite",
@@ -87,4 +84,5 @@ const FullStackDevelopment = () => {
     </Box>
   );
 };
-export default FullStackDevelopment;
+export default Landing;
+

@@ -16,121 +16,398 @@ const allowedFileTypes = [
     ...allowedImageTypes
 ];
 
-export const createCourse = [
+// export const createCourse = [
 
+//     // Basic Course Details
+//     body("title")
+//         .notEmpty().withMessage("Title is required")
+//         .isString().withMessage("Title must be a string"),
+
+//     body("subtitle")
+//         .notEmpty().withMessage("Subtitle is required")
+//         .isString().withMessage("Subtitle must be a string"),
+
+//     body("category")
+//         .notEmpty().withMessage("Category is required")
+//         .isMongoId().withMessage("Category must be a valid ObjectId"),
+
+//     body("language")
+//         .notEmpty().withMessage("Language is required")
+//         .isIn(Object.values(CourseEnum.Language))
+//         .withMessage("Invalid language selection"),
+
+//     body("instructor")
+//         .notEmpty().withMessage("Instructor is required")
+//         .isMongoId().withMessage("Instructor must be a valid ObjectId"),
+
+//     body("courseMode")
+//         .notEmpty().withMessage("Course mode is required")
+//         .isIn(Object.values(CourseEnum.CourseMode))
+//         .withMessage("Invalid course mode selection"),
+
+//     body("thumbnail")
+//         .notEmpty().withMessage("Thumbnail is required")
+//         .isString().withMessage("Thumbnail URL must be a string")
+//         .isURL().withMessage("Thumbnail must be a valid URL")
+//         .matches(/^https?:\/\/.*\.amazonaws\.com\/.*/).withMessage("Invalid AWS S3 URL format"),
+
+//     body("brouchure")
+//         .notEmpty().withMessage("Brouchure is required")
+//         .isString().withMessage("Brouchure URL must be a string")
+//         .isURL().withMessage("Brouchure must be a valid URL")
+//         .matches(/^https?:\/\/.*\.amazonaws\.com\/.*/).withMessage("Invalid AWS S3 URL format"),
+
+//     // Additional Course Details
+//     body("keypoints")
+//         .notEmpty().withMessage("At least one keypoint is required")
+//         .isArray().withMessage("Keypoints must be an array")
+//         .custom((value: string[]) => value.every((item) => typeof item === "string"))
+//         .withMessage("Each keypoint must be a string"),
+
+//     body("tags")
+//         .notEmpty().withMessage("At least one tag is required")
+//         .isArray().withMessage("Tags must be an array")
+//         .custom((value: string[]) => value.every((item) => typeof item === "string"))
+//         .withMessage("Each tag must be a string"),
+
+//     body("whatWillYouLearn")
+//         .notEmpty().withMessage("At least one learning point is required")
+//         .isArray().withMessage("whatWillYouLearn must be an array")
+//         .custom((value: string[]) => value.every((item) => typeof item === "string"))
+//         .withMessage("Each learning point must be a string"),
+
+//     body("description")
+//         .notEmpty().withMessage("Description is required")
+//         .isString().withMessage("Description must be a string"),
+
+//     body("duration")
+//         .notEmpty().withMessage("Duration is required")
+//         .isString().withMessage("Duration must be a string"),
+
+//     body("totalLectures")
+//         .notEmpty().withMessage("Total lectures count is required")
+//         .isNumeric().withMessage("Total lectures must be a number"),
+
+//     body("trailerVideo")
+//         .optional()
+//         .isString().withMessage("Trailer video URL must be a string")
+//         .isURL().withMessage("Trailer video must be a valid URL")
+//         .matches(/^https?:\/\/.*\.amazonaws\.com\/.*/).withMessage("Invalid AWS S3 URL format"),
+
+//     body("tools")
+//         .optional()
+//         .isArray().withMessage("Tools must be an array")
+//         .custom((tools: any[]) => tools.every(tool =>
+//             typeof tool.name === "string" &&
+//             (!tool.url || typeof tool.url === "string")
+//         ))
+//         .withMessage("Each tool must have a valid name (string) and optional url (string)"),
+
+//     body("faq")
+//         .optional()
+//         .isArray().withMessage("FAQ must be an array")
+//         .custom((faqItems: any[]) => faqItems.every(item =>
+//             typeof item.question === "string" &&
+//             typeof item.answer === "string"
+//         ))
+//         .withMessage("Each FAQ item must have a valid question and answer (both strings)"),
+
+//     // Price Validation
+//     body("price.actualPrice")
+//         .notEmpty().withMessage("Actual price is required")
+//         .isNumeric().withMessage("Actual price must be a number"),
+
+//     body("price.discountPercentage")
+//         .optional()
+//         .isNumeric().withMessage("Discount percentage must be a number"),
+
+//     body("price.finalPrice")
+//         .notEmpty().withMessage("Final price is required")
+//         .isNumeric().withMessage("Final price must be a number"),
+
+//     // Course Sections
+//     body("sections")
+//         .isArray({ min: 1 }).withMessage("Sections must be an array with at least one section"),
+
+//     body("sections.*.title")
+//         .notEmpty().withMessage("Section title is required")
+//         .isString().withMessage("Section title must be a string"),
+
+//     body("sections.*.description")
+//         .optional()
+//         .isString().withMessage("Section description must be a string"),
+
+//     body("sections.*.subSections")
+//         .isArray().withMessage("SubSections must be an array"),
+
+//     body("sections.*.subSections.*.title")
+//         .notEmpty().withMessage("SubSection title is required")
+//         .isString().withMessage("SubSection title must be a string"),
+
+//     // Course Status
+//     body("courseStatus")
+//         .optional()
+//         .isIn(Object.values(CourseEnum.CourseStatus))
+//         .withMessage("Invalid course status selection"),
+// ];
+
+export const createCourse = [
     // Basic Course Details
     body("title")
         .notEmpty().withMessage("Title is required")
-        .isString().withMessage("Title must be a string"),
+        .isString().withMessage("Title must be a string")
+        .trim(),
 
     body("subtitle")
         .notEmpty().withMessage("Subtitle is required")
-        .isString().withMessage("Subtitle must be a string"),
+        .isString().withMessage("Subtitle must be a string")
+        .trim(),
 
+    body("brouchure")
+        .optional()
+        .isString().withMessage("Brouchure URL must be a string")
+        .trim()
+        .isURL().withMessage("Brouchure must be a valid URL")
+        .matches(/^https?:\/\/.*\.amazonaws\.com\/.*/).withMessage("Invalid AWS S3 URL format"),
+
+    body("thumbnail")
+        .notEmpty().withMessage("Thumbnail is required")
+        .isString().withMessage("Thumbnail URL must be a string")
+        .trim()
+        .isURL().withMessage("Thumbnail must be a valid URL")
+        .matches(/^https?:\/\/.*\.amazonaws\.com\/.*/).withMessage("Invalid AWS S3 URL format"),
+
+    body("instructor")
+        .optional()
+        .isMongoId().withMessage("Instructor must be a valid ObjectId"),
+
+    body("description")
+        .notEmpty().withMessage("Description is required")
+        .isString().withMessage("Description must be a string")
+        .trim(),
+
+    // Arrays with optional items
+    body("keypoints")
+        .optional()
+        .isArray().withMessage("Keypoints must be an array")
+        .custom((value: string[]) => value.every((item) => typeof item === "string"))
+        .withMessage("Each keypoint must be a string"),
+
+    body("tags")
+        .optional()
+        .isArray().withMessage("Tags must be an array")
+        .custom((value: string[]) => value.every((item) => typeof item === "string"))
+        .withMessage("Each tag must be a string"),
+
+    body("whatWillYouLearn")
+        .optional()
+        .isArray().withMessage("whatWillYouLearn must be an array")
+        .custom((value: string[]) => value.every((item) => typeof item === "string"))
+        .withMessage("Each learning point must be a string"),
+
+    body("prerequisites")
+        .optional()
+        .isArray().withMessage("Prerequisites must be an array")
+        .custom((value: string[]) => value.every((item) => typeof item === "string"))
+        .withMessage("Each prerequisite must be a string"),
+
+    body("courseLevel")
+        .optional()
+        .isString().withMessage("Course level must be a string")
+        .trim(),
+
+    // Tools validation
+    body("tools")
+        .optional()
+        .isArray().withMessage("Tools must be an array"),
+
+    body("tools.*.name")
+        .if(body("tools").exists().isArray())
+        .notEmpty().withMessage("Tool name is required")
+        .isString().withMessage("Tool name must be a string")
+        .trim(),
+
+    body("tools.*.iconName")
+        .if(body("tools").exists().isArray())
+        .optional()
+        .isString().withMessage("Tool icon name must be a string")
+        .trim(),
+
+    body("tools.*.url")
+        .if(body("tools").exists().isArray())
+        .optional()
+        .isString().withMessage("Tool URL must be a string")
+        .trim()
+        .isURL().withMessage("Tool URL must be a valid URL"),
+
+    // FAQ validation
+    body("faq")
+        .optional()
+        .isArray().withMessage("FAQ must be an array"),
+
+    body("faq.*.question")
+        .if(body("faq").exists().isArray())
+        .notEmpty().withMessage("FAQ question is required")
+        .isString().withMessage("FAQ question must be a string")
+        .trim(),
+
+    body("faq.*.answer")
+        .if(body("faq").exists().isArray())
+        .notEmpty().withMessage("FAQ answer is required")
+        .isString().withMessage("FAQ answer must be a string")
+        .trim(),
+
+    body("faq.*.resourceUrl")
+        .if(body("faq").exists().isArray())
+        .optional()
+        .isString().withMessage("FAQ resource URL must be a string")
+        .trim()
+        .isURL().withMessage("FAQ resource must be a valid URL"),
+
+    // Category and pricing
     body("category")
         .notEmpty().withMessage("Category is required")
         .isMongoId().withMessage("Category must be a valid ObjectId"),
 
+    body("price.actualPrice")
+        .notEmpty().withMessage("Actual price is required")
+        .isFloat({ min: 0 }).withMessage("Actual price must be a positive number"),
+
+    body("price.discountPercentage")
+        .optional()
+        .isFloat({ min: 0, max: 100 }).withMessage("Discount percentage must be between 0 and 100"),
+
+    body("price.finalPrice")
+        .notEmpty().withMessage("Final price is required")
+        .isFloat({ min: 0 }).withMessage("Final price must be a positive number"),
+
+    // Course metadata
     body("language")
         .notEmpty().withMessage("Language is required")
         .isIn(Object.values(CourseEnum.Language))
         .withMessage("Invalid language selection"),
 
-    body("instructor")
-        .notEmpty().withMessage("Instructor is required")
-        .isMongoId().withMessage("Instructor must be a valid ObjectId"),
+    body("duration")
+        .optional()
+        .isString().withMessage("Duration must be a string")
+        .trim(),
 
     body("courseMode")
         .notEmpty().withMessage("Course mode is required")
         .isIn(Object.values(CourseEnum.CourseMode))
         .withMessage("Invalid course mode selection"),
 
-    body("thumbnail")
-        .notEmpty().withMessage("Thumbnail is required")
-        .isString().withMessage("Thumbnail URL must be a string")
-        .isURL().withMessage("Thumbnail must be a valid URL")
-        .matches(/^https?:\/\/.*\.amazonaws\.com\/.*/).withMessage("Invalid AWS S3 URL format"),
-
-    body("brouchure")
-        .notEmpty().withMessage("Brouchure is required")
-        .isString().withMessage("Brouchure URL must be a string")
-        .isURL().withMessage("Brouchure must be a valid URL")
-        .matches(/^https?:\/\/.*\.amazonaws\.com\/.*/).withMessage("Invalid AWS S3 URL format"),
-
-    // Additional Course Details
-    body("keypoints")
-        .notEmpty().withMessage("At least one keypoint is required")
-        .isArray().withMessage("Keypoints must be an array")
-        .custom((value: string[]) => value.every((item) => typeof item === "string"))
-        .withMessage("Each keypoint must be a string"),
-
-    body("tags")
-        .notEmpty().withMessage("At least one tag is required")
-        .isArray().withMessage("Tags must be an array")
-        .custom((value: string[]) => value.every((item) => typeof item === "string"))
-        .withMessage("Each tag must be a string"),
-
-    body("whatWillYouLearn")
-        .notEmpty().withMessage("At least one learning point is required")
-        .isArray().withMessage("whatWillYouLearn must be an array")
-        .custom((value: string[]) => value.every((item) => typeof item === "string"))
-        .withMessage("Each learning point must be a string"),
-
-    body("description")
-        .notEmpty().withMessage("Description is required")
-        .isString().withMessage("Description must be a string"),
-
-    body("duration")
-        .notEmpty().withMessage("Duration is required")
-        .isString().withMessage("Duration must be a string"),
-
-    body("totalLectures")
-        .notEmpty().withMessage("Total lectures count is required")
-        .isNumeric().withMessage("Total lectures must be a number"),
-
     body("trailerVideo")
         .optional()
         .isString().withMessage("Trailer video URL must be a string")
+        .trim()
         .isURL().withMessage("Trailer video must be a valid URL")
         .matches(/^https?:\/\/.*\.amazonaws\.com\/.*/).withMessage("Invalid AWS S3 URL format"),
 
-    // Price Validation
-    body("price.actualPrice")
-        .notEmpty().withMessage("Actual price is required")
-        .isNumeric().withMessage("Actual price must be a number"),
-
-    body("price.discountPercentage")
-        .optional()
-        .isNumeric().withMessage("Discount percentage must be a number"),
-
-    body("price.finalPrice")
-        .notEmpty().withMessage("Final price is required")
-        .isNumeric().withMessage("Final price must be a number"),
-
-    // Course Sections
+    // Sections validation
     body("sections")
-        .isArray({ min: 1 }).withMessage("Sections must be an array with at least one section"),
+        .isArray({ min: 1 }).withMessage("At least one section is required")
+        .custom((sections: any[]) => sections.length > 0).withMessage("At least one section is required"),
 
+    // Section validation
     body("sections.*.title")
         .notEmpty().withMessage("Section title is required")
-        .isString().withMessage("Section title must be a string"),
+        .isString().withMessage("Section title must be a string")
+        .trim(),
 
     body("sections.*.description")
         .optional()
-        .isString().withMessage("Section description must be a string"),
+        .isString().withMessage("Section description must be a string")
+        .trim(),
 
+    body("sections.*.duration")
+        .optional()
+        .isString().withMessage("Section duration must be a string")
+        .trim(),
+
+    body("sections.*.assignments")
+        .optional()
+        .isArray().withMessage("Assignments must be an array"),
+
+    body("sections.*.assignments.*")
+        .if(body("sections.*.assignments").exists().isArray())
+        .isString().withMessage("Assignment must be a string")
+        .trim(),
+
+    body("sections.*.projects")
+        .optional()
+        .isArray().withMessage("Projects must be an array"),
+
+    body("sections.*.projects.*")
+        .if(body("sections.*.projects").exists().isArray())
+        .isString().withMessage("Project must be a string")
+        .trim(),
+
+    // SubSections validation
     body("sections.*.subSections")
-        .isArray().withMessage("SubSections must be an array"),
+        .isArray({ min: 1 }).withMessage("At least one subsection is required")
+        .custom((subSections: any[]) => subSections.length > 0).withMessage("At least one subsection is required"),
 
     body("sections.*.subSections.*.title")
-        .notEmpty().withMessage("SubSection title is required")
-        .isString().withMessage("SubSection title must be a string"),
+        .notEmpty().withMessage("Subsection title is required")
+        .isString().withMessage("Subsection title must be a string")
+        .trim(),
 
-    // Course Status
+    body("sections.*.subSections.*.description")
+        .optional()
+        .isString().withMessage("Subsection description must be a string")
+        .trim(),
+
+    // Video validation
+    body("sections.*.subSections.*.video.link")
+        .optional()
+        .isString().withMessage("Video link must be a string")
+        .trim()
+        .isURL().withMessage("Video link must be a valid URL"),
+
+    body("sections.*.subSections.*.video.duration")
+        .optional()
+        .isString().withMessage("Video duration must be a string")
+        .trim(),
+
+    // PDF validation
+    body("sections.*.subSections.*.pdf")
+        .optional()
+        .isString().withMessage("PDF must be a string")
+        .trim()
+        .isURL().withMessage("PDF must be a valid URL"),
+
+    // Image validation
+    body("sections.*.subSections.*.image")
+        .optional()
+        .isString().withMessage("Image must be a string")
+        .trim()
+        .isURL().withMessage("Image must be a valid URL"),
+
+    // Resources validation
+    body("sections.*.subSections.*.resources")
+        .optional()
+        .isArray().withMessage("Resources must be an array"),
+
+    body("sections.*.subSections.*.resources.*")
+        .if(body("sections.*.subSections.*.resources").exists().isArray())
+        .isString().withMessage("Resource must be a string")
+        .trim(),
+
+    // Preview flag
+    body("sections.*.subSections.*.isPreview")
+        .optional()
+        .isBoolean().withMessage("isPreview must be a boolean"),
+    // Course status and validity
     body("courseStatus")
         .optional()
         .isIn(Object.values(CourseEnum.CourseStatus))
         .withMessage("Invalid course status selection"),
+
+    body("validity")
+        .notEmpty().withMessage("Validity is required")
+        .isIn(Object.values(CourseEnum.CourseValidity))
+        .withMessage("Invalid course validity selection")
 ];
 
 export const updateCourse = [

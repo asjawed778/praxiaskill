@@ -1,8 +1,10 @@
-import backgroundVideo from "/video/background_video.mp4"
+import backgroundVideo from "/video/background_video.mp4";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import BookDemoClass from "../../components/BookDemo/BookDemoClass";
 import Courses from "./Carousal";
+import Benefits from "./Benefits";
+import Collaboration from "./Collaboration";
 import Membership from "../../components/Membership";
 import { Link } from "react-router-dom";
 import Button from "../../components/Button/Button";
@@ -36,17 +38,17 @@ function HomePage() {
 
   return (
     <>
-    <SEOHelmet
-      title={"Praxia Skill"}
-      description={"Join Praxia Skill for the best Data Analytics program"}
-      keywords={"Data Analytics, Praxia Skill"}
-      image={backgroundVideo}
-      url={"https://praxiaskill.com"}
-      robots="index, follow"
-      schema={generateOrganizationSchema()}
-    />
+      <SEOHelmet
+        title={"Praxia Skill"}
+        description={"Join Praxia Skill for the best Data Analytics program"}
+        keywords={"Data Analytics, Praxia Skill"}
+        image={backgroundVideo}
+        url={"https://praxiaskill.com"}
+        robots="index, follow"
+        schema={generateOrganizationSchema()}
+      />
       <motion.div
-        className="h-auto flex flex-col items-center w-full font-sans overflow-x-hidden"
+        className="h-auto flex flex-col items-center w-full font-sans "
         initial="hidden"
         animate="visible"
         variants={containerVariants}
@@ -110,7 +112,6 @@ function HomePage() {
             </Link>
           </motion.div>
 
-          {/* Form Section */}
           <BookDemoClass />
         </motion.div>
 
@@ -145,12 +146,17 @@ function HomePage() {
         >
           <Courses />
         </motion.div>
+        <Benefits />
+        <Collaboration />
 
         {/* <Membership /> */}
-
       </motion.div>
     </>
   );
 }
 
 export default HomePage;
+
+
+
+

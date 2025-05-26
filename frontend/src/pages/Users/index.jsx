@@ -3,7 +3,6 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import debounce from "lodash/debounce";
 import { toast } from 'react-hot-toast';
 import CustomTable from "../../components/CustomTable";
-import CustomDropdown from "../../components/CustomDropdown";
 import {
   useGetAllUsersQuery,
   useUpdateStatusMutation,
@@ -13,6 +12,7 @@ import CustomButton from "../../components/CustomButton";
 import AddNewUser from "./AddNewUser";
 import DialogBoxWrapper from "../../components/DialogBoxWrapper";
 import AssignCourse from "./AssignCourse";
+import CustomDropdownField from "../../components/CustomDropdownField";
 
 const Users = () => {
   const [page, setPage] = useState(0);
@@ -40,7 +40,6 @@ const Users = () => {
     setLimit(newLimit);
     setPage(0);
   };
-
   const debouncedSearch = useMemo(
     () =>
       debounce((value) => {
@@ -125,7 +124,7 @@ const Users = () => {
           <Typography variant="body2" sx={{ whiteSpace: "nowrap" }}>
             Filter By:
           </Typography>
-          <CustomDropdown
+          <CustomDropdownField
             label="Status"
             required={false}
             value={statusFilter}

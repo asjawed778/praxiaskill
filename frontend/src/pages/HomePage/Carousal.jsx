@@ -64,10 +64,9 @@ export default function Carousal() {
   };
 
   const handleCourseClick = (courseId, title) => {
-    const courseTitle = title.toLowerCase().split(' ').join('-');
+    const courseTitle = title.toLowerCase().split(" ").join("-");
     navigate(`/course/${courseTitle}/${courseId}`);
   };
-  
 
   return (
     <div className="py-8 mt-4 w-[90vw] lg:w-full mx-auto">
@@ -82,26 +81,26 @@ export default function Carousal() {
       </div>
 
       {/* Tab Menu */}
-      <div className="flex overflow-x-scroll scroll-smooth scrollbar-hide gap-8 md:gap-7 px-4 mb-1 whitespace-nowrap custom-scrollbar border-b border-neutral-300">
+      <div className="flex justify-start overflow-x-scroll scroll-smooth scrollbar-hide gap-8 md:gap-7 mb-1 whitespace-nowrap custom-scrollbar border-b border-neutral-300">
         {/* <div className="flex w-auto flex-nowrap gap-4 space-x-1 overflow-x-auto carousel  scroll-snap-x scroll-smooth"> */}
-        {categories
-          .map(
-            (tab) =>
-              tab.courses.length !== 0 && (
-                <button
-                  key={tab._id}
-                  onClick={() => {
-                    setActiveTab(tab._id);
-                  }}
-                  className={`flex justify-center items-center w-fit px-0 py-2 border-b-2 cursor-pointer ${activeTab === tab._id
-                      ? " border-[var(--color-primary)] text-[var(--secondary-heading-color)]"
-                      : " border-transparent text-[var(--alt-secondary-text-color)] carousel-item"
-                    }`}
-                >
-                  {tab.name}
-                </button>
-              )
-          )}
+        {categories.map(
+          (tab) =>
+            tab.courses.length !== 0 && (
+              <button
+                key={tab._id}
+                onClick={() => {
+                  setActiveTab(tab._id);
+                }}
+                className={`flex justify-center items-center w-fit px-0 py-2 border-b-2 cursor-pointer ${
+                  activeTab === tab._id
+                    ? " border-[var(--color-primary)] text-[var(--secondary-heading-color)]"
+                    : " border-transparent text-[var(--alt-secondary-text-color)] carousel-item"
+                }`}
+              >
+                {tab.name}
+              </button>
+            )
+        )}
       </div>
 
       {/* Scrollable Course Cards */}
@@ -132,15 +131,15 @@ export default function Carousal() {
           {/* Scrollable Container */}
           <div
             ref={sliderRef}
-            className="flex overflow-x-scroll scroll-smooth scrollbar-hide gap-8 md:gap-7 p-4 whitespace-nowrap custom-scrollbar"
+            className="flex overflow-x-scroll scroll-smooth scrollbar-hide gap-8 md:gap-7 py-4  custom-scrollbar"
           >
             {coursesAll?.map((course, index) => (
               <button
                 key={index}
-                onClick={()=>handleCourseClick(course._id, course?.title)}
-                className="bg-white flex flex-col h-70 gap-2 w-[300px] pb-3 rounded-lg shadow-md flex-none mx-auto md:mx-0 cursor-pointer"
+                onClick={() => handleCourseClick(course._id, course?.title)}
+                className="bg-white flex flex-col gap-2 w-[300px] h-[300px]  pb-3 rounded-lg shadow-md flex-none mx-auto md:mx-0 cursor-pointer"
               >
-                <div className="w-full h-44 relative rounded-lg">
+                <div className="flex  w-full h-44 relative rounded-lg">
                   <img
                     src={course?.thumbnail}
                     alt={course?.title}
@@ -148,12 +147,12 @@ export default function Carousal() {
                   />
                 </div>
                 <div className="flex flex-col px-3 w-full">
-                  <h3 className="font-sans text-[var(--color-secondary)] w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                  <h3 className="font-sans text-[var(--color-secondary)] w-full text-md break-words line-clamp-none text-left">
                     {course?.title}
                   </h3>
 
-                  <hr className="mt-4 border-gray-200 mb-5 flex-grow" />
-                  <div className="text-xs flex items-center justify-between gap-2 h-[38px]">
+                  <hr className="mt-2 border-gray-200 mb-5 flex-grow" />
+                  <div className="text-xs flex items-center justify-between gap-2 h-[24px]">
                     <div className="flex flex-row items-center gap-1">
                       <img
                         src={user}
@@ -176,7 +175,7 @@ export default function Carousal() {
                         {course?.language === "ENGLISH_HINDI"
                           ? "Bilingual"
                           : course?.language?.charAt(0).toUpperCase() +
-                          course?.language?.slice(1).toLowerCase()}
+                            course?.language?.slice(1).toLowerCase()}
                       </p>
                     </div>
 
