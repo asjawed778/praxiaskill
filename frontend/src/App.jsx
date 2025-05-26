@@ -300,23 +300,23 @@ const courseLectureRoute = [
 
 function App() {
   const { accessToken, user } = useSelector((store) => store.auth);
-  const dispatch = useDispatch();
-  const hasShown = useSelector((state) => state.splashScreen.hasShown);
-  const [showSplash, setShowSplash] = useState(!hasShown);
+  // const dispatch = useDispatch();
+  // const hasShown = useSelector((state) => state.splashScreen.hasShown);
+  // const [showSplash, setShowSplash] = useState(!hasShown);
 
-  useEffect(() => {
-    if (!hasShown) {
-      const timer = setTimeout(() => {
-        setShowSplash(false);
-        dispatch(setSplashShown());
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [hasShown, dispatch]);
+  // useEffect(() => {
+  //   if (!hasShown) {
+  //     const timer = setTimeout(() => {
+  //       setShowSplash(false);
+  //       dispatch(setSplashShown());
+  //     }, 1500);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [hasShown, dispatch]);
 
-  if (showSplash) {
-    return <SplashScreen />;
-  }
+  // if (showSplash) {
+  //   return <SplashScreen />;
+  // }
 
   return (
     <BrowserRouter>
