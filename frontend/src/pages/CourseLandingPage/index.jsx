@@ -16,9 +16,7 @@ import Landing from "./Landing";
 const CourseLandingPage = () => {
   const dispatch = useDispatch()
   const { courseId, courseTitle } = useParams();
-  const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(courseId)
-  console.log("course details: ", courseDetails?.data);
-  console.log("course Title: ", courseTitle);
+  const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(courseId);
   
   const navigate = useNavigate();
 

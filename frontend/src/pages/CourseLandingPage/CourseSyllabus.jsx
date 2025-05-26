@@ -26,8 +26,6 @@ const CourseSyllabus = ({ course }) => {
     }
   );
 
-  console.log("course contents: ", courseContent);
-
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -36,7 +34,6 @@ const CourseSyllabus = ({ course }) => {
     <Box
       sx={{
         bgcolor: "#0d0d0d",
-        minHeight: "100vh",
         py: 4,
         px: { xs: 0.5 },
       }}
