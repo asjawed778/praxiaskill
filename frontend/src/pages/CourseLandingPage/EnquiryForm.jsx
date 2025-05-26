@@ -67,8 +67,6 @@ export default function EnquiryForm({ onClose }) {
   const [sendEnquiry, { isLoading }] = useSendEnquiryMutation();
 
   const onSubmit = async (data) => {
-    console.log("Enquiry data: ", data);
-
     try {
       const res = await sendEnquiry(data).unwrap();
       if (res?.success) {

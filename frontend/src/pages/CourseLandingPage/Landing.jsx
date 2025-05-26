@@ -17,7 +17,6 @@ import CourseHighlights from "./CourseHighlights";
 const Landing = ({ course }) => {
   const syllabusRef = useRef(null);
   const [showFloatingBtn, setShowFloatingBtn] = useState(false);
-  console.log("Course: ",course?.title);
 
   useEffect(() => {
     const handleScroll = () => {

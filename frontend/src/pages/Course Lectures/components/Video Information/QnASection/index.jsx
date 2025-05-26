@@ -58,10 +58,6 @@ const QnASection = ({ course }) => {
 
 
 const handleCreateQna = async (newQna) => {
-    console.log("Form data2: ", newQna);
-    console.log("Course id: ", course._id);
-    
-    
     try {
       await createQna({courseId: course._id, newQna}).unwrap();
       

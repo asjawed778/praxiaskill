@@ -147,8 +147,6 @@ const AddCourse = () => {
   };
 
   const onSubmit = async (formData) => {
-    console.log("Form data: ", formData);
-
     try {
       const { tags } = formData;
       const newTags = tags.map((tag) => tag.value);

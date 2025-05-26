@@ -41,7 +41,7 @@ const ToolsGrid = ({ course }) => {
         fontWeight="bold"
         sx={{ mb: 4, fontSize: { xs: "24px", sm: "36px", md: "44px" } }}
       >
-        Master {course.tools.length}+ Tools
+        Master {Math.floor(course.tools.length/5)*5}+ Tools
       </Typography>
 
       <Grid
