@@ -10,21 +10,21 @@ import {
   Box,
 } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSendEnquiryMutation } from "../../../services/course.api";
+import { useSendEnquiryMutation } from "@/services/course.api";
 import { toast } from "react-hot-toast";
-import { EnquirySchema } from "../../../../yup";
+import { EnquirySchema } from "../../../yup";
 import CustomInputField from "@/components/CustomInputField";
 
 function WhatsAppCheckbox() {
   const { register, watch } = useFormContext();
-  const whatsAppOptIn = watch("whatsAppOptIn", true); // Watch the value of "whatsAppOptIn"
+  const whatsAppOptIn = watch("whatsAppOptIn", true);
 
   return (
     <FormControlLabel
       control={
         <Checkbox
-          {...register("whatsAppOptIn")} // Register the checkbox with react-hook-form
-          checked={whatsAppOptIn} // Use the watched value here
+          {...register("whatsAppOptIn")} 
+          checked={whatsAppOptIn} 
           sx={{ color: "primary.main" }}
         />
       }
@@ -48,7 +48,7 @@ function WhatsAppCheckbox() {
           </Typography>
         </Box>
       }
-      sx={{ justifyContent: "flex-start" }} // Aligns the entire label and checkbox to the left
+      sx={{ justifyContent: "flex-start" }} 
     />
   );
 }
@@ -67,8 +67,6 @@ export default function EnquiryForm({ onClose }) {
   const [sendEnquiry, { isLoading }] = useSendEnquiryMutation();
 
   const onSubmit = async (data) => {
-    console.log("Enquiry data: ", data);
-
     try {
       const res = await sendEnquiry(data).unwrap();
       if (res?.success) {
@@ -89,27 +87,29 @@ export default function EnquiryForm({ onClose }) {
         <Typography variant="h6" color="primary" mb={2}>
           Book a Live Class, For Free!
         </Typography>
-        <CustomInputField label="Full Name" name="name" />
+        <Stack spacing={2}>
+          <CustomInputField label="Full Name" name="name" />
 
-        <CustomInputField label="Education" name="education" />
-        <CustomInputField label="Phone No" name="phone" />
-        <CustomInputField label="Email Id" name="email" type="email" />
-        <CustomInputField label="Interested Course" name="interestedCourse" />
-        <WhatsAppCheckbox />
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
-          type="submit"
-          disabled={isLoading}
-          sx={{ height: "40px" }}
-        >
-          {isLoading ? (
-            <CircularProgress size={22} sx={{ color: "white" }} />
-          ) : (
-            "Submit"
-          )}
-        </Button>
+          <CustomInputField label="Education" name="education" />
+          <CustomInputField label="Phone No" name="phone" />
+          <CustomInputField label="Email Id" name="email" type="email" />
+          <CustomInputField label="Interested Course" name="interestedCourse" />
+          <WhatsAppCheckbox />
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+            sx={{ height: "40px" }}
+          >
+            {isLoading ? (
+              <CircularProgress size={22} sx={{ color: "white" }} />
+            ) : (
+              "Submit"
+            )}
+          </Button>
+        </Stack>
       </form>
     </FormProvider>
   );

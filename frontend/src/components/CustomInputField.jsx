@@ -22,6 +22,7 @@ const CustomInputField = ({
   required = true,
   maxDate,
   minDate,
+  row,
   sx = {},
   ...rest
 }) => {
@@ -42,6 +43,8 @@ const CustomInputField = ({
           {label} {required && <span style={{ color: 'red' }}>*</span>}
         </span>
       }
+      multiline={!!row}
+      rows={row}
       disabled={disabled}
       value={field?.value ?? ""}
       placeholder={isDate ? undefined : placeholder}
@@ -57,7 +60,7 @@ const CustomInputField = ({
       variant="outlined"
       error={!!error}
       helperText={error?.message}
-      margin="normal"
+      // margin="normal"
       sx={{
         "& .MuiOutlinedInput-root": {
           borderRadius: "8px",
@@ -106,3 +109,6 @@ const CustomInputField = ({
 };
 
 export default CustomInputField;
+
+
+

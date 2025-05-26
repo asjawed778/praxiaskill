@@ -11,12 +11,7 @@ import createHttpError from "http-errors";
 import { ExpressValidator } from "express-validator";
 import qnaSchema from "./qna.schema";
 
-/**
- * Checks whether a course exists in the database.
- *
- * @param {string} courseId - The unique identifier of the course.
- * @returns {Promise<boolean>} True if the course exists, false otherwise.
- */
+
 export const isCourseExist = async (courseId: string): Promise<boolean> => {
     const courseExists = await courseSchema.exists({ _id: courseId });
     return courseExists !== null;
@@ -43,22 +38,16 @@ export const isValidSectionSubsectionId = async (courseId: string, sectionId: st
     return true;
 };
 
-/**
- * Creates a new course along with its sections and subsections.
- *
- * @param {Omit<CourseDTO.ICourse, "sections"> & { sections: (ISection & { subSections: ISubSection[] })[] }} data 
- *        - The course details including sections and subsections.
- * @returns {Promise<any>} The newly created course with section references.
- */
 export const createCourse = async (data: Omit<CourseDTO.ICourse, "sections"> & { sections: (CourseDTO.ISection & { subSections: CourseDTO.ISubSection[] })[] }): Promise<any> => {
 
     const { sections, ...courseDetails } = data;
     const course = await courseSchema.create(courseDetails);
-
+    let totalLectures = 0;
     // Step 1: Check if sections exist and process them
     if (data.sections && data.sections.length > 0) {
         const sectionPromises = data.sections.map(async (section) => {
             const subsectionDocs = await subSectionSchema.insertMany(section.subSections);
+            totalLectures += subsectionDocs.length;
             const subsectionIds = subsectionDocs.map((sub) => sub._id);
 
             // Step 2: Create section with subsection IDs
@@ -67,6 +56,8 @@ export const createCourse = async (data: Omit<CourseDTO.ICourse, "sections"> & {
                 description: section.description,
                 duration: section.duration,
                 subSections: subsectionIds,
+                assignments: section.assignments,
+                projects: section.projects
             });
 
             return savedSection._id;
@@ -78,7 +69,7 @@ export const createCourse = async (data: Omit<CourseDTO.ICourse, "sections"> & {
         // Step 3: Update Course with new section IDs
         const result = await courseSchema.findByIdAndUpdate(
             course._id,
-            { $set: { sections: sectionIds } },
+            { $set: { sections: sectionIds, totalLectures } },
             { new: true }
         );
         return result;
@@ -91,12 +82,7 @@ export const updateCourseDetails = async (courseId: string, data: CourseDTO.IUpd
     return course as CourseDTO.ICourse;
 };
 
-/**
- * Retrieves course content including sections and subsections.
- *
- * @param {string} courseId - The unique identifier of the course.
- * @returns {Promise<any>} The course content including sections and subsections.
- */
+
 export const getCourseContent = async (courseId: string): Promise<any> => {
     const coursesContent = await courseSchema.findById(courseId)
         .select("_id title sections")
@@ -115,48 +101,27 @@ export const getEnrolledCourseCountByUser = async (userId: string): Promise<numb
 };
 
 
-/**
- * Moves a course to draft by updating its status to "DRAFT".
- *
- * @param {string} courseId - The unique identifier of the course.
- * @returns {Promise<any>} The updated course document.
- */
 export const draftCourse = async (courseId: string): Promise<any> => {
     const result = await courseSchema.findByIdAndUpdate
         (courseId, { courseStatus: "DRAFT" }, { new: true });
     return result;
 };
 
-/**
- * Terminates a course by updating its status to "TERMINATED".
- *
- * @param {string} courseId - The unique identifier of the course.
- * @returns {Promise<any>} The updated course document.
- */
+
 export const terminateCourse = async (courseId: string): Promise<any> => {
     const result = await courseSchema.findByIdAndUpdate
         (courseId, { courseStatus: "TERMINATED" }, { new: true });
     return result;
 };
 
-/**
- * Publishes a course by updating its status to "PUBLISHED".
- *
- * @param {string} courseId - The unique identifier of the course.
- * @returns {Promise<any>} The updated course document.
- */
+
 export const publishCourse = async (courseId: string): Promise<any> => {
     const result = await courseSchema.findByIdAndUpdate
         (courseId, { courseStatus: "PUBLISHED" }, { new: true });
     return result;
 };
 
-/**
- * Retrieves detailed information about a specific course.
- *
- * @param {string} courseId - The unique identifier of the course.
- * @returns {Promise<any>} The course document populated with instructor, category, ratings, and sections.
- */
+
 export const getCourseDetails = async (courseId: string): Promise<any> => {
     const course = await courseSchema
         .findById(courseId)
@@ -178,21 +143,32 @@ export const getCourseDetails = async (courseId: string): Promise<any> => {
         })
         .populate({
             path: "sections",
+            select: "title description duration assignments projects subSections",
             populate: {
                 path: "subSections",
                 select: "_id title",
             },
-        });
-    return course;
+        }).lean();
+
+    
+
+    if (!course) {
+        return course;
+    }
+
+    let totalProjects = 0;
+    let totalAssignments = 0;
+    const result: any = course;
+
+    result.sections.forEach((section: any) => {
+        totalProjects += (section.projects as any)?.length || 0;
+        totalAssignments += (section.assignments as any)?.length || 0;
+    });
+
+    return {...course, totalProjects, totalAssignments};
 };
 
-/**
- * Fetches published courses based on a specific category with pagination.
- *
- * @param {string} categoryId - The unique identifier of the category.
- * @param {number} [pageNo=1] - The page number for pagination.
- * @returns {Promise<any>} An object containing success status, total courses, page details, and course data.
- */
+
 export const getPublishedCoursesByCategory = async (categoryId: string, pageNo: number = 1): Promise<any> => {
     const pageSize = 10; // Number of courses per page
     const skip = (pageNo - 1) * pageSize; // Calculate the number of documents to skip
@@ -275,24 +251,12 @@ export const getPublishedCoursesByCategory = async (categoryId: string, pageNo: 
     };
 };
 
-/**
- * Creates a new course enquiry and saves it to the database.
- *
- * @param {ICourseEnquiry} data - The enquiry data containing user details and message.
- * @returns {Promise<any>} The newly created enquiry document.
- */
 export const courseEnquiry = async (data: CourseDTO.ICourseEnquiry): Promise<any> => {
     const enquiry = new CourseEnquirySchema(data);
     await enquiry.save();
     return enquiry;
 };
 
-/**
- * Retrieves course enquiries with pagination.
- *
- * @param {number} [pageNo=1] - The page number for pagination.
- * @returns {Promise<any>} An object containing enquiries, start and end entry indices, current page, and total results.
- */
 export const getCourseEnquiry = async (pageNo: number = 1): Promise<any> => {
     const pageSize = 10;
     const skip = (pageNo - 1) * pageSize;
@@ -316,24 +280,13 @@ export const getCourseEnquiry = async (pageNo: number = 1): Promise<any> => {
     };
 };
 
-/**
- * Updates the status of a specific course enquiry.
- *
- * @param {string} enquiryId - The unique identifier of the enquiry.
- * @param {string} status - The new status of the enquiry.
- * @returns {Promise<CourseDTO.ICourseEnquiry>} The updated enquiry document.
- */
+
 export const changeEnquiryStatus = async (enquiryId: string, status: string): Promise<CourseDTO.ICourseEnquiry> => {
     const enquiry = await CourseEnquirySchema.findByIdAndUpdate(enquiryId, { status }, { new: true });
     return enquiry as CourseDTO.ICourseEnquiry;
 };
 
-/**
- * Retrieves a paginated list of published courses.
- *
- * @param {number} [pageNo=1] - The page number for pagination.
- * @returns {Promise<any>} An object containing success status, total courses, page details, and course data.
- */
+
 export const getPublishedCourses = async (pageNo: number = 1): Promise<any> => {
     const pageSize = 10; // Number of courses per page
     const skip = (pageNo - 1) * pageSize; // Calculate the number of documents to skip
@@ -415,14 +368,7 @@ export const getPublishedCourses = async (pageNo: number = 1): Promise<any> => {
     };
 };
 
-/**
- * Submits a rating and review for a specific course.
- *
- * @param {string} courseId - The unique identifier of the course.
- * @param {string} userId - The unique identifier of the user submitting the review.
- * @param {CourseDTO.IRatingAndReviews} data - The rating and review data.
- * @returns {Promise<any>} The newly created rating and review document.
- */
+
 export const rateCourse = async (courseId: string, userId: string, data: CourseDTO.IRatingAndReviews): Promise<any> => {
     const rating = new ratingAndReviewSchema({
         ...data,
@@ -433,13 +379,7 @@ export const rateCourse = async (courseId: string, userId: string, data: CourseD
     return rating;
 };
 
-/**
- * Checks if a user has purchased a specific course.
- *
- * @param {string} courseId - The unique identifier of the course.
- * @param {string} userId - The unique identifier of the user.
- * @returns {Promise<boolean>} A boolean indicating whether the user has purchased the course.
- */
+
 export const isUserCoursePurchased = async (courseId: string, userId: string): Promise<boolean> => {
     const isPurchased = await enrollmentSchema.exists({ courseId, userId });
     return isPurchased !== null;
@@ -450,7 +390,7 @@ export const isInstructor = async (courseId: string, userId: string): Promise<bo
     if (!course) {
         throw createHttpError(404, "Course not found");
     }
-    return course.instructor.toString() === userId;
+    return course.instructor?.toString() === userId;
 };
 
 export const isUserCourseActive = async (courseId: string, userId: string): Promise<boolean> => {
@@ -830,7 +770,7 @@ export const getQnas = async ({
     sectionId,
     subSectionId,
     search,
-    sort='latest',
+    sort = 'latest',
     upvote,
     page = 1,
     limit = 10

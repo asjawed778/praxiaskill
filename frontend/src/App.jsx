@@ -20,11 +20,11 @@ const CourseEnquiryManagement = lazy(() =>
 const LearningPage = lazy(() => import("./pages/Learning/index"));
 const AddCategory = lazy(() => import("./pages/Admin/Category/AddCategory"));
 const AuthPage = lazy(() => import("./pages/authpage"));
-const HomePage = lazy(() => import("./pages/Home page/homepage"));
 const BlogPage = lazy(() => import("./pages/Blog/landingpage"));
+const HomePage = lazy(() => import("./pages/HomePage"));
 const AdminDashboard = lazy(() => import("./pages/Admin/AdminDashboard"));
 const CourseLandingPage = lazy(() =>
-  import("./pages/CourseLandingPage/index")
+  import("./pages/CourseLandingPage")
 );
 // const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
 const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
@@ -41,8 +41,7 @@ const CourseLectures = lazy(() => import("./pages/Course Lectures"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const Users = lazy(() => import("./pages/Users"));
 const StaticPage = lazy(() => import("./pages/StaticPage"));
-const FullStackDevelopment = lazy(() => import("./pages/CourseLanding/FullStackDevelopment"));
-const DigitalMarketing = lazy(() => import("./pages/CourseLanding/DigitalMarketing"));
+
 
 const publicRoutes = [
   {
@@ -127,22 +126,22 @@ const publicRoutes = [
       </LazyComponent>
     ),
   },
-  {
-    path: "full-stack-development",
-    element: (
-      <LazyComponent>
-        <FullStackDevelopment />
-      </LazyComponent>
-    )
-  },
-  {
-    path: "ai-power-digital-marketing",
-    element: (
-      <LazyComponent>
-        <DigitalMarketing />
-      </LazyComponent>
-    )
-  }
+  // {
+  //   path: "full-stack-web-development-pro-level",
+  //   element: (
+  //     <LazyComponent>
+  //       <FullStackDevelopment />
+  //     </LazyComponent>
+  //   )
+  // },
+  // {
+  //   path: "ai-powered-digital-marketing",
+  //   element: (
+  //     <LazyComponent>
+  //       <DigitalMarketing />
+  //     </LazyComponent>
+  //   )
+  // }
 ];
 
 const authRoutes = [
@@ -301,23 +300,23 @@ const courseLectureRoute = [
 
 function App() {
   const { accessToken, user } = useSelector((store) => store.auth);
-  const dispatch = useDispatch();
-  const hasShown = useSelector((state) => state.splashScreen.hasShown);
-  const [showSplash, setShowSplash] = useState(!hasShown);
+  // const dispatch = useDispatch();
+  // const hasShown = useSelector((state) => state.splashScreen.hasShown);
+  // const [showSplash, setShowSplash] = useState(!hasShown);
 
-  useEffect(() => {
-    if (!hasShown) {
-      const timer = setTimeout(() => {
-        setShowSplash(false);
-        dispatch(setSplashShown());
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [hasShown, dispatch]);
+  // useEffect(() => {
+  //   if (!hasShown) {
+  //     const timer = setTimeout(() => {
+  //       setShowSplash(false);
+  //       dispatch(setSplashShown());
+  //     }, 1500);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [hasShown, dispatch]);
 
-  if (showSplash) {
-    return <SplashScreen />;
-  }
+  // if (showSplash) {
+  //   return <SplashScreen />;
+  // }
 
   return (
     <BrowserRouter>
@@ -343,7 +342,7 @@ function App() {
         )}
 
         {/* Private routes  */}
-        {accessToken && user?.role === "USER" ? (
+        {accessToken ? (
           <Route element={<BasicLayout />}>
             {userPrivateRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />

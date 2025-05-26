@@ -27,7 +27,6 @@ export default function CustomTable({
   onPageChange,
   onRowsPerPageChange,
   onActionClick,
-  cellHeight = 20,
   isLoading,
 }) {
   const { colors } = useAppTheme();

@@ -1,20 +1,18 @@
-import {
-  Box,
-  Grid,
-  Paper,
-  Typography,
-  Container,
-} from '@mui/material';
+import { Box, Grid, Paper, Typography, Container } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import LaptopMacIcon from '@mui/icons-material/LaptopMac';
 import Science from '@mui/icons-material/Science';
 
-const highlights = [
+
+
+
+const CourseHighlights = ({ course }) => {
+  const highlights = [
   {
     icon: <AccessTimeIcon fontSize="large" sx={{ color: '#6366f1' }} />,
     title: 'Duration',
-    subtitle: '6 Months',
+    subtitle: course?.duration,
   },
   {
     icon: <TrendingUpIcon fontSize="large" sx={{ color: '#10b981' }} />,
@@ -24,16 +22,15 @@ const highlights = [
   {
     icon: <LaptopMacIcon fontSize="large" sx={{ color: '#f59e0b' }} />,
     title: 'Mode',
-    subtitle: 'Live/In-Person',
+    subtitle: course?.courseMode,
   },
   {
-    icon: <Science fontSize="large" sx={{ color: 'blue' }} />,
+    icon: <Science fontSize="large" sx={{ color: 'blue' }} />
+    ,
     title: 'Method',
     subtitle: 'Project Based Learning',
   },
 ];
-
-const CourseHighlights = () => {
   return (
     <Box
       sx={{
@@ -49,14 +46,14 @@ const CourseHighlights = () => {
           color="white"
           sx={{
             mb: {xs: 4, md: 8},
-            fontSize: { xs: '28px', sm: '36px', md: '44px' },
+            fontSize: { xs: "24px", sm: "36px", md: "44px" },
           }}
         >
           Course Highlights
         </Typography>
 
         <Grid container spacing={2}>
-          {highlights.map((item, index) => (
+          {highlights?.map((item, index) => (
             <Grid size={{xs: 12, md: 3}} key={index}>
               <Paper
                 elevation={2}
@@ -64,10 +61,7 @@ const CourseHighlights = () => {
                   py: 2,
                   borderRadius: '20px',
                   backgroundColor: '#1e293b',
-                  // height: {xs: '100px', md: '150px'},
-                  // width: {xs:"150px", md: "280px"},
                   height: "150px",
-                  widht: "280px",
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -95,6 +89,7 @@ const CourseHighlights = () => {
                 }}
               >
                 {item.icon}
+                {/* <AccessTimeIcon /> */}
                 <Typography
                   variant="subtitle2"
                   sx={{

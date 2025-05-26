@@ -3,12 +3,12 @@ import CustomButton from "../../components/CustomButton";
 import CustomInputField from "../../components/CustomInputField";
 import ModalWrapper from "../../components/ModalWrapper";
 import { useGetAllPublishedCourseQuery } from "../../services/course.api";
-import CustomDropdown from "../../components/CustomDropdown";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useAssignCourseMutation } from "../../services/usersApi";
 import { assignCourseSchema } from "../../../yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import CustomDropdownField from "../../components/CustomDropdownField";
 
 const AssignCourse = ({ open, onClose, user }) => {
   const { data, isLoading } = useGetAllPublishedCourseQuery();
@@ -52,7 +52,7 @@ const AssignCourse = ({ open, onClose, user }) => {
             required={false}
           />
 
-          <CustomDropdown
+          <CustomDropdownField
             name="courseId"
             label="Select Course"
             placeholder="Choose a course"

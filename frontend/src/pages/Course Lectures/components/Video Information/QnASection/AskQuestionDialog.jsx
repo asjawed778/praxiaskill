@@ -15,7 +15,6 @@ const AskQuestionDialog = ({ open, onClose, onSubmit }) => {
         }
     })
     const onFormSubmit = (data) => {
-        console.log("form data1: ", data);
         onSubmit(data);
         
     }
