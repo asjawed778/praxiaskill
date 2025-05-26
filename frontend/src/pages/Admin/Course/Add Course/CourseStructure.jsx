@@ -5,6 +5,8 @@ import required from "/imgs/required.svg";
 import InputField from "../../../../components/Input Field";
 import Button from "../../../../components/Button/Button";
 import SubSectionFields from "./Course Structure/SubSectionFields";
+import ProjectFields from "./Course Structure/ProjectFields";
+import AssignmentFields from "./Course Structure/AssignmentsFields";
 
 const CourseStructure = ({ handleNext, handlePrev }) => {
   const { control, register, formState: { errors } } = useFormContext();
@@ -76,6 +78,17 @@ const CourseStructure = ({ handleNext, handlePrev }) => {
 
             {/* Subsections */}
             <SubSectionFields
+              control={control}
+              sectionIndex={sectionIndex}
+              errors={errors}
+            />
+            <AssignmentFields
+              control={control}
+              sectionIndex={sectionIndex}
+              errors={errors}
+            />
+            <ProjectFields
+              register={register}
               control={control}
               sectionIndex={sectionIndex}
               errors={errors}
