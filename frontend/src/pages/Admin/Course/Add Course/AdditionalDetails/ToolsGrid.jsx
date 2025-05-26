@@ -55,7 +55,6 @@ const ToolsGrid = () => {
     if (!lib || !lib[iconName]) return null;
     return lib[iconName];
   };
- console.log("Tools: ", getValues);
  
   return (
       <Box p={2}>

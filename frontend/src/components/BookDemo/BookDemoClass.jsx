@@ -37,8 +37,6 @@ const BookDemoClass = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log("Data: ", data);
-
     try {
       const res = await sendEnquiry(data);
       if (res?.error) throw new Error(JSON.stringify(res.error));

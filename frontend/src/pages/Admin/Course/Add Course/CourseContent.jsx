@@ -11,9 +11,6 @@ export default function CourseContent() {
     useGetFullCourseContentQuery(courseId);
   const data = courseContent?.data;
   const courseTitle = courseContent?.data?.title;
-  // console.log("Data: ", data);
-  
-
   const [deletePopUpIds, setDeletePopIds] = useState(null);
 
   return !isFetching ? (
@@ -21,7 +18,13 @@ export default function CourseContent() {
       <h1 className="text-2xl font-bold">Course Content</h1>
       <div className="flex flex-col gap-10">
         {data?.sections?.map((section, index) => (
-          <Section key={index} index={index} courseId={courseId} section={section} courseTitle={courseTitle} />
+          <Section
+            key={index}
+            index={index}
+            courseId={courseId}
+            section={section}
+            courseTitle={courseTitle}
+          />
         ))}
       </div>
 
