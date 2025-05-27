@@ -74,7 +74,7 @@ const Benefits = () => {
               fontSize: '24px'
             }}
           >
-            How praxiaskills help you?
+            How Praxia Skill help you?
           </Typography>
           <Typography  
             sx={{ 
