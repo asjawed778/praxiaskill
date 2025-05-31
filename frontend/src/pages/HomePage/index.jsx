@@ -1,15 +1,32 @@
-import backgroundVideo from "/video/background_video.mp4";
-import { useState } from "react";
+import React, { useState } from "react";
+import { Box, Typography, Button, Grid, Container } from "@mui/material";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import backgroundVideo from "/video/background_video.mp4";
 import BookDemoClass from "../../components/BookDemo/BookDemoClass";
 import Courses from "./Carousal";
 import Benefits from "./Benefits";
 import Collaboration from "./Collaboration";
-import Membership from "../../components/Membership";
-import { Link } from "react-router-dom";
-import Button from "../../components/Button/Button";
+// import Membership from "../../components/Membership";
 import SEOHelmet from "../../SEO/SEOHelmet";
 import { generateOrganizationSchema } from "../../SEO/SEOHelper";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2, delayChildren: 0.5 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 80 },
+  },
+};
 
 const gradientBackground = {
   background:
@@ -18,23 +35,6 @@ const gradientBackground = {
 
 function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.2, delayChildren: 0.5 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { type: "spring", stiffness: 80 },
-    },
-  };
 
   return (
     <>
@@ -47,107 +47,138 @@ function HomePage() {
         robots="index, follow"
         schema={generateOrganizationSchema()}
       />
+
       <motion.div
-        className="h-auto flex flex-col items-center w-full font-sans "
         initial="hidden"
         animate="visible"
         variants={containerVariants}
       >
-        <motion.div className="relative w-full flex flex-col md:flex-row md:items-center justify-around p-4">
-          {/* Background Video */}
+        <Box sx={{ position: "relative", width: "100%", overflow: "hidden" }}>
           <video
             autoPlay
             loop
             muted
             playsInline
-            className="absolute top-0 left-0 w-full h-full object-cover -z-10"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              zIndex: -1,
+            }}
           >
             <source src={backgroundVideo} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          {/* Text Section */}
-          <motion.div
-            className="flex flex-col items-start text-left text-white px-4 mb-8"
-            variants={itemVariants}
-          >
-            <motion.h2
-              className="text-4xl  md:text-4xl font-sans"
-              variants={itemVariants}
+
+          <Container maxWidth="lg" sx={{ py: 2 }}>
+            <Grid
+              container
+              spacing={2}
+              alignItems="center"
+              sx={{
+                justifyContent: {
+                  xs: "center", 
+                  md: "space-between", 
+                },
+              }}
             >
-              Ready For the Future
-            </motion.h2>
-            <motion.h2
-              className="text-4xl md:text-4xl font-sans mb-4"
-              variants={itemVariants}
-            >
-              At Praxia Skill
-            </motion.h2>
+              <Grid item xs={12} md={6}>
+                <motion.div variants={itemVariants}>
+                  <Typography
+                    variant="h4"
+                    sx={{ color: "white", fontWeight: 600 }}
+                    gutterBottom
+                  >
+                    Ready For the Future
+                  </Typography>
+                  <Typography
+                    variant="h4"
+                    sx={{ color: "white", fontWeight: 600 }}
+                    gutterBottom
+                  >
+                    At Praxia Skill
+                  </Typography>
 
-            <motion.p
-              className="text-white mt-6 mb-1 font-sans text-xl"
-              variants={itemVariants}
-            >
-              Join this 20 weeks, Job-ready Program to master
-            </motion.p>
-            <motion.p
-              className="text-white text-xl mb-1 font-sans"
-              variants={itemVariants}
-            >
-              Data Analytics from scratch with Top Data Analysts
-            </motion.p>
-            <motion.p
-              className="text-white mb-4 font-sans"
-              variants={itemVariants}
-            >
-              from Microsoft, KPMG, Amazon, and Rapido.
-            </motion.p>
+                  <Typography variant="h6" sx={{ color: "white", mt: 3 }}>
+                    Join this 20 weeks, Job-ready Program to master
+                  </Typography>
+                  <Typography variant="h6" sx={{ color: "white" }}>
+                    Data Analytics from scratch with Top Data Analysts
+                  </Typography>
+                  <Typography variant="h6" sx={{ color: "white", mb: 2 }}>
+                    from Microsoft, KPMG, Amazon, and Rapido.
+                  </Typography>
 
-            <Link
-              to="/courses"
-              variants={itemVariants}
+                  <Button
+                    component={Link}
+                    to="/courses"
+                    variant="contained"
+                    color="primary"
+                    sx={{ mt: 3, borderRadius: 2, px: 4 }}
+                  >
+                    Explore Program
+                  </Button>
+                </motion.div>
+              </Grid>
 
-            >
-              <Button type="button" className="relative mt-4  py-2 px-6 rounded-lg duration-200">Explore Program</Button>
+              <Grid item xs={12} md={6}>
+                <BookDemoClass />
+              </Grid>
+            </Grid>
+          </Container>
+        </Box>
 
-            </Link>
-          </motion.div>
+        <Container maxWidth="lg" sx={{ mt: 6 }}>
+          <Grid container spacing={4} justifyContent="center">
+            {["Foundational", "Employability", "Entrepreneurial"].map(
+              (skill, index) => (
+                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+                  <motion.div
+                    whileHover={{ scale: 1.06 }}
+                    whileTap={{ scale: 0.95 }}
+                    variants={itemVariants}
+                    style={{
+                      ...gradientBackground,
+                      borderRadius: 16,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        p: 4,
+                        boxShadow: 2,
+                        height: 200,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        color: "white",
+                      }}
+                    >
+                      <Typography variant="h5" fontWeight="bold">
+                        {skill}
+                      </Typography>
+                      <Typography variant="h5" fontWeight="bold">
+                        Skills
+                      </Typography>
+                    </Box>
+                  </motion.div>
+                </Grid>
+              )
+            )}
+          </Grid>
+        </Container>
 
-          <BookDemoClass />
-        </motion.div>
-
-        {/* Skill Boxes */}
-        <motion.div
-          className="mt-10 flex flex-wrap flex-col md:flex-row gap-4 justify-center px-4"
-          variants={containerVariants}
-        >
-          {["Foundational", "Employability", "Entrepreneurial"].map(
-            (skill, index) => (
-              <motion.div
-                key={index}
-                style={gradientBackground}
-                className="text-white font-sans flex flex-col items-start justify-center p-8 sm:p-6 h-48 w-80 md:w-56 lg:w-80 rounded-lg shadow-lg"
-                whileHover={{ scale: 1.06 }}
-                whileTap={{ scale: 0.95 }}
-                variants={itemVariants}
-              >
-                <h1 className="font-semibold text-2xl lg:text-3xl flex flex-col">
-                  {skill}
-                  <span>Skills</span>
-                </h1>
-              </motion.div>
-            )
-          )}
-        </motion.div>
-
-        {/* Courses Section */}
-        <motion.div
-          className="flex items-center justify-center lg:w-[1000px]"
-          variants={itemVariants}
-        >
+        <Container maxWidth="lg" sx={{ py: 3 }}>
           <Courses />
-        </motion.div>
-        <Benefits />
-        <Collaboration />
+        </Container>
+
+        <Container maxWidth="lg">
+          <Benefits />
+          <Collaboration />
+        </Container>
 
         {/* <Membership /> */}
       </motion.div>
@@ -156,7 +187,3 @@ function HomePage() {
 }
 
 export default HomePage;
-
-
-
-

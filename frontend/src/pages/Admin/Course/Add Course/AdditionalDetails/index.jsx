@@ -265,7 +265,7 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
                 {...register("duration")}
                 id="duraion"
                 // required={true}
-                placeholder="30 hours plus videos"
+                placeholder="Enter course duration"
                 labelClassName="relative flex"
               >
                 <p>Duration</p>
@@ -282,7 +282,7 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
               )}
             </div>
 
-            <div>
+            {/* <div>
               <InputField
                 {...register("totalLectures")}
                 id="total-lecture"
@@ -302,7 +302,7 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
                   {errors.totalLectures.message}
                 </p>
               )}
-            </div>
+            </div> */}
           </div>
 
           {/* Second Column */}

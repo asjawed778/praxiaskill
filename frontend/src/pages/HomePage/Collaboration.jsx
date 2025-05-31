@@ -8,63 +8,66 @@ import {
   Avatar,
 } from "@mui/material";
 import { GroupsOutlined } from "@mui/icons-material";
+import zohoLogo from "@/assets/PartnersIcons/zoho.png";
+import rapidoLogo from "@/assets/PartnersIcons/rapido.jpg";
 
-const PartnerLogo = ({ name }) => {
+const PartnerLogo = ({ name, logo }) => {
   const theme = useTheme();
+
   return (
-    <Avatar
+    <Box
       sx={{
-        width: 120,
-        height: 60,
-        bgcolor: "background.paper",
-        color: theme.palette.secondary.main,
-        border: "1px solid",
-        borderColor: "divider",
-        borderRadius: 2,
-        "&:hover": {
-          transform: "scale(1.05)",
-          boxShadow: 2,
-        },
-        transition: "all 0.3s ease",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
       }}
     >
-      <Typography variant="h6" sx={{ fontWeight: 600, fontSize: "1rem" }}>
+      <Avatar
+        variant="rounded"
+        src={logo}
+        alt={`${name} logo`}
+        sx={{
+          width: 60,
+          height: 60,
+          bgcolor: "background.paper",
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: 2,
+          transition: "all 0.3s ease",
+          "&:hover": {
+            transform: "scale(1.05)",
+            boxShadow: 2,
+          },
+          mb: 1, 
+        }}
+      />
+      <Typography align="center">
         {name}
       </Typography>
-    </Avatar>
+    </Box>
   );
 };
 
 const Collaboration = () => {
   const theme = useTheme();
-  const partners = ["Zoho", "Rapido"];
+  const partners = [
+    {
+      name: "Zoho",
+      logo: zohoLogo,
+    },
+    {
+      name: "Rapido",
+      logo: rapidoLogo,
+    },
+  ];
 
   return (
     <Box
-      sx={{
-        py: 4,
-        my:2,
-        backgroundColor:
-          theme.palette.mode === "light"
-            ? "#f9fafc"
-            : theme.palette.background.default,
-        position: "relative",
-        overflow: "hidden",
-        width: "88vw",
-        marginLeft: "-50vw",
-        marginRight: "-50vw",
-        "&:before": {
-          content: '""',
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          background:
-            "radial-gradient(circle at 80% 20%, rgba(25, 118, 210, 0.05) 0%, transparent 50%)",
-          zIndex: 0,
-        },
-      }}
+    sx={{
+      backgroundColor: "#f9fafc",
+      py: 4,
+      my: 2
+    }}
     >
       <Container maxWidth="lg">
         <Box
@@ -132,7 +135,7 @@ const Collaboration = () => {
                 justifyContent: "center",
               }}
             >
-              <PartnerLogo name={partner} />
+              <PartnerLogo name={partner.name} logo={partner.logo} />
             </Grid>
           ))}
         </Grid>
@@ -155,3 +158,6 @@ const Collaboration = () => {
 };
 
 export default Collaboration;
+
+
+
