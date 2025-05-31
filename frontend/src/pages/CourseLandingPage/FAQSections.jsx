@@ -27,7 +27,7 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
   },
 }));
 
-export default function ImageAccordion({ course }) {
+export default function FAQSections({ course }) {
   const [expanded, setExpanded] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -43,7 +43,8 @@ export default function ImageAccordion({ course }) {
   };
 
   const currentItem = course?.faq?.find((item) => item._id === expanded);
-
+  
+  if(course?.faq?.length === 0 || !course?.faq) return;
   return (
     <Box
       sx={{

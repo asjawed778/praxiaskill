@@ -27,7 +27,7 @@ const FAQSections = () => {
     }
   }, [fields, append]);
   return (
-    <Box maxWidth="lg">
+    <Box>
       {/* <Grid container spacing={2}> */}
         <Box sx={{ mb: 2 }}>
           <Typography variant="h6" gutterBottom fontWeight={500}>
@@ -90,7 +90,7 @@ const FAQSections = () => {
                 />
               </Grid>
             
-             <Grid size={{ xs: 12, md: 6 }}>
+             <Grid size={{ xs: 12, sm: 6 }}>
               <ImageUploader
                 label="Upload Related Image"
                 name={`faq.${index}.resourceUrl`}

@@ -19,8 +19,7 @@ const CourseLandingPage = () => {
   const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(courseId);
   
   const navigate = useNavigate();
-
-
+  
   useEffect(() => {
     window.scrollTo(0, 0)
     if (courseDetails?.success) {

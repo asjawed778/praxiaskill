@@ -19,13 +19,6 @@ import { useGetFullCourseContentQuery } from "@/services/course.api";
 
 const CourseSyllabus = ({ course }) => {
   const [expanded, setExpanded] = useState("");
-  const { data: courseContent, isLoading } = useGetFullCourseContentQuery(
-    course?._id,
-    {
-      skip: !course?._id,
-    }
-  );
-
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -52,8 +45,8 @@ const CourseSyllabus = ({ course }) => {
           Course Curriculum
         </Typography>
 
-        {courseContent?.data?.sections?.length > 0 &&
-          courseContent?.data?.sections?.map((module, index) => (
+        {course?.sections?.length > 0 &&
+          course?.sections?.map((module, index) => (
             <Accordion
               key={module._id}
               expanded={expanded === module._id}

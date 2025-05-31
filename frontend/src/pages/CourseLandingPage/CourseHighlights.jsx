@@ -17,7 +17,7 @@ const CourseHighlights = ({ course }) => {
   {
     icon: <TrendingUpIcon fontSize="large" sx={{ color: '#10b981' }} />,
     title: 'Level',
-    subtitle: 'Beginner to Advanced',
+    subtitle: course?.courseLevel,
   },
   {
     icon: <LaptopMacIcon fontSize="large" sx={{ color: '#f59e0b' }} />,

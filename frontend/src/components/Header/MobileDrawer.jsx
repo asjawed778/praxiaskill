@@ -39,7 +39,7 @@ const MobileDrawer = ({ open, onClose, navItems, colors }) => {
       sx={{
         "& .MuiDrawer-paper": {
           width: 260,
-          height: "auto",
+          // height: "50%",
           padding: 2,
           backgroundColor: colors.background,
         },

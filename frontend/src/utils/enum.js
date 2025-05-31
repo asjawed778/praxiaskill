@@ -31,7 +31,7 @@ export const EnquiryStatus = {
 export const CourseStatus = {
   DRAFT: "DRAFT",
   PUBLISHED: "PUBLISHED",
-  TERMINATED: "TERMINATED",
+  // TERMINATED: "TERMINATED",
 };
 
 export const CourseValidity = {

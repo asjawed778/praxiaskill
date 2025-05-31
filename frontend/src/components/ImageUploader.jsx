@@ -1,12 +1,7 @@
-import React, { useRef, useState } from "react";
-import {
-  Box,
-  Typography,
-  IconButton,
-  CircularProgress,
-} from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import { Box, Typography, IconButton, CircularProgress } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useAppTheme } from "@/context/ThemeContext";
 import { CloudUploadOutlined } from "@mui/icons-material";
 import { useUploadThumbnailMutation } from "../services/course.api";
@@ -33,9 +28,16 @@ const ImageUploader = ({
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { accessToken } = useSelector((store) => store.auth);
-const [uploadImage, { isLoading: isUploading }] =
-      useUploadThumbnailMutation();
+  const [uploadImage, { isLoading: isUploading }] =
+    useUploadThumbnailMutation();
 
+  const watchedValue = useWatch({ control: activeControl, name });
+
+  useEffect(() => {
+    if (typeof watchedValue === "string" && watchedValue !== previewUrl) {
+      setPreviewUrl(watchedValue);
+    }
+  }, [watchedValue]);
   const handleFileChange = async (file, onChange) => {
     setError(null);
     setLoading(true);
@@ -74,7 +76,7 @@ const [uploadImage, { isLoading: isUploading }] =
       formData.append("thumbnail", file);
 
       try {
-        const response = await uploadImage({formData, accessToken}).unwrap();
+        const response = await uploadImage({ formData, accessToken }).unwrap();
         const uploadedUrl = response?.data?.url;
 
         if (uploadedUrl) {
@@ -114,9 +116,7 @@ const [uploadImage, { isLoading: isUploading }] =
           {label && (
             <Typography variant="subtitle1">
               {label}
-              {required && (
-                <span style={{ color: colors.error }}>*</span>
-              )}
+              {required && <span style={{ color: colors.error }}>*</span>}
             </Typography>
           )}
           <input
