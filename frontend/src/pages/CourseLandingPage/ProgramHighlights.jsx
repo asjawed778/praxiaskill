@@ -24,7 +24,7 @@ const ProgramHighlights = ({ course }) => {
     },
     {
       icon: <AssignmentIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
-      title: `${Math.floor((course?.totalAssignments + course?.totalProjects) / 5) * 5}+ Projects`,
+      title: `${Math.floor((course?.totalAssignments + course?.totalProjects)/5)*5}+ Projects`,
       subtitle: "and Real-World Assignments",
     },
     {

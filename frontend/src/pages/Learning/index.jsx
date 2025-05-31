@@ -128,10 +128,10 @@ const CourseCard = () => {
               <div
                 key={index}
                 onClick={() => handleClick(course._id, course?.title)}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:scale-105 hover:shadow-gray-400 cursor-pointer 
+                className="w-full bg-white rounded-lg shadow-md overflow-hidden hover:scale-105 hover:shadow-gray-400 cursor-pointer 
               transition-transform duration-500 ease-in-out"
               >
-                <img className="w-full h-52 object-cover" src={course.thumbnail} alt={course.title} />
+                <img className="w-full h-55 object-cover" src={course.thumbnail} alt={course.title} />
                 <div className="p-4">
                   <h3 className="text-xl mb-4 font-semibold">{course.title}</h3>
                   <p className="text-gray-600">{course?.instructor?.name}</p>

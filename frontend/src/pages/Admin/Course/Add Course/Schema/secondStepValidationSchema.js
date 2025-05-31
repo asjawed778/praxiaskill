@@ -21,7 +21,7 @@ const secondStepValidationSchema = yup.object().shape({
 
   duration: yup.string().trim().required("Duration is required"),
 
-  totalLectures: yup.string().trim().required("Lecture is required"),
+  // totalLectures: yup.string().trim().required("Lecture is required"),
 
   // Optionally uncomment and update the trailer_video if needed
   // trailer_video: yup
