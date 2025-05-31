@@ -20,9 +20,7 @@ const CourseFirstStep = ({ handleNext }) => {
 
   return (
     <div className="w-full">
-      <div
-        className="p-3 flex flex-col gap-6 px-4"
-      >
+      <div className="p-3 flex flex-col gap-6 px-4">
         <div>
           <InputField
             placeholder="Enter the course title"
@@ -114,38 +112,55 @@ const CourseFirstStep = ({ handleNext }) => {
           )}
         </div>
 
-        <div className="flex flex-col gap-2">
-          <div>
-            Mode: <span className="text-red-600">*</span>{" "}
+        <div className="flex flex-col md:flex-row md:justify-between gap-4">
+          <div className="flex flex-col gap-2 w-full md:w-1/2">
+            <div>
+              Mode: <span className="text-red-600">*</span>{" "}
+            </div>
+            <div className="flex w-full border border-neutral-300 rounded-md overflow-hidden bg-white">
+              {["OFFLINE", "ONLINE", "HYBRID"].map((mode) => (
+                <label
+                  key={mode}
+                  htmlFor={mode}
+                  className={`text-sm cursor-pointer px-4 py-2 flex-1 text-center capitalize ${
+                    (mode === "OFFLINE" &&
+                      "rounded-l-md border-r border-neutral-200") ||
+                    (mode === "HYBRID" &&
+                      "rounded-r-md border-l border-neutral-200")
+                  } ${selectedMode === mode ? "bg-[#9CA1CD]" : ""}`}
+                >
+                  {mode.toLowerCase()}
+                  <input
+                    hidden
+                    id={mode}
+                    type="radio"
+                    value={mode}
+                    {...register("courseMode")}
+                  />
+                </label>
+              ))}
+            </div>
+            {errors?.courseMode && (
+              <p className="text-red-600 text-xs ml-1 -mt-1.5">
+                {errors?.courseMode.message}
+              </p>
+            )}
           </div>
-          <div className="flex justify-between border border-neutral-300 rounded-md md:w-2/5 w-full bg-white">
-            {["OFFLINE", "ONLINE", "HYBRID"].map((mode) => (
-              <label
-                key={mode}
-                htmlFor={mode}
-                className={`text-sm cursor-pointer px-4 py-2 w-full text-center capitalize ${
-                  (mode === "OFFLINE" &&
-                    "rounded-l-md border-r border-neutral-200") ||
-                  (mode === "HYBRID" &&
-                    "rounded-r-md border-l border-neutral-200")
-                } ${selectedMode === mode ? "bg-[#9CA1CD]" : ""}`}
-              >
-                {mode.toLowerCase()}
-                <input
-                  hidden
-                  id={mode}
-                  type="radio"
-                  value={mode}
-                  {...register("courseMode")}
-                />
-              </label>
-            ))}
+
+          <div className="flex flex-col gap-2 w-full md:w-1/2">
+            <InputField
+              placeholder="Enter course level"
+              className="bg-white"
+              {...register("courseLevel")}
+            >
+              Course Level <span className="text-red-600">*</span>
+            </InputField>
+            {errors?.title && (
+              <p className="text-red-600 text-xs ml-1 mt-0.5">
+                {errors?.courseLevel.message}
+              </p>
+            )}
           </div>
-          {errors?.courseMode && (
-            <p className="text-red-600 text-xs ml-1 -mt-1.5">
-              {errors?.courseMode.message}
-            </p>
-          )}
         </div>
 
         <div className="flex gap-20 flex-col md:flex-row">
@@ -153,10 +168,16 @@ const CourseFirstStep = ({ handleNext }) => {
             <InputField setvalue={setValue} type="image" id="thumbnail">
               Thumbnail Image <span className="text-red-600">*</span>
             </InputField>
-            {thumbnail && <div className="h-30 w-full rounded-md mt-2">
-              <img className="h-full w-full rounded-md" src={thumbnail} alt="thumnail" />
-              <p className="text-sm text-green-500">Uploaded Image Preview</p>
-            </div> }
+            {thumbnail && (
+              <div className="h-30 w-full rounded-md mt-2">
+                <img
+                  className="h-full w-full rounded-md"
+                  src={thumbnail}
+                  alt="thumnail"
+                />
+                <p className="text-sm text-green-500">Uploaded Image Preview</p>
+              </div>
+            )}
             {!thumbnail && errors?.thumbnail && (
               <p className="text-red-600 text-xs ml-1 mt-0.5">
                 {errors?.thumbnail.message}
@@ -168,16 +189,19 @@ const CourseFirstStep = ({ handleNext }) => {
             <InputField setvalue={setValue} type="pdf" id="pdf">
               Brochure pdf <span className="text-red-600">*</span>
             </InputField>
-            {brouchure && <div><a
-            href={brouchure}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="z-10 mt-1 flex items-center justify-center text-xl text-white bg-black/55 w-full h-10 rounded-md cursor-pointer"
-          >
-            Preview
-          </a>
-          <p className="text-sm">Click to Preview Brouchure</p>
-          </div> }
+            {brouchure && (
+              <div>
+                <a
+                  href={brouchure}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="z-10 mt-1 flex items-center justify-center text-xl text-white bg-black/55 w-full h-10 rounded-md cursor-pointer"
+                >
+                  Preview
+                </a>
+                <p className="text-sm">Click to Preview Brouchure</p>
+              </div>
+            )}
             {!brouchure && errors?.brouchure && (
               <p className="text-red-600 text-xs ml-1 mt-0.5">
                 {errors?.brouchure.message}

@@ -10,9 +10,9 @@ import HeroSection from "./HeroSection";
 import ProgramHighlights from "./ProgramHighlights";
 import ToolsGrid from "./ToolsGrid";
 import CourseSyllabus from "./CourseSyllabus";
-import ImageAccordian from "./ImageAccordian";
 import Testimonials from "./Testimonials";
 import CourseHighlights from "./CourseHighlights";
+import FAQSections from "./FAQSections";
 
 const Landing = ({ course }) => {
   const syllabusRef = useRef(null);
@@ -41,7 +41,7 @@ const Landing = ({ course }) => {
       <div ref={syllabusRef}>
         <CourseSyllabus course={course} />
       </div>
-      <ImageAccordian course={course}/>
+      <FAQSections course={course}/>
       <Testimonials />
       {/* <FaqSection /> */}
 

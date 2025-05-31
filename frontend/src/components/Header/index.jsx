@@ -22,7 +22,7 @@ const Header = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const isMobile = useMediaQuery("(max-width: 600px)");
+  const isMobile = useMediaQuery("(max-width: 700px)");
   const navItems = [
     { to: "/", label: "Home" },
     { to: "/courses", label: "Learning" },
@@ -59,7 +59,7 @@ const Header = () => {
   );
 
   return (
-    <>
+    <Box>
       <AppBar
         position="sticky"
         elevation={1}
@@ -68,13 +68,14 @@ const Header = () => {
           color: colors.text,
         }}
       >
-        <Toolbar>
+        <Toolbar disableGutters>
           <Box
             sx={{
+              px: {xs: 1, md: 6, lg: 15 }, // Adjust horizontal padding for different screen sizes
+              width: "100%",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              width: "100%",
             }}
           >
             {/* Logo and Nav */}
@@ -155,7 +156,7 @@ const Header = () => {
         navItems={navItems}
         colors={colors}
       />
-    </>
+    </Box>
   );
 };
 

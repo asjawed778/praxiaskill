@@ -69,7 +69,7 @@ export default function Carousal() {
   };
 
   return (
-    <div className="py-8 mt-4 w-[90vw] lg:w-full mx-auto">
+    <div className="py-6 w-[90vw] lg:w-full mx-auto ">
       <div className="mb-6 items-center">
         <h2 className="font-sans font-semibold text-2xl text-[var(--color-primary)]">
           All the skills you need in one place
@@ -147,7 +147,8 @@ export default function Carousal() {
                   />
                 </div>
                 <div className="flex flex-col px-3 w-full">
-                  <h3 className="font-sans text-[var(--color-secondary)] w-full text-md break-words line-clamp-none text-left">
+                  <h3 className="font-sans text-[var(--color-secondary)] w-full text-sm break-words line-clamp-2 text-left">
+
                     {course?.title}
                   </h3>
 

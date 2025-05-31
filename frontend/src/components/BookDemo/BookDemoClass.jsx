@@ -55,13 +55,12 @@ const BookDemoClass = () => {
 
   return (
     <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "90vh",
-        px: 2,
-      }}
+      // sx={{
+      //   display: "flex",
+      //   justifyContent: "center",
+      //   alignItems: "center",
+      //   // px: 2,
+      // }}
     >
       <Paper
         elevation={2}
