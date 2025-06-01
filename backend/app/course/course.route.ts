@@ -44,4 +44,7 @@ router
     .put("/qna/:qnaId/answers/:answerIndex", authMiddlerware.auth, courseValidation.editQnaAnswer, catchError, courseController.editQnaAnswer)
     .delete("/qna/:qnaId/answers/:answerIndex", authMiddlerware.auth, courseValidation.deleteQnaAnswer, catchError, courseController.deleteQnaAnswer)
 
+    .post("/rate/:courseId", authMiddlerware.auth, courseValidation.rateCourse, catchError, courseController.rateCourse)
+    .get("/ratings/:courseId", authMiddlerware.auth, courseValidation.getRatings, catchError, courseController.getRatings)
+
 export default router;

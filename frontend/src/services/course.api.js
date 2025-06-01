@@ -202,20 +202,38 @@ export const apiCourse = createApi({
 
     // implement terminate course api here
     terminateCourse: builder.mutation({
-      query: ({courseId}) => ({
+      query: ({ courseId }) => ({
         url: `course/terminate/${courseId}`,
         method: "PATCH",
       })
     }),
 
     updateCourseDetails: builder.mutation({
-      query: ({courseId, data}) => ({
+      query: ({ courseId, data }) => ({
         url: `course/details/${courseId}`,
-        method: "PUT",  
+        method: "PUT",
         body: data,
         credentials: "include"
       }),
     }),
+
+    rateCourse: builder.mutation({
+      query: ({ courseId, data }) => ({
+        url: `course/rate/${courseId}`,
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+    }),
+
+    getCourseRatings: builder.query({
+      query: ({ courseId, pageNo = 1, limit = 10, sort = "latest" }) => ({
+        url: `course/ratings/${courseId}?pageNo=${pageNo}&limit=${limit}&sort=${sort}`,
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
+
   }),
 });
 
@@ -245,4 +263,6 @@ export const {
   useGetMyCoursesQuery,
   useTerminateCourseMutation,
   useUpdateCourseDetailsMutation,
+  useRateCourseMutation,
+  useGetCourseRatingsQuery
 } = apiCourse;

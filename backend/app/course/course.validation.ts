@@ -817,3 +817,39 @@ export const getQnas = [
         .isInt({ min: 1, max: 100 }).withMessage('PerPage must be between 1 and 100')
         .toInt()
 ];
+
+export const rateCourse = [
+    param('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+
+    body('rating')
+        .notEmpty().withMessage('Rating is required')
+        .isInt({ min: 1, max: 5 }).withMessage('Rating must be an integer between 1 and 5'),
+
+    body('comment')
+        .optional()
+        .isString().withMessage('Review must be a string')
+        .trim()
+        .isLength({ max: 500 }).withMessage('Review must not exceed 500 characters'),
+];
+
+export const getRatings = [
+    param('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+
+    query('sort')
+        .optional()
+        .isIn(['latest', 'oldest']).withMessage('Sort must be either "latest" or "oldest"'),
+
+    query('pageNo')
+        .optional()
+        .isInt({ min: 1 }).withMessage('Page must be a positive integer')
+        .toInt(),
+
+    query('limit')
+        .optional()
+        .isInt({ min: 1, max: 100 }).withMessage('PerPage must be between 1 and 100')
+        .toInt(),
+];

@@ -8,8 +8,9 @@ import * as courseEnum from "./course.enum";
 import ratingAndReviewSchema from "./ratingAndReview.schema";
 import enrollmentSchema from "./enrollment.schema";
 import createHttpError from "http-errors";
-import { ExpressValidator } from "express-validator";
 import qnaSchema from "./qna.schema";
+import { SortOrder } from 'mongoose';
+
 
 
 export const isCourseExist = async (courseId: string): Promise<boolean> => {
@@ -82,7 +83,6 @@ export const updateCourseDetails = async (courseId: string, data: CourseDTO.IUpd
     return course as CourseDTO.ICourse;
 };
 
-
 export const getCourseContent = async (courseId: string): Promise<any> => {
     const coursesContent = await courseSchema.findById(courseId)
         .select("_id title sections")
@@ -100,13 +100,11 @@ export const getEnrolledCourseCountByUser = async (userId: string): Promise<numb
     return count;
 };
 
-
 export const draftCourse = async (courseId: string): Promise<any> => {
     const result = await courseSchema.findByIdAndUpdate
         (courseId, { courseStatus: "DRAFT" }, { new: true });
     return result;
 };
-
 
 export const terminateCourse = async (courseId: string): Promise<any> => {
     const result = await courseSchema.findByIdAndUpdate
@@ -114,13 +112,11 @@ export const terminateCourse = async (courseId: string): Promise<any> => {
     return result;
 };
 
-
 export const publishCourse = async (courseId: string): Promise<any> => {
     const result = await courseSchema.findByIdAndUpdate
         (courseId, { courseStatus: "PUBLISHED" }, { new: true });
     return result;
 };
-
 
 export const getCourseDetails = async (courseId: string): Promise<any> => {
     const course = await courseSchema
@@ -133,14 +129,14 @@ export const getCourseDetails = async (courseId: string): Promise<any> => {
             path: "category",
             select: "_id name",
         })
-        .populate({
-            path: "ratingAndReviews",
-            select: "_id rating comment userId",
-            populate: {
-                path: "userId",
-                select: "_id name profilePic",
-            }
-        })
+        // .populate({
+        //     path: "ratingAndReviews",
+        //     select: "_id rating comment userId",
+        //     populate: {
+        //         path: "userId",
+        //         select: "_id name profilePic",
+        //     }
+        // })
         .populate({
             path: "sections",
             select: "title description duration assignments projects subSections",
@@ -149,8 +145,6 @@ export const getCourseDetails = async (courseId: string): Promise<any> => {
                 select: "_id title",
             },
         }).lean();
-
-    
 
     if (!course) {
         return course;
@@ -165,13 +159,12 @@ export const getCourseDetails = async (courseId: string): Promise<any> => {
         totalAssignments += (section.assignments as any)?.length || 0;
     });
 
-    return {...course, totalProjects, totalAssignments};
+    return { ...course, totalProjects, totalAssignments };
 };
 
-
 export const getPublishedCoursesByCategory = async (categoryId: string, pageNo: number = 1): Promise<any> => {
-    const pageSize = 10; // Number of courses per page
-    const skip = (pageNo - 1) * pageSize; // Calculate the number of documents to skip
+    const pageSize = 10;
+    const skip = (pageNo - 1) * pageSize;
 
     const result = await courseSchema.aggregate([
         {
@@ -280,16 +273,14 @@ export const getCourseEnquiry = async (pageNo: number = 1): Promise<any> => {
     };
 };
 
-
 export const changeEnquiryStatus = async (enquiryId: string, status: string): Promise<CourseDTO.ICourseEnquiry> => {
     const enquiry = await CourseEnquirySchema.findByIdAndUpdate(enquiryId, { status }, { new: true });
     return enquiry as CourseDTO.ICourseEnquiry;
 };
 
-
 export const getPublishedCourses = async (pageNo: number = 1): Promise<any> => {
-    const pageSize = 10; // Number of courses per page
-    const skip = (pageNo - 1) * pageSize; // Calculate the number of documents to skip
+    const pageSize = 10;
+    const skip = (pageNo - 1) * pageSize;
 
     const result = await courseSchema.aggregate([
         {
@@ -368,8 +359,15 @@ export const getPublishedCourses = async (pageNo: number = 1): Promise<any> => {
     };
 };
 
-
 export const rateCourse = async (courseId: string, userId: string, data: CourseDTO.IRatingAndReviews): Promise<any> => {
+    const existingRating = await ratingAndReviewSchema.findOne({ courseId, userId });
+    console.log("Existing Rating:", existingRating);
+    if (existingRating) {
+        existingRating.rating = data.rating;
+        existingRating.comment = data.comment;
+        await existingRating.save();
+        return existingRating;
+    }
     const rating = new ratingAndReviewSchema({
         ...data,
         courseId,
@@ -379,6 +377,58 @@ export const rateCourse = async (courseId: string, userId: string, data: CourseD
     return rating;
 };
 
+export const getRatings = async (
+    courseId: string,
+    pageNo: number = 1,
+    pageSize: number = 10,
+    userId?: string,
+    sort?: 'latest' | 'oldest'
+): Promise<{
+    ratings: CourseDTO.IRatingAndReviews[];
+    totalRatings: number;
+    averageRating: number;
+    pageNo: number;
+    pageSize: number;
+    totalPages: number;
+    isRated: boolean;
+}> => {
+    const skip = (pageNo - 1) * pageSize;
+
+    const isRated = userId ? await ratingAndReviewSchema.exists({ courseId: new mongoose.Types.ObjectId(courseId), userId: new mongoose.Types.ObjectId(userId) }) : false;
+    console.log("Israted:", isRated);
+    const totalRatings = await ratingAndReviewSchema.countDocuments({ courseId });
+
+    const averageRatingResult = await ratingAndReviewSchema.aggregate([
+        { $match: { courseId: new mongoose.Types.ObjectId(courseId) } },
+        { $group: { _id: null, averageRating: { $avg: "$rating" } } }
+    ]);
+
+    const averageRating = averageRatingResult[0]?.averageRating || 0;
+
+    const sortOptions: Record<string, SortOrder> = sort === 'oldest'
+        ? { createdAt: 1 }
+        : { createdAt: -1 };
+
+    const ratings = await ratingAndReviewSchema.find({ courseId })
+        .populate({
+            path: "userId",
+            select: "_id name profilePic"
+        })
+        .sort(sortOptions)
+        .skip(skip)
+        .limit(pageSize)
+        .lean();
+
+    return {
+        ratings,
+        totalRatings,
+        averageRating: Number(averageRating.toFixed(1)),
+        pageNo,
+        pageSize,
+        totalPages: Math.ceil(totalRatings / pageSize),
+        isRated: !!isRated
+    };
+};
 
 export const isUserCoursePurchased = async (courseId: string, userId: string): Promise<boolean> => {
     const isPurchased = await enrollmentSchema.exists({ courseId, userId });
@@ -475,7 +525,6 @@ export const isAlreadyEnrolledInCourse = async (userId: string, courseId: string
         ]
     });
 };
-
 
 export const getMyCourses = async (userId: string, pageNo: number = 1, pageSize: number = 10) => {
     if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -580,7 +629,6 @@ export const getMyCourses = async (userId: string, pageNo: number = 1, pageSize:
         courses: result
     };
 };
-
 
 export const assignCourseByAdmin = async (userId: string, courseId: string) => {
     const course = await courseSchema.findById(courseId);
