@@ -76,10 +76,6 @@ const courseSchema = new mongoose.Schema<ICourse>({
             required: false
         }
     }],
-    ratingAndReviews: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "RatingAndReviews"
-    }],
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "CourseCategory",
