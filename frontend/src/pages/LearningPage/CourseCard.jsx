@@ -1,5 +1,4 @@
-import React from "react";
-import { Card, CardContent, Typography, Box } from "@mui/material";
+import { Card, Typography, Box } from "@mui/material";
 import { Star, StarBorder, StarHalf } from "@mui/icons-material";
 import { useAppTheme } from "@/context/ThemeContext";
 
@@ -47,12 +46,12 @@ const CourseCard = ({ course, onClick }) => {
   const averageRating = reviews ? totalRatings / reviews : 4.5;
 
   return (
-      <Card
+    <Card
       onClick={() => onClick(_id, title)}
       sx={{
         cursor: "pointer",
         width: "100%",
-    maxWidth: 280,
+        maxWidth: 280,
         height: 400,
         p: 0.5,
         display: "flex",
@@ -88,7 +87,6 @@ const CourseCard = ({ course, onClick }) => {
           }}
         />
       </Box>
-
 
       <Box sx={{ flexGrow: 1, p: 1 }}>
         <Typography

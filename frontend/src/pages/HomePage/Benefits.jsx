@@ -1,7 +1,5 @@
-import React from 'react';
 import { Box, Typography, Grid, Card, CardContent, Avatar, Container, useTheme } from '@mui/material';
 import {
-  LightbulbOutlined,
   SchoolOutlined,
   BuildOutlined,
   SupportOutlined,

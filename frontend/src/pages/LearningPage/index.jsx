@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Typography,
@@ -12,6 +12,7 @@ import {
   Pagination,
   Container,
   CircularProgress,
+  Stack,
 } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
 import {
@@ -62,9 +63,22 @@ const LearningPage = () => {
   return (
     <Container maxWidth="lg">
       <Box py={5}>
-        <Typography variant="h4" align="center" mb={4}>
+        <Typography
+          align="center"
+          mb={4}
+          sx={{
+            fontSize: {
+              xs: "1.5rem",
+              sm: "2rem",
+              md: "2.5rem",
+              lg: "3rem",
+            },
+            fontWeight: 600,
+          }}
+        >
           Explore Our Courses
         </Typography>
+
         <Grid container spacing={2} mb={4} px={2}>
           <Grid size={{ xs: 12, md: 6 }}>
             <TextField
@@ -86,32 +100,33 @@ const LearningPage = () => {
               sx={{ flexGrow: 1, minWidth: 250 }}
             />
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 6 }} noWrap>
             <Box
-              display="flex"
               sx={{
-                flexDirection: { xs: "column", md: "row" },
-                alignItems: "center",
-                gap: 2,
                 width: "100%",
-                justifyContent: "flex-start",
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                alignItems: { xs: "flex-start", md: "center" },
+                gap: 2,
               }}
             >
               <Typography fontWeight={600} flexShrink={0}>
                 Filter by Category:
               </Typography>
-              <Box
-                display="flex"
-                flexWrap="wrap"
-                gap={2}
-                sx={{ flexDirection: { sm: "row" }, width: "100%" }}
+
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={2}
+                alignItems={{ xs: "stretch", sm: "center" }}
+                width="100%"
               >
                 <Select
                   value={categoryId}
                   size="small"
                   onChange={(e) => setCategoryId(e.target.value)}
                   displayEmpty
-                  sx={{ minWidth: 150, flexGrow: 1 }}
+                  fullWidth
+                  sx={{ minWidth: 150 }}
                 >
                   <MenuItem value="">All Categories</MenuItem>
                   {categories.map((cat) => (
@@ -124,11 +139,14 @@ const LearningPage = () => {
                 <Button
                   variant="outlined"
                   onClick={handleClearFilter}
-                  sx={{ flexShrink: 0 }}
+                  sx={{
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
+                  }}
                 >
                   Clear Filters
                 </Button>
-              </Box>
+              </Stack>
             </Box>
           </Grid>
         </Grid>
@@ -151,7 +169,16 @@ const LearningPage = () => {
             No courses found. Try again!
           </Typography>
         ) : (
-          <Grid container spacing={1}>
+          <Grid
+            container
+            spacing={1}
+            sx={{
+              justifyContent: {
+                xs: "center",  
+                lg: "flex-start", 
+              },
+            }}
+          >
             {courses.map((course) => (
               <Grid
                 item
@@ -159,10 +186,6 @@ const LearningPage = () => {
                 sm={6}
                 md={4}
                 key={course._id}
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                }}
               >
                 <CourseCard course={course} onClick={handleNavigate} />
               </Grid>
