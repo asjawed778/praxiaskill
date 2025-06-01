@@ -39,7 +39,7 @@ const Landing = ({ course }) => {
           <CourseSyllabus course={course} />
         </div>
         <FAQSections course={course} />
-        <Testimonials />
+        <Testimonials course={course} />
         <Zoom in={showFloatingBtn}>
           <Box
             sx={{

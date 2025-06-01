@@ -10,6 +10,7 @@ import {
   CardActions,
   Divider,
   useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,13 +31,14 @@ const Carousel = () => {
   const sliderRef = useRef(null);
   const containerRef = useRef(null);
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const categories = useSelector((state) => state.categories.categories);
   const coursesAll = useSelector((state) => state.courses.courses);
 
   const [activeTab, setActiveTab] = useState(null);
   const [cardsPerView, setCardsPerView] = useState(1);
-  const cardWidth = 300; 
+  const cardWidth = 300;
   const gap = 16;
 
   const { data: allCategories, isFetching: allCategoriesLoading } =
@@ -139,20 +141,22 @@ const Carousel = () => {
         <CourseSkeleton />
       ) : coursesAll?.length ? (
         <Box sx={{ position: "relative" }}>
-          <Box display="flex" justifyContent="flex-end" gap={2} mb={1}>
-            <IconButton
-              onClick={scrollPrev}
-              sx={{ bgcolor: "primary.main", color: "#fff" }}
-            >
-              <IoIosArrowBack />
-            </IconButton>
-            <IconButton
-              onClick={scrollNext}
-              sx={{ bgcolor: "primary.main", color: "#fff" }}
-            >
-              <IoIosArrowForward />
-            </IconButton>
-          </Box>
+          {!isMobile && (
+            <Box display="flex" justifyContent="flex-end" gap={2} mb={1}>
+              <IconButton
+                onClick={scrollPrev}
+                sx={{ bgcolor: "primary.main", color: "#fff" }}
+              >
+                <IoIosArrowBack />
+              </IconButton>
+              <IconButton
+                onClick={scrollNext}
+                sx={{ bgcolor: "primary.main", color: "#fff" }}
+              >
+                <IoIosArrowForward />
+              </IconButton>
+            </Box>
+          )}
 
           <Box
             ref={sliderRef}
@@ -274,7 +278,7 @@ const Carousel = () => {
           </Box>
         </Box>
       ) : (
-        <Typography variant="body2" color="textSecondary" align="center">
+        <Typography variant="body2" color="red" align="center">
           No courses available.
         </Typography>
       )}

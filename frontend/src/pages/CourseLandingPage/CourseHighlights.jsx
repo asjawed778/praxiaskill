@@ -19,7 +19,7 @@ const CourseHighlights = ({ course }) => {
   {
     icon: <LaptopMacIcon fontSize="large" sx={{ color: '#f59e0b' }} />,
     title: 'Mode',
-    subtitle: course?.courseMode,
+    subtitle: course?.courseMode?.charAt(0).toUpperCase() + course?.courseMode?.slice(1).toLowerCase(),
   },
   {
     icon: <Science fontSize="large" sx={{ color: 'blue' }} />

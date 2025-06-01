@@ -1,93 +1,78 @@
 import { Box, Typography, Avatar, Paper, Button, styled } from "@mui/material";
-import { motion, useAnimation } from "framer-motion";
-import { useEffect, useRef } from "react";
-
-const testimonials = [
-  {
-    name: "Neha Sethi",
-    role: "Digital Marketing Specialist",
-    message:
-      "The blend of AI tools like ChatGPT and Canva AI with practical digital marketing strategies was a game changer for my career.",
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-  },
-  {
-    name: "Rohan Malhotra",
-    role: "Performance Marketing Analyst",
-    message:
-      "I now confidently run Meta Ads and track results in GA4. This course truly bridges the gap between theory and execution.",
-    avatar: "https://randomuser.me/api/portraits/men/51.jpg",
-  },
-  {
-    name: "Isha Thakur",
-    role: "SEO & Content Strategist",
-    message:
-      "From mastering SurferSEO to creating engaging posts with Jasper, this platform made my content workflow 3x faster!",
-    avatar: "https://randomuser.me/api/portraits/women/57.jpg",
-  },
-  {
-    name: "Tanmay Rathi",
-    role: "Email Marketing Manager",
-    message:
-      "I loved the deep dive into Mailchimp automations. Now I run high-converting email campaigns with zero guesswork.",
-    avatar: "https://randomuser.me/api/portraits/men/64.jpg",
-  },
-];
+import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
 const TestimonialCard = styled(Paper)(({ theme }) => ({
   minWidth: 300,
   maxWidth: 300,
+  height: 230,
+  display: "flex",
+  flexDirection: "column",
   marginRight: theme.spacing(3),
   backgroundColor: "#1e1e1e",
   color: "#fff",
-  padding: theme.spacing(3),
+  padding: theme.spacing(2),
   borderRadius: 16,
   flexShrink: 0,
+  overflow: "hidden", 
 }));
 
-export default function Testimonials() {
-  const controls = useAnimation();
-  const containerRef = useRef(null);
-  const xPos = useRef(0);
-  const isHovering = useRef(false);
+const MAX_LENGTH = 100;
 
-  const startAnimation = (fromX = 0) => {
-    const totalDistance = containerRef.current.scrollWidth / 2;
-    const remainingDistance = totalDistance + fromX; 
-    const duration = (remainingDistance / totalDistance) * 20;
+const TruncatedComment = ({ text }) => {
+  const [showFull, setShowFull] = useState(false);
+  const shouldTruncate = text.length > MAX_LENGTH;
 
-    controls.start({
-      x: [fromX, -totalDistance],
-      transition: {
-        x: {
-          duration: duration,
-          ease: "linear",
-          repeat: Infinity,
-          repeatType: "loop",
-        },
-      },
-    });
+  const toggle = (e) => {
+    e.stopPropagation(); 
+    setShowFull((prev) => !prev);
   };
+
+  return (
+    <Typography sx={{ fontSize: "15px", color: "#ddd" }}>
+      {showFull || !shouldTruncate
+        ? `“${text}”`
+        : `“${text.slice(0, MAX_LENGTH)}...”`}
+      {shouldTruncate && (
+        <span
+          onClick={toggle}
+          style={{
+            color: "#90caf9",
+            cursor: "pointer",
+            marginLeft: 4,
+            fontSize: "13px",
+          }}
+        >
+          {showFull ? "Show Less" : "Read More"}
+        </span>
+      )}
+    </Typography>
+  );
+};
+
+export default function Testimonials({ course }) {
+  if (!course?.testimonials || course.testimonials.length === 0) return null;
+
+  const topTestimonials = course.testimonials.map((testimonial) => ({
+    name: testimonial.userId.name,
+    profilePic: testimonial.userId.profilePic,
+    comment: testimonial.comment,
+  }));
+
+  const extendedTestimonials = [...topTestimonials, ...topTestimonials];
+
+  const [isPaused, setIsPaused] = useState(false);
+  const isTouchDevice =
+    typeof window !== "undefined" && "ontouchstart" in window;
+
+  const containerRef = useRef(null);
+  const scrollWidth = useRef(0);
 
   useEffect(() => {
     if (containerRef.current) {
-      startAnimation(0);
+      scrollWidth.current = containerRef.current.scrollWidth / 2;
     }
   }, []);
-
-
-  const handlePause = () => {
-    isHovering.current = true;
-    controls.stop();
-    const computedStyle = window.getComputedStyle(containerRef.current);
-    const matrix = new WebKitCSSMatrix(computedStyle.transform);
-    xPos.current = matrix.m41;
-  };
-
-  const handleResume = () => {
-    if (!isHovering.current) return;
-    isHovering.current = false;
-    startAnimation(xPos.current);
-  };
 
   return (
     <Box
@@ -102,6 +87,7 @@ export default function Testimonials() {
     >
       <Typography
         variant="h4"
+        fontWeight="bold"
         align="center"
         gutterBottom
         sx={{
@@ -116,44 +102,36 @@ export default function Testimonials() {
       </Typography>
 
       <Box
-        ref={containerRef}
         component={motion.div}
-        animate={controls}
-        sx={{ display: "flex", width: "fit-content", mt: 4 }}
+        ref={containerRef}
+        onMouseEnter={!isTouchDevice ? () => setIsPaused(true) : undefined}
+        onMouseLeave={!isTouchDevice ? () => setIsPaused(false) : undefined}
+        animate={{
+          x: isPaused ? undefined : [0, -scrollWidth.current],
+        }}
+        transition={{
+          x: {
+            duration: 20,
+            ease: "linear",
+            repeat: Infinity,
+          },
+        }}
+        sx={{
+          display: "flex",
+          width: "fit-content",
+          mt: 4,
+        }}
       >
-        {[...testimonials, ...testimonials, ...testimonials].map((t, idx) => (
-          <Box key={idx} onMouseEnter={handlePause} onMouseLeave={handleResume}>
-            <TestimonialCard elevation={6}>
-              <Avatar
-                // src={t.avatar}
-                alt={t.name}
-                sx={{
-                  // width: 56,
-                  // height: 56,
-                  mb: 1,
-                }}
-              >
-               { t.name.charAt(0)}
-              </Avatar>
-              <Typography variant="h6">{t.name}</Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: "#ccc", mb: 1, fontStyle: "italic" }}
-              >
-                {t.role}
-              </Typography>
-              <Typography sx={{ fontSize: "15px", color: "#ddd" }}>
-                “{t.message}”
-              </Typography>
-            </TestimonialCard>
-          </Box>
+        {extendedTestimonials.map((t, idx) => (
+          <TestimonialCard key={idx} elevation={6}>
+            <Avatar src={t.profilePic} alt={t.name} sx={{ mb: 1 }} />
+            <Typography variant="h6">{t.name}</Typography>
+            <Box sx={{ overflowY: "auto", maxHeight: 100, mt: 1 }}>
+              <TruncatedComment text={t.comment} />
+            </Box>
+          </TestimonialCard>
         ))}
       </Box>
     </Box>
   );
 }
-
-
-
-
-

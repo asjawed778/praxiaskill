@@ -17,6 +17,7 @@ const CourseLandingPage = () => {
   const dispatch = useDispatch()
   const { courseId, courseTitle } = useParams();
   const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(courseId);
+  console.log("Course Details: ", courseDetails);
   
   const navigate = useNavigate();
   
@@ -46,7 +47,7 @@ const CourseLandingPage = () => {
         <Typography variant="h5" mt={2} color="text.primary">
           Course is loading, please wait...
         </Typography>
-        <CircularProgress size={20} thickness={4} />
+        <CircularProgress size={30} thickness={4} />
       </Box>
     );
   }
