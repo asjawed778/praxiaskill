@@ -1,11 +1,5 @@
-import React from "react";
-import {
-  Box,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-} from "@mui/material";
+import React, { createElement } from "react";
+import { Box, Typography, Grid, Card, CardContent } from "@mui/material";
 import * as FaIcons from "react-icons/fa";
 import * as SiIcons from "react-icons/si";
 import * as MdIcons from "react-icons/md";
@@ -24,7 +18,7 @@ const getIconComponent = (iconName) => {
 };
 
 const ToolsGrid = ({ course }) => {
-  if (!course?.tools?.length) return null;
+  if (!course?.tools?.length === 0 || !course?.tools) return;
 
   return (
     <Box
@@ -41,7 +35,9 @@ const ToolsGrid = ({ course }) => {
         fontWeight="bold"
         sx={{ mb: 4, fontSize: { xs: "24px", sm: "36px", md: "44px" } }}
       >
-        Master {Math.floor(course.tools.length/5)*5}+ Tools
+        {course?.tools?.length < 5
+          ? `Master ${course?.tools?.length} Tools`
+          : `Master ${Math.floor(course?.tools?.length / 5) * 5}+ Tools`}
       </Typography>
 
       <Grid
@@ -78,7 +74,9 @@ const ToolsGrid = ({ course }) => {
                 {item.url ? (
                   <img src={item.url} alt={item.name} width={50} height={50} />
                 ) : getIconComponent(item.iconName) ? (
-                  React.createElement(getIconComponent(item.iconName), { size: 35 })
+                  createElement(getIconComponent(item.iconName), {
+                    size: 35,
+                  })
                 ) : (
                   <Typography variant="caption" color="error">
                     Icon not found
