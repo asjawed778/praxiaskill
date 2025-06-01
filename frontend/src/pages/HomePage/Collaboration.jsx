@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   Typography,
@@ -9,7 +8,7 @@ import {
 } from "@mui/material";
 import { GroupsOutlined } from "@mui/icons-material";
 import zohoLogo from "@/assets/PartnersIcons/zoho.png";
-import rapidoLogo from "@/assets/PartnersIcons/rapido.jpg";
+import rapidoLogo from "@/assets/PartnersIcons/rapido.png";
 
 const PartnerLogo = ({ name, logo }) => {
   const theme = useTheme();
@@ -29,21 +28,17 @@ const PartnerLogo = ({ name, logo }) => {
         sx={{
           width: 60,
           height: 60,
-          bgcolor: "background.paper",
-          border: "1px solid",
-          borderColor: "divider",
+          bgcolor: "transparent", 
+          border: "none", 
           borderRadius: 2,
           transition: "all 0.3s ease",
           "&:hover": {
             transform: "scale(1.05)",
-            boxShadow: 2,
           },
-          mb: 1, 
+          mb: 1,
         }}
       />
-      <Typography align="center">
-        {name}
-      </Typography>
+      <Typography align="center">{name}</Typography>
     </Box>
   );
 };
@@ -63,11 +58,11 @@ const Collaboration = () => {
 
   return (
     <Box
-    sx={{
-      backgroundColor: "#f9fafc",
-      py: 4,
-      my: 2
-    }}
+      sx={{
+        backgroundColor: "#f9fafc",
+        py: 4,
+        my: 2,
+      }}
     >
       <Container maxWidth="lg">
         <Box
@@ -158,6 +153,3 @@ const Collaboration = () => {
 };
 
 export default Collaboration;
-
-
-
