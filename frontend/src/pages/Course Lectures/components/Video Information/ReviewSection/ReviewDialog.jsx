@@ -3,36 +3,46 @@ import {
   Dialog, DialogTitle, DialogContent, DialogActions,
   TextField, Button, Rating, Stack
 } from '@mui/material';
+import { useRateCourseMutation } from '../../../../../services/course.api';
+import { toast } from 'react-hot-toast';
 
-export default function ReviewDialog({ open, onClose, onSave, initialData }) {
-  const [name, setName] = useState('');
+export default function ReviewDialog({ open, onClose, onSave, initialData, courseId }) {
+  // const [name, setName] = useState('');
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+  const [rateCourse, { isLoading }] = useRateCourseMutation();
 
   useEffect(() => {
     if (initialData) {
-      setName(initialData.name);
+      // setName(initialData.name);
       setRating(initialData.rating);
       setComment(initialData.comment);
     } else {
-      setName('');
+      // setName('');
       setRating(0);
       setComment('');
     }
   }, [initialData]);
 
-  const handleSubmit = () => {
-    if (!name || !comment || rating === 0) return;
+  const handleSubmit = async () => {
+    if (!comment || rating === 0) return;
     const review = {
       id: initialData?.id || null,
-      name,
       rating,
       comment,
     };
-    onSave(review);
-    setName('');
-  setRating(0);
-  setComment('');
+    try {
+      const result = await rateCourse({ courseId, data: { rating, comment } }).unwrap();
+      console.log("Review submitted:", result);
+      onClose();
+      onSave(result.data);
+      setRating(0);
+      setComment('');
+      toast.success("Review submitted successfully!");
+    } catch (error) {
+      console.error("Failed to submit review:", error);
+      toast.error("Failed to submit review. Please try again.");
+    }
   };
 
   return (
@@ -40,14 +50,14 @@ export default function ReviewDialog({ open, onClose, onSave, initialData }) {
       <DialogTitle>{initialData ? 'Edit Review' : 'Write a Review'}</DialogTitle>
       <DialogContent>
         <Stack spacing={2} mt={1}>
-          <TextField
+          {/* <TextField
             label="Name"
             size="small"
             fullWidth
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-          />
+          /> */}
           <Rating
             value={rating}
             onChange={(e, newValue) => setRating(newValue)}

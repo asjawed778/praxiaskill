@@ -10,6 +10,7 @@ import * as CourseDTO from './course.dto';
 import * as CourseCategoryService from "../category/category.service";
 import { courseEnquiryEmailTemplate } from '../common/template/courseEnquiry.template';
 import { emailQueue } from '../common/queue/queues/email.queue';
+import { UserRole } from '../user/user.schema';
 
 
 export const uploadPublicFile = asyncHandler(async (req: Request, res: Response) => {
@@ -109,7 +110,6 @@ export const getCourseVideoAccessUrl = asyncHandler(async (req: Request, res: Re
     res.send(createResponse({ url, duration }, "Presigned url generated"));
 });
 
-
 export const createCourse = asyncHandler(async (req: Request, res: Response) => {
 
     const data = req.body;
@@ -163,7 +163,6 @@ export const updateCourseDetails = asyncHandler(async (req: Request, res: Respon
     res.send(createResponse(result, "Course details updated successfully"));
 });
 
-
 export const getCourseContent = asyncHandler(async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
     const isCourseExist = await courseService.isCourseExist(courseId);
@@ -185,7 +184,6 @@ export const getCourseContent = asyncHandler(async (req: Request, res: Response)
     const courseContent = await courseService.getCourseContent(courseId);
     res.send(createResponse(courseContent, "Course content fetched successfully"));
 });
-
 
 export const publishCourse = asyncHandler(async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
@@ -247,7 +245,6 @@ export const getIntructorList = asyncHandler(async (req: Request, res: Response)
     res.send(createResponse(instructor, "Instructor List fetched"));
 });
 
-
 export const courseEnquiry = asyncHandler(async (req: Request, res: Response) => {
     const data = req.body;
     const result = await courseService.courseEnquiry(data);
@@ -295,18 +292,43 @@ export const rateCourse = asyncHandler(async (req: Request, res: Response) => {
     }
     const userId = req.user._id;
     const courseId = req.params.courseId;
-    const isCategoryExist = await courseService.isCourseExist(courseId);
-    if (!isCategoryExist) {
+    const isCourseExist = await courseService.isCourseExist(courseId);
+    if (!isCourseExist) {
         throw createHttpError(404, "Course id is invalid, Not found");
     }
-    const isPurchased = await courseService.isUserCoursePurchased(userId, courseId);
-    if (!isPurchased) {
-        throw createHttpError(401, "Unauthorized user, course not purchased");
+    if (req.user.role === UserRole.USER) {
+        const isPurchased = await courseService.isUserCoursePurchased(userId, courseId);
+        if (!isPurchased) {
+            throw createHttpError(401, "Unauthorized user, course not assigned");
+        }
     }
 
     const data = req.body;
-    const result = await courseService.rateCourse(userId, courseId, data);
+    const result = await courseService.rateCourse(courseId, userId, data);
     res.send(createResponse(result, "Course rated successfully"));
+});
+
+export const getRatings = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+    const userId = req.user._id;
+    const courseId = req.params.courseId;
+    const isCourseExist = await courseService.isCourseExist(courseId);
+    if (!isCourseExist) {
+        throw createHttpError(404, "Course id is invalid, Not found");
+    }
+    const pageNo = parseInt(req.query.pageNo as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const sort = req.query.sort as 'latest' | 'oldest';
+    if (sort && !['latest', 'oldest'].includes(sort)) {
+        throw createHttpError(400, "Invalid sort parameter, must be 'latest' or 'oldest'");
+    }
+    if (pageNo < 1 || limit < 1) {
+        throw createHttpError(400, "Invalid page number or limit");
+    }
+    const result = await courseService.getRatings(courseId, pageNo, limit, userId, sort);
+    res.send(createResponse(result, "Ratings fetched successfully"));
 });
 
 export const deleteSection = asyncHandler(async (req: Request, res: Response) => {
