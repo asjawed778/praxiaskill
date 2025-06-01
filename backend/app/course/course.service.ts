@@ -163,7 +163,7 @@ export const getCourseDetails = async (courseId: string): Promise<any> => {
         ...course,
         totalProjects,
         totalAssignments,
-        topReviews: topRatings
+        testimonials: topRatings
     };
 };
 
