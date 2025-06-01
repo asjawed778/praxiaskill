@@ -36,7 +36,7 @@ const Carousel = () => {
 
   const [activeTab, setActiveTab] = useState(null);
   const [cardsPerView, setCardsPerView] = useState(1);
-  const cardWidth = 300; // consistent with MUI Card style
+  const cardWidth = 300; 
   const gap = 16;
 
   const { data: allCategories, isFetching: allCategoriesLoading } =

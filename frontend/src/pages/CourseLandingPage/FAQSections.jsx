@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionSummary,
@@ -8,6 +8,7 @@ import {
   Paper,
   useMediaQuery,
   useTheme,
+  Container,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/system";
@@ -45,18 +46,14 @@ export default function FAQSections({ course }) {
   const currentItem = course?.faq?.find((item) => item._id === expanded);
   
   if(course?.faq?.length === 0 || !course?.faq) return;
+
   return (
-    <Box
-      sx={{
-        px: { xs: 2, sm: 3, md: 6 },
-        py: { xs: 4, sm: 6, md: 8 },
-      }}
-    >
+    <Container maxWidth="lg" sx={{ py: 2}}>
       <Typography
         sx={{
           color: "white",
           textAlign: "center",
-          mb: { xs: 4, sm: 6 },
+          mb: 4,
           fontWeight: 500,
           fontSize: {
             xs: "24px",
@@ -123,6 +120,6 @@ export default function FAQSections({ course }) {
           ))}
         </Box>
       </Box>
-    </Box>
+    </Container>
   );
 }

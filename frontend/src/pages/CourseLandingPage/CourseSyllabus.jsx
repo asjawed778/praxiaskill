@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Typography,
@@ -15,30 +15,30 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { useGetFullCourseContentQuery } from "@/services/course.api";
 
 const CourseSyllabus = ({ course }) => {
   const [expanded, setExpanded] = useState("");
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-
+   
+  if(course?.sections?.length === 0) return;
+  
   return (
     <Box
       sx={{
         bgcolor: "#0d0d0d",
-        py: 4,
-        px: { xs: 0.5 },
+        py: 2,
       }}
     >
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         <Typography
           component="h2"
           color="#00e676"
           fontWeight="bold"
           textAlign="center"
           sx={{
-            mb: { xs: 4, md: 8 },
+            mb: { xs: 4 },
             fontSize: { xs: "24px", sm: "36px", md: "44px" },
           }}
         >
@@ -80,7 +80,7 @@ const CourseSyllabus = ({ course }) => {
                     label={`Module ${index + 1}`}
                     sx={{
                       mr: 2,
-                      mb: { xs: 1, sm: 0 },
+                      // mb: { xs: 1, sm: 0 },
                       bgcolor: "#00e676",
                       color: "#000",
                       fontWeight: "bold",
@@ -98,7 +98,7 @@ const CourseSyllabus = ({ course }) => {
                 </Box>
               </AccordionSummary>
 
-              <AccordionDetails sx={{ px: { xs: 1, sm: 2 }, py: 2 }}>
+              <AccordionDetails sx={{ px: { xs: 1, sm: 2 } }}>
                 <List dense>
                   {module.subSections.map((point, index) => (
                     <ListItem key={index}>
@@ -118,7 +118,7 @@ const CourseSyllabus = ({ course }) => {
                   ))}
                 </List>
 
-                {module?.assignments && (
+                {module?.assignments?.length > 0 && (
                   <>
                     <Divider sx={{ my: 2, borderColor: "#333" }} />
                     <Typography
@@ -143,7 +143,7 @@ const CourseSyllabus = ({ course }) => {
                   </>
                 )}
 
-                {module?.projects && (
+                {module?.projects?.length > 0 && (
                   <>
                     <Divider sx={{ my: 2, borderColor: "#333" }} />
                     <Typography
