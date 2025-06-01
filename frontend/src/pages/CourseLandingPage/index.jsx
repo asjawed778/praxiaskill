@@ -42,12 +42,11 @@ const CourseLandingPage = () => {
         alignItems="center"
         justifyContent="center"
         my={4}
-        // height="100vh"
       >
-        <CircularProgress size={40} thickness={4} />
         <Typography variant="h5" mt={2} color="text.primary">
           Course is loading, please wait...
         </Typography>
+        <CircularProgress size={20} thickness={4} />
       </Box>
     );
   }

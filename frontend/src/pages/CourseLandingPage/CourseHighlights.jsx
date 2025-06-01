@@ -4,9 +4,6 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import LaptopMacIcon from '@mui/icons-material/LaptopMac';
 import Science from '@mui/icons-material/Science';
 
-
-
-
 const CourseHighlights = ({ course }) => {
   const highlights = [
   {
@@ -34,18 +31,18 @@ const CourseHighlights = ({ course }) => {
   return (
     <Box
       sx={{
-        py: { xs: 6, md: 10 },
+        py: 2,
         backgroundColor: '#0f172a',
       }}
     >
-      <Container >
+      <Container maxWidth="lg">
         <Typography
           component="h2"
           textAlign="center"
           fontWeight="bold"
           color="white"
           sx={{
-            mb: {xs: 4, md: 8},
+            mb: {xs: 2, md: 4},
             fontSize: { xs: "24px", sm: "36px", md: "44px" },
           }}
         >
