@@ -131,7 +131,7 @@ function HomePage() {
           </Container>
         </Box>
 
-        <Container maxWidth="lg" sx={{ mt: 6 }}>
+        <Container maxWidth="lg" sx={{ mt: 4 }}>
           <Grid container spacing={4} justifyContent="center">
             {["Foundational", "Employability", "Entrepreneurial"].map(
               (skill, index) => (
@@ -171,7 +171,7 @@ function HomePage() {
           </Grid>
         </Container>
 
-        <Container maxWidth="lg" sx={{ py: 3 }}>
+        <Container maxWidth="lg" sx={{ py: 3}}>
           <Courses />
         </Container>
 

@@ -54,20 +54,14 @@ const BookDemoClass = () => {
   };
 
   return (
-    <Box
-      // sx={{
-      //   display: "flex",
-      //   justifyContent: "center",
-      //   alignItems: "center",
-      //   // px: 2,
-      // }}
-    >
+    <Box>
       <Paper
         elevation={2}
         sx={{
           width: "100%",
           maxWidth: 400,
-          p: 3,
+          py: 1,
+          px: 2,
           borderRadius: 2,
           backgroundColor: "#fff",
         }}
@@ -80,7 +74,7 @@ const BookDemoClass = () => {
           component="form"
           noValidate
           onSubmit={handleSubmit(onSubmit)}
-          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+          sx={{ display: "flex", flexDirection: "column", gap: 1.2 }}
         >
           <CustomInputField label="Full Name" name="name" control={control} />
           <CustomInputField
