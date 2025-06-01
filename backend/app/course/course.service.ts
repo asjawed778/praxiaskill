@@ -130,18 +130,6 @@ export const getCourseDetails = async (courseId: string): Promise<any> => {
             select: "_id name",
         })
         .populate({
-            path: "ratingAndReviews",
-            select: "_id rating comment userId createdAt",
-            options: {
-                sort: { rating: -1 },
-                limit: 10
-            },
-            populate: {
-                path: "userId",
-                select: "_id name profilePic",
-            }
-        })
-        .populate({
             path: "sections",
             select: "title description duration assignments projects subSections",
             populate: {
@@ -162,12 +150,20 @@ export const getCourseDetails = async (courseId: string): Promise<any> => {
         totalProjects += (section.projects as any)?.length || 0;
         totalAssignments += (section.assignments as any)?.length || 0;
     });
-
+    const topRatings = await ratingAndReviewSchema
+        .find({ courseId: course._id }) 
+        .sort({ rating: -1 }) 
+        .limit(10)
+        .populate({
+            path: "userId", 
+            select: "_id name profilePic", 
+        })
+        .lean();
     return {
         ...course,
         totalProjects,
         totalAssignments,
-        topReviews: course.ratingAndReviews
+        topReviews: topRatings
     };
 };
 

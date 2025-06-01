@@ -14,7 +14,6 @@ export interface ICourse extends BaseSchema {
     thumbnail: string;
 
     instructor?: mongoose.Schema.Types.ObjectId;
-    ratingAndReviews: mongoose.Schema.Types.ObjectId[];
     category: mongoose.Schema.Types.ObjectId;
     price: {
         actualPrice: number;
