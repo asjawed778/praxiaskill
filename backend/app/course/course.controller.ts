@@ -297,7 +297,7 @@ export const rateCourse = asyncHandler(async (req: Request, res: Response) => {
         throw createHttpError(404, "Course id is invalid, Not found");
     }
     if (req.user.role === UserRole.USER) {
-        const isPurchased = await courseService.isUserCoursePurchased(userId, courseId);
+        const isPurchased = await courseService.isUserCoursePurchased(courseId, userId);
         if (!isPurchased) {
             throw createHttpError(401, "Unauthorized user, course not assigned");
         }

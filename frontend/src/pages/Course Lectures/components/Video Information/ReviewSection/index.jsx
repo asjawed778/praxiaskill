@@ -35,15 +35,20 @@ export default function ReviewSection() {
     sort: sort
   });
 
-  const handleAdd = (review) => {
-    if (review._id) {
-      setAllReviews(allReviews.map(r => (r._id === review._id ? review : r)));
-    } else {
-      setAllReviews([{ ...review, _id: Date.now() }, ...allReviews]);
-    }
-    setOpen(false);
-    setEditingReview(null);
-  };
+const handleAdd = (review) => {
+  if (review._id) {
+    setAllReviews(allReviews.map(r =>
+      r._id === review._id
+        ? { ...r, comment: review.comment, rating: review.rating, updatedAt: new Date().toISOString() }
+        : r
+    ));
+  } else {
+    setAllReviews([{ ...review, _id: Date.now(), createdAt: new Date().toISOString() }, ...allReviews]);
+  }
+  setOpen(false);
+  setEditingReview(null);
+};
+
 
   const handleDelete = (id) => {
     setAllReviews(allReviews.filter(r => r._id !== id));
