@@ -5,7 +5,7 @@ import { PiNewspaper } from "react-icons/pi";
 import { BiBell } from "react-icons/bi";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useGetFullCourseDetailsQuery } from "../../services/course.api";
 import { setSpecificCourse } from "../../store/reducers/coursesReducer";
 import SEOHelmet from "../../SEO/SEOHelmet";
@@ -15,7 +15,9 @@ import Landing from "./Landing";
 
 const CourseLandingPage = () => {
   const dispatch = useDispatch()
-  const { courseId, courseTitle } = useParams();
+  const { courseTitle } = useParams();
+  const location = useLocation();
+  const courseId = location.state?.courseId;
   const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(courseId);
   console.log("Course Details: ", courseDetails);
   

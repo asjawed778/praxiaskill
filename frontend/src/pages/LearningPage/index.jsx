@@ -57,7 +57,7 @@ const LearningPage = () => {
 
   const handleNavigate = (id, title) => {
     const slug = title.toLowerCase().split(" ").join("-");
-    navigate(`/course/${slug}/${id}`);
+    navigate(`/course/${slug}`, { state: { courseId: id } });
   };
 
   return (
@@ -110,9 +110,9 @@ const LearningPage = () => {
                 gap: 2,
               }}
             >
-              <Typography fontWeight={600} flexShrink={0}>
+              {/* <Typography fontWeight={600} flexShrink={0}>
                 Filter by Category:
-              </Typography>
+              </Typography> */}
 
               <Stack
                 direction={{ xs: "column", sm: "row" }}
