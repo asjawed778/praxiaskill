@@ -65,16 +65,8 @@ const LearningPage = () => {
       <Box py={2}>
         <Typography
           align="center"
+          variant="h1"
           mb={2}
-          sx={{
-            fontSize: {
-              xs: "1.5rem",
-              sm: "2rem",
-              md: "2.5rem",
-              lg: "3rem",
-            },
-            fontWeight: 600,
-          }}
         >
           Explore Our Courses
         </Typography>
@@ -175,7 +167,7 @@ const LearningPage = () => {
           // sx={{
           //   justifyContent: {
           //     xs: "center",
-          //     lg: "flex-start",
+          //     sm: "flex-start",
           //   },
           // }}
           // >
@@ -191,13 +183,15 @@ const LearningPage = () => {
           //     </Grid>
           //   ))}
           // </Grid>
-          <Box
+            <Box
             display="flex"
             flexWrap="wrap"
             sx={{
+              alignItems: "center",
+              alignContent: "center",
               justifyContent: {
                 xs: "center",
-                lg: "flex-start",
+                sm: "flex-start",
               },
             }}
             gap={1}
