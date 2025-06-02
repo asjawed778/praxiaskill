@@ -32,7 +32,8 @@ export default function FAQSections({ course }) {
   const [expanded, setExpanded] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
+  const isTablet = useMediaQuery(theme.breakpoints.up("md"));
+  // const isTablet = useMediaQuery("(max-width:750px)");
   useEffect(() => {
     if (course?.faq?.length > 0) {
       setExpanded(course?.faq[0]?._id);
@@ -44,16 +45,16 @@ export default function FAQSections({ course }) {
   };
 
   const currentItem = course?.faq?.find((item) => item._id === expanded);
-  
-  if(course?.faq?.length === 0 || !course?.faq) return;
+
+  if (course?.faq?.length === 0 || !course?.faq) return;
 
   return (
-    <Container maxWidth="lg" sx={{ py: 2}}>
+    <Container maxWidth="lg" sx={{ py: 2 }}>
       <Typography
         sx={{
           color: "white",
           textAlign: "center",
-          mb: 4,
+          mb: 2,
           fontWeight: 500,
           fontSize: {
             xs: "24px",
@@ -68,7 +69,8 @@ export default function FAQSections({ course }) {
       <Box
         sx={{
           display: "flex",
-          flexDirection: isTablet ? "column" : "row",
+          // flexDirection: isTablet ? "column" : "row",
+          flexDirection: {xs: "column", md: "row"},
           alignItems: "flex-start",
           justifyContent: "center",
           gap: 4,
@@ -86,16 +88,35 @@ export default function FAQSections({ course }) {
             borderRadius: 2,
           }}
         >
-          <img
+          {/* <img
             src={currentItem?.resourceUrl}
             alt={currentItem?.question}
             style={{
               width: "100%",
               borderRadius: 12,
               objectFit: "cover",
-              height: isMobile ? "200px" : "300px",
+              // height: isMobile ? "220px" : "250px",
+              height: {xs: 200, sm: 220,  md: 250}
             }}
-          />
+          /> */}
+          <Box
+            sx={{
+              width: "100%",
+              borderRadius: 2,
+              overflow: "hidden",
+              height: { xs: 200, sm: 220, md: 250 },
+            }}
+          >
+            <img
+              src={currentItem?.resourceUrl}
+              alt={currentItem?.question}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            />
+          </Box>
         </Paper>
 
         {/* Right Accordion Section */}

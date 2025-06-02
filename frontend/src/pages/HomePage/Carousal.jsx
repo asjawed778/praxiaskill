@@ -166,7 +166,7 @@ const Carousel = () => {
               gap: `${gap}px`,
               scrollSnapType: "x mandatory",
               "&::-webkit-scrollbar": { display: "none" },
-              py: 1,
+              pb: 1,
             }}
           >
             {coursesAll.map((course) => (
@@ -207,7 +207,6 @@ const Carousel = () => {
                       objectFit: "cover",
                       display: "block",
                     }}
-                    loading="lazy"
                   />
                 </Box>
 

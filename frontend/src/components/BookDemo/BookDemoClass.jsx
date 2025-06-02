@@ -12,9 +12,11 @@ import {
   Typography,
   Paper,
   CircularProgress,
+  TextField,
 } from "@mui/material";
 import { useSendEnquiryMutation } from "../../services/course.api";
 import { toast } from "react-hot-toast";
+import CustomButton from "@/components/CustomButton"
 
 const BookDemoClass = () => {
   const {
@@ -54,7 +56,12 @@ const BookDemoClass = () => {
   };
 
   return (
-    <Box>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: { xs: "center", sm: "flex-end" },
+      }}
+    >
       <Paper
         elevation={2}
         sx={{
@@ -66,7 +73,7 @@ const BookDemoClass = () => {
           backgroundColor: "#fff",
         }}
       >
-        <Typography variant="h6" color="primary" gutterBottom>
+        <Typography variant="h5" color="primary" gutterBottom>
           Book a Live Class, For Free!
         </Typography>
 
@@ -109,17 +116,23 @@ const BookDemoClass = () => {
               />
             }
             label="Send me an update on WhatsApp"
+            sx={{
+              alignItems: "center",
+              m: 0,
+              height: { xs: 20, sm: 30 },
+            }}
           />
 
-          <Button
+          <CustomButton
+            label="Submit"
             type="submit"
             variant="contained"
             color="primary"
             disabled={isLoading}
-            sx={{ height: 40 }}
-          >
-            {isLoading ? <CircularProgress size={20} /> : "Submit"}
-          </Button>
+            sx={{ height: 30 }}
+          />
+          {/* {isLoading ? <CircularProgress size={20} /> : "Submit"}
+          </Button> */}
         </Box>
       </Paper>
     </Box>

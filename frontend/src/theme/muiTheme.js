@@ -2,7 +2,7 @@ import { createTheme } from '@mui/material/styles';
 import { Colors } from './colors';
 
 const createAppTheme = (mode) => {
-  const palette= Colors[mode];
+  const palette = Colors[mode];
 
   const themeOptions = {
     palette: {
@@ -14,7 +14,7 @@ const createAppTheme = (mode) => {
         main: palette.secondary,
       },
       background: {
-        default: mode ==="light" ? "#ffffff" : "#121212",
+        default: mode === "light" ? "#ffffff" : "#121212",
         paper: mode === "light" ? "#ffffff" : "#121212",
       },
       text: {
@@ -31,36 +31,55 @@ const createAppTheme = (mode) => {
         main: palette.error,
       },
     },
+
     typography: {
-      fontFamily:  `"Inter", "Roboto", "sans-serif"`,
-      h1: {
-        fontFamily: `"Mohave", "sans-serif"`,
-        fontWeight: 600,
-        fontSize: "2.5rem",
-      },
-      h2: {
-        fontFamily: `"Mohave", "sans-serif"`,
-        fontWeight: 600,
-        fontSize: "2rem",
-      },
+      fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
       body1: {
-        fontFamily: `"Inter", "sans-serif"`,
         fontWeight: 400,
-        fontSize: "1rem",
+        fontSize: "14px",
+        [createTheme().breakpoints.up("sm")]: {
+          fontSize: "16px",
+        },
+        [createTheme().breakpoints.up("md")]: {
+          fontSize: "18px",
+        },
+        [createTheme().breakpoints.up("lg")]: {
+          fontSize: "20px",
+        },
+        [createTheme().breakpoints.up("xl")]: {
+          fontSize: "22px",
+        },
       },
-      button: {
-        fontFamily: `"Mohave", `,
-        fontWeight: 400,
-        fontSize: "0.875rem",
-        textTransform: "none",
+      h1: {
+        fontWeight: 700,
+        fontSize: "32px",
+        [createTheme().breakpoints.up("sm")]: {
+          fontSize: "36px",
+        },
+        [createTheme().breakpoints.up("md")]: {
+          fontSize: "40px",
+        },
+        [createTheme().breakpoints.up("lg")]: {
+          fontSize: "44px",
+        },
+        [createTheme().breakpoints.up("xl")]: {
+          fontSize: "48px",
+        },
       },
-    },
-    components: {
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            borderRadius: 8,
-          },
+       h2: {
+        fontWeight: 600,
+        fontSize: "24px",
+        [createTheme().breakpoints.up("sm")]: {
+          fontSize: "28px",
+        },
+        [createTheme().breakpoints.up("md")]: {
+          fontSize: "32px",
+        },
+        [createTheme().breakpoints.up("lg")]: {
+          fontSize: "36px",
+        },
+        [createTheme().breakpoints.up("xl")]: {
+          fontSize: "40px",
         },
       },
     },

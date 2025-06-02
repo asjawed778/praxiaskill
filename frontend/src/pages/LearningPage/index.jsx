@@ -62,10 +62,10 @@ const LearningPage = () => {
 
   return (
     <Container maxWidth="lg">
-      <Box py={5}>
+      <Box py={2}>
         <Typography
           align="center"
-          mb={4}
+          mb={2}
           sx={{
             fontSize: {
               xs: "1.5rem",
@@ -79,7 +79,7 @@ const LearningPage = () => {
           Explore Our Courses
         </Typography>
 
-        <Grid container spacing={2} mb={4} px={2}>
+        <Grid container spacing={2} mb={4} px={1}>
           <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               value={searchQuery}
@@ -169,28 +169,47 @@ const LearningPage = () => {
             No courses found. Try again!
           </Typography>
         ) : (
-          <Grid
-            container
-            spacing={1}
+          // <Grid
+          //   container
+          //   spacing={1}
+          // sx={{
+          //   justifyContent: {
+          //     xs: "center",
+          //     lg: "flex-start",
+          //   },
+          // }}
+          // >
+          //   {courses.map((course) => (
+          //     <Grid
+          //       item
+          //       xs={12}
+          //       sm={6}
+          //       md={4}
+          //       key={course._id}
+          //     >
+          //       <CourseCard course={course} onClick={handleNavigate} />
+          //     </Grid>
+          //   ))}
+          // </Grid>
+          <Box
+            display="flex"
+            flexWrap="wrap"
             sx={{
               justifyContent: {
-                xs: "center",  
-                lg: "flex-start", 
+                xs: "center",
+                lg: "flex-start",
               },
             }}
+            gap={1}
           >
             {courses.map((course) => (
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
+              <CourseCard
                 key={course._id}
-              >
-                <CourseCard course={course} onClick={handleNavigate} />
-              </Grid>
+                course={course}
+                onClick={handleNavigate}
+              />
             ))}
-          </Grid>
+          </Box>
         )}
         {courses.length > 0 && (
           <Box display="flex" justifyContent="center" mt={5}>

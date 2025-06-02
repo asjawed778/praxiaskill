@@ -52,6 +52,8 @@ const CourseCard = ({ course, onClick }) => {
         cursor: "pointer",
         // width: "100%",
         width: {xs: 350, md: 280},
+        // width: { xs: '100%', sm: 350, md: 280 },
+
         height: 400,
         p: {xs: 1, md: 0.5},
         display: "flex",
@@ -67,13 +69,14 @@ const CourseCard = ({ course, onClick }) => {
     >
       <Box
         sx={{
-          height: {xs: 180, md: 140},
+          height: {xs: 170, md: 140},
+          // height: "auto",
           width: "100%",
           overflow: "hidden",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          borderRadius: 2,
+          borderRadius: 3,
         }}
       >
         <img
@@ -81,7 +84,8 @@ const CourseCard = ({ course, onClick }) => {
           alt={title}
           style={{
             width: "100%",
-            height: "100%",
+            // height: "100%",
+            height: "auto",
             objectFit: "cover",
             display: "block",
           }}

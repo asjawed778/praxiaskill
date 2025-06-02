@@ -10,6 +10,7 @@ import Collaboration from "./Collaboration";
 // import Membership from "../../components/Membership";
 import SEOHelmet from "../../SEO/SEOHelmet";
 import { generateOrganizationSchema } from "../../SEO/SEOHelper";
+import CustomButton from "@/components/CustomButton"
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -73,11 +74,12 @@ function HomePage() {
             Your browser does not support the video tag.
           </video>
 
-          <Container maxWidth="lg" sx={{ py: 2 }}>
+          <Container maxWidth="lg" sx={{ py: 2 }} justifyContent="center">
             <Grid
               container
               spacing={2}
               alignItems="center"
+              alignContent="center"
               sx={{
                 justifyContent: {
                   xs: "center", 
@@ -85,46 +87,45 @@ function HomePage() {
                 },
               }}
             >
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <motion.div variants={itemVariants}>
                   <Typography
-                    variant="h4"
-                    sx={{ color: "white", fontWeight: 600 }}
-                    gutterBottom
+                    variant="h1"
+                    sx={{ color: "white" }}
+                    // gutterBottom
                   >
                     Ready For the Future
                   </Typography>
                   <Typography
-                    variant="h4"
-                    sx={{ color: "white", fontWeight: 600 }}
-                    gutterBottom
+                    variant="h2"
+                    sx={{ color: "white", }}
+                    // gutterBottom
                   >
                     At Praxia Skill
                   </Typography>
 
-                  <Typography variant="h6" sx={{ color: "white", mt: 3 }}>
+                  <Typography variant="body1" sx={{ color: "white", mt: 3 }}>
                     Join this 20 weeks, Job-ready Program to master
                   </Typography>
-                  <Typography variant="h6" sx={{ color: "white" }}>
+                  <Typography variant="body1" sx={{ color: "white" }}>
                     Data Analytics from scratch with Top Data Analysts
                   </Typography>
-                  <Typography variant="h6" sx={{ color: "white", mb: 2 }}>
+                  <Typography variant="body1" sx={{ color: "white", mb: 2 }}>
                     from Microsoft, KPMG, Amazon, and Rapido.
                   </Typography>
 
-                  <Button
+                  <CustomButton
+                  label="Explore Program"
                     component={Link}
                     to="/courses"
                     variant="contained"
                     color="primary"
-                    sx={{ mt: 3, borderRadius: 2, px: 4 }}
-                  >
-                    Explore Program
-                  </Button>
+                    sx={{  px: 3 }}
+                  />
                 </motion.div>
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <BookDemoClass />
               </Grid>
             </Grid>
@@ -132,7 +133,7 @@ function HomePage() {
         </Box>
 
         <Container maxWidth="lg" sx={{ mt: 4 }}>
-          <Grid container spacing={4} justifyContent="center">
+          <Grid container spacing={2} justifyContent="center">
             {["Foundational", "Employability", "Entrepreneurial"].map(
               (skill, index) => (
                 <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
@@ -157,7 +158,7 @@ function HomePage() {
                         color: "white",
                       }}
                     >
-                      <Typography variant="h5" fontWeight="bold">
+                      <Typography variant="h2" fontWeight="bold">
                         {skill}
                       </Typography>
                       <Typography variant="h5" fontWeight="bold">
