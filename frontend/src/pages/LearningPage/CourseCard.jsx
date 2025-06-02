@@ -50,9 +50,7 @@ const CourseCard = ({ course, onClick }) => {
       onClick={() => onClick(_id, title)}
       sx={{
         cursor: "pointer",
-        // width: "100%",
         width: {xs: 350, md: 280},
-        // width: { xs: '100%', sm: 350, md: 280 },
 
         height: 400,
         p: {xs: 1, md: 0.5},
@@ -70,7 +68,6 @@ const CourseCard = ({ course, onClick }) => {
       <Box
         sx={{
           height: {xs: 170, md: 140},
-          // height: "auto",
           width: "100%",
           overflow: "hidden",
           display: "flex",
@@ -84,7 +81,6 @@ const CourseCard = ({ course, onClick }) => {
           alt={title}
           style={{
             width: "100%",
-            // height: "100%",
             height: "auto",
             objectFit: "cover",
             display: "block",
@@ -94,6 +90,8 @@ const CourseCard = ({ course, onClick }) => {
 
       <Box sx={{ flexGrow: 1, p: 1 }}>
         <Typography
+        variant="subtitle1"
+        fontWeight="bold"
           gutterBottom
           sx={{
             display: "-webkit-box",

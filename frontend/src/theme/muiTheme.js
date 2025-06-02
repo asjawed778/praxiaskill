@@ -1,5 +1,5 @@
-import { createTheme } from '@mui/material/styles';
-import { Colors } from './colors';
+import { createTheme } from "@mui/material/styles";
+import { Colors } from "./colors";
 
 const createAppTheme = (mode) => {
   const palette = Colors[mode];
@@ -50,6 +50,23 @@ const createAppTheme = (mode) => {
           fontSize: "22px",
         },
       },
+      body2: {
+        fontWeight: 400,
+        color: "textSecondary",
+        fontSize: "12px",
+        [createTheme().breakpoints.up("sm")]: {
+          fontSize: "12px",
+        },
+        [createTheme().breakpoints.up("md")]: {
+          fontSize: "13px",
+        },
+        [createTheme().breakpoints.up("lg")]: {
+          fontSize: "14px",
+        },
+        [createTheme().breakpoints.up("xl")]: {
+          fontSize: "15px",
+        },
+      },
       h1: {
         fontWeight: 700,
         fontSize: "32px",
@@ -66,7 +83,7 @@ const createAppTheme = (mode) => {
           fontSize: "48px",
         },
       },
-       h2: {
+      h2: {
         fontWeight: 600,
         fontSize: "24px",
         [createTheme().breakpoints.up("sm")]: {
@@ -80,6 +97,22 @@ const createAppTheme = (mode) => {
         },
         [createTheme().breakpoints.up("xl")]: {
           fontSize: "40px",
+        },
+      },
+      h3: {
+        fontWeight: 600,
+        fontSize: "20px",
+        [createTheme().breakpoints.up("sm")]: {
+          fontSize: "24px",
+        },
+        [createTheme().breakpoints.up("md")]: {
+          fontSize: "28px",
+        },
+        [createTheme().breakpoints.up("lg")]: {
+          fontSize: "32px",
+        },
+        [createTheme().breakpoints.up("xl")]: {
+          fontSize: "36px",
         },
       },
     },

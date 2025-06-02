@@ -65,23 +65,10 @@ const Benefits = () => {
             zIndex: 1
           }}
         >
-          <Typography  
-            sx={{ 
-              fontWeight: 700,
-              mb: 2,
-              fontSize: '24px'
-            }}
-          >
+          <Typography variant="h3" gutterBottom>
             How Praxia Skill help you?
           </Typography>
-          <Typography  
-            sx={{ 
-              fontWeight: 400,
-              color: theme.palette.text.secondary,
-              maxWidth: '700px',
-              mx: 'auto'
-            }}
-          >
+          <Typography variant="body1" color="textSecondary"> 
             Connects theoretical understanding with practical implementation through expert insights.
           </Typography>
         </Box>
@@ -116,23 +103,12 @@ const Benefits = () => {
                   >
                     {benefit.icon}
                   </Avatar>
-                  <Typography 
-                    sx={{ 
-                      fontWeight: 600,
-                      mb: 2,
-                      fontSize: "16px"
-                    }}
-                  >
+                  <Typography variant="body1" fontWeight="bold" gutterBottom>
                     {benefit.title}
                   </Typography>
                   <Typography 
-                    variant="body1" 
-                    sx={{ 
-                      color: theme.palette.text.secondary,
-                      lineHeight: 1.6,
-                      fontSize: "14px"
-                    }}
-                  >
+                  variant="body2"  
+                  color="textSecondary">
                     {benefit.description}
                   </Typography>
                 </CardContent>

@@ -24,6 +24,7 @@ import { setCategories } from "../../store/reducers/adminCategoryReducer";
 import CourseSkeleton from "../../components/skeletons/CourseSkeleton";
 import userIcon from "/imgs/slider/user_icon2.png";
 import clockIcon from "/imgs/slider/language2.png";
+import CustomButton from "@/components/CustomButton"
 
 const Carousel = () => {
   const dispatch = useDispatch();
@@ -104,10 +105,10 @@ const Carousel = () => {
   return (
     <Box ref={containerRef}>
       <Box mb={2}>
-        <Typography variant="h5" fontWeight="bold" color="primary">
+        <Typography variant="h3" color="primary" >
           All the skills you need in one place
         </Typography>
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant="body1" color="textSecondary">
           From critical skills to technical topics, Praxia Skill supports your
           professional development.
         </Typography>
@@ -128,6 +129,7 @@ const Carousel = () => {
               label={tab.name}
               value={tab._id}
               sx={{
+                // fontSize: theme.typography.body1.fontSize,
                 textTransform: "none",
                 fontWeight: activeTab === tab._id ? "bold" : "normal",
                 color:
@@ -211,7 +213,7 @@ const Carousel = () => {
                 </Box>
 
                 <Typography
-                  variant="subtitle2"
+                  variant="subtitle1"
                   sx={{
                     fontWeight: 600,
                     lineHeight: 1.4,
@@ -250,13 +252,12 @@ const Carousel = () => {
                     </Typography>
                   </Box>
 
-                  <Button
+                  <CustomButton
+                    label="Learn More"
                     size="small"
                     variant="contained"
                     sx={{ fontSize: 12 }}
-                  >
-                    Learn More
-                  </Button>
+                  />
                 </CardActions>
               </Card>
             ))}
