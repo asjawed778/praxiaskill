@@ -57,7 +57,9 @@ const LearningPage = () => {
 
   const handleNavigate = (id, title) => {
     const slug = title.toLowerCase().split(" ").join("-");
-    navigate(`/course/${slug}`, { state: { courseId: id } });
+    sessionStorage.setItem("courseId", id);
+    console.log("Id send: ", id)
+    navigate(`/course/${slug}`);
   };
 
   return (
@@ -76,6 +78,7 @@ const LearningPage = () => {
             <TextField
               value={searchQuery}
               size="small"
+              borderRadius="8px"
               fullWidth
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -107,7 +110,7 @@ const LearningPage = () => {
               </Typography> */}
 
               <Stack
-                direction={{ xs: "column", sm: "row" }}
+                direction={{ xs: "row", sm: "row" }}
                 spacing={2}
                 alignItems={{ xs: "stretch", sm: "center" }}
                 width="100%"
@@ -134,6 +137,7 @@ const LearningPage = () => {
                   sx={{
                     whiteSpace: "nowrap",
                     flexShrink: 0,
+                    height: 45
                   }}
                 >
                   Clear Filters
@@ -196,9 +200,9 @@ const LearningPage = () => {
             }}
             gap={1}
           >
-            {courses.map((course) => (
+            {courses?.map((course) => (
               <CourseCard
-                key={course._id}
+                key={course?._id}
                 course={course}
                 onClick={handleNavigate}
               />

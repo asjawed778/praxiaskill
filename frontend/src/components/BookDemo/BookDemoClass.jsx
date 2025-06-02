@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { useSendEnquiryMutation } from "../../services/course.api";
 import { toast } from "react-hot-toast";
-import CustomButton from "@/components/CustomButton"
+import CustomButton from "@/components/CustomButton";
 
 const BookDemoClass = () => {
   const {
@@ -66,14 +66,14 @@ const BookDemoClass = () => {
         elevation={2}
         sx={{
           width: "100%",
-          maxWidth: 400,
-          py: 1,
+          maxWidth: { xs: 300, md: 400 },
+          py: {xs: 1.5, md: 2},
           px: 2,
           borderRadius: 2,
           backgroundColor: "#fff",
         }}
       >
-        <Typography variant="h5" color="primary" gutterBottom>
+        <Typography variant="body1" fontWeight="bold" align="center" color="primary" gutterBottom>
           Book a Live Class, For Free!
         </Typography>
 
@@ -86,6 +86,7 @@ const BookDemoClass = () => {
           <CustomInputField label="Full Name" name="name" control={control} />
           <CustomInputField
             label="Education"
+            // placeholder="Enter Education"
             name="education"
             control={control}
           />
@@ -113,13 +114,34 @@ const BookDemoClass = () => {
                 checked={isChecked}
                 onChange={handleCheckboxChange}
                 color="primary"
+                sx={{
+                  p: 0.5, 
+                }}
               />
             }
-            label="Send me an update on WhatsApp"
+            label={
+              <Typography
+                sx={{
+                  fontSize: {
+                    xs: "0.75rem", 
+                    sm: "0.875rem", 
+                    md: "1rem", 
+                  },
+                  lineHeight: 1, 
+                }}
+              >
+                Send me an update on WhatsApp
+              </Typography>
+            }
             sx={{
-              alignItems: "center",
               m: 0,
-              height: { xs: 20, sm: 30 },
+              p: 0,
+              alignItems: "center",
+              lineHeight: 1,
+              "& .MuiFormControlLabel-label": {
+                marginTop: 0,
+                marginBottom: 0,
+              },
             }}
           />
 
@@ -128,11 +150,8 @@ const BookDemoClass = () => {
             type="submit"
             variant="contained"
             color="primary"
-            disabled={isLoading}
-            sx={{ height: 30 }}
+            loading={isLoading}
           />
-          {/* {isLoading ? <CircularProgress size={20} /> : "Submit"}
-          </Button> */}
         </Box>
       </Paper>
     </Box>

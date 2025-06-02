@@ -49,19 +49,15 @@ const ProgramHighlights = ({ course }) => {
     <Box
       sx={{
         bgcolor: "black",
-        mt: 2,
+        mt: 3,
         color: "white",
       }}
     >
       <Container maxWidth="lg">
         <Typography
-          component="h2"
+          variant="h1"
           textAlign="center"
-          fontWeight="bold"
-          sx={{
-            mb: 4,
-            fontSize: { xs: "24px", sm: "36px", md: "44px" },
-          }}
+          mb={3}
         >
           Program Highlights
         </Typography>

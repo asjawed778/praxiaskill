@@ -31,13 +31,14 @@ const CustomButton = ({
       endIcon={!loading && endIcon}
       className={className}
       sx={{
+        fontSize: "14px",
         borderRadius: 2,
         textTransform: "none",
         ...sx,
       }}
       {...rest}
     >
-      {loading ? <CircularProgress size={20} color="inherit" /> : label}
+      {loading ? <CircularProgress size={25} color="inherit" /> : label}
     </Button>
   );
 };

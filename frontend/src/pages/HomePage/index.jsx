@@ -136,7 +136,7 @@ function HomePage() {
           <Grid container spacing={2} justifyContent="center">
             {["Foundational", "Employability", "Entrepreneurial"].map(
               (skill, index) => (
-                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+                <Grid size={{ xs: 12, sm: 4, }} key={index}>
                   <motion.div
                     whileHover={{ scale: 1.06 }}
                     whileTap={{ scale: 0.95 }}
@@ -151,14 +151,14 @@ function HomePage() {
                       sx={{
                         p: 4,
                         boxShadow: 2,
-                        height: 200,
+                        height: {xs: 150, md: 200},
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "center",
                         color: "white",
                       }}
                     >
-                      <Typography variant="h2" fontWeight="bold">
+                      <Typography variant="h3">
                         {skill}
                       </Typography>
                       <Typography variant="h5" fontWeight="bold">

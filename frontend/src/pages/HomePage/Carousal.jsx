@@ -24,7 +24,7 @@ import { setCategories } from "../../store/reducers/adminCategoryReducer";
 import CourseSkeleton from "../../components/skeletons/CourseSkeleton";
 import userIcon from "/imgs/slider/user_icon2.png";
 import clockIcon from "/imgs/slider/language2.png";
-import CustomButton from "@/components/CustomButton"
+import CustomButton from "@/components/CustomButton";
 
 const Carousel = () => {
   const dispatch = useDispatch();
@@ -99,13 +99,14 @@ const Carousel = () => {
 
   const handleCourseClick = (id, title) => {
     const slug = encodeURIComponent(title.toLowerCase().replace(/\s+/g, "-"));
-    navigate(`/course/${slug}/${id}`);
+    sessionStorage.setItem("courseId", id);
+    navigate(`/course/${slug}`);
   };
 
   return (
     <Box ref={containerRef}>
       <Box mb={2}>
-        <Typography variant="h3" color="primary" >
+        <Typography variant="h3" color="primary">
           All the skills you need in one place
         </Typography>
         <Typography variant="body1" color="textSecondary">
@@ -119,7 +120,10 @@ const Carousel = () => {
         onChange={(e, val) => setActiveTab(val)}
         variant="scrollable"
         scrollButtons="auto"
-        sx={{ mb: 2, borderBottom: "1px solid #ccc" }}
+        sx={{
+          mb: 2,
+          borderBottom: "1px solid #ccc",
+        }}
       >
         {categories
           .filter((cat) => cat.courses.length > 0)
@@ -129,7 +133,7 @@ const Carousel = () => {
               label={tab.name}
               value={tab._id}
               sx={{
-                // fontSize: theme.typography.body1.fontSize,
+                fontSize: { xs: "14px", md: "15px" },
                 textTransform: "none",
                 fontWeight: activeTab === tab._id ? "bold" : "normal",
                 color:
@@ -264,16 +268,14 @@ const Carousel = () => {
           </Box>
 
           <Box mt={2} display="flex" justifyContent="flex-end">
-            <Link
-              to="/courses"
-              style={{
-                color: theme.palette.error.main,
-                textDecoration: "none",
-                fontWeight: "bold",
-                fontSize: 12,
-              }}
-            >
-              View More
+            <Link to="/courses" style={{ textDecoration: "none" }}>
+              <Typography 
+              variant="body2" 
+              fontWeight="bold" 
+              color="primary"
+              >
+                View More
+              </Typography>
             </Link>
           </Box>
         </Box>

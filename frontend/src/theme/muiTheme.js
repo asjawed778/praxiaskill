@@ -35,7 +35,7 @@ const createAppTheme = (mode) => {
     typography: {
       fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
       body1: {
-        fontWeight: 400,
+        fontWeight: 300,
         fontSize: "14px",
         [createTheme().breakpoints.up("sm")]: {
           fontSize: "16px",
@@ -51,7 +51,7 @@ const createAppTheme = (mode) => {
         },
       },
       body2: {
-        fontWeight: 400,
+        fontWeight: 300,
         color: "textSecondary",
         fontSize: "12px",
         [createTheme().breakpoints.up("sm")]: {

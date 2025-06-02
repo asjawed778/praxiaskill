@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../components/Button/Button";
 import { FaCheck, FaCircleCheck } from "react-icons/fa6";
 import { PiNewspaper } from "react-icons/pi";
@@ -16,10 +16,18 @@ import Landing from "./Landing";
 const CourseLandingPage = () => {
   const dispatch = useDispatch()
   const { courseTitle } = useParams();
-  const location = useLocation();
-  const courseId = location.state?.courseId;
-  const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(courseId);
-  console.log("Course Details: ", courseDetails);
+  const [courseId, setCourseId] = useState("");
+  useEffect(() => {
+    const storedId = sessionStorage.getItem("courseId");
+    if (storedId) {
+      setCourseId(storedId); 
+    } 
+  }, []);
+  // const location = useLocation();
+  // const courseId = location.state?.id;
+  const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(courseId, {
+    skip: !courseId
+  });
   
   const navigate = useNavigate();
   
@@ -45,8 +53,9 @@ const CourseLandingPage = () => {
         alignItems="center"
         justifyContent="center"
         my={4}
+        height="40vh"
       >
-        <Typography variant="h5" mt={2} color="text.primary">
+        <Typography variant="h5" my={4} color="text.primary">
           Course is loading, please wait...
         </Typography>
         <CircularProgress size={30} thickness={4} />
