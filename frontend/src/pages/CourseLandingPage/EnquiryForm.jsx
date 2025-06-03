@@ -14,6 +14,7 @@ import { useSendEnquiryMutation } from "@/services/course.api";
 import { toast } from "react-hot-toast";
 import { EnquirySchema } from "../../../yup";
 import CustomInputField from "@/components/CustomInputField";
+import CustomButton from "../../components/CustomButton";
 
 function WhatsAppCheckbox() {
   const { register, watch } = useFormContext();
@@ -23,9 +24,13 @@ function WhatsAppCheckbox() {
     <FormControlLabel
       control={
         <Checkbox
-          {...register("whatsAppOptIn")} 
-          checked={whatsAppOptIn} 
-          sx={{ color: "primary.main" }}
+          {...register("whatsAppOptIn")}
+          checked={whatsAppOptIn}
+          sx={{
+            color: "primary.main",
+            p: 0.5,
+            alignSelf: "flex-start",
+          }}
         />
       }
       label={
@@ -33,29 +38,30 @@ function WhatsAppCheckbox() {
           sx={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-start",
+            gap: 1,
           }}
         >
           <Typography
             variant="body2"
             color="text.secondary"
-            sx={{
-              textAlign: "start",
-              display: "inline-block",
-            }}
+            sx={{ textAlign: "left", lineHeight: 1.2 }}
           >
             Send me an update on WhatsApp
           </Typography>
         </Box>
       }
-      sx={{ justifyContent: "flex-start" }} 
+      sx={{
+        alignItems: "center",
+        m: 0,
+        p: 0,
+      }}
     />
   );
 }
 
 export default function EnquiryForm({ onClose }) {
   const methods = useForm({
-    mode: "onTouched",
+    mode: "onChange",
     resolver: yupResolver(EnquirySchema),
     defaultValues: {
       whatsAppOptIn: true,
@@ -95,20 +101,13 @@ export default function EnquiryForm({ onClose }) {
           <CustomInputField label="Email Id" name="email" type="email" />
           <CustomInputField label="Interested Course" name="interestedCourse" />
           <WhatsAppCheckbox />
-          <Button
-            fullWidth
+          <CustomButton
+            label="Submit"
             variant="contained"
             color="primary"
             type="submit"
-            disabled={isLoading}
-            sx={{ height: "40px" }}
-          >
-            {isLoading ? (
-              <CircularProgress size={22} sx={{ color: "white" }} />
-            ) : (
-              "Submit"
-            )}
-          </Button>
+            loading={isLoading}
+          />
         </Stack>
       </form>
     </FormProvider>

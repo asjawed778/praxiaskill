@@ -115,14 +115,20 @@ const Carousel = () => {
         </Typography>
       </Box>
 
-      <Tabs
+      {activeTab && (
+        <Tabs
         value={activeTab}
         onChange={(e, val) => setActiveTab(val)}
         variant="scrollable"
         scrollButtons="auto"
         sx={{
           mb: 2,
-          borderBottom: "1px solid #ccc",
+          pl: 2,
+          ml: -4,
+          // borderBottom: "1px solid #ccc",
+          "& .MuiTabs-flexContainer": {
+              borderBottom: "1px solid #ccc",
+            },
         }}
       >
         {categories
@@ -142,6 +148,9 @@ const Carousel = () => {
             />
           ))}
       </Tabs>
+      )}
+
+        
 
       {allCategoriesLoading || categoryCourseLoading ? (
         <CourseSkeleton />
@@ -269,11 +278,7 @@ const Carousel = () => {
 
           <Box mt={2} display="flex" justifyContent="flex-end">
             <Link to="/courses" style={{ textDecoration: "none" }}>
-              <Typography 
-              variant="body2" 
-              fontWeight="bold" 
-              color="primary"
-              >
+              <Typography variant="body2" fontWeight="bold" color="primary">
                 View More
               </Typography>
             </Link>

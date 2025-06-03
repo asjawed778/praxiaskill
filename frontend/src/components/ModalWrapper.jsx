@@ -1,5 +1,4 @@
-import React from "react";
-import { Modal, Box, Typography, IconButton, Grow } from "@mui/material";
+import { Modal, Box, Typography, IconButton, Grow, useMediaQuery, useTheme } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const ModalWrapper = ({
@@ -7,50 +6,59 @@ const ModalWrapper = ({
   onClose,
   title,
   children,
-  width = 500,
+  width = 400,
+  close = true,  
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <Modal open={open} onClose={onClose} closeAfterTransition>
       <Grow in={open}>
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
+            alignItems: isMobile ? "flex-end" : "center",
             justifyContent: "center",
             height: "100vh",
             overflow: "auto",
+            p: isMobile ? 0 : 2,
           }}
         >
           <Box
             sx={{
               position: "relative",
-              width: width,
+              width: isMobile ? "100%" : width,
               maxWidth: "90vw",
-              maxHeight: "90vh",
+              maxHeight: isMobile ? "70vh" : "90vh",
               bgcolor: "background.paper",
               boxShadow: 24,
-              p: 4,
-              borderRadius: 2,
+              p: {xs: 1.5, sm: 2},
+              borderRadius: isMobile ? "16px 16px 0 0" : 2,
               textAlign: "center",
             }}
           >
-            <IconButton
-              onClick={onClose}
-              sx={{
-                position: "absolute",
-                top: 8,
-                right: 8,
-              }}
-              color="error"
-            >
-              <CloseIcon />
-            </IconButton>
+            {close && (
+              <IconButton
+                onClick={onClose}
+                sx={{
+                  position: "absolute",
+                  top: 8,
+                  right: 8,
+                  color: "error.main",
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
+            )}
+
             {title && (
               <Typography id="modal-title" variant="h6" component="h2" mb={2}>
                 {title}
               </Typography>
             )}
-            <Box sx={{ maxHeight: "75vh", overflowY: "auto" }}>
+
+            <Box sx={{ maxHeight: isMobile ? "55vh" : "75vh", overflowY: "auto" }} p={1}>
               {children}
             </Box>
           </Box>

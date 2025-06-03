@@ -122,6 +122,7 @@ const BookDemoClass = () => {
             label={
               <Typography
                 sx={{
+                  color: "text.secondary",
                   fontSize: {
                     xs: "0.75rem", 
                     sm: "0.875rem", 

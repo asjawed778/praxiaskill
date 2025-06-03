@@ -74,7 +74,7 @@ function HomePage() {
             Your browser does not support the video tag.
           </video>
 
-          <Container maxWidth="lg" sx={{ py: 2 }} justifyContent="center">
+          <Container maxWidth="lg" sx={{ py: 2 }} display="flex" justifyContent="center">
             <Grid
               container
               spacing={2}
@@ -83,11 +83,11 @@ function HomePage() {
               sx={{
                 justifyContent: {
                   xs: "center", 
-                  md: "space-between", 
+                  sm: "space-between", 
                 },
               }}
             >
-              <Grid item xs={12} sm={6}>
+               <Grid item xs={12} sm={6}>
                 <motion.div variants={itemVariants}>
                   <Typography
                     variant="h1"

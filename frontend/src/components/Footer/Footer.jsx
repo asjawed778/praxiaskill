@@ -55,6 +55,7 @@ const Footer = () => {
               sx={{ width: "200px", height: "54px", mb: 2 }}
             />
             <Typography
+            variant="body2"
               sx={{
                 fontSize: "17px",
                 lineHeight: "25px",
@@ -98,7 +99,7 @@ const Footer = () => {
           {/* About Section */}
           <Grid item xs={12} sm={6} md={2}>
             <Typography
-              variant="h6"
+            variant="h6"
               sx={{ fontWeight: 700, fontSize: "17px", mt: 2 }}
             >
               About Praxiaskill
@@ -112,6 +113,7 @@ const Footer = () => {
                 "Admission",
               ].map((item) => (
                 <Typography
+                variant="body2"
                   key={item}
                   sx={{ fontSize: "14px", lineHeight: "25px", fontWeight: 400 }}
                 >
@@ -124,7 +126,7 @@ const Footer = () => {
           {/* Our Courses Section */}
           <Grid item xs={12} sm={6} md={2}>
             <Typography
-              variant="h6"
+            variant="h6"
               sx={{ fontWeight: 700, fontSize: "17px", mt: 2 }}
             >
               Our Courses
@@ -138,6 +140,7 @@ const Footer = () => {
                 "Cyber Security",
               ].map((course) => (
                 <Typography
+                variant="body2"
                   key={course}
                   sx={{ fontSize: "14px", lineHeight: "25px", fontWeight: 400 }}
                 >
@@ -158,6 +161,7 @@ const Footer = () => {
             <Box sx={{ mt: 2 }}>
               {["Daily Blogs"].map((item) => (
                 <Typography
+                variant="body2"
                   key={item}
                   sx={{ fontSize: "14px", lineHeight: "25px", fontWeight: 400 }}
                 >
@@ -188,6 +192,7 @@ const Footer = () => {
                 >
                   {icon}
                   <Typography
+                  variant="body2"
                     component="a"
                     href={href}
                     sx={{

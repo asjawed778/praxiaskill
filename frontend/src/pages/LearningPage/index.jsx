@@ -22,6 +22,7 @@ import {
 } from "@/services/course.api";
 import { useNavigate } from "react-router-dom";
 import CourseCard from "./CourseCard";
+import CustomButton from "../../components/CustomButton";
 
 const LearningPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,18 +59,14 @@ const LearningPage = () => {
   const handleNavigate = (id, title) => {
     const slug = title.toLowerCase().split(" ").join("-");
     sessionStorage.setItem("courseId", id);
-    console.log("Id send: ", id)
+    console.log("Id send: ", id);
     navigate(`/course/${slug}`);
   };
 
   return (
     <Container maxWidth="lg">
       <Box py={2}>
-        <Typography
-          align="center"
-          variant="h1"
-          mb={2}
-        >
+        <Typography align="center" variant="h1" mb={2}>
           Explore Our Courses
         </Typography>
 
@@ -131,17 +128,18 @@ const LearningPage = () => {
                   ))}
                 </Select>
 
-                <Button
+                <CustomButton
+                  label="Clear Filters"
                   variant="outlined"
                   onClick={handleClearFilter}
                   sx={{
                     whiteSpace: "nowrap",
                     flexShrink: 0,
-                    height: 45
+                    height: 45,
                   }}
-                >
-                  Clear Filters
-                </Button>
+                />
+                {/* Clear Filters
+                </Button> */}
               </Stack>
             </Box>
           </Grid>
@@ -187,7 +185,7 @@ const LearningPage = () => {
           //     </Grid>
           //   ))}
           // </Grid>
-            <Box
+          <Box
             display="flex"
             flexWrap="wrap"
             sx={{
