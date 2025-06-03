@@ -97,10 +97,9 @@ const Carousel = () => {
     }
   };
 
-  const handleCourseClick = (id, title) => {
+  const handleCourseClick = (courseId, title) => {
     const slug = encodeURIComponent(title.toLowerCase().replace(/\s+/g, "-"));
-    sessionStorage.setItem("courseId", id);
-    navigate(`/course/${slug}`);
+    navigate(`/course/${courseId}/${slug}`);
   };
 
   return (

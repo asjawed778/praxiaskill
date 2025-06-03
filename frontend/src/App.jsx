@@ -76,7 +76,7 @@ const publicRoutes = [
     ),
   },
   {
-    path: "course/:courseTitle",
+    path: "course/:courseId/:courseTitle",
     element: (
       <LazyComponent>
         <CourseLandingPage />

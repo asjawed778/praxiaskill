@@ -15,21 +15,9 @@ import Landing from "./Landing";
 
 const CourseLandingPage = () => {
   const dispatch = useDispatch()
-  const { courseTitle } = useParams();
-  const [courseId, setCourseId] = useState("");
-  useEffect(() => {
-    const storedId = sessionStorage.getItem("courseId");
-    if (storedId) {
-      setCourseId(storedId); 
-    } 
-  }, []);
-  // const location = useLocation();
-  // const courseId = location.state?.id;
-  const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(courseId, {
-    skip: !courseId
-  });
+  const { courseId, courseTitle } = useParams();
+  const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(courseId);
   
-  const navigate = useNavigate();
   
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -42,7 +30,7 @@ const CourseLandingPage = () => {
   const specificCourse = courses?.specificCourse;
   const courseSEOSchema = generateOrganizationSchema({
     name: specificCourse?.title,
-    url: `https://praxiaskill.com/course/${courseTitle}/${courseId}`,
+    url: `https://praxiaskill.com/course/${courseId}/${courseTitle}`,
     logo: specificCourse?.thumbnail,
   })
   if (isLoading) {

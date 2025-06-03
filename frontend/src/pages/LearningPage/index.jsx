@@ -56,11 +56,9 @@ const LearningPage = () => {
     setCurrentPage(1);
   };
 
-  const handleNavigate = (id, title) => {
+  const handleNavigate = (courseId, title) => {
     const slug = title.toLowerCase().split(" ").join("-");
-    sessionStorage.setItem("courseId", id);
-    console.log("Id send: ", id);
-    navigate(`/course/${slug}`);
+    navigate(`/course/${courseId}/${slug}`);
   };
 
   return (
