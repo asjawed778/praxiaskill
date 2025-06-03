@@ -59,14 +59,15 @@ const BookDemoClass = () => {
     <Box
       sx={{
         display: "flex",
-        justifyContent: { xs: "center", sm: "flex-end" },
+        // justifyContent: { xs: "center", sm: "flex-end" },
       }}
     >
       <Paper
         elevation={2}
         sx={{
-          width: "100%",
-          maxWidth: { xs: 300, md: 400 },
+          // width: "100%",
+          width: {xs: 320},
+          // maxWidth: { xs: "100%", sm: 400 },
           py: {xs: 1.5, md: 2},
           px: 2,
           borderRadius: 2,

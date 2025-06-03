@@ -106,7 +106,7 @@ const Carousel = () => {
   return (
     <Box ref={containerRef}>
       <Box mb={2}>
-        <Typography variant="h3" color="primary">
+        <Typography variant="h4" color="primary">
           All the skills you need in one place
         </Typography>
         <Typography variant="body1" color="textSecondary">
@@ -139,7 +139,7 @@ const Carousel = () => {
               label={tab.name}
               value={tab._id}
               sx={{
-                fontSize: { xs: "14px", md: "15px" },
+                fontSize: { xs: "14px", sm: "16px" },
                 textTransform: "none",
                 fontWeight: activeTab === tab._id ? "bold" : "normal",
                 color:

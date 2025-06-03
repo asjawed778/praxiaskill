@@ -33,9 +33,9 @@ const createAppTheme = (mode) => {
     },
 
     typography: {
-      fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+      fontFamily: "'Roboto'",
       body1: {
-        fontWeight: 300,
+        fontWeight: 100,
         fontSize: "14px",
         [createTheme().breakpoints.up("sm")]: {
           fontSize: "16px",
@@ -51,8 +51,8 @@ const createAppTheme = (mode) => {
         },
       },
       body2: {
-        fontWeight: 300,
-        color: "textSecondary",
+        fontWeight: 100,
+        // color: "textSecondary",
         fontSize: "12px",
         [createTheme().breakpoints.up("sm")]: {
           fontSize: "12px",
@@ -68,7 +68,7 @@ const createAppTheme = (mode) => {
         },
       },
       h1: {
-        fontWeight: 700,
+        fontWeight: 600,
         fontSize: "32px",
         [createTheme().breakpoints.up("sm")]: {
           fontSize: "36px",
@@ -85,6 +85,22 @@ const createAppTheme = (mode) => {
       },
       h2: {
         fontWeight: 600,
+        fontSize: "28px",
+        [createTheme().breakpoints.up("sm")]: {
+          fontSize: "32px",
+        },
+        [createTheme().breakpoints.up("md")]: {
+          fontSize: "36px",
+        },
+        [createTheme().breakpoints.up("lg")]: {
+          fontSize: "40px",
+        },
+        [createTheme().breakpoints.up("xl")]: {
+          fontSize: "44px",
+        },
+      },
+      h3: {
+        fontWeight: 600,
         fontSize: "24px",
         [createTheme().breakpoints.up("sm")]: {
           fontSize: "28px",
@@ -99,7 +115,7 @@ const createAppTheme = (mode) => {
           fontSize: "40px",
         },
       },
-      h3: {
+      h4: {
         fontWeight: 600,
         fontSize: "20px",
         [createTheme().breakpoints.up("sm")]: {

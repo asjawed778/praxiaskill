@@ -111,7 +111,7 @@ const CustomInputField = ({
             md: "1rem",
             // lg: "1.125rem",
           },
-          color: colors.labelColor || "inherit",
+          color: colors.inputLabel,
         },
 
         ...sx,

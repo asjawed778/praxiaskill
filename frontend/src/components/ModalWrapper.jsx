@@ -1,5 +1,19 @@
-import { Modal, Box, Typography, IconButton, Grow, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton,
+  useMediaQuery,
+  useTheme,
+  Slide,
+  Box,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { forwardRef } from "react";
+
+const SlideTransition = forwardRef(function SlideTransition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const ModalWrapper = ({
   open,
@@ -7,64 +21,79 @@ const ModalWrapper = ({
   title,
   children,
   width = 400,
-  close = true,  
+  close = true,
+  allowOutsideClick = false,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const handleClose = (event, reason) => {
+    if (reason === "backdropClick") {
+      if (isMobile || allowOutsideClick) {
+        onClose?.(event, reason);
+      } else {
+        return;
+      }
+    } else {
+      onClose?.(event, reason);
+    }
+  };
+
   return (
-    <Modal open={open} onClose={onClose} closeAfterTransition>
-      <Grow in={open}>
-        <Box
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      fullScreen={isMobile}
+      scroll="paper"
+      slots={{
+        transition: SlideTransition, 
+      }}
+      slotProps={{
+        paper: {
+          sx: {
+            position: "relative",
+            width: isMobile ? "100%" : width,
+            maxWidth: "100%",
+            maxHeight: isMobile ? "60vh" : "90vh",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            borderRadius: isMobile ? "16px 16px 0 0" : 2,
+            mx: isMobile ? 0 : 2,
+            textAlign: "center",
+            alignSelf: isMobile ? "flex-end" : "center",
+            overflow: "hidden",
+          },
+        },
+      }}
+    >
+      {close && !isMobile && (
+        <IconButton
+          onClick={onClose}
           sx={{
-            display: "flex",
-            alignItems: isMobile ? "flex-end" : "center",
-            justifyContent: "center",
-            height: "100vh",
-            overflow: "auto",
-            p: isMobile ? 0 : 2,
+            position: "absolute",
+            top: 8,
+            right: 8,
+            color: "error.main",
+            zIndex: 10,
           }}
         >
-          <Box
-            sx={{
-              position: "relative",
-              width: isMobile ? "100%" : width,
-              maxWidth: "90vw",
-              maxHeight: isMobile ? "70vh" : "90vh",
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              p: {xs: 1.5, sm: 2},
-              borderRadius: isMobile ? "16px 16px 0 0" : 2,
-              textAlign: "center",
-            }}
-          >
-            {close && (
-              <IconButton
-                onClick={onClose}
-                sx={{
-                  position: "absolute",
-                  top: 8,
-                  right: 8,
-                  color: "error.main",
-                }}
-              >
-                <CloseIcon />
-              </IconButton>
-            )}
+          <CloseIcon />
+        </IconButton>
+      )}
 
-            {title && (
-              <Typography id="modal-title" variant="h6" component="h2" mb={2}>
-                {title}
-              </Typography>
-            )}
+      {title && <DialogTitle sx={{ mb: 1, p: 0 }}>{title}</DialogTitle>}
 
-            <Box sx={{ maxHeight: isMobile ? "55vh" : "75vh", overflowY: "auto" }} p={1}>
-              {children}
-            </Box>
-          </Box>
-        </Box>
-      </Grow>
-    </Modal>
+      <DialogContent
+        dividers
+        sx={{
+          maxHeight: isMobile ? "calc(70vh - 60px)" : "75vh",
+          overflowY: "auto",
+          p: 0,
+        }}
+      >
+        <Box p={2}>{children}</Box>
+      </DialogContent>
+    </Dialog>
   );
 };
 
