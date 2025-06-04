@@ -25,15 +25,13 @@ const ToolsGrid = ({ course }) => {
       sx={{
         backgroundColor: "#000",
         color: "#fff",
-        px: 2,
+        // px: 2,
         textAlign: "center",
       }}
     >
       <Typography
-        component="h2"
+        variant="h1"
         textAlign="center"
-        fontWeight="bold"
-        sx={{ mb: 4, fontSize: { xs: "24px", sm: "36px", md: "44px" } }}
       >
         {course?.tools?.length < 5
           ? `Master ${course?.tools?.length} Tools`
@@ -44,7 +42,7 @@ const ToolsGrid = ({ course }) => {
         container
         spacing={2}
         justifyContent="center"
-        sx={{ mt: 4, mx: { xs: 1, sm: 2, md: 16 } }}
+        sx={{ mt: 3, mx: { xs: 1, sm: 2, md: 16 } }}
       >
         {course.tools.map((item, index) => (
           <Grid item key={index} xs={4} sm={3} lg={2}>

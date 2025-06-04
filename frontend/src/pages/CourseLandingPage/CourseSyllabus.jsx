@@ -33,14 +33,10 @@ const CourseSyllabus = ({ course }) => {
     >
       <Container maxWidth="lg">
         <Typography
-          component="h2"
+          variant="h1"
           color="#00e676"
-          fontWeight="bold"
           textAlign="center"
-          sx={{
-            mb: { xs: 4 },
-            fontSize: { xs: "24px", sm: "36px", md: "44px" },
-          }}
+          mb={2}
         >
           Course Curriculum
         </Typography>
@@ -110,7 +106,7 @@ const CourseSyllabus = ({ course }) => {
                         primaryTypographyProps={{
                           sx: {
                             color: "#ccc",
-                            fontSize: { xs: "16px" }, 
+                            fontSize: { xs: "16px", md: "18px" }, 
                           },
                         }}
                       />

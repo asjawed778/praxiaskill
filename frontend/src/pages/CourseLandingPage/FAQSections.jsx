@@ -19,9 +19,13 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
   border: "1px solid #333",
   borderRadius: "8px !important",
   marginBottom: "12px",
+  boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
   "& .MuiAccordionSummary-content": {
     fontWeight: 600,
-    fontSize: "18px",
+    fontSize: "1rem",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.9rem",
+    },
   },
   "&:before": {
     display: "none",
@@ -31,75 +35,79 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
 export default function FAQSections({ course }) {
   const [expanded, setExpanded] = useState(null);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
+
   useEffect(() => {
     if (course?.faq?.length > 0) {
       setExpanded(course?.faq[0]?._id);
     }
   }, [course]);
+
   const handleChange = (panel) => (event, isExpanded) => {
-    if (!isExpanded) return;
-    setExpanded(panel);
+    if (isExpanded) {
+      setExpanded(panel);
+    }
   };
 
   const currentItem = course?.faq?.find((item) => item._id === expanded);
-  
-  if(course?.faq?.length === 0 || !course?.faq) return;
+
+  if (!course?.faq?.length) return null;
 
   return (
-    <Container maxWidth="lg" sx={{ py: 2}}>
+    <Container maxWidth="lg" sx={{ py: { xs: 4, sm: 6 } }}>
       <Typography
-        sx={{
-          color: "white",
-          textAlign: "center",
-          mb: 4,
-          fontWeight: 500,
-          fontSize: {
-            xs: "24px",
-            sm: "36px",
-            md: "44px",
-          },
-        }}
+        variant="h1"
+        color="white"
+        textAlign="center"
+        mb={3}
       >
-        Frequently asked questions
+        Frequently Asked Questions
       </Typography>
 
       <Box
         sx={{
           display: "flex",
-          flexDirection: isTablet ? "column" : "row",
+          flexDirection: { xs: "column", sm: "row" },
           alignItems: "flex-start",
           justifyContent: "center",
-          gap: 4,
+          gap: { xs: 3, md: 5 },
           bgcolor: "#000",
           color: "#fff",
         }}
       >
-        {/* Left Image */}
         <Paper
-          elevation={6}
+          elevation={4}
           sx={{
-            width: isTablet ? "100%" : "45%",
+            width: { xs: "100%", sm: "45%" },
             bgcolor: "#111",
-            p: 2,
             borderRadius: 2,
+            overflow: "hidden",
+            maxHeight: 250
           }}
         >
-          <img
-            src={currentItem?.resourceUrl}
-            alt={currentItem?.question}
-            style={{
+          <Box
+            sx={{
               width: "100%",
-              borderRadius: 12,
-              objectFit: "cover",
-              height: isMobile ? "200px" : "300px",
+              maxWidht: 400,
+              height: "auto",
+              borderRadius: 2,
+              overflow: "hidden",
+              transition: "transform 0.4s ease",
             }}
-          />
+          >
+            <img
+              src={currentItem?.resourceUrl}
+              alt={currentItem?.question}
+              style={{
+                width: "100%",
+                height: "auto",
+                objectFit: "cover",
+                display: "block",
+                borderRadius: 8,
+              }}
+            />
+          </Box>
         </Paper>
-
-        {/* Right Accordion Section */}
-        <Box sx={{ width: isTablet ? "100%" : "50%" }}>
+        <Box sx={{ width: { xs: "100%", sm: "55%" } }}>
           {course?.faq?.map((item) => (
             <StyledAccordion
               key={item._id}
@@ -109,10 +117,18 @@ export default function FAQSections({ course }) {
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />}
               >
-                <Typography>{item.question}</Typography>
+                <Typography
+                  variant="body1"
+                  fontWeight="bold"
+                >
+                  {item.question}
+                </Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography sx={{ color: "#ccc", fontSize: "14px" }}>
+                <Typography
+                  variant="body1"
+                  color="#ccc"
+                >
                   {item.answer}
                 </Typography>
               </AccordionDetails>

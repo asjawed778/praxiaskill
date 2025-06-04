@@ -10,6 +10,7 @@ import {
   CardActions,
   Divider,
   useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +24,7 @@ import { setCategories } from "../../store/reducers/adminCategoryReducer";
 import CourseSkeleton from "../../components/skeletons/CourseSkeleton";
 import userIcon from "/imgs/slider/user_icon2.png";
 import clockIcon from "/imgs/slider/language2.png";
+import CustomButton from "@/components/CustomButton";
 
 const Carousel = () => {
   const dispatch = useDispatch();
@@ -30,13 +32,14 @@ const Carousel = () => {
   const sliderRef = useRef(null);
   const containerRef = useRef(null);
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const categories = useSelector((state) => state.categories.categories);
   const coursesAll = useSelector((state) => state.courses.courses);
 
   const [activeTab, setActiveTab] = useState(null);
   const [cardsPerView, setCardsPerView] = useState(1);
-  const cardWidth = 300; 
+  const cardWidth = 300;
   const gap = 16;
 
   const { data: allCategories, isFetching: allCategoriesLoading } =
@@ -94,29 +97,38 @@ const Carousel = () => {
     }
   };
 
-  const handleCourseClick = (id, title) => {
+  const handleCourseClick = (courseId, title) => {
     const slug = encodeURIComponent(title.toLowerCase().replace(/\s+/g, "-"));
-    navigate(`/course/${slug}/${id}`);
+    navigate(`/course/${courseId}/${slug}`);
   };
 
   return (
     <Box ref={containerRef}>
       <Box mb={2}>
-        <Typography variant="h5" fontWeight="bold" color="primary">
+        <Typography variant="h4" color="primary">
           All the skills you need in one place
         </Typography>
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant="body1" color="textSecondary">
           From critical skills to technical topics, Praxia Skill supports your
           professional development.
         </Typography>
       </Box>
 
-      <Tabs
+      {activeTab && (
+        <Tabs
         value={activeTab}
         onChange={(e, val) => setActiveTab(val)}
         variant="scrollable"
         scrollButtons="auto"
-        sx={{ mb: 2, borderBottom: "1px solid #ccc" }}
+        sx={{
+          mb: 2,
+          pl: 2,
+          ml: -4,
+          // borderBottom: "1px solid #ccc",
+          "& .MuiTabs-flexContainer": {
+              borderBottom: "1px solid #ccc",
+            },
+        }}
       >
         {categories
           .filter((cat) => cat.courses.length > 0)
@@ -126,6 +138,7 @@ const Carousel = () => {
               label={tab.name}
               value={tab._id}
               sx={{
+                fontSize: { xs: "14px", sm: "16px" },
                 textTransform: "none",
                 fontWeight: activeTab === tab._id ? "bold" : "normal",
                 color:
@@ -134,25 +147,30 @@ const Carousel = () => {
             />
           ))}
       </Tabs>
+      )}
+
+        
 
       {allCategoriesLoading || categoryCourseLoading ? (
         <CourseSkeleton />
       ) : coursesAll?.length ? (
         <Box sx={{ position: "relative" }}>
-          <Box display="flex" justifyContent="flex-end" gap={2} mb={1}>
-            <IconButton
-              onClick={scrollPrev}
-              sx={{ bgcolor: "primary.main", color: "#fff" }}
-            >
-              <IoIosArrowBack />
-            </IconButton>
-            <IconButton
-              onClick={scrollNext}
-              sx={{ bgcolor: "primary.main", color: "#fff" }}
-            >
-              <IoIosArrowForward />
-            </IconButton>
-          </Box>
+          {!isMobile && (
+            <Box display="flex" justifyContent="flex-end" gap={2} mb={1}>
+              <IconButton
+                onClick={scrollPrev}
+                sx={{ bgcolor: "primary.main", color: "#fff" }}
+              >
+                <IoIosArrowBack />
+              </IconButton>
+              <IconButton
+                onClick={scrollNext}
+                sx={{ bgcolor: "primary.main", color: "#fff" }}
+              >
+                <IoIosArrowForward />
+              </IconButton>
+            </Box>
+          )}
 
           <Box
             ref={sliderRef}
@@ -162,7 +180,7 @@ const Carousel = () => {
               gap: `${gap}px`,
               scrollSnapType: "x mandatory",
               "&::-webkit-scrollbar": { display: "none" },
-              py: 1,
+              pb: 1,
             }}
           >
             {coursesAll.map((course) => (
@@ -203,12 +221,11 @@ const Carousel = () => {
                       objectFit: "cover",
                       display: "block",
                     }}
-                    loading="lazy"
                   />
                 </Box>
 
                 <Typography
-                  variant="subtitle2"
+                  variant="subtitle1"
                   sx={{
                     fontWeight: 600,
                     lineHeight: 1.4,
@@ -247,34 +264,27 @@ const Carousel = () => {
                     </Typography>
                   </Box>
 
-                  <Button
+                  <CustomButton
+                    label="Learn More"
                     size="small"
                     variant="contained"
                     sx={{ fontSize: 12 }}
-                  >
-                    Learn More
-                  </Button>
+                  />
                 </CardActions>
               </Card>
             ))}
           </Box>
 
           <Box mt={2} display="flex" justifyContent="flex-end">
-            <Link
-              to="/courses"
-              style={{
-                color: theme.palette.error.main,
-                textDecoration: "none",
-                fontWeight: "bold",
-                fontSize: 12,
-              }}
-            >
-              View More
+            <Link to="/courses" style={{ textDecoration: "none" }}>
+              <Typography variant="body2" fontWeight="bold" color="primary">
+                View More
+              </Typography>
             </Link>
           </Box>
         </Box>
       ) : (
-        <Typography variant="body2" color="textSecondary" align="center">
+        <Typography variant="body2" color="red" align="center">
           No courses available.
         </Typography>
       )}

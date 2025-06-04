@@ -22,6 +22,7 @@ import {
 } from "@/services/course.api";
 import { useNavigate } from "react-router-dom";
 import CourseCard from "./CourseCard";
+import CustomButton from "../../components/CustomButton";
 
 const LearningPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,35 +56,24 @@ const LearningPage = () => {
     setCurrentPage(1);
   };
 
-  const handleNavigate = (id, title) => {
+  const handleNavigate = (courseId, title) => {
     const slug = title.toLowerCase().split(" ").join("-");
-    navigate(`/course/${slug}/${id}`);
+    navigate(`/course/${courseId}/${slug}`);
   };
 
   return (
     <Container maxWidth="lg">
-      <Box py={5}>
-        <Typography
-          align="center"
-          mb={4}
-          sx={{
-            fontSize: {
-              xs: "1.5rem",
-              sm: "2rem",
-              md: "2.5rem",
-              lg: "3rem",
-            },
-            fontWeight: 600,
-          }}
-        >
+      <Box py={2}>
+        <Typography align="center" variant="h1" mb={2}>
           Explore Our Courses
         </Typography>
 
-        <Grid container spacing={2} mb={4} px={2}>
+        <Grid container spacing={2} mb={4} px={1}>
           <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               value={searchQuery}
               size="small"
+              borderRadius="8px"
               fullWidth
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -110,12 +100,12 @@ const LearningPage = () => {
                 gap: 2,
               }}
             >
-              <Typography fontWeight={600} flexShrink={0}>
+              {/* <Typography fontWeight={600} flexShrink={0}>
                 Filter by Category:
-              </Typography>
+              </Typography> */}
 
               <Stack
-                direction={{ xs: "column", sm: "row" }}
+                direction={{ xs: "row", sm: "row" }}
                 spacing={2}
                 alignItems={{ xs: "stretch", sm: "center" }}
                 width="100%"
@@ -136,16 +126,18 @@ const LearningPage = () => {
                   ))}
                 </Select>
 
-                <Button
+                <CustomButton
+                  label="Clear Filters"
                   variant="outlined"
                   onClick={handleClearFilter}
                   sx={{
                     whiteSpace: "nowrap",
                     flexShrink: 0,
+                    height: 45,
                   }}
-                >
-                  Clear Filters
-                </Button>
+                />
+                {/* Clear Filters
+                </Button> */}
               </Stack>
             </Box>
           </Grid>
@@ -169,28 +161,49 @@ const LearningPage = () => {
             No courses found. Try again!
           </Typography>
         ) : (
-          <Grid
-            container
-            spacing={1}
+          // <Grid
+          //   container
+          //   spacing={1}
+          // sx={{
+          //   justifyContent: {
+          //     xs: "center",
+          //     sm: "flex-start",
+          //   },
+          // }}
+          // >
+          //   {courses.map((course) => (
+          //     <Grid
+          //       item
+          //       xs={12}
+          //       sm={6}
+          //       md={4}
+          //       key={course._id}
+          //     >
+          //       <CourseCard course={course} onClick={handleNavigate} />
+          //     </Grid>
+          //   ))}
+          // </Grid>
+          <Box
+            display="flex"
+            flexWrap="wrap"
             sx={{
+              alignItems: "center",
+              alignContent: "center",
               justifyContent: {
-                xs: "center",  
-                lg: "flex-start", 
+                xs: "center",
+                sm: "flex-start",
               },
             }}
+            gap={1}
           >
-            {courses.map((course) => (
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                key={course._id}
-              >
-                <CourseCard course={course} onClick={handleNavigate} />
-              </Grid>
+            {courses?.map((course) => (
+              <CourseCard
+                key={course?._id}
+                course={course}
+                onClick={handleNavigate}
+              />
             ))}
-          </Grid>
+          </Box>
         )}
         {courses.length > 0 && (
           <Box display="flex" justifyContent="center" mt={5}>

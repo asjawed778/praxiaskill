@@ -38,7 +38,7 @@ const PartnerLogo = ({ name, logo }) => {
           mb: 1,
         }}
       />
-      <Typography align="center">{name}</Typography>
+      <Typography variant="body1" align="center">{name}</Typography>
     </Box>
   );
 };
@@ -85,24 +85,19 @@ const Collaboration = () => {
           >
             <GroupsOutlined fontSize="medium" />
           </Avatar>
-          <Typography
-            sx={{
+          <Typography variant="h3" gutterBottom>
+            {/* sx={{
               fontWeight: 700,
               mb: 2,
               color: theme.palette.text.primary,
               fontSize: { xs: "1rem", md: "1.25rem" },
             }}
-          >
+          > */}
             We collaborate with 100+ leading universities and companies
           </Typography>
           <Typography
-            variant="subtitle1"
-            sx={{
-              color: theme.palette.text.secondary,
-              maxWidth: "700px",
-              mx: "auto",
-              fontSize: { xs: "0.8rem", md: "1rem" },
-            }}
+            variant="body1"
+            color="textSecondary"
           >
             Partnering with top institutions worldwide to deliver exceptional
             learning experiences
@@ -141,7 +136,7 @@ const Collaboration = () => {
             sx={{
               color: theme.palette.text.secondary,
               fontStyle: "italic",
-              fontSize: { xs: "0.6rem", md: "0.8rem" },
+              fontSize: { xs: "0.8rem", md: "1rem" },
             }}
           >
             And 45+ other prestigious institutions worldwide

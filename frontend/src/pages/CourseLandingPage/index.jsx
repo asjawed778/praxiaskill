@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../components/Button/Button";
 import { FaCheck, FaCircleCheck } from "react-icons/fa6";
 import { PiNewspaper } from "react-icons/pi";
 import { BiBell } from "react-icons/bi";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useGetFullCourseDetailsQuery } from "../../services/course.api";
 import { setSpecificCourse } from "../../store/reducers/coursesReducer";
 import SEOHelmet from "../../SEO/SEOHelmet";
@@ -18,7 +18,6 @@ const CourseLandingPage = () => {
   const { courseId, courseTitle } = useParams();
   const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(courseId);
   
-  const navigate = useNavigate();
   
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -31,7 +30,7 @@ const CourseLandingPage = () => {
   const specificCourse = courses?.specificCourse;
   const courseSEOSchema = generateOrganizationSchema({
     name: specificCourse?.title,
-    url: `https://praxiaskill.com/course/${courseTitle}/${courseId}`,
+    url: `https://praxiaskill.com/course/${courseId}/${courseTitle}`,
     logo: specificCourse?.thumbnail,
   })
   if (isLoading) {
@@ -42,11 +41,12 @@ const CourseLandingPage = () => {
         alignItems="center"
         justifyContent="center"
         my={4}
+        height="40vh"
       >
-        <Typography variant="h5" mt={2} color="text.primary">
+        <Typography variant="h5" my={4} color="text.primary">
           Course is loading, please wait...
         </Typography>
-        <CircularProgress size={20} thickness={4} />
+        <CircularProgress size={30} thickness={4} />
       </Box>
     );
   }

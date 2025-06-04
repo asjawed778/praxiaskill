@@ -32,8 +32,7 @@ const HeroSection = ({ syllabusRef, course }) => {
         sx={{
           background: "radial-gradient(circle at top left, #0f172a, #1e293b)",
           color: "white",
-          py: { xs: 6, sm: 8, md: 12 },
-          px: { xs: 4, md: 10 },
+          py: { xs: 4, sm: 6, md: 8 },
           minHeight: { xs: "auto" },
           position: "relative",
           overflow: "hidden",
@@ -60,9 +59,7 @@ const HeroSection = ({ syllabusRef, course }) => {
           <Box
             sx={{
               display: "flex",
-              flexDirection: { xs: "column-reverse", md: "row" },
-              justifyContent: "center",
-              alignItems: "center",
+              flexDirection: { xs: "column-reverse", sm: "row" },
               gap: 4,
             }}
           >
@@ -76,18 +73,13 @@ const HeroSection = ({ syllabusRef, course }) => {
               }}
             >
               <Stack spacing={{ xs: 2, md: 3 }}>
-                <Typography
-                  fontWeight="bold"
-                  fontSize={{ xs: "18px", sm: "24px", md: "28px", lg: "36px" }}
-                  lineHeight={1.2}
-                >
+                <Typography variant="h2">
                   {course?.title}
                 </Typography>
 
                 <Typography
                   variant="body1"
                   color="grey.300"
-                  fontSize={{ xs: "14px" }}
                 >
                   {course?.subtitle}
                 </Typography>
