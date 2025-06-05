@@ -91,7 +91,7 @@ const HeroSection = ({ syllabusRef, course }) => {
                   sx={{ width: "100%" }}
                 >
                   <CustomButton
-                    label="Enquiry Now"
+                    label="Enquire Now"
                     variant="contained"
                     size="large"
                     onClick={handleEnquiry}
