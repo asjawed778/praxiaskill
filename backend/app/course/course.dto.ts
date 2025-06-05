@@ -4,6 +4,7 @@ import * as CourseEnum from "./course.enum";
 
 export interface ICourse extends BaseSchema {
     title: string;
+    slug: string;
     subtitle: string;
     keypoints?: string[];
     description: string;
@@ -14,7 +15,6 @@ export interface ICourse extends BaseSchema {
     thumbnail: string;
 
     instructor?: mongoose.Schema.Types.ObjectId;
-    ratingAndReviews: mongoose.Schema.Types.ObjectId[];
     category: mongoose.Schema.Types.ObjectId;
     price: {
         actualPrice: number;

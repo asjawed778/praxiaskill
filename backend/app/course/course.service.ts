@@ -10,11 +10,42 @@ import enrollmentSchema from "./enrollment.schema";
 import createHttpError from "http-errors";
 import qnaSchema from "./qna.schema";
 import { SortOrder } from 'mongoose';
+import slugify from "slugify";
 
+export const courseSlug = async(title: string, excludeId?: string | mongoose.Types.ObjectId): Promise<string> => {
+  const baseSlug = slugify(title, {
+    lower: true,
+    strict: true,
+    trim: true,
+  });
 
+  let slug = baseSlug;
+  let count = 1;
+  let exists = true;
 
-export const isCourseExist = async (courseId: string): Promise<boolean> => {
-    const courseExists = await courseSchema.exists({ _id: courseId });
+  while (exists) {
+    const query: any = { slug };
+    if (excludeId) {
+      query._id = { $ne: excludeId };
+    }
+
+    const existing = await courseSchema.findOne(query);
+    exists = !!existing;
+
+    if (exists) {
+      slug = `${baseSlug}-${count++}`;
+    }
+  }
+
+  return slug;
+}
+
+export const isCourseExist = async (identifier: string): Promise<boolean> => {
+    if (mongoose.Types.ObjectId.isValid(identifier)) {
+        const courseExists = await courseSchema.exists({ _id: identifier });
+        return courseExists !== null;
+    }
+    const courseExists = await courseSchema.exists({ slug: identifier });
     return courseExists !== null;
 };
 
@@ -42,7 +73,8 @@ export const isValidSectionSubsectionId = async (courseId: string, sectionId: st
 export const createCourse = async (data: Omit<CourseDTO.ICourse, "sections"> & { sections: (CourseDTO.ISection & { subSections: CourseDTO.ISubSection[] })[] }): Promise<any> => {
 
     const { sections, ...courseDetails } = data;
-    const course = await courseSchema.create(courseDetails);
+    const slug = await courseSlug(data.title);
+    const course = await courseSchema.create({...courseDetails, slug});
     let totalLectures = 0;
     // Step 1: Check if sections exist and process them
     if (data.sections && data.sections.length > 0) {
@@ -79,7 +111,8 @@ export const createCourse = async (data: Omit<CourseDTO.ICourse, "sections"> & {
 };
 
 export const updateCourseDetails = async (courseId: string, data: CourseDTO.IUpdateCourseDetails): Promise<any> => {
-    const course = await courseSchema.findByIdAndUpdate(courseId, data, { new: true });
+    const slug = await courseSlug(data.title);
+    const course = await courseSchema.findByIdAndUpdate(courseId, {...data, slug}, { new: true });
     return course as CourseDTO.ICourse;
 };
 
@@ -118,9 +151,12 @@ export const publishCourse = async (courseId: string): Promise<any> => {
     return result;
 };
 
-export const getCourseDetails = async (courseId: string): Promise<any> => {
+export const getCourseDetails = async (identifier: string): Promise<any> => {
+    const query = mongoose.Types.ObjectId.isValid(identifier)
+        ? { _id: identifier }
+        : { slug: identifier };
     const course = await courseSchema
-        .findById(courseId)
+        .findOne(query)
         .populate({
             path: "instructor",
             select: "_id name email profilePic",
@@ -129,14 +165,6 @@ export const getCourseDetails = async (courseId: string): Promise<any> => {
             path: "category",
             select: "_id name",
         })
-        // .populate({
-        //     path: "ratingAndReviews",
-        //     select: "_id rating comment userId",
-        //     populate: {
-        //         path: "userId",
-        //         select: "_id name profilePic",
-        //     }
-        // })
         .populate({
             path: "sections",
             select: "title description duration assignments projects subSections",
@@ -158,8 +186,21 @@ export const getCourseDetails = async (courseId: string): Promise<any> => {
         totalProjects += (section.projects as any)?.length || 0;
         totalAssignments += (section.assignments as any)?.length || 0;
     });
-
-    return { ...course, totalProjects, totalAssignments };
+    const topRatings = await ratingAndReviewSchema
+        .find({ courseId: course._id })
+        .sort({ rating: -1 })
+        .limit(10)
+        .populate({
+            path: "userId",
+            select: "_id name profilePic",
+        })
+        .lean();
+    return {
+        ...course,
+        totalProjects,
+        totalAssignments,
+        testimonials: topRatings
+    };
 };
 
 export const getPublishedCoursesByCategory = async (categoryId: string, pageNo: number = 1): Promise<any> => {
@@ -217,6 +258,7 @@ export const getPublishedCoursesByCategory = async (categoryId: string, pageNo: 
                 title: 1,
                 subtitle: 1,
                 tags: 1,
+                slug: 1,
                 duration: 1,
                 thumbnail: 1,
                 language: 1,
@@ -332,6 +374,7 @@ export const getPublishedCourses = async (pageNo: number = 1): Promise<any> => {
                 title: 1,
                 subtitle: 1,
                 tags: 1,
+                slug: 1,
                 duration: 1,
                 thumbnail: 1,
                 language: 1,

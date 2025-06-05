@@ -1,11 +1,18 @@
 import mongoose from "mongoose";
 import { ICourse } from "./course.dto";
 import * as CourseEnum from "./course.enum";
+import slugify from "slugify";
 
 const courseSchema = new mongoose.Schema<ICourse>({
     title: {
         type: String,
         required: true
+    },
+    slug: {
+        type: String,
+        unique: true,
+        trim: true,
+        lowercase: true
     },
     subtitle: {
         type: String,
@@ -76,10 +83,6 @@ const courseSchema = new mongoose.Schema<ICourse>({
             required: false
         }
     }],
-    ratingAndReviews: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "RatingAndReviews"
-    }],
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "CourseCategory",
@@ -135,5 +138,40 @@ const courseSchema = new mongoose.Schema<ICourse>({
         default: CourseEnum.CourseValidity.LIFETIME
     }
 }, { timestamps: true });
+
+courseSchema.pre("save", async function (next) {
+    const course = this as any;
+
+    if (course.isNew || course.isModified("title")) {
+        const baseSlug = slugify(course.title, {
+            lower: true,
+            strict: true,
+            trim: true
+        });
+
+        let slug = baseSlug;
+        let count = 1;
+        let exists = true;
+
+        while (exists) {
+            const query = mongoose.model("Course").findOne({ slug });
+            if (!course.isNew) {
+                query.where("_id").ne(course._id); // Avoid self
+            }
+
+            const existingDoc = await query.exec();
+            exists = !!existingDoc;
+
+            if (exists) {
+                slug = `${baseSlug}-${count++}`;
+            }
+        }
+
+        course.slug = slug;
+    }
+
+    next();
+});
+
 
 export default mongoose.model<ICourse>("Course", courseSchema);

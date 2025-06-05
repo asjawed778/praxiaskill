@@ -11,21 +11,21 @@ import CategoryManagement from "./pages/Admin/Category/CategoryManagement";
 import { useDispatch, useSelector } from "react-redux";
 import SplashScreen from "./components/SplashScreen";
 import { setSplashShown } from "./store/reducers/splashScreenReducer";
+import ScrollToTop from "./components/ScrollToTop";
+import useScrollToTop from "./hooks/useScrollToTop";
 const ViewCategories = lazy(() =>
   import("./pages/Admin/Category/ViewCategories")
 );
 const CourseEnquiryManagement = lazy(() =>
   import("./pages/Admin/Category/CourseEnquiryManagement")
 );
-const LearningPage = lazy(() => import("./pages/Learning/index"));
+const LearningPage = lazy(() => import("./pages/LearningPage"));
 const AddCategory = lazy(() => import("./pages/Admin/Category/AddCategory"));
 const AuthPage = lazy(() => import("./pages/authpage"));
 const BlogPage = lazy(() => import("./pages/Blog/landingpage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 const AdminDashboard = lazy(() => import("./pages/Admin/AdminDashboard"));
-const CourseLandingPage = lazy(() =>
-  import("./pages/CourseLandingPage")
-);
+const CourseLandingPage = lazy(() => import("./pages/CourseLandingPage"));
 // const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
 const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
 const AddCourse = lazy(() => import("./pages/Admin/Course/index"));
@@ -41,7 +41,6 @@ const CourseLectures = lazy(() => import("./pages/Course Lectures"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const Users = lazy(() => import("./pages/Users"));
 const StaticPage = lazy(() => import("./pages/StaticPage"));
-
 
 const publicRoutes = [
   {
@@ -77,7 +76,7 @@ const publicRoutes = [
     ),
   },
   {
-    path: "course/:courseTitle/:courseId",
+    path: "course/:slug",
     element: (
       <LazyComponent>
         <CourseLandingPage />
@@ -297,8 +296,12 @@ const courseLectureRoute = [
     ],
   },
 ];
-
+function ScrollToTopHandler() {
+  useScrollToTop();
+  return null;
+}
 function App() {
+ 
   const { accessToken, user } = useSelector((store) => store.auth);
   // const dispatch = useDispatch();
   // const hasShown = useSelector((state) => state.splashScreen.hasShown);
@@ -320,6 +323,7 @@ function App() {
 
   return (
     <BrowserRouter>
+    <ScrollToTopHandler />
       <Routes>
         {/* Public routes */}
         <Route element={<BasicLayout />}>
@@ -385,7 +389,6 @@ function App() {
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
-
   );
 }
 

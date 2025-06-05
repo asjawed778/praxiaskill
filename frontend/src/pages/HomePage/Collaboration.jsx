@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   Typography,
@@ -9,7 +8,7 @@ import {
 } from "@mui/material";
 import { GroupsOutlined } from "@mui/icons-material";
 import zohoLogo from "@/assets/PartnersIcons/zoho.png";
-import rapidoLogo from "@/assets/PartnersIcons/rapido.jpg";
+import rapidoLogo from "@/assets/PartnersIcons/rapido.png";
 
 const PartnerLogo = ({ name, logo }) => {
   const theme = useTheme();
@@ -29,21 +28,17 @@ const PartnerLogo = ({ name, logo }) => {
         sx={{
           width: 60,
           height: 60,
-          bgcolor: "background.paper",
-          border: "1px solid",
-          borderColor: "divider",
+          bgcolor: "transparent", 
+          border: "none", 
           borderRadius: 2,
           transition: "all 0.3s ease",
           "&:hover": {
             transform: "scale(1.05)",
-            boxShadow: 2,
           },
-          mb: 1, 
+          mb: 1,
         }}
       />
-      <Typography align="center">
-        {name}
-      </Typography>
+      <Typography variant="body1" align="center">{name}</Typography>
     </Box>
   );
 };
@@ -63,11 +58,11 @@ const Collaboration = () => {
 
   return (
     <Box
-    sx={{
-      backgroundColor: "#f9fafc",
-      py: 4,
-      my: 2
-    }}
+      sx={{
+        backgroundColor: "#f9fafc",
+        py: 4,
+        my: 2,
+      }}
     >
       <Container maxWidth="lg">
         <Box
@@ -90,24 +85,19 @@ const Collaboration = () => {
           >
             <GroupsOutlined fontSize="medium" />
           </Avatar>
-          <Typography
-            sx={{
+          <Typography variant="h3" gutterBottom>
+            {/* sx={{
               fontWeight: 700,
               mb: 2,
               color: theme.palette.text.primary,
               fontSize: { xs: "1rem", md: "1.25rem" },
             }}
-          >
+          > */}
             We collaborate with 100+ leading universities and companies
           </Typography>
           <Typography
-            variant="subtitle1"
-            sx={{
-              color: theme.palette.text.secondary,
-              maxWidth: "700px",
-              mx: "auto",
-              fontSize: { xs: "0.8rem", md: "1rem" },
-            }}
+            variant="body1"
+            color="textSecondary"
           >
             Partnering with top institutions worldwide to deliver exceptional
             learning experiences
@@ -146,7 +136,7 @@ const Collaboration = () => {
             sx={{
               color: theme.palette.text.secondary,
               fontStyle: "italic",
-              fontSize: { xs: "0.6rem", md: "0.8rem" },
+              fontSize: { xs: "0.8rem", md: "1rem" },
             }}
           >
             And 45+ other prestigious institutions worldwide
@@ -158,6 +148,3 @@ const Collaboration = () => {
 };
 
 export default Collaboration;
-
-
-

@@ -1,27 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { Box, Grid, Typography, Stack, useTheme, Fade } from "@mui/material";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import { useEffect, useState } from "react";
+import {
+  Box,
+  Grid,
+  Typography,
+  Stack,
+  useTheme,
+  Fade,
+  Container,
+} from "@mui/material";
 import CustomButton from "@/components/CustomButton";
 import ModalWrapper from "@/components/ModalWrapper";
 import EnquiryForm from "./EnquiryForm";
 
 const HeroSection = ({ syllabusRef, course }) => {
-  const [animateBadge, setAnimateBadge] = useState(false);
   const [openEnquiry, setOpenEnquiry] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setAnimateBadge(true);
-    }, 100);
-    return () => clearTimeout(timeout);
-  }, []);
 
   const handleScrollToSyllabus = () => {
     if (syllabusRef?.current) {
       syllabusRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
-
   const handleEnquiry = () => {
     setOpenEnquiry(true);
   };
@@ -30,56 +28,58 @@ const HeroSection = ({ syllabusRef, course }) => {
 
   return (
     <Fade in={true} timeout={1000}>
-      <Box>
+      <Box
+        sx={{
+          background: "radial-gradient(circle at top left, #0f172a, #1e293b)",
+          color: "white",
+          py: { xs: 4, sm: 6, md: 8 },
+          minHeight: { xs: "auto" },
+          position: "relative",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Box
           sx={{
-            background: "radial-gradient(circle at top left, #0f172a, #1e293b)",
-            color: "white",
-            py: { xs: 6, sm: 8, md: 12 },
-            px: { xs: 4, md: 10 },
-            minHeight: { xs: "auto" },
-            position: "relative",
-            overflow: "hidden",
-            display: "flex",
-            alignItems: "center",
+            position: "absolute",
+            top: -100,
+            left: -100,
+            width: 300,
+            height: 300,
+            borderRadius: "50%",
+            background: "rgba(255, 0, 80, 0.3)",
+            filter: "blur(100px)",
+            zIndex: 0,
           }}
-        >
+        />
+
+        <Container maxWidth="lg">
           <Box
             sx={{
-              position: "absolute",
-              top: -100,
-              left: -100,
-              width: 300,
-              height: 300,
-              borderRadius: "50%",
-              background: "rgba(255, 0, 80, 0.3)",
-              filter: "blur(100px)",
-              zIndex: 0,
+              display: "flex",
+              flexDirection: { xs: "column-reverse", sm: "row" },
+              gap: 4,
             }}
-          />
-
-          <Grid
-            container
-            spacing={{ xs: 4, md: 8 }}
-            alignItems="center"
-            zIndex={2}
-            position="relative"
           >
-            {/* LEFT - Course Info */}
-            <Grid size={{ xs: 12, md: 6 }} order={{ xs: 2, md: 1 }}>
+            <Box
+              sx={{
+                width: { xs: "100%", md: "50%" },
+                display: "flex",
+                flexDirection: "column",
+                alignItems: { xs: "center", lg: "flex-start" },
+                zIndex: 1
+              }}
+            >
               <Stack spacing={{ xs: 2, md: 3 }}>
-                <Typography
-                  fontWeight="bold"
-                  fontSize={{ xs: "24px", sm: "36px", md: "44px" }}
-                  lineHeight={1.2}
-                >
+                <Typography variant="h2">
                   {course?.title}
                 </Typography>
 
                 <Typography
                   variant="body1"
                   color="grey.300"
-                  fontSize={{ xs: "16px", md: "18px" }}
                 >
                   {course?.subtitle}
                 </Typography>
@@ -122,48 +122,48 @@ const HeroSection = ({ syllabusRef, course }) => {
                   />
                 </Stack>
               </Stack>
-            </Grid>
-
-            {/* RIGHT - Thumbnail */}
-            <Grid
-              size={{ xs: 12, md: 6 }}
-              order={{ xs: 1, md: 2 }}
+            </Box>
+            <Box
               sx={{
+                width: { xs: "100%", md: "50%" },
                 display: "flex",
-                justifyContent: { xs: "center", lg: "flex-end" },
+                justifyContent: { xs: "center", md: "flex-end" },
+                zIndex: 1,
               }}
             >
               <Box
                 sx={{
-                  position: "relative",
-                  maxWidth: "500px",
-                  aspectRatio: "2 / 1",
+                  width: "100%",
+                  maxWidth: 400,
+                  height: "auto",
+                  overflow: "hidden",
+                  borderRadius: 2,
+                  transition: "transform 0.4s ease",
+                  "&:hover": {
+                    transform: "scale(1.02)",
+                  },
                 }}
               >
-                <Box
-                  component="img"
-                  src={course?.thumbnail}
-                  alt="Course Thumbnail"
-                  sx={{
+                <img
+                  src={course.thumbnail}
+                  alt={course.title}
+                  style={{
                     width: "100%",
-                    height: "100%",
+                    height: "auto",
                     objectFit: "cover",
-                    borderRadius: 4,
-                    boxShadow: "0 20px 50px rgba(0,0,0,0.6)",
-                    transition: "transform 0.4s ease",
-                    "&:hover": {
-                      transform: "scale(1.02)",
-                    },
+                    display: "block",
+                    borderRadius: "8px",
                   }}
+                  loading="lazy"
                 />
               </Box>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
+        </Container>
 
-          <ModalWrapper open={openEnquiry} onClose={handleClose} title="">
-            <EnquiryForm onClose={handleClose} />
-          </ModalWrapper>
-        </Box>
+        <ModalWrapper open={openEnquiry} onClose={handleClose} title="">
+          <EnquiryForm onClose={handleClose} />
+        </ModalWrapper>
       </Box>
     </Fade>
   );

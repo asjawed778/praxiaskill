@@ -18,6 +18,7 @@ import { toast } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import AdditionalDetails from "./Add Course/AdditionalDetails";
 import { cleanData } from "../../../utils/helper";
+import useScrollToTop from "../../../hooks/useScrollToTop";
 
 const AddCourse = () => {
   const [uploadCourse, { isLoading, errors }] = useUploadCourseMutation();

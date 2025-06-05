@@ -36,9 +36,10 @@ const PageHeader = () => (
     }}
   >
     <Typography
+    variant="h3"
       sx={{
-        fontWeight: 700,
-        fontSize: { xs: "1rem", sm: "1.5rem", md: "2rem" },
+        // fontWeight: 700,
+        // fontSize: { xs: "1rem", sm: "1.5rem", md: "2rem" },
         background: "linear-gradient(to right, #ff416c, #ff4b2b)",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
@@ -53,7 +54,7 @@ const PageHeader = () => (
       sx={{
         maxWidth: 700,
         mx: "auto",
-        fontSize: { xs: "0.8rem", md: "1rem" },
+        // fontSize: { xs: "0.8rem", md: "1rem" },
         color: "text.secondary",
         lineHeight: 1.75,
       }}
