@@ -28,7 +28,7 @@ router
     .post("/enquiry", courseValidation.courseEnquiry, catchError, courseController.courseEnquiry)
     .get("/enquiry", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseController.getCourseEnquiry)
     .patch("/enquiry-status/:enquiryId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.changeEnquiryStatus, catchError, courseController.changeEnquiryStatus)
-    .get("/:courseId", courseValidation.getCourseDetails, courseController.getCourseDetails)
+    .get("/:identifier", courseValidation.getCourseDetails, courseController.getCourseDetails)
 
     .post("/start-upload/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.courseUpload, catchError, courseController.startUpload)
     .post("/chunk-upload/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.uploadChunk, fileUploadMiddleware.validateChunkUpload, catchError, courseController.uploadChunk)

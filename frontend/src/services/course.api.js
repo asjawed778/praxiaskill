@@ -137,8 +137,9 @@ export const apiCourse = createApi({
       }),
     }),
     getFullCourseDetails: builder.query({
-      query: (courseId) => ({
-        url: `course/${courseId}`,
+      // identifier means either slug or course ID
+      query: (identifier) => ({
+        url: `course/${identifier}`,
         method: "GET",
       }),
     }),

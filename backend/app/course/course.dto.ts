@@ -4,6 +4,7 @@ import * as CourseEnum from "./course.enum";
 
 export interface ICourse extends BaseSchema {
     title: string;
+    slug: string;
     subtitle: string;
     keypoints?: string[];
     description: string;

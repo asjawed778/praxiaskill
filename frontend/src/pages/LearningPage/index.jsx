@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -56,11 +56,12 @@ const LearningPage = () => {
     setCurrentPage(1);
   };
 
-  const handleNavigate = (courseId, title) => {
-    const slug = title.toLowerCase().split(" ").join("-");
-    navigate(`/course/${courseId}/${slug}`);
+  const handleNavigate = (slug) => {
+    navigate(`/course/${slug}`);
   };
-
+  useEffect(() => {
+    console.log("Courses data is : ", coursesData)
+  }, [coursesData])
   return (
     <Container maxWidth="lg">
       <Box py={2}>
@@ -200,7 +201,7 @@ const LearningPage = () => {
               <CourseCard
                 key={course?._id}
                 course={course}
-                onClick={handleNavigate}
+                onClick={()=>handleNavigate(course.slug)}
               />
             ))}
           </Box>
