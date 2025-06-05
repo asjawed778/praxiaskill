@@ -52,7 +52,7 @@ const CourseCard = ({ course, onClick }) => {
         cursor: "pointer",
         width: {xs: 350, md: 280},
 
-        height: 400,
+        height: 380,
         p: {xs: 1, md: 0.5},
         display: "flex",
         flexDirection: "column",
@@ -104,9 +104,9 @@ const CourseCard = ({ course, onClick }) => {
           {title}
         </Typography>
 
-        <Typography variant="body2" color="text.secondary" noWrap>
+        {/* <Typography variant="body2" color="text.secondary" noWrap>
           {instructor?.name}
-        </Typography>
+        </Typography> */}
         <Typography variant="caption" display="block" color="text.secondary">
           {type} • {level}
         </Typography>
@@ -116,7 +116,7 @@ const CourseCard = ({ course, onClick }) => {
           mt={1}
           sx={{
             display: "-webkit-box",
-            WebkitLineClamp: 2,
+            WebkitLineClamp: 3,
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
           }}
@@ -125,10 +125,9 @@ const CourseCard = ({ course, onClick }) => {
         </Typography>
 
         <Box mt={2}>
-          <Typography variant="body2">
-            {/* {renderStars(averageRating)} ({averageRating.toFixed(1)}) */}
-            {renderStars(averageRating)}
-          </Typography>
+          {/* <Typography variant="body2">
+            {renderStars(averageRating)} ({averageRating.toFixed(1)})
+          </Typography> */}
 
           <Typography variant="caption" color="text.secondary" mt={2}>
             {level} • {type} • {duration}

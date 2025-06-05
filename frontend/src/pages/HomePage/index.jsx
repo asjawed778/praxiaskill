@@ -74,13 +74,10 @@ function HomePage() {
             Your browser does not support the video tag.
           </video>
 
-          <Container
-            maxWidth="lg"
-            sx={{ py: 2 }}
-            // display="flex"
-            // justifyContent="center"
-          >
-            {/* <Grid
+          
+           <Container maxWidth="lg" sx={{ my: 4,}}>
+
+              <Grid
               container
               spacing={2}
               alignItems="center"
@@ -133,59 +130,10 @@ function HomePage() {
               <Grid item xs={12} sm={6}>
                   <BookDemoClass />
               </Grid>
-            </Grid> */}
-
-            <Grid
-              container
-              spacing={2}
-              alignItems="center"
-              justifyContent={{ xs: "center", sm: "space-between" }}
-            >
-              {/* Left Side Text Section */}
-              <Grid item xs={12} sm={6}>
-                <motion.div variants={itemVariants}>
-                  <Typography variant="h1" sx={{ color: "white" }}>
-                    Ready For the Future
-                  </Typography>
-                  <Typography variant="h1" sx={{ color: "white" }}>
-                    At Praxia Skill
-                  </Typography>
-
-                  <Typography variant="body1" sx={{ color: "white", mt: 3 }}>
-                    Join this 20 weeks, Job-ready Program to master
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: "white" }}>
-                    Data Analytics from scratch with Top Data Analysts
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: "white", mb: 2 }}>
-                    from Microsoft, KPMG, Amazon, and Rapido.
-                  </Typography>
-
-                  <CustomButton
-                    label="Explore Program"
-                    component={Link}
-                    to="/courses"
-                    variant="contained"
-                    color="primary"
-                    sx={{ px: 3 }}
-                  />
-                </motion.div>
-              </Grid>
-
-              {/* Right Side Form Section */}
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                sx={{
-                  display: "flex",
-                  justifyContent: { xs: "center", sm: "flex-end" },
-                }}
-              >
-                <BookDemoClass />
-              </Grid>
             </Grid>
-          </Container>
+            </Container>
+
+           
         </Box>
 
         <Container maxWidth="lg" sx={{ mt: 4 }}>
@@ -226,7 +174,7 @@ function HomePage() {
           </Grid>
         </Container>
 
-        <Container maxWidth="lg" sx={{ py: 3 }}>
+        <Container maxWidth="lg" sx={{ pt: 3 }}>
           <Courses />
         </Container>
 
