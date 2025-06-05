@@ -63,7 +63,7 @@ const MobileDrawer = ({ open, onClose, navItems, colors }) => {
                   sx={{
                     borderRadius: 1,
                     backgroundColor: isActive ? colors.primary : "transparent",
-                    color: isActive ? "#fff" : colors.text,
+                    color: isActive ? "#fff" : "black",
                     "&:hover": {
                       backgroundColor: colors.secondary,
                       color: "#fff",
