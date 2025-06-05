@@ -49,7 +49,7 @@ const CustomInputField = ({
       value={field?.value ?? ""}
       placeholder={isDate ? undefined : placeholder}
       size={size}
-      type={
+      type={  
         isDate
           ? "date"
           : isPassword && !showPassword
@@ -60,15 +60,60 @@ const CustomInputField = ({
       variant="outlined"
       error={!!error}
       helperText={error?.message}
-      // margin="normal"
       sx={{
         "& .MuiOutlinedInput-root": {
           borderRadius: "8px",
           transition: "border-color 0.3s",
           "&:hover": { borderColor: colors.inputHover },
           "&.Mui-focused": { borderColor: colors.inputFocus },
+
+          // Responsive font size and padding for input
+          fontSize: {
+            xs: "0.75rem",   // mobile
+            sm: "0.875rem",  // tablet
+            md: "1rem",      // desktop
+            // lg: "1.125rem",  // large screens
+          },
+          "& input": {
+            padding: {
+              // xs: "6px 10px",
+              // sm: "8px 12px",
+              // md: "10px 14px",
+              xs: "6px 8px",
+              sm: "8px 10px",
+              xl: "10px 12px",
+              // lg: "12px 14px",
+            },
+            fontSize: {
+              xs: "0.75rem",
+              sm: "0.875rem",
+              md: "1rem",
+              // lg: "1.125rem",
+            },
+          },
         },
-        
+        // Responsive font size for placeholder
+        "& input::placeholder": {
+          fontSize: {
+            xs: "0.75rem",
+            sm: "0.875rem",
+            md: "1rem",
+            // lg: "1.125rem",
+          },
+          opacity: 1,
+          color: "#aaa",
+        },
+        // Responsive font size for label
+        "& label": {
+          fontSize: {
+            xs: "0.75rem",
+            sm: "0.875rem",
+            md: "1rem",
+            // lg: "1.125rem",
+          },
+          color: colors.inputLabel,
+        },
+
         ...sx,
       }}
       InputProps={{
@@ -109,6 +154,3 @@ const CustomInputField = ({
 };
 
 export default CustomInputField;
-
-
-

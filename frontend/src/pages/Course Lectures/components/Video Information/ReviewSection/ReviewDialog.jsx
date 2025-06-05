@@ -7,18 +7,15 @@ import { useRateCourseMutation } from '../../../../../services/course.api';
 import { toast } from 'react-hot-toast';
 
 export default function ReviewDialog({ open, onClose, onSave, initialData, courseId }) {
-  // const [name, setName] = useState('');
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [rateCourse, { isLoading }] = useRateCourseMutation();
 
   useEffect(() => {
     if (initialData) {
-      // setName(initialData.name);
       setRating(initialData.rating);
       setComment(initialData.comment);
     } else {
-      // setName('');
       setRating(0);
       setComment('');
     }
@@ -50,14 +47,6 @@ export default function ReviewDialog({ open, onClose, onSave, initialData, cours
       <DialogTitle>{initialData ? 'Edit Review' : 'Write a Review'}</DialogTitle>
       <DialogContent>
         <Stack spacing={2} mt={1}>
-          {/* <TextField
-            label="Name"
-            size="small"
-            fullWidth
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          /> */}
           <Rating
             value={rating}
             onChange={(e, newValue) => setRating(newValue)}

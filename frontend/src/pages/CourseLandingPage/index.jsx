@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../components/Button/Button";
 import { FaCheck, FaCircleCheck } from "react-icons/fa6";
 import { PiNewspaper } from "react-icons/pi";
 import { BiBell } from "react-icons/bi";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useGetFullCourseDetailsQuery } from "../../services/course.api";
 import { setSpecificCourse } from "../../store/reducers/coursesReducer";
 import SEOHelmet from "../../SEO/SEOHelmet";
@@ -15,10 +15,9 @@ import Landing from "./Landing";
 
 const CourseLandingPage = () => {
   const dispatch = useDispatch()
-  const { courseId, courseTitle } = useParams();
-  const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(courseId);
+  const { slug } = useParams();
+  const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(slug);
   
-  const navigate = useNavigate();
   
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -31,7 +30,7 @@ const CourseLandingPage = () => {
   const specificCourse = courses?.specificCourse;
   const courseSEOSchema = generateOrganizationSchema({
     name: specificCourse?.title,
-    url: `https://praxiaskill.com/course/${courseTitle}/${courseId}`,
+    url: `https://praxiaskill.com/course/${slug}`,
     logo: specificCourse?.thumbnail,
   })
   if (isLoading) {
@@ -42,12 +41,12 @@ const CourseLandingPage = () => {
         alignItems="center"
         justifyContent="center"
         my={4}
-        // height="100vh"
+        height="40vh"
       >
-        <CircularProgress size={40} thickness={4} />
-        <Typography variant="h5" mt={2} color="text.primary">
+        <Typography variant="h5" my={4} color="text.primary">
           Course is loading, please wait...
         </Typography>
+        <CircularProgress size={30} thickness={4} />
       </Box>
     );
   }
@@ -59,7 +58,7 @@ const CourseLandingPage = () => {
         description={specificCourse?.description}
         keywords={specificCourse?.tags?.join(", ")}
         image={specificCourse?.thumbnail}
-        url={`https://praxiaskill.com/course/${courseTitle}/${courseId}`}
+        url={`https://praxiaskill.com/course/${slug}`}
         robots="index, follow"
         schema={courseSEOSchema}
       />

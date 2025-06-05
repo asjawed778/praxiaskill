@@ -1,8 +1,8 @@
-import { createTheme } from '@mui/material/styles';
-import { Colors } from './colors';
+import { createTheme } from "@mui/material/styles";
+import { Colors } from "./colors";
 
 const createAppTheme = (mode) => {
-  const palette= Colors[mode];
+  const palette = Colors[mode];
 
   const themeOptions = {
     palette: {
@@ -14,7 +14,7 @@ const createAppTheme = (mode) => {
         main: palette.secondary,
       },
       background: {
-        default: mode ==="light" ? "#ffffff" : "#121212",
+        default: mode === "light" ? "#ffffff" : "#121212",
         paper: mode === "light" ? "#ffffff" : "#121212",
       },
       text: {
@@ -31,36 +31,104 @@ const createAppTheme = (mode) => {
         main: palette.error,
       },
     },
+
     typography: {
-      fontFamily:  `"Inter", "Roboto", "sans-serif"`,
+      fontFamily: "'Roboto'",
+      body1: {
+        fontWeight: 100,
+        fontSize: "14px",
+        [createTheme().breakpoints.up("sm")]: {
+          fontSize: "16px",
+        },
+        [createTheme().breakpoints.up("md")]: {
+          fontSize: "18px",
+        },
+        [createTheme().breakpoints.up("lg")]: {
+          fontSize: "20px",
+        },
+        [createTheme().breakpoints.up("xl")]: {
+          fontSize: "22px",
+        },
+      },
+      body2: {
+        fontWeight: 100,
+        // color: "textSecondary",
+        fontSize: "12px",
+        [createTheme().breakpoints.up("sm")]: {
+          fontSize: "12px",
+        },
+        [createTheme().breakpoints.up("md")]: {
+          fontSize: "13px",
+        },
+        [createTheme().breakpoints.up("lg")]: {
+          fontSize: "14px",
+        },
+        [createTheme().breakpoints.up("xl")]: {
+          fontSize: "15px",
+        },
+      },
       h1: {
-        fontFamily: `"Mohave", "sans-serif"`,
         fontWeight: 600,
-        fontSize: "2.5rem",
+        fontSize: "32px",
+        [createTheme().breakpoints.up("sm")]: {
+          fontSize: "36px",
+        },
+        [createTheme().breakpoints.up("md")]: {
+          fontSize: "40px",
+        },
+        [createTheme().breakpoints.up("lg")]: {
+          fontSize: "44px",
+        },
+        [createTheme().breakpoints.up("xl")]: {
+          fontSize: "48px",
+        },
       },
       h2: {
-        fontFamily: `"Mohave", "sans-serif"`,
         fontWeight: 600,
-        fontSize: "2rem",
+        fontSize: "28px",
+        [createTheme().breakpoints.up("sm")]: {
+          fontSize: "32px",
+        },
+        [createTheme().breakpoints.up("md")]: {
+          fontSize: "36px",
+        },
+        [createTheme().breakpoints.up("lg")]: {
+          fontSize: "40px",
+        },
+        [createTheme().breakpoints.up("xl")]: {
+          fontSize: "44px",
+        },
       },
-      body1: {
-        fontFamily: `"Inter", "sans-serif"`,
-        fontWeight: 400,
-        fontSize: "1rem",
+      h3: {
+        fontWeight: 600,
+        fontSize: "24px",
+        [createTheme().breakpoints.up("sm")]: {
+          fontSize: "28px",
+        },
+        [createTheme().breakpoints.up("md")]: {
+          fontSize: "32px",
+        },
+        [createTheme().breakpoints.up("lg")]: {
+          fontSize: "36px",
+        },
+        [createTheme().breakpoints.up("xl")]: {
+          fontSize: "40px",
+        },
       },
-      button: {
-        fontFamily: `"Mohave", `,
-        fontWeight: 400,
-        fontSize: "0.875rem",
-        textTransform: "none",
-      },
-    },
-    components: {
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            borderRadius: 8,
-          },
+      h4: {
+        fontWeight: 600,
+        fontSize: "20px",
+        [createTheme().breakpoints.up("sm")]: {
+          fontSize: "24px",
+        },
+        [createTheme().breakpoints.up("md")]: {
+          fontSize: "28px",
+        },
+        [createTheme().breakpoints.up("lg")]: {
+          fontSize: "32px",
+        },
+        [createTheme().breakpoints.up("xl")]: {
+          fontSize: "36px",
         },
       },
     },

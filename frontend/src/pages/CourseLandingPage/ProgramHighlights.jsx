@@ -1,14 +1,4 @@
-import React from "react";
-import {
-  Box,
-  Typography,
-  Grid,
-  Card,
-  Button,
-  Container,
-  Stack,
-} from "@mui/material";
-import CheckIcon from "@mui/icons-material/Check";
+import { Box, Typography, Grid, Card, Container } from "@mui/material";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import WorkIcon from "@mui/icons-material/Work";
@@ -16,60 +6,68 @@ import SchoolIcon from "@mui/icons-material/School";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 
 const ProgramHighlights = ({ course }) => {
-  const fullStackHighlights = [
+  const formatValue = (value) =>
+    value < 5 ? `${value}` : `${Math.floor(value / 5) * 5}+`;
+
+  const rawHighlights = [
     {
       icon: <AutoStoriesIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
-      title: `${Math.floor((course?.totalLectures)/5)*5}+ Live`,
+      value: course?.totalLectures,
+      title: `${formatValue(course?.totalLectures)} Live`,
       subtitle: "Mentorship Sessions",
     },
     {
       icon: <AssignmentIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
-      title: `${Math.floor((course?.totalAssignments + course?.totalProjects)/5)*5}+ Projects`,
+      value: course?.totalAssignments + course?.totalProjects,
+      title: `${formatValue(
+        course?.totalAssignments + course?.totalProjects
+      )} Projects`,
       subtitle: "and Real-World Assignments",
     },
     {
       icon: <WorkIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
-      title: `${Math.floor(course?.totalProjects/5)*5}+ Major+Minor`,
+      value: course?.totalProjects,
+      title: `${formatValue(course?.totalProjects)} Major+Minor`,
       subtitle: "Capstone Projects",
     },
     {
       icon: <SchoolIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
-      title: `${Math.floor((course?.totalLectures*4)/5)*5}+ Hours of`,
+      value: course?.totalLectures * 4,
+      title: `${formatValue(course?.totalLectures * 4)} Hours of`,
       subtitle: "Recorded Content",
     },
     {
       icon: <SmartToyIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
-      title: `${Array.isArray(course?.tools) ? Math.floor(course.tools?.length/5)*5 : 0}+ Tools`,
+      value: Array.isArray(course?.tools) ? course.tools.length : 0,
+      title: `${formatValue(course?.tools?.length || 0)} Tools`,
       subtitle: "Learn and Explore",
     },
   ];
+  const highlights = rawHighlights.filter((item) => item.value > 0);
 
   return (
     <Box
       sx={{
         bgcolor: "black",
-        py: 4,
+        mt: 3,
         color: "white",
       }}
     >
       <Container maxWidth="lg">
         <Typography
-          component="h2"
+          variant="h1"
           textAlign="center"
-          fontWeight="bold"
-          sx={{
-            mb: 4,
-            fontSize: { xs: "24px", sm: "36px", md: "44px" },
-          }}
+          mb={3}
         >
           Program Highlights
         </Typography>
 
         <Grid container spacing={2} justifyContent="center" sx={{ mb: 6 }}>
-          {fullStackHighlights.map((item, index) => (
+          {highlights.map((item, index) => (
             <Grid
               item
               xs={6}
+              sm={4}
               md={3}
               key={index}
               sx={{ display: "flex", justifyContent: "center" }}
@@ -81,7 +79,6 @@ const ProgramHighlights = ({ course }) => {
                   justifyContent: "center",
                   alignItems: "center",
                   textAlign: "center",
-                  p: 2,
                   bgcolor: "rgba(54, 15, 95, 0.5)",
                   background:
                     "linear-gradient(145deg, rgba(85, 25, 139, 0.7) 0%, rgba(43, 10, 84, 0.7) 100%)",
@@ -95,7 +92,6 @@ const ProgramHighlights = ({ course }) => {
                 <Box
                   sx={{
                     bgcolor: "rgba(255, 255, 255, 0.1)",
-                    color: "#ffffff",
                     borderRadius: 2,
                     p: 1,
                     mb: 1.5,
@@ -119,7 +115,10 @@ const ProgramHighlights = ({ course }) => {
 
                 <Typography
                   variant="body2"
-                  sx={{ fontSize: { xs: "0.65rem", md: "0.9rem" }, mt: 0.5 }}
+                  sx={{
+                    fontSize: { xs: "0.65rem", md: "0.9rem" },
+                    mt: 0.5,
+                  }}
                 >
                   {item.subtitle}
                 </Typography>

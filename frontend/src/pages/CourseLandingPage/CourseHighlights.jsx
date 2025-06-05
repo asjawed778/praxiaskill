@@ -4,9 +4,6 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import LaptopMacIcon from '@mui/icons-material/LaptopMac';
 import Science from '@mui/icons-material/Science';
 
-
-
-
 const CourseHighlights = ({ course }) => {
   const highlights = [
   {
@@ -22,7 +19,7 @@ const CourseHighlights = ({ course }) => {
   {
     icon: <LaptopMacIcon fontSize="large" sx={{ color: '#f59e0b' }} />,
     title: 'Mode',
-    subtitle: course?.courseMode,
+    subtitle: course?.courseMode?.charAt(0).toUpperCase() + course?.courseMode?.slice(1).toLowerCase(),
   },
   {
     icon: <Science fontSize="large" sx={{ color: 'blue' }} />
@@ -34,34 +31,29 @@ const CourseHighlights = ({ course }) => {
   return (
     <Box
       sx={{
-        py: { xs: 6, md: 10 },
+        py: 2,
         backgroundColor: '#0f172a',
       }}
     >
-      <Container >
+      <Container maxWidth="lg">
         <Typography
-          component="h2"
+          variant="h1"
           textAlign="center"
-          fontWeight="bold"
-          color="white"
-          sx={{
-            mb: {xs: 4, md: 8},
-            fontSize: { xs: "24px", sm: "36px", md: "44px" },
-          }}
+          gutterBottom
         >
           Course Highlights
         </Typography>
 
         <Grid container spacing={2}>
           {highlights?.map((item, index) => (
-            <Grid size={{xs: 12, md: 3}} key={index}>
+            <Grid size={{xs: 12, sm: 6, md: 3}} key={index}>
               <Paper
                 elevation={2}
                 sx={{
                   py: 2,
                   borderRadius: '20px',
                   backgroundColor: '#1e293b',
-                  height: "150px",
+                  height: {xs: "130px", sm: "150px"},
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',

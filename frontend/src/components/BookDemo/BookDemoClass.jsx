@@ -12,9 +12,11 @@ import {
   Typography,
   Paper,
   CircularProgress,
+  TextField,
 } from "@mui/material";
 import { useSendEnquiryMutation } from "../../services/course.api";
 import { toast } from "react-hot-toast";
+import CustomButton from "@/components/CustomButton";
 
 const BookDemoClass = () => {
   const {
@@ -55,24 +57,24 @@ const BookDemoClass = () => {
 
   return (
     <Box
-      // sx={{
-      //   display: "flex",
-      //   justifyContent: "center",
-      //   alignItems: "center",
-      //   // px: 2,
-      // }}
+      sx={{
+        display: "flex",
+        // justifyContent: { xs: "center", sm: "flex-end" },
+      }}
     >
       <Paper
         elevation={2}
         sx={{
-          width: "100%",
-          maxWidth: 400,
-          p: 3,
+          // width: "100%",
+          width: {xs: 320},
+          // maxWidth: { xs: "100%", sm: 400 },
+          py: {xs: 1.5, md: 2},
+          px: 2,
           borderRadius: 2,
           backgroundColor: "#fff",
         }}
       >
-        <Typography variant="h6" color="primary" gutterBottom>
+        <Typography variant="body1" fontWeight="bold" align="center" color="primary" gutterBottom>
           Book a Live Class, For Free!
         </Typography>
 
@@ -80,11 +82,12 @@ const BookDemoClass = () => {
           component="form"
           noValidate
           onSubmit={handleSubmit(onSubmit)}
-          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+          sx={{ display: "flex", flexDirection: "column", gap: 1.2 }}
         >
           <CustomInputField label="Full Name" name="name" control={control} />
           <CustomInputField
             label="Education"
+            // placeholder="Enter Education"
             name="education"
             control={control}
           />
@@ -112,20 +115,45 @@ const BookDemoClass = () => {
                 checked={isChecked}
                 onChange={handleCheckboxChange}
                 color="primary"
+                sx={{
+                  p: 0.5, 
+                }}
               />
             }
-            label="Send me an update on WhatsApp"
+            label={
+              <Typography
+                sx={{
+                  color: "text.secondary",
+                  fontSize: {
+                    xs: "0.75rem", 
+                    sm: "0.875rem", 
+                    md: "1rem", 
+                  },
+                  lineHeight: 1, 
+                }}
+              >
+                Send me an update on WhatsApp
+              </Typography>
+            }
+            sx={{
+              m: 0,
+              p: 0,
+              alignItems: "center",
+              lineHeight: 1,
+              "& .MuiFormControlLabel-label": {
+                marginTop: 0,
+                marginBottom: 0,
+              },
+            }}
           />
 
-          <Button
+          <CustomButton
+            label="Submit"
             type="submit"
             variant="contained"
             color="primary"
-            disabled={isLoading}
-            sx={{ height: 40 }}
-          >
-            {isLoading ? <CircularProgress size={20} /> : "Submit"}
-          </Button>
+            loading={isLoading}
+          />
         </Box>
       </Paper>
     </Box>
