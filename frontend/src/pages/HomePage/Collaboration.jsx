@@ -60,7 +60,7 @@ const Collaboration = () => {
     <Box
       sx={{
         backgroundColor: "#f9fafc",
-        py: 4,
+        py: 2,
         my: 2,
       }}
     >
@@ -68,7 +68,7 @@ const Collaboration = () => {
         <Box
           sx={{
             textAlign: "center",
-            mb: 6,
+            mb: 4,
             position: "relative",
             zIndex: 1,
           }}
@@ -79,7 +79,7 @@ const Collaboration = () => {
               color: theme.palette.primary.contrastText,
               width: 60,
               height: 60,
-              mb: 3,
+              mb: 2,
               mx: "auto",
             }}
           >
@@ -93,15 +93,15 @@ const Collaboration = () => {
               fontSize: { xs: "1rem", md: "1.25rem" },
             }}
           > */}
-            We collaborate with 100+ leading universities and companies
+            Backed by a strong placement support system offering access to 100+ recruiting companies.
           </Typography>
-          <Typography
+          {/* <Typography
             variant="body1"
             color="textSecondary"
           >
             Partnering with top institutions worldwide to deliver exceptional
             learning experiences
-          </Typography>
+          </Typography> */}
         </Box>
 
         <Grid
@@ -130,7 +130,7 @@ const Collaboration = () => {
           ))}
         </Grid>
 
-        <Box sx={{ textAlign: "center", mt: 4 }}>
+        {/* <Box sx={{ textAlign: "center", mt: 4 }}>
           <Typography
             variant="body2"
             sx={{
@@ -141,7 +141,7 @@ const Collaboration = () => {
           >
             And 45+ other prestigious institutions worldwide
           </Typography>
-        </Box>
+        </Box> */}
       </Container>
     </Box>
   );
