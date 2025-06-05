@@ -575,9 +575,8 @@ export const changeEnquiryStatus = [
 ];
 
 export const getCourseDetails = [
-    param('courseId')
-        .notEmpty().withMessage('courseId is required')
-        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+    param('identifier')
+        .notEmpty().withMessage('courseId or slug is required')
 ];
 
 export const deleteSection = [

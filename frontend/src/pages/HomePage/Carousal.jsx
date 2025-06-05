@@ -97,9 +97,8 @@ const Carousel = () => {
     }
   };
 
-  const handleCourseClick = (courseId, title) => {
-    const slug = encodeURIComponent(title.toLowerCase().replace(/\s+/g, "-"));
-    navigate(`/course/${courseId}/${slug}`);
+  const handleCourseClick = (slug) => {
+    navigate(`/course/${slug}`);
   };
 
   return (
@@ -186,7 +185,7 @@ const Carousel = () => {
             {coursesAll.map((course) => (
               <Card
                 key={course._id}
-                onClick={() => handleCourseClick(course._id, course.title)}
+                onClick={() => handleCourseClick(course.slug)}
                 sx={{
                   width: cardWidth,
                   minWidth: cardWidth,

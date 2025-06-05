@@ -20,8 +20,8 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 
 const Course = () => {
   const dispatch = useDispatch()
-  const { courseId, courseTitle } = useParams();
-  const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(courseId);
+  const { slug } = useParams();
+  const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(slug);
   
   const navigate = useNavigate();
 
@@ -37,7 +37,7 @@ const Course = () => {
   const specificCourse = courses?.specificCourse;
   const courseSEOSchema = generateOrganizationSchema({
     name: specificCourse?.title,
-    url: `https://praxiaskill.com/course/${courseTitle}/${courseId}`,
+    url: `https://praxiaskill.com/course/${slug}`,
     logo: specificCourse?.thumbnail,
   })
   if (isLoading) {
@@ -65,7 +65,7 @@ const Course = () => {
         description={specificCourse?.description}
         keywords={specificCourse?.tags?.join(", ")}
         image={specificCourse?.thumbnail}
-        url={`https://praxiaskill.com/course/${courseTitle}/${courseId}`}
+        url={`https://praxiaskill.com/course/${slug}`}
         robots="index, follow"
         schema={courseSEOSchema}
       />

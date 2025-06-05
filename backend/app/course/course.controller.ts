@@ -228,12 +228,12 @@ export const getPublishedCourseByCategory = asyncHandler(async (req: Request, re
 });
 
 export const getCourseDetails = asyncHandler(async (req: Request, res: Response) => {
-    const courseId = req.params.courseId;
-    const isCourseExist = await courseService.isCourseExist(courseId);
+    const { identifier } = req.params;
+    const isCourseExist = await courseService.isCourseExist(identifier);
     if (!isCourseExist) {
         throw createHttpError(404, "Course id is invalid, Not found");
     }
-    const course = await courseService.getCourseDetails(courseId);
+    const course = await courseService.getCourseDetails(identifier);
     if (!course) {
         throw createHttpError(404, "Course id invalid, course not found")
     }

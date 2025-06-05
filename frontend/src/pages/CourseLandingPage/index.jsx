@@ -15,8 +15,8 @@ import Landing from "./Landing";
 
 const CourseLandingPage = () => {
   const dispatch = useDispatch()
-  const { courseId, courseTitle } = useParams();
-  const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(courseId);
+  const { slug } = useParams();
+  const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(slug);
   
   
   useEffect(() => {
@@ -30,7 +30,7 @@ const CourseLandingPage = () => {
   const specificCourse = courses?.specificCourse;
   const courseSEOSchema = generateOrganizationSchema({
     name: specificCourse?.title,
-    url: `https://praxiaskill.com/course/${courseId}/${courseTitle}`,
+    url: `https://praxiaskill.com/course/${slug}`,
     logo: specificCourse?.thumbnail,
   })
   if (isLoading) {
@@ -58,7 +58,7 @@ const CourseLandingPage = () => {
         description={specificCourse?.description}
         keywords={specificCourse?.tags?.join(", ")}
         image={specificCourse?.thumbnail}
-        url={`https://praxiaskill.com/course/${courseTitle}/${courseId}`}
+        url={`https://praxiaskill.com/course/${slug}`}
         robots="index, follow"
         schema={courseSEOSchema}
       />
