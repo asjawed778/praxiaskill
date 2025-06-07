@@ -852,3 +852,40 @@ export const getRatings = [
         .isInt({ min: 1, max: 100 }).withMessage('PerPage must be between 1 and 100')
         .toInt(),
 ];
+
+// course notes validation
+
+export const createCourseNotes = [
+    body("notes")
+        .notEmpty().withMessage("Notes is required")
+        .isString().withMessage("Notes must be a string")
+        .trim(),
+
+    query("courseId")
+        .notEmpty().withMessage("Course ID is required")
+        .isMongoId().withMessage("Invalid courseId. Must be a valid MongoDB ObjectId"),
+
+    query("sectionId")
+        .optional()
+        .isMongoId().withMessage("Invalid sectionId. Must be a valid MongoDB ObjectId"),
+
+    query("subSectionId")
+        .optional()
+        .isMongoId().withMessage("Invalid subSectionId. Must be a valid MongoDB ObjectId"),
+
+];
+
+export const updateCourseNotes = [
+    body("notes")
+        .notEmpty().withMessage("Notes is required"),
+
+    param("notesId")
+        .notEmpty().withMessage("Notes ID is required")
+        .isMongoId().withMessage("Invalid notesId. Must be a valid MongoDB ObjectId")
+];
+
+export const deleteCourseNotes = [
+    param("notesId")
+        .notEmpty().withMessage("Notes ID is required")
+        .isMongoId().withMessage("Invalid notesId. Must be a valid MongoDB ObjectId"),
+];

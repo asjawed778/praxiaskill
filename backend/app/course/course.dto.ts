@@ -120,4 +120,26 @@ export interface IQna extends BaseSchema {
 
 export interface ICreateQna extends Omit<IQna, "createdAt" | "updatedAt" | "_id" | "answers"> { }
 
+export interface ICourseNotes extends BaseSchema {
+    userId: mongoose.Schema.Types.ObjectId;
+    courseId?: mongoose.Schema.Types.ObjectId;
+    sectionId?: mongoose.Schema.Types.ObjectId;
+    subSectionId?: mongoose.Schema.Types.ObjectId;
+    notes: string;
+}
+export interface ICourseNotesCreate extends Omit<ICourseNotes, "createdAt" | "updatedAt" | "_id"> { }
 
+export interface EnquiryStatusCount {
+    _id: string;
+    count: number;
+}
+
+export interface EnquiryAnalyticsResult {
+    totalEnquiries: number;
+    today: number;
+    thisWeek: number;
+    thisMonth: number;
+    lastSixMonths: number;
+    thisYear: number;
+    byStatus: Record<string, number>;
+}

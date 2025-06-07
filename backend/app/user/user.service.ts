@@ -1,5 +1,5 @@
 import { ICreateUser, ICreateUserResponse, IGetUserResponse, ITempUser, type IUser } from "./user.dto";
-import UserSchema from "./user.schema";
+import UserSchema, { UserRole } from "./user.schema";
 import bcrypt from 'bcryptjs';
 import * as jwthelper from '../common/helper/jwt.helper';
 import createHttpError from "http-errors";
@@ -140,28 +140,10 @@ export const getInstructorById = async (instructorId: string): Promise<Pick<IUse
     return instructor;
 };
 
-
-/**
- * Updates the reset password token for a user.
- * 
- * @param {string} userId - The ID of the user whose reset token is being updated.
- * @param {string} token - The reset password token to be stored in the database.
- * @returns {Promise<void>} A promise that resolves when the token is updated.
- */
 export const updateResetToken = async (userId: string, token: string) => {
     await UserSchema.findByIdAndUpdate(userId, { resetPasswordToken: token });
 };
 
-
-/**
- * Resets the user's password if the provided token is valid.
- * 
- * @param {string} userId - The ID of the user who is resetting their password.
- * @param {string} token - The reset password token provided by the user.
- * @param {string} newPassword - The new password to be set for the user.
- * @throws {HttpError} Throws an error if the reset token is invalid or expired.
- * @returns {Promise<User | null>} A promise that resolves to the updated user document, or null if the user is not found.
- */
 export const resetPassword = async (userId: string, token: string, newPassword: string) => {
     const user = await UserSchema.findById(userId);
     if (!user?.resetPasswordToken) {
@@ -185,7 +167,7 @@ export const getAllUsers = async (
     pageNo: number,
     limit: number,
     search?: string,
-    active?: boolean 
+    active?: boolean
 ): Promise<{
     users: IGetUserResponse[];
     totalDocs: number;
@@ -257,4 +239,168 @@ export const updateUserStatus = async (userId: string) => {
     );
 
     return omit(updatedUser?.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
+};
+
+export const getUserAnalytics = async () => {
+    const now = new Date();
+    const startOfToday = new Date(now.setHours(0, 0, 0, 0));
+    const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+    const sixMonthsAgo = new Date(now.setMonth(now.getMonth() - 6));
+    const yesterday = new Date(startOfToday);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const lastWeek = new Date(startOfWeek);
+    lastWeek.setDate(lastWeek.getDate() - 7);
+    const lastMonth = new Date(startOfMonth);
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+    const result = await UserSchema.aggregate([
+        {
+            $match: {
+                role: { $ne: UserRole.SUPER_ADMIN }
+            }
+        },
+        {
+            $facet: {
+                totals: [
+                    {
+                        $group: {
+                            _id: null,
+                            total: { $sum: 1 },
+                            instructors: {
+                                $sum: { $cond: [{ $eq: ["$role", UserRole.INSTRUCTOR] }, 1, 0] }
+                            },
+                            students: {
+                                $sum: { $cond: [{ $eq: ["$role", UserRole.USER] }, 1, 0] }
+                            },
+                            active: {
+                                $sum: { $cond: ["$active", 1, 0] }
+                            }
+                        }
+                    }
+                ],
+                timeStats: [
+                    {
+                        $group: {
+                            _id: null,
+                            today: {
+                                $sum: { $cond: [{ $gte: ["$createdAt", startOfToday] }, 1, 0] }
+                            },
+                            yesterday: {
+                                $sum: {
+                                    $cond: [
+                                        {
+                                            $and: [
+                                                { $gte: ["$createdAt", new Date(yesterday.setHours(0, 0, 0, 0))] },
+                                                { $lt: ["$createdAt", startOfToday] }
+                                            ]
+                                        }, 1, 0]
+                                }
+                            },
+                            thisWeek: {
+                                $sum: { $cond: [{ $gte: ["$createdAt", startOfWeek] }, 1, 0] }
+                            },
+                            lastWeek: {
+                                $sum: {
+                                    $cond: [
+                                        {
+                                            $and: [
+                                                { $gte: ["$createdAt", lastWeek] },
+                                                { $lt: ["$createdAt", startOfWeek] }
+                                            ]
+                                        }, 1, 0]
+                                }
+                            },
+                            thisMonth: {
+                                $sum: { $cond: [{ $gte: ["$createdAt", startOfMonth] }, 1, 0] }
+                            },
+                            lastMonth: {
+                                $sum: {
+                                    $cond: [
+                                        {
+                                            $and: [
+                                                { $gte: ["$createdAt", lastMonth] },
+                                                { $lt: ["$createdAt", startOfMonth] }
+                                            ]
+                                        }, 1, 0]
+                                }
+                            },
+                            lastSixMonths: {
+                                $sum: { $cond: [{ $gte: ["$createdAt", sixMonthsAgo] }, 1, 0] }
+                            },
+                            thisYear: {
+                                $sum: { $cond: [{ $gte: ["$createdAt", startOfYear] }, 1, 0] }
+                            }
+                        }
+                    }
+                ],
+                monthlyTrend: [
+                    {
+                        $match: {
+                            createdAt: { $gte: new Date(new Date().setFullYear(new Date().getFullYear() - 1)) }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: {
+                                year: { $year: "$createdAt" },
+                                month: { $month: "$createdAt" }
+                            },
+                            count: { $sum: 1 }
+                        }
+                    },
+                    { $sort: { "_id.year": 1, "_id.month": 1 } },
+                    {
+                        $project: {
+                            _id: 0,
+                            month: {
+                                $concat: [
+                                    { $toString: "$_id.year" },
+                                    "-",
+                                    { $toString: "$_id.month" }
+                                ]
+                            },
+                            users: "$count"
+                        }
+                    }
+                ]
+            }
+        }
+    ]);
+
+    const totals = result[0].totals[0] || {};
+    const timeStats = result[0].timeStats[0] || {};
+    const monthlyTrend = result[0].monthlyTrend || [];
+
+    const calculateGrowth = (current: number, previous: number) =>
+        previous > 0 ? ((current - previous) / previous) * 100 : 0;
+
+    return {
+        totals: {
+            users: totals.total || 0,
+            instructors: totals.instructors || 0,
+            students: totals.students || 0,
+            active: totals.active || 0
+        },
+        timePeriods: {
+            today: timeStats.today || 0,
+            yesterday: timeStats.yesterday || 0,
+            dailyGrowth: calculateGrowth(timeStats.today || 0, timeStats.yesterday || 0),
+
+            thisWeek: timeStats.thisWeek || 0,
+            lastWeek: timeStats.lastWeek || 0,
+            weeklyGrowth: calculateGrowth(timeStats.thisWeek || 0, timeStats.lastWeek || 0),
+
+            thisMonth: timeStats.thisMonth || 0,
+            lastMonth: timeStats.lastMonth || 0,
+            monthlyGrowth: calculateGrowth(timeStats.thisMonth || 0, timeStats.lastMonth || 0),
+
+            lastSixMonths: timeStats.lastSixMonths || 0,
+            thisYear: timeStats.thisYear || 0
+        },
+        trends: {
+            monthly: monthlyTrend
+        }
+    };
 };
