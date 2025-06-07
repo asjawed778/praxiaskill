@@ -53,12 +53,21 @@ export default function FAQSections({ course }) {
   if (!course?.faq?.length) return null;
 
   return (
-    <Container maxWidth="lg" sx={{ py: { xs: 4, sm: 6 } }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 4 } }}>
       <Typography
-        variant="h1"
-        color="white"
-        textAlign="center"
-        mb={3}
+        sx={{
+          color: "white",
+          fontWeight: 600,
+          fontSize: {
+            xs: "32px",
+            sm: "36px",
+            md: "40px",
+            lg: "44px",
+            xl: "48px",
+          },
+          textAlign: "center",
+          mb: 2,
+        }}
       >
         Frequently Asked Questions
       </Typography>
@@ -81,7 +90,7 @@ export default function FAQSections({ course }) {
             bgcolor: "#111",
             borderRadius: 2,
             overflow: "hidden",
-            maxHeight: 250
+            maxHeight: 250,
           }}
         >
           <Box
@@ -118,16 +127,32 @@ export default function FAQSections({ course }) {
                 expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />}
               >
                 <Typography
-                  variant="body1"
-                  fontWeight="bold"
+                  sx={{
+                    fontSize: {
+                      xs: "14px",
+                      sm: "16px",
+                      md: "18px",
+                      lg: "20px",
+                      xl: "22px",
+                    },
+                    fontWeight: 600,
+                  }}
                 >
                   {item.question}
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <Typography
-                  variant="body1"
-                  color="#ccc"
+                  sx={{
+                    fontSize: {
+                      xs: "14px",
+                      sm: "16px",
+                      md: "18px",
+                      lg: "20px",
+                      xl: "22px",
+                    },
+                    color: "#ccc"
+                  }}
                 >
                   {item.answer}
                 </Typography>

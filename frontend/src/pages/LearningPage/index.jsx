@@ -64,7 +64,20 @@ const LearningPage = () => {
   return (
     <Container maxWidth="lg">
       <Box py={2}>
-        <Typography align="center" variant="h1" mb={2}>
+        <Typography
+          sx={{
+            textAlign: "center",
+            mb: 2,
+            fontWeight: 600,
+            fontSize: {
+              xs: "32px",
+              sm: "36px",
+              md: "40px",
+              lg: "44px",
+              xl: "48px",
+            },
+          }}
+        >
           Explore Our Courses
         </Typography>
 
