@@ -4,90 +4,61 @@ import createHttpError from "http-errors";
 import { UploadedFile } from "express-fileupload";
 
 
-const allowedVideoTypes = [
-    "video/mp4", "video/mov", "video/avi",
-    "video/mkv", "video/webm", "video/flv", "video/wmv"
-];
+const allowedTypes: Record<string, { maxSizeMB: number }> = {
+    // Images
+    "image/jpeg": { maxSizeMB: 5 },
+    "image/png": { maxSizeMB: 5 },
+    "image/jpg": { maxSizeMB: 5 },
+    "image/gif": { maxSizeMB: 5 },
 
-const allowedImageTypes = [
-    "image/png", "image/jpeg", "image/jpg", "image/gif"
-];
+    // PDF
+    "application/pdf": { maxSizeMB: 5 },
 
-const allowedFileTypes = [
-    ...allowedVideoTypes,
-    "application/pdf",
-    ...allowedImageTypes
-];
+    // Videos
+    "video/mp4": { maxSizeMB: 10 },
+    "video/mov": { maxSizeMB: 10 },
+    "video/avi": { maxSizeMB: 10 },
+    "video/mkv": { maxSizeMB: 10 },
+    "video/webm": { maxSizeMB: 10 },
+    "video/flv": { maxSizeMB: 10 },
+    "video/wmv": { maxSizeMB: 10 },
+};
+
 
 // Max chunk size is 5MB
 const MAX_CHUNK_SIZE = 5.5 * 1024 * 1024;
 
-export const thumbnailUpload = (req: Request, res: Response, next: NextFunction) => {
-    if (!req.files || !req.files.thumbnail) {
-        throw createHttpError(400, "Thumbnail is required");
+export const validateFileUpload = (req: Request, res: Response, next: NextFunction) => {
+    if (!req.files || !req.files.file) {
+        return next(createHttpError(400, "File is required"));
     }
 
-    const file = req.files.thumbnail as fileUpload.UploadedFile;
-    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-    const maxSize = 5 * 1024 * 1024;
+    const uploaded = req.files.file as fileUpload.UploadedFile;
 
-    if (!allowedTypes.includes(file.mimetype)) {
-        throw createHttpError(400, "Thumbnail must be an image (jpg, jpeg, png)");
+    const fileType = uploaded.mimetype;
+    const fileSize = uploaded.size;
+
+    const validation = allowedTypes[fileType];
+
+    if (!validation) {
+        return next(
+            createHttpError(400, `Unsupported file type: ${fileType}.`)
+        );
     }
 
-    if (file.size > maxSize) {
-        throw createHttpError(400, "Thumbnail must be less than 5MB");
-    }
-
-    next();
-};
-
-export const brouchureUpload = (req: Request, res: Response, next: NextFunction) => {
-    if (!req.files || !req.files.brouchure) {
-        throw createHttpError(400, "Brochure is required");
-    }
-
-    const file = req.files.brouchure as fileUpload.UploadedFile;
-    const maxSize = 5 * 1024 * 1024;
-
-    if (file.mimetype !== "application/pdf") {
-        throw createHttpError(400, "Brochure must be a PDF file");
-    }
-
-    if (file.size > maxSize) {
-        throw createHttpError(400, "Brochure must be less than 5MB");
-    }
-
-    next();
-};
-
-export const videoUpload = (req: Request, res: Response, next: NextFunction) => {
-    if (!req.files || !req.files.video) {
-        throw createHttpError(400, "Video file is required.");
-    }
-
-    const file = req.files.video as fileUpload.UploadedFile;
-    const allowedTypes = [
-        "video/mp4", "video/mov", "video/avi", 
-        "video/mkv", "video/webm", "video/flv", "video/wmv"
-    ];
-    const maxSize = 10 * 1024 * 1024;
-
-    if (!allowedTypes.includes(file.mimetype)) {
-        throw createHttpError(400, "Invalid video format. Allowed formats: mp4, mov, avi, mkv, webm, flv, wmv.");
-    }
-
-    if (file.size > maxSize) {
-        throw createHttpError(400, "Video file size must not exceed 10MB.");
+    if (fileSize > validation.maxSizeMB * 1024 * 1024) {
+        return next(
+            createHttpError(400, `File size must be less than ${validation.maxSizeMB}MB.`)
+        );
     }
 
     next();
 };
 
 export const validateChunkUpload = (req: Request, res: Response, next: NextFunction) => {
-    
+
     const { uploadId, fileKey, partNumber } = req.body;
-    
+
     if (!uploadId || typeof uploadId !== "string") {
         return next(createHttpError(400, "uploadId is required and must be a string"));
     }
@@ -99,7 +70,7 @@ export const validateChunkUpload = (req: Request, res: Response, next: NextFunct
     if (!partNumber || isNaN(parseInt(partNumber)) || parseInt(partNumber) < 1) {
         return next(createHttpError(400, "partNumber is required and must be a positive integer"));
     }
-    
+
     if (!req.files || !req.files.chunk) {
         return next(createHttpError(400, "No file chunk provided"));
     }
@@ -116,23 +87,3 @@ export const validateChunkUpload = (req: Request, res: Response, next: NextFunct
 
     next();
 };
-
-// export const imageUpload = (req: Request, res: Response, next: NextFunction) => {
-//     if (!req.files || !req.files.file) {
-//         throw createHttpError(400, "file is required");
-//     }
-
-//     const file = req.files.thumbnail as fileUpload.UploadedFile;
-//     const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-//     const maxSize = 5 * 1024 * 1024;
-
-//     if (!allowedTypes.includes(file.mimetype)) {
-//         throw createHttpError(400, "Thumbnail must be an image (jpg, jpeg, png)");
-//     }
-
-//     if (file.size > maxSize) {
-//         throw createHttpError(400, "Thumbnail must be less than 5MB");
-//     }
-
-//     next();
-// };
