@@ -1082,3 +1082,98 @@ export const getCourseNotes = async (userId: string, courseId?: string, sectionI
         pageSize
     };
 };
+
+export const getCourseAnalytics = async () => {
+    const results = await Promise.all([
+        courseSchema.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    total: { $sum: 1 },
+                    active: {
+                        $sum: { $cond: [{ $eq: ["$courseStatus", courseEnum.CourseStatus.PUBLISHED] }, 1, 0] }
+                    },
+                    draft: {
+                        $sum: { $cond: [{ $eq: ["$courseStatus", courseEnum.CourseStatus.DRAFT] }, 1, 0] }
+                    },
+                    terminated: {
+                        $sum: { $cond: [{ $eq: ["$courseStatus", courseEnum.CourseStatus.TERMINATED] }, 1, 0] }
+                    }
+                }
+            }
+        ]),
+        enrollmentSchema.countDocuments({})
+    ]);
+
+    return {
+        courseOverview: {
+            totalCourses: results[0][0]?.total || 0,
+            activeCourses: results[0][0]?.active || 0,
+            draftCourses: results[0][0]?.draft || 0,
+            terminatedCourses: results[0][0]?.archived || 0
+        },
+        enrollmentMetrics: {
+            totalEnrollments: results[1] || 0
+        }
+    };
+};
+
+export const getEnquiryAnalytics = async () => {
+    const now = new Date();
+
+    const periods = {
+        today: new Date(now.setHours(0, 0, 0, 0)),
+        week: new Date(now.setDate(now.getDate() - 7)),
+        month: new Date(now.setMonth(now.getMonth() - 1)),
+        sixMonths: new Date(now.setMonth(now.getMonth() - 6)),
+        year: new Date(now.setFullYear(now.getFullYear() - 1))
+    };
+
+    const results = await CourseEnquirySchema.aggregate([
+        {
+            $facet: {
+                total: [{ $count: "count" }],
+                today: [
+                    { $match: { createdAt: { $gte: periods.today } } },
+                    { $count: "count" }
+                ],
+                thisWeek: [
+                    { $match: { createdAt: { $gte: periods.week } } },
+                    { $count: "count" }
+                ],
+                thisMonth: [
+                    { $match: { createdAt: { $gte: periods.month } } },
+                    { $count: "count" }
+                ],
+                lastSixMonths: [
+                    { $match: { createdAt: { $gte: periods.sixMonths } } },
+                    { $count: "count" }
+                ],
+                thisYear: [
+                    { $match: { createdAt: { $gte: periods.year } } },
+                    { $count: "count" }
+                ],
+                byStatus: [
+                    { $group: { _id: "$status", count: { $sum: 1 } } }
+                ]
+            }
+        }
+    ]);
+
+    const getCount = (field: string) => results[0][field][0]?.count || 0;
+
+
+
+    return {
+        totalEnquiries: getCount("total"),
+        today: getCount("today"),
+        thisWeek: getCount("thisWeek"),
+        thisMonth: getCount("thisMonth"),
+        lastSixMonths: getCount("lastSixMonths"),
+        thisYear: getCount("thisYear"),
+        byStatus: (results[0].byStatus as CourseDTO.EnquiryStatusCount[]).reduce((acc: Record<string, number>, curr: CourseDTO.EnquiryStatusCount) => {
+            acc[curr._id] = curr.count;
+            return acc;
+        }, {})
+    } as CourseDTO.EnquiryAnalyticsResult;
+};

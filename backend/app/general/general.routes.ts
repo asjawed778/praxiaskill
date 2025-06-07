@@ -9,6 +9,6 @@ const router = Router();
 
 router
     .post("/contact-us", generalValidation.contactUs, catchError, generalController.contactUs)
-
+    .get("/dashboard", authMiddlerware.auth, catchError, generalController.getDashboardData)
 
 export default router;

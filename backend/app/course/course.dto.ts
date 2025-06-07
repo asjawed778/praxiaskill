@@ -127,5 +127,19 @@ export interface ICourseNotes extends BaseSchema {
     subSectionId?: mongoose.Schema.Types.ObjectId;
     notes: string;
 }
-export interface ICourseNotesCreate extends Omit<ICourseNotes, "createdAt" | "updatedAt" | "_id"> {}
+export interface ICourseNotesCreate extends Omit<ICourseNotes, "createdAt" | "updatedAt" | "_id"> { }
 
+export interface EnquiryStatusCount {
+    _id: string;
+    count: number;
+}
+
+export interface EnquiryAnalyticsResult {
+    totalEnquiries: number;
+    today: number;
+    thisWeek: number;
+    thisMonth: number;
+    lastSixMonths: number;
+    thisYear: number;
+    byStatus: Record<string, number>;
+}
