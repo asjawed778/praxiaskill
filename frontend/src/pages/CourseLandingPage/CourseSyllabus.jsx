@@ -21,9 +21,9 @@ const CourseSyllabus = ({ course }) => {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-   
-  if(course?.sections?.length === 0) return;
-  
+
+  if (course?.sections?.length === 0) return;
+
   return (
     <Box
       sx={{
@@ -33,14 +33,22 @@ const CourseSyllabus = ({ course }) => {
     >
       <Container maxWidth="lg">
         <Typography
-          variant="h1"
-          color="#00e676"
-          textAlign="center"
-          mb={2}
+          sx={{
+            color: "#00e676",
+            fontWeight: 600,
+            fontSize: {
+              xs: "32px",
+              sm: "36px",
+              md: "40px",
+              lg: "44px",
+              xl: "48px",
+            },
+            textAlign: "center",
+            mb: 2,
+          }}
         >
           Course Curriculum
         </Typography>
-
         {course?.sections?.length > 0 &&
           course?.sections?.map((module, index) => (
             <Accordion
@@ -106,7 +114,7 @@ const CourseSyllabus = ({ course }) => {
                         primaryTypographyProps={{
                           sx: {
                             color: "#ccc",
-                            fontSize: { xs: "16px", md: "18px" }, 
+                            fontSize: { xs: "16px", md: "18px" },
                           },
                         }}
                       />
