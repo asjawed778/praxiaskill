@@ -21,8 +21,8 @@ const ModalWrapper = ({
   title,
   children,
   width = 400,
-  close = true,
-  allowOutsideClick = false,
+  closeIcon = true,
+  allowOutsideClick = true,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -62,24 +62,27 @@ const ModalWrapper = ({
             overflow: "hidden",
             display: "flex",
             flexDirection: "column",
-            maxHeight: isMobile ? "80dvh" : "70dvh",
+            maxHeight: isMobile ? "80dvh" : "90dvh",
             height: "auto",
           },
         },
       }}
     >
-      {close && !isMobile && (
+      {closeIcon && !isMobile && (
         <IconButton
           onClick={onClose}
           sx={{
             position: "absolute",
-            top: 8,
-            right: 8,
-            color: "error.main",
+            top: -2,
+            right: -2,
+            color: "text.secondary",
+            '&:hover': {
+              color: "error.main"
+            },
             zIndex: 10,
           }}
         >
-          <CloseIcon />
+          <CloseIcon fontSize="small"/>
         </IconButton>
       )}
 
@@ -92,7 +95,7 @@ const ModalWrapper = ({
           p: 0,
         }}
       >
-        <Box p={2}>{children}</Box>
+        <Box px={2} py={1}>{children}</Box>
       </DialogContent>
     </Dialog>
   );

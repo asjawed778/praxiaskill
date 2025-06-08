@@ -245,9 +245,10 @@ const Sidebar = () => {
                               aria-label={subLabel}
                               sx={{
                                 color: colors.sidebarText,
-                                // pl: 4,
+                                pl: 4,
                                 fontSize: "0.875rem",
                                 fontWeight: "600",
+                                // pl: 2,
                                 borderRadius: "8px",
                                 ...(isRouteActive(subPath) ? activeStyles : {}),
                               }}
@@ -263,6 +264,7 @@ const Sidebar = () => {
                                   primaryTypographyProps={{
                                     fontSize: "0.875rem",
                                     fontWeight: "600",
+                                    // pl: 2,
                                     color: colors.sidebarText,
                                   }}
                                 />
