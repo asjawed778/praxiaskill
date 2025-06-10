@@ -47,3 +47,6 @@ export const EnquirySchema = yup.object().shape({
   interestedCourse: yup.string().required("Course selection is required"),
   whatsAppOptIn: yup.boolean().default(true),
 });
+
+// Add course structure schema
+

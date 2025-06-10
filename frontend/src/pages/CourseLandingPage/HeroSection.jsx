@@ -84,6 +84,7 @@ const HeroSection = ({ syllabusRef, course }) => {
                     },
                     fontWeight: 600,
                     color: "white",
+                    // lineHeight: 1.2
                   }}
                 >
                   {course?.title}

@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useRef } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import ImageUploader from "@/components/ImageUploader";
+import CustomButton from "@/components/CustomButton";
 
 const FAQSections = () => {
   const { control } = useFormContext();
@@ -28,16 +29,15 @@ const FAQSections = () => {
   }, [fields, append]);
   return (
     <Box>
-      {/* <Grid container spacing={2}> */}
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="h6" gutterBottom fontWeight={500}>
-            FAQ Details
-          </Typography>
-          <Divider />
-        </Box>
-        <Grid container spacing={3}>
+      <Box sx={{ mb: 2 }}>
+        <Typography variant="h6" gutterBottom fontWeight={500}>
+          FAQ Details
+        </Typography>
+        <Divider />
+      </Box>
+      <Grid container spacing={3}>
         {fields.map((field, index) => (
-         <Grid
+          <Grid
             key={field.id}
             size={{ xs: 12 }}
             sx={{
@@ -61,7 +61,7 @@ const FAQSections = () => {
             )}
 
             <Grid container spacing={3}>
-            <Grid size={{ xs: 12, md: 6 }}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <CustomInputField
                   name={`faq.${index}.question`}
                   label="Question"
@@ -89,33 +89,30 @@ const FAQSections = () => {
                   required={false}
                 />
               </Grid>
-            
-             <Grid size={{ xs: 12, sm: 6 }}>
-              <ImageUploader
-                label="Upload Related Image"
-                name={`faq.${index}.resourceUrl`}
-                control={control}
-                width={500}
-                height={200}
-                required={false}
-              />
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <ImageUploader
+                  label="Upload Related Image"
+                  name={`faq.${index}.resourceUrl`}
+                  control={control}
+                  width={500}
+                  height={200}
+                  required={false}
+                />
+              </Grid>
             </Grid>
-            
-          </Grid>
           </Grid>
         ))}
-      <Grid size={{ xs: 12 }}>
-        
-          <Button
+        <Grid size={{ xs: 12 }}>
+          <CustomButton
+            label="Add More FAQ"
             variant="outlined"
             startIcon={<AddCircleOutline />}
             onClick={() =>
               append({ question: "", answer: "", resourceUrl: null })
             }
-          >
-            Add More FAQ
-          </Button>
-          </Grid>
+          />
+        </Grid>
       </Grid>
     </Box>
   );

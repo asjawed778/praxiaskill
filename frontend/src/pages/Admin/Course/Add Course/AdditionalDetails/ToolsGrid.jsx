@@ -1,24 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
-  Button,
   Grid,
   Typography,
-  TextField,
   IconButton,
   Divider,
   InputAdornment,
   Tooltip,
 } from "@mui/material";
-import {
-  useForm,
-  useFieldArray,
-  Controller,
-  FormProvider,
-  useFormContext,
-} from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import { AddCircleOutline, Close, InfoOutlined } from "@mui/icons-material";
 import CustomInputField from "@/components/CustomInputField";
+import CustomButton from "@/components/CustomButton";
 import ImageUploader from "@/components/ImageUploader";
 import * as FaIcons from "react-icons/fa";
 import * as SiIcons from "react-icons/si";
@@ -29,11 +22,7 @@ const iconLibraries = {
   Md: MdIcons,
 };
 
-
 const ToolsGrid = () => {
-  // const methods = useForm({
-  //   defaultValues: { tools: [{ name: "", iconName: null, url: null }] },
-  // });
   const { control, watch } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
@@ -59,7 +48,7 @@ const ToolsGrid = () => {
   };
 
   return (
-    <Box p={2}>
+    <Box>
       <Typography variant="h6">Tools You Learn</Typography>
       <Divider sx={{ mb: 2 }} />
 
@@ -168,13 +157,12 @@ const ToolsGrid = () => {
         );
       })}
 
-      <Button
+      <CustomButton
+        label="Add More Tool"
         variant="outlined"
         startIcon={<AddCircleOutline />}
         onClick={() => append({ name: "", iconName: null, url: null })}
-      >
-        Add More Tool
-      </Button>
+      />
     </Box>
   );
 };

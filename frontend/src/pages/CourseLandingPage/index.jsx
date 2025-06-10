@@ -16,7 +16,7 @@ import Landing from "./Landing";
 const CourseLandingPage = () => {
   const dispatch = useDispatch()
   const { slug } = useParams();
-  const { data: courseDetails, isLoading } = useGetFullCourseDetailsQuery(slug);
+  const { data: courseDetails, isLoading, isError } = useGetFullCourseDetailsQuery(slug);
   
   
   useEffect(() => {
@@ -47,6 +47,22 @@ const CourseLandingPage = () => {
           Course is loading, please wait...
         </Typography>
         <CircularProgress size={30} thickness={4} />
+      </Box>
+    );
+  }
+  if (isError) {
+    return (
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        my={4}
+        height="40vh"
+      >
+        <Typography variant="h5" my={4} color="error">
+          Somethings are wrong. Please refresh the page!
+        </Typography>
       </Box>
     );
   }

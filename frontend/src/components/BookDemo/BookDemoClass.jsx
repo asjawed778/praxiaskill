@@ -163,6 +163,7 @@ const BookDemoClass = () => {
           />
 
           <CustomButton
+            fullWidth
             label="Submit"
             type="submit"
             variant="contained"

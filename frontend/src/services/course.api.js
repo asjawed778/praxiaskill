@@ -234,7 +234,13 @@ export const apiCourse = createApi({
         credentials: "include",
       }),
     }),
-
+    uploadFile: builder.mutation({
+      query: (file) => ({
+        url: "/course/file",
+        method: "POST",
+        body: file
+      }),
+    }),
   }),
 });
 
@@ -265,5 +271,6 @@ export const {
   useTerminateCourseMutation,
   useUpdateCourseDetailsMutation,
   useRateCourseMutation,
-  useGetCourseRatingsQuery
+  useGetCourseRatingsQuery,
+  useUploadFileMutation,
 } = apiCourse;

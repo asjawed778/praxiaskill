@@ -1,8 +1,9 @@
+import { Box, IconButton, Typography, Stack } from "@mui/material";
 import { FaPlus } from "react-icons/fa6";
-import { MdDelete } from "react-icons/md";
-
-import { useFieldArray } from "react-hook-form";
-import InputField from "../../../../../components/Input Field";
+import { useFieldArray, useWatch } from "react-hook-form";
+import CustomInputField from "../../../../../components/CustomInputField";
+import { Delete } from "@mui/icons-material";
+import CustomButton from "../../../../../components/CustomButton";
 
 export default function SubSectionFields({ control, sectionIndex, errors }) {
   const {
@@ -13,56 +14,64 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
     control,
     name: `sections.${sectionIndex}.subSections`,
   });
-  
+
+  const subSections = useWatch({
+    control,
+    name: `sections.${sectionIndex}.subSections`,
+  });
+
+  const handleAddSubsection = () => {
+    const lastSub = subSections?.[subSections.length - 1];
+    if (!lastSub || lastSub.title?.trim() === "") return;
+
+    appendSubsection({ title: "", description: "" });
+  };
+
   return (
-    <div className="flex flex-col gap-3 mt-2">
-      <h1 className="font-medium">Subsections</h1>
+    <Box mt={1}>
+      <Typography variant="h6" fontWeight={500} gutterBottom>
+        Subsections
+      </Typography>
 
-      {subSectionFields?.map((_, subIndex) => (
-        <div key={subIndex} className="flex flex-col gap-5">
-          <div className="flex gap-5 items-center">
-            <div className="flex-1">
-              <InputField
-                id="step3-subsection-title"
-                {...control.register(
-                  `sections.${sectionIndex}.subSections.${subIndex}.title`
-                )}
-                placeholder="Subsection Title"
-                // parentClassName="w-full"
-              />
+      {subSectionFields?.map((field, subIndex) => (
+        <Box key={field.id} mb={2}>
+          <Stack direction="column" spacing={2} alignItems="center">
+            <CustomInputField
+              name={`sections.${sectionIndex}.subSections.${subIndex}.title`}
+              label="Subsection Title"
+              placeholder="Enter subsection title"
+            />
+            <CustomInputField
+              name={`sections.${sectionIndex}.subSections.${subIndex}.description`}
+              label="Subsection Description"
+              placeholder="Enter subsection description"
+              multiline
+              row={3}
+              required={false}
+            />
 
-              {errors?.sections && errors?.sections[sectionIndex]?.title && (
-                  <p className="text-red-600 text-xs ml-1 mt-0.5">
-                    {
-                      errors?.sections[sectionIndex]?.title?.message
-                    }
-                  </p>
-                )}
-            </div>
-
-            {subSectionFields?.length > 1 && (
-              <button
-                type="button"
+            {subSectionFields.length > 1 && (
+              <IconButton
                 onClick={() => removeSubsection(subIndex)}
-                className="text-gray-500 mt-1"
+                color="error"
+                size="small"
               >
-                <MdDelete size={30} />
-              </button>
+                <Delete />
+              </IconButton>
             )}
-          </div>
+          </Stack>
 
-          {subIndex === subSectionFields?.length - 1 && (
-            <button
-              type="button"
-              onClick={() => appendSubsection({ title: "" })}
-              className="text-[var(--color-primary)] cursor-pointer flex items-center gap-1 w-fit"
-            >
-              <FaPlus size={30} />
-              <span>Add More Subsection</span>
-            </button>
+          {subIndex === subSectionFields.length - 1 && (
+            <CustomButton
+              label="Add More Subsection"
+              variant="outlined"
+              startIcon={<FaPlus />}
+              onClick={handleAddSubsection}
+              sx={{ mt: 2 }}
+            />
           )}
-        </div>
+        </Box>
       ))}
-    </div>
+    </Box>
   );
 }

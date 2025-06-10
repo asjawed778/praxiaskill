@@ -18,7 +18,6 @@ import { toast } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import AdditionalDetails from "./Add Course/AdditionalDetails";
 import { cleanData } from "../../../utils/helper";
-import useScrollToTop from "../../../hooks/useScrollToTop";
 
 const AddCourse = () => {
   const [uploadCourse, { isLoading, errors }] = useUploadCourseMutation();
@@ -132,6 +131,7 @@ const AddCourse = () => {
   }, [loadCourse, isCourseLoading, methods]);
 
   const handleNext = async () => {
+    
     const isValid = await methods.trigger();
     if (!isValid) return;
 
@@ -230,7 +230,8 @@ const AddCourse = () => {
         </div>
 
         {/* Step Content */}
-        <div className="bg-[#F5F5F5] rounded-lg p-2 w-full">
+        {/* <div className="bg-[#F5F5F5] rounded-lg p-2 w-full"> */}
+        <div className="brounded-lg p-2 w-full">
           {currentStep === 0 && <CourseFirstStep handleNext={handleNext} />}
           {currentStep === 1 && (
             <AdditionalDetails
