@@ -15,27 +15,14 @@ import mongoose from 'mongoose';
 
 // This controller handles the upload of public files related to courses, such as thumbnails, brochures, trailers, and videos.
 export const uploadPublicFile = asyncHandler(async (req: Request, res: Response) => {
-    const allowedFields = ["thumbnail", "brouchure", "trailerVideo", "video"];
 
-    // Ensure req.files is not null or undefined
-    if (!req.files) {
-        throw createHttpError(400, "No files were selected.");
+    if (!req.files || !req.files.file) {
+        throw createHttpError(400, "No file were selected.");
     }
-
-    // Find which file is being uploaded
-    let fileKey = allowedFields.find(field => req.files?.[field]);
-
-    if (!fileKey) {
-        throw createHttpError(400, "Please select a valid file to upload");
-    }
-
-    const file = req.files[fileKey] as UploadedFile;
-
-    const uploadPath = `public/course/${fileKey}`;
-
+    const file = req.files.file as UploadedFile;
+    const uploadPath = `public/course/assets/${file.name}`;
     const result = await AWSservice.putObject(file, uploadPath);
-
-    res.send(createResponse(result, `${fileKey} uploaded successfully to AWS`));
+    res.send(createResponse(result, `File uploaded successfully to AWS`));
 });
 
 // course content upload controllers
