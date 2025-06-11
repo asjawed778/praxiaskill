@@ -16,6 +16,7 @@ import { paymentApi } from "../services/payment.api";
 import { contactApi } from "../services/contactApi"
 import { usersApi } from "../services/usersApi";
 import { qnaApi } from "../services/qnaApi";
+import { generalApi } from "../services/generalApi";
 
 // Persist configuration
 const persistConfig = {
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
   [contactApi.reducerPath]: contactApi.reducer,
   [usersApi.reducerPath]: usersApi.reducer,
   [qnaApi.reducerPath]: qnaApi.reducer,
+  [generalApi.reducerPath]: generalApi.reducer,
 });
 
 // Create a persisted reducer
@@ -58,6 +60,7 @@ export const store = configureStore({
       contactApi.middleware,
       usersApi.middleware,
       qnaApi.middleware,
+      generalApi.middleware,
     ),
 });
 

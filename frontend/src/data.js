@@ -19,10 +19,10 @@ export const cardData = [
   ];
   
   export const enrollments = [
-    { course: 'B', count: 300 },
-    { course: 'C', count: 400 },
-    { course: 'D', count: 550 },
-    { course: 'E', count: 700 },
+    { user: 'B', count: 300 },
+    { user: 'C', count: 400 },
+    { user: 'D', count: 550 },
+    { user: 'E', count: 700 },
   ];
   export const topCourses = [
     { name: 'Course B', popularity: 95 },

@@ -1,25 +1,30 @@
 export enum Language {
-    ENGLISH = "ENGLISH",
-    HINDI = "HINDI",
-    ENGLISH_HINDI = "ENGLISH_HINDI",
+    ENGLISH = "English",
+    HINDI = "Hindi",
+    ENGLISH_HINDI = "English & Hindi",
 }
 
 export enum CourseMode {
-    ONLINE = "ONLINE",
-    OFFLINE = "OFFLINE",
-    HYBRID = "HYBRID",
+    ONLINE = "Online",
+    OFFLINE = "Offline",
+    HYBRID = "Hybrid",
 }
 
 export enum Status {
-    ACTIVE = "ACTIVE",
-    COMPLETED = "COMPLETED",
-    EXPIRED = "EXPIRED",
-    CANCELLED = "CANCELLED",
+    ACTIVE = "Active",
+    COMPLETED = "Completed",
+    EXPIRED = "Expired",
+    CANCELLED = "Cancelled",
 }
 
 export enum EnquiryStatus {
-    PENDING = "PENDING",
-    CLOSED = "CLOSED",
+    PENDING = "Pending",
+    FIRST_CALL_ATTEMPTED = "First Call Attempted",
+    INTERESTED = "Interested",
+    INFORMATION_SENT = "Information Sent",
+    NOT_ENGAGE = "Not Engage",
+    COURSE_FEE_ISSUE = "Course Fee Issue",
+    CLOSED = "Closed",
 }
 
 export enum CourseStatus {
