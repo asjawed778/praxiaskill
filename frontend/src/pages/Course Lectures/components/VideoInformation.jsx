@@ -91,10 +91,10 @@ const VideoInformation = ({
         )}
 
         {activeSection === "Q&A" && (
-          <QnASection course={courseContent} />
+          <QnASection course={courseContent}  />
         )}
         {activeSection === "Notes" && (
-          <NotesSection />
+          <NotesSection courseId={courseContent?._id} section={sectionIds}/>
         )}
         {activeSection === "Reviews" && (
           <ReviewSection />

@@ -46,7 +46,9 @@ const CustomInputField = ({
       multiline={!!row}
       rows={row}
       disabled={disabled}
-      value={field?.value ?? ""}
+      // value={field?.value ?? ""}
+      value={typeof field.value === "undefined" ? "" : field.value}
+
       placeholder={isDate ? undefined : placeholder}
       size={size}
       type={  

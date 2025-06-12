@@ -206,7 +206,7 @@ export const apiCourse = createApi({
       query: ({ courseId }) => ({
         url: `course/terminate/${courseId}`,
         method: "PATCH",
-      })
+      }),
     }),
 
     updateCourseDetails: builder.mutation({
@@ -214,7 +214,7 @@ export const apiCourse = createApi({
         url: `course/details/${courseId}`,
         method: "PUT",
         body: data,
-        credentials: "include"
+        credentials: "include",
       }),
     }),
 
@@ -238,9 +238,45 @@ export const apiCourse = createApi({
       query: (file) => ({
         url: "/course/file",
         method: "POST",
-        body: file
+        body: file,
       }),
     }),
+    createCourseNotes: builder.mutation({
+      query: ({courseId, sectionId, subSectionId, body}) => ({
+        url: "/course/notes",
+        method: "POST",
+        params:{
+          courseId,
+          sectionId,
+          subSectionId
+        },
+        body,
+        credentials: "include",
+      })
+    }),
+    getNotes: builder.query({
+      query: ({ courseId, sectionId, subSectionId, page = 1, limit = 10, search = '', sort = 'latest' }) => ({
+        url: `/course/notes/my`,
+        params: { courseId, sectionId, subSectionId, page, limit, search, sort },
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
+    deleteNotes: builder.mutation({
+      query:(notesId) => ({
+        url: `/course/notes/${notesId}`,
+        method: "DELETE",
+        credentials: "include",
+      })
+    }),
+    updateNotes: builder.mutation({
+      query:({notesId, notes}) => ({
+        url: `/course/notes/${notesId}`,
+        method: "PUT",
+        body: notes,
+        credentials: "include",
+      })
+    })
   }),
 });
 
@@ -273,4 +309,8 @@ export const {
   useRateCourseMutation,
   useGetCourseRatingsQuery,
   useUploadFileMutation,
+  useCreateCourseNotesMutation,
+  useGetNotesQuery,
+  useDeleteNotesMutation,
+  useUpdateNotesMutation
 } = apiCourse;
