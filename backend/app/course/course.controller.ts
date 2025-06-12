@@ -585,7 +585,7 @@ export const createCourseNotes = asyncHandler(async (req: Request, res: Response
     const userId = req.user._id;
     const { courseId, sectionId, subSectionId } = req.query;
 
-    if (req.user.role === UserRole.USER) {
+    if (req.user.role === UserRole.USER && courseId) {
         const isAlreadyEnrolledInCourse = await courseService.isUserCoursePurchased(courseId as string, userId);
         if (!isAlreadyEnrolledInCourse) {
             throw createHttpError(401, "Unauthorized user, course not purchased");
@@ -593,12 +593,13 @@ export const createCourseNotes = asyncHandler(async (req: Request, res: Response
     }
 
     const data: CourseDTO.ICourseNotesCreate = {
-        userId: new mongoose.Schema.Types.ObjectId(userId),
-        courseId: courseId ? new mongoose.Schema.Types.ObjectId(courseId as string) : undefined,
-        sectionId: sectionId ? new mongoose.Schema.Types.ObjectId(sectionId as string) : undefined,
-        subSectionId: subSectionId ? new mongoose.Schema.Types.ObjectId(subSectionId as string) : undefined,
+        userId: new mongoose.Types.ObjectId(userId),
+        courseId: courseId ? new mongoose.Types.ObjectId(courseId as string) : undefined,
+        sectionId: sectionId ? new mongoose.Types.ObjectId(sectionId as string) : undefined,
+        subSectionId: subSectionId ? new mongoose.Types.ObjectId(subSectionId as string) : undefined,
         notes: req.body.notes
     };
+
 
     const result = await courseService.createCourseNotes(data);
     res.send(createResponse(result, "Course notes created successfully"));
@@ -628,10 +629,32 @@ export const getCourseNotes = asyncHandler(async (req: Request, res: Response) =
         throw createHttpError(401, "Unauthorized user, login again");
     }
     const userId = req.user._id;
-    const { courseId, sectionId, subSectionId, page, limit, search, sort,  } = req.query;
+    const { courseId, sectionId, subSectionId, page, limit, search, sort } = req.query;
     const pageNo = page ? parseInt(page as string, 10) : 1;
     const pageSize = limit ? parseInt(limit as string, 10) : 10;
 
-    const result = await courseService.getCourseNotes(userId, courseId as string | undefined, sectionId as string | undefined, subSectionId as string | undefined, search as string | undefined, sort as 'latest' | 'oldest' | undefined, pageNo, pageSize);
+    const query: Record<string, any> = {
+        userId: userId as string,
+        pageNo,
+        pageSize
+    }
+    if (courseId) {
+        query.courseId = courseId as string;
+    }
+    if (sectionId) {
+        query.sectionId = sectionId as string;
+    }
+    if (subSectionId) {
+        query.subSectionId = subSectionId as string;
+    }
+    if (search) {
+        query.search = search as string;
+    }
+    if(sort) {
+        query.sort = sort as string
+    }
+
+
+    const result = await courseService.getCourseNotes(query);
     res.send(createResponse(result, "Course notes fetched successfully"));
 });

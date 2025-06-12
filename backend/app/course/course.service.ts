@@ -1044,42 +1044,42 @@ export const deleteNotes = async (notesId: string): Promise<any> => {
     return deletedNotes;
 };
 
-export const getCourseNotes = async (userId: string, courseId?: string, sectionId?: string, subSectionId?: string, search?: string, sort?: string, pageNo: number = 1, pageSize: number = 1): Promise<any> => {
-    const skip = (pageNo - 1) * pageSize;
-    const query: any = { userId: new mongoose.Types.ObjectId(userId) };
+export const getCourseNotes = async (queryParam: Record<string, any>): Promise<any> => {
+    const skip = (queryParam.pageNo - 1) * queryParam.pageSize;
+    const query: any = { userId: new mongoose.Types.ObjectId(queryParam.userId) };
 
-    if (courseId) {
-        query.courseId = new mongoose.Types.ObjectId(courseId);
+    if (queryParam.courseId) {
+        query.courseId = new mongoose.Types.ObjectId(queryParam.courseId);
     }
-    if (sectionId) {
-        query.sectionId = new mongoose.Types.ObjectId(sectionId);
+    if (queryParam.sectionId) {
+        query.sectionId = new mongoose.Types.ObjectId(queryParam.sectionId);
     }
-    if (subSectionId) {
-        query.subSectionId = new mongoose.Types.ObjectId(subSectionId);
+    if (queryParam.subSectionId) {
+        query.subSectionId = new mongoose.Types.ObjectId(queryParam.subSectionId);
     }
-    if (search) {
-        query.notes = { $regex: search, $options: 'i' };
+    if (queryParam.search) {
+        query.notes = { $regex: queryParam.search, $options: 'i' };
     }
 
-    const sortOptions: Record<string, SortOrder> = sort === 'latest'
+    const sortOptions: Record<string, SortOrder> = queryParam.sort === 'latest'
         ? { createdAt: -1 }
         : { createdAt: 1 };
 
     const totalNotes = await courseNotesSchema.countDocuments(query);
-    const totalPages = Math.ceil(totalNotes / pageSize);
+    const totalPages = Math.ceil(totalNotes / queryParam.pageSize);
 
     const notes = await courseNotesSchema.find(query)
         .sort(sortOptions)
         .skip(skip)
-        .limit(pageSize)
+        .limit(queryParam.pageSize)
         .lean();
 
     return {
         notes,
         totalNotes,
         totalPages,
-        currentPage: pageNo,
-        pageSize
+        currentPage: queryParam.pageNo,
+        pageSize: queryParam.pageSize,
     };
 };
 
