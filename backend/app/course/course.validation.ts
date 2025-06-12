@@ -862,7 +862,7 @@ export const createCourseNotes = [
         .trim(),
 
     query("courseId")
-        .notEmpty().withMessage("Course ID is required")
+        .optional()
         .isMongoId().withMessage("Invalid courseId. Must be a valid MongoDB ObjectId"),
 
     query("sectionId")
@@ -888,4 +888,38 @@ export const deleteCourseNotes = [
     param("notesId")
         .notEmpty().withMessage("Notes ID is required")
         .isMongoId().withMessage("Invalid notesId. Must be a valid MongoDB ObjectId"),
+];
+
+export const getCourseNotes = [
+    query("courseId")
+        .optional()
+        .isMongoId().withMessage("Invalid courseId. Must be a valid MongoDB ObjectId"),
+
+    query("sectionId")
+        .optional()
+        .isMongoId().withMessage("Invalid sectionId. Must be a valid MongoDB ObjectId"),
+
+    query("subSectionId")
+        .optional()
+        .isMongoId().withMessage("Invalid subSectionId. Must be a valid MongoDB ObjectId"),
+
+    query("pageNo")
+        .optional()
+        .isInt({ min: 1 }).withMessage("Page must be a positive integer")
+        .toInt(),
+
+    query("limit")
+        .optional()
+        .isInt({ min: 1, max: 100 }).withMessage("PerPage must be between 1 and 100")
+        .toInt(),
+
+    query("search")
+        .optional()
+        .isString().withMessage("Search query must be a string")
+        .trim(),
+
+    query("sort")
+        .optional()
+        .isIn(['latest', 'oldest']).withMessage('Sort must be either "latest" or "oldest"')
+
 ];
