@@ -7,6 +7,7 @@ import * as AWSservice from '../common/services/AWS.service';
 import * as courseService from './course.service';
 import * as UserService from '../user/user.service';
 import * as CourseDTO from './course.dto';
+import * as CourseEnum from './course.enum';
 import * as CourseCategoryService from "../category/category.service";
 import { courseEnquiryEmailTemplate } from '../common/template/courseEnquiry.template';
 import { emailQueue } from '../common/queue/queues/email.queue';
@@ -267,6 +268,17 @@ export const changeEnquiryStatus = asyncHandler(async (req: Request, res: Respon
     const status = req.body.status;
     const result = await courseService.changeEnquiryStatus(enquiryId, status);
     res.send(createResponse({}, "Enquiry status changed successfully"));
+});
+
+// this controller will stay and all redudnat code removes
+export const getCourses = asyncHandler(async (req: Request, res: Response) => {
+    const pageNo = parseInt(req.query.pageNo as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const category = req.query.category as string | undefined;
+    const status = req.query.status as CourseEnum.CourseStatus | undefined;
+
+    const result = await courseService.getCourses(pageNo, limit, category, status);
+    res.send(createResponse(result, "courses fetched successfully"));
 });
 
 export const getPublishedCourses = asyncHandler(async (req: Request, res: Response) => {

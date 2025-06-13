@@ -321,6 +321,93 @@ export const changeEnquiryStatus = async (enquiryId: string, status: string): Pr
     return enquiry as CourseDTO.ICourseEnquiry;
 };
 
+// this will be final course get service all redundant codes
+export const getCourses = async (pageNo: number = 1, limit: number = 10, category?: string, status?: courseEnum.CourseStatus): Promise<any> => {
+    const skip = (pageNo - 1) * limit;
+    const query: any = {
+        courseStatus: status || courseEnum.CourseStatus.PUBLISHED
+    };
+
+    if (category) {
+        query.category = new mongoose.Types.ObjectId(category);
+    }
+
+    const result = await courseSchema.aggregate([
+        {
+            $match: query
+        },
+        {
+            $lookup: {
+                from: "ratingandreviews",
+                localField: "_id",
+                foreignField: "courseId",
+                as: "ratingsData"
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "instructor",
+                foreignField: "_id",
+                as: "instructorDetails"
+            }
+        },
+        {
+            $lookup: {
+                from: "coursecategories",
+                localField: "category",
+                foreignField: "_id",
+                as: "categoryDetails"
+            }
+        },
+        {
+            $addFields: {
+                totalRatings: { $size: "$ratingsData" },
+                averageRating: {
+                    $cond: {
+                        if: { $eq: [{ $size: "$ratingsData" }, 0] },
+                        then: 0,
+                        else: { $avg: "$ratingsData.rating" }
+                    }
+                },
+                instructor: { $arrayElemAt: ["$instructorDetails", 0] },
+                category: { $arrayElemAt: ["$categoryDetails", 0] }
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                title: 1,
+                subtitle: 1,
+                tags: 1,
+                slug: 1,
+                duration: 1,
+                thumbnail: 1,
+                language: 1,
+                courseMode: 1,
+                totalLectures: 1,
+                totalRatings: 1,
+                averageRating: 1,
+                "instructor._id": 1,
+                "instructor.name": 1,
+                "instructor.profilePic": 1,
+                "category._id": 1,
+                "category.name": 1
+            }
+        },
+        { $skip: skip },
+        { $limit: limit }
+    ]);
+
+    return {
+        success: true,
+        totalCourses: result.length,
+        page: pageNo,
+        pageSize: limit,
+        courses: result
+    };
+};
+
 export const getPublishedCourses = async (pageNo: number = 1, limit: number = 10, category?: string): Promise<any> => {
     const skip = (pageNo - 1) * limit;
     const query: any = {
