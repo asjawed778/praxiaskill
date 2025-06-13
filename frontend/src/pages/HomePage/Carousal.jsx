@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import {
   useGetAllCategoryQuery,
+  useGetAllPublishedCourseQuery,
   useGetCategoryCourseQuery,
 } from "../../services/course.api";
 import { setCourses } from "../../store/reducers/coursesReducer";
@@ -35,7 +36,9 @@ const Carousel = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const categories = useSelector((state) => state.categories.categories);
+  
   const coursesAll = useSelector((state) => state.courses.courses);
+  
 
   const [activeTab, setActiveTab] = useState(null);
   const [cardsPerView, setCardsPerView] = useState(1);
@@ -44,10 +47,17 @@ const Carousel = () => {
 
   const { data: allCategories, isFetching: allCategoriesLoading } =
     useGetAllCategoryQuery();
+//     const allCoursesOption = { _id: "all", name: "All Courses" };
+// const allCategories = useMemo(() => {
+//   return [allCoursesOption, ...(allCategory || [])];
+// }, [allCategory]);
   const { data: categoryCourse, isFetching: categoryCourseLoading } =
     useGetCategoryCourseQuery(activeTab, {
       skip: !activeTab,
     });
+    const { data: publishedCourses, isFetching: publishedCourseLoading } =
+        useGetAllPublishedCourseQuery(1);
+    console.log("course all: ", categories);
 
   useEffect(() => {
     if (allCategories?.success) {
@@ -152,8 +162,7 @@ const Carousel = () => {
             },
           }}
         >
-          {categories
-            .filter((cat) => cat.courses.length > 0)
+          {categories?.filter((cat) => cat?.courses?.length > 0)
             .map((tab) => (
               <Tab
                 key={tab._id}
