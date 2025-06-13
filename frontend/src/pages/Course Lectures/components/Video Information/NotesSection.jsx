@@ -112,8 +112,8 @@ const NotesSection = ({ courseId, section }) => {
   const filterOptions = [
     { label: "Latest", value: "latest" },
     { label: "Oldest", value: "oldest" },
-    {label: "Course", value: courseId},
-    {label: "Course Lecture", value: section?.subSectionId}
+    // {label: "Course", value: courseId},
+    // {label: "Course Lecture", value: section?.subSectionId}
   ];
 
   const onSubmit = async (data) => {
