@@ -879,13 +879,13 @@ export const updateCourseNotes = [
     body("notes")
         .notEmpty().withMessage("Notes is required"),
 
-    param("notesId")
+    param("noteId")
         .notEmpty().withMessage("Notes ID is required")
         .isMongoId().withMessage("Invalid notesId. Must be a valid MongoDB ObjectId")
 ];
 
 export const deleteCourseNotes = [
-    param("notesId")
+    param("noteId")
         .notEmpty().withMessage("Notes ID is required")
         .isMongoId().withMessage("Invalid notesId. Must be a valid MongoDB ObjectId"),
 ];

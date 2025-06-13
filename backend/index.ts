@@ -14,7 +14,6 @@ import routes from "./app/routes";
 import swaggerUi from "swagger-ui-express";
 import apiLimiter from "./app/common/middleware/rate-limit.middleware";
 import './app/common/queue/jobProcessor';
-import { trackVisitor } from "./app/common/middleware/visitor.middleware";
 
 loadConfig();
 
@@ -32,8 +31,7 @@ const port = Number(process.env.PORT) ?? 5000;
 
 const app: Express = express();
 
-// app.set('trust proxy', true);
-app.use(trackVisitor);
+
 app.use(bodyParser.json());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
