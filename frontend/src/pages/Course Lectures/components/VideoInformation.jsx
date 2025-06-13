@@ -94,7 +94,10 @@ const VideoInformation = ({
           <QnASection course={courseContent}  />
         )}
         {activeSection === "Notes" && (
-          <NotesSection courseId={courseContent?._id} section={sectionIds}/>
+          <NotesSection 
+            courseId={courseContent?._id} 
+            section={sectionIds}
+          />
         )}
         {activeSection === "Reviews" && (
           <ReviewSection />

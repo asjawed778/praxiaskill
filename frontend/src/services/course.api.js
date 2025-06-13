@@ -255,12 +255,23 @@ export const apiCourse = createApi({
       })
     }),
     getNotes: builder.query({
-      query: ({ courseId, sectionId, subSectionId, page = 1, limit = 10, search = '', sort = 'latest' }) => ({
-        url: `/course/notes/my`,
-        params: { courseId, sectionId, subSectionId, page, limit, search, sort },
-        method: "GET",
-        credentials: "include",
-      }),
+      query: ({ courseId="", sectionId="", subSectionId="", page = 1, limit = 10, search = "", sort = "latest" }) => {
+        const params = {
+      ...(courseId && { courseId }),
+      ...(sectionId && { sectionId }),
+      ...(subSectionId && { subSectionId }),
+      ...(search && { search }),
+      page,
+      limit,
+      sort,
+    };
+        return {
+      url: "/course/notes/my",
+      params,
+      method: "GET",
+      credentials: "include",
+    };
+      },
     }),
     deleteNotes: builder.mutation({
       query:(notesId) => ({
@@ -270,8 +281,8 @@ export const apiCourse = createApi({
       })
     }),
     updateNotes: builder.mutation({
-      query:({notesId, notes}) => ({
-        url: `/course/notes/${notesId}`,
+      query:({noteId, notes}) => ({
+        url: `/course/notes/${noteId}`,
         method: "PUT",
         body: notes,
         credentials: "include",
