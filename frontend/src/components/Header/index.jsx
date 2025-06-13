@@ -47,6 +47,7 @@ const Header = () => {
         to={to}
         style={({ isActive }) => ({
           textDecoration: "none",
+          fontWeight: "bold",
           color: isActive ? colors.secondary : "inherit",
           borderBottom: isActive
             ? `2px solid ${colors.primary}`
@@ -112,9 +113,16 @@ const Header = () => {
                   underline="none"
                   sx={{
                     color: colors.primary,
-                    fontSize: "14px",
+                    // bgcolor: colors.primary,
+                    py: "6px",
+                    px: "10px",
+                    borderRadius: 2,
+                    border: "1px solid",
+                    borderColor: "primary.main",
+                    fontSize: "16px",
                     "&:hover": {
-                      color: colors.secondary,
+                      bgcolor: colors.primary,
+                      color: "white",
                     },
                   }}
                 >
@@ -128,13 +136,13 @@ const Header = () => {
                 <>
                   <CustomButton
                     label="Login"
-                    variant="outlined"
+                    // variant="outlined"
                     onClick={() => navigate("/auth")}
                   />
-                  <CustomButton
+                  {/* <CustomButton
                     label="Signup"
                     onClick={() => navigate("/auth")}
-                  />
+                  /> */}
                 </>
               )}
 

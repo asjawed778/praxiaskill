@@ -7,7 +7,7 @@ const CustomButton = ({
   type = "button",
   variant = "contained",
   color = "primary",
-  size = "small",
+  size = "medium",
   fullWidth = false,
   disabled = false,
   loading = false,
@@ -42,6 +42,7 @@ const CustomButton = ({
         sx={{
           fontSize: "14px",
           borderRadius: 1.5,
+          // py: "8px",
           textTransform: "none",
           width: fullWidth ? "100%" : "max-content",
           maxWidth: fullWidth ? "100%" : "none",
