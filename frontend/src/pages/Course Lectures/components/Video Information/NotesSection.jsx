@@ -47,29 +47,23 @@ const NotesSection = ({ courseId, section }) => {
   const [openDialog, setOpenDialog] = useState(false);
 
   const [createNotes, { isLoading }] = useCreateCourseNotesMutation();
-  const {
-    data: notesData,
-    isLoading: notesLoading,
-    isError,
-    isFetching,
-    refetch,
-  } = useGetNotesQuery(
+  const { data: notesData, isLoading: notesLoading, isError } = useGetNotesQuery(
     {
       courseId,
-      sectionId: section?.sectionId,
-      subSectionId: section?.subSectionId,
       page,
       limit: 10,
       search: searchQuery,
       sort: filter,
+      ...(section?.sectionId && { sectionId: section.sectionId }),
+      ...(section?.subSectionId && { subSectionId: section.subSectionId }),
     },
     {
-      skip: !courseId || !section?.sectionId || !section?.subSectionId,
-      // keepPreviousData: true,
+      skip: !courseId,
     }
   );
   const [deleteNotes] = useDeleteNotesMutation();
   const [updateNotes] = useUpdateNotesMutation();
+
   useEffect(() => {
     if (notesData?.data?.notes?.length) {
       setAllNotes((prevNotes) => {
@@ -78,18 +72,15 @@ const NotesSection = ({ courseId, section }) => {
         [...prevNotes, ...newNotes].forEach((note) => {
           uniqueNotesMap.set(note._id, note);
         });
-
         return Array.from(uniqueNotesMap.values());
       });
     }
-  }, [notesData, page]);
-
-  const hasMore = notesData?.data?.currentPage < notesData?.data?.totalPages;
+  }, [notesData]);
 
   useEffect(() => {
     setPage(1);
     setAllNotes([]);
-  }, [searchQuery, filter]);
+  }, [searchQuery, filter, section?.sectionId, section?.subSectionId]);
 
   const methods = useForm({
     resolver: yupResolver(noteSchema),
@@ -114,50 +105,60 @@ const NotesSection = ({ courseId, section }) => {
     reset({ content: "" });
     setEditNoteId(null);
   };
+
   const filterOptions = [
     { label: "Latest", value: "latest" },
     { label: "Oldest", value: "oldest" },
-    
   ];
+
   const onSubmit = async (data) => {
     try {
-      if(editNoteId){
+      if (editNoteId) {
         const res = await updateNotes({
-        noteId: editNoteId,
-        notes: { notes: data.content.trim() },
-      }).unwrap();
+          noteId: editNoteId,
+          notes: { notes: data.content.trim() },
+        }).unwrap();
+        setAllNotes((prev) =>
+          prev.map((note) =>
+            note._id === editNoteId
+              ? { ...note, notes: data.content.trim() }
+              : note
+          )
+        );
+        toast.success("Note updated successfully!");
+      } else {
+        const payload = {
+          courseId,
+          body: { notes: data.content.trim() },
+        };
 
-      toast.success("Note updated successfully!");
-      refetch();
-      reset();
-      setEditNoteId(null);
-      handleCloseDialog();
-      }else{
-        const res = await createNotes({
-        courseId,
-        sectionId: section?.sectionId,
-        subSectionId: section?.subSectionId,
-        body: { notes: data.content.trim() },
-      }).unwrap();
-      console.log("Response: ", res);
+        if (section?.sectionId) {
+          payload.sectionId = section.sectionId;
+        }
 
-      toast.success("Note added successfully!");
-      refetch();
-      reset();
-      handleCloseDialog();
+        if (section?.subSectionId) {
+          payload.subSectionId = section.subSectionId;
+        }
+        const res = await createNotes(payload).unwrap();
+        setAllNotes((prev) => [
+          { ...res.data, createdAt: new Date().toISOString() },
+          ...prev,
+        ]);
+        toast.success("Note added successfully!");
       }
     } catch (error) {
       console.error("Create note error:", error);
       toast.error(
         error?.data?.message || "Failed to add note. Please try again."
       );
+    } finally {
+      reset();
+      setOpenDialog(false);
+      setEditNoteId(null);
     }
-    reset();
-    setOpenDialog(false);
-    setEditNoteId(null);
   };
+
   const handleDeleteNote = async (id) => {
-    console.log("Id: ", id);
     try {
       await deleteNotes(id).unwrap();
       setAllNotes((prev) => prev.filter((note) => note._id !== id));
@@ -167,8 +168,8 @@ const NotesSection = ({ courseId, section }) => {
       toast.error(error?.data?.message || "Failed to delete note.");
     }
   };
-  console.log("notes: ", notesData);
-  console.log("allnotes: ", allNotes);
+
+  const hasMore = notesData?.data?.currentPage < notesData?.data?.totalPages;
 
   return (
     <Box>
@@ -191,7 +192,6 @@ const NotesSection = ({ courseId, section }) => {
           </Box>
         </Grid>
       </Grid>
-
       <Box mt={2}>
         {notesLoading ? (
           <Box textAlign="center" mt={2}>
@@ -240,11 +240,11 @@ const NotesSection = ({ courseId, section }) => {
         {hasMore && (
           <Box textAlign="center" mt={2}>
             <CustomButton
-              label={isFetching ? "" : "Load More"}
+              label="Load More"
               onClick={() => setPage((prev) => prev + 1)}
-              disabled={isFetching}
+              disabled={notesLoading}
             />
-            {isFetching && (
+            {notesLoading && (
               <Box mt={1}>
                 <CircularProgress size={24} />
               </Box>
