@@ -25,7 +25,7 @@ const Header = () => {
   const isMobile = useMediaQuery("(max-width: 700px)");
   const navItems = [
     { to: "/", label: "Home" },
-    { to: "/courses", label: "Learning" },
+    { to: "/courses", label: "Courses" },
     { to: "/contact-us", label: "Contact Us" },
   ];
 
@@ -90,7 +90,7 @@ const Header = () => {
               </NavLink>
 
               {!isMobile && (
-                <Box sx={{ display: "flex", gap: 4, fontSize: "14px" }}>
+                <Box sx={{ display: "flex", gap: 4, fontSize: "16px" }}>
                   {navItems.map((item) => (
                     <NavItem key={item.to} to={item.to} label={item.label} />
                   ))}

@@ -574,6 +574,29 @@ export const changeEnquiryStatus = [
         .withMessage(`Status must be one of: ${Object.values(CourseEnum.EnquiryStatus).join(', ')}`)
 ];
 
+export const getCourses = [
+    query('page')
+        .optional()
+        .isInt({ min: 1 }).withMessage('Page must be a positive integer'),
+
+    query('limit')
+        .optional()
+        .isInt({ min: 1, max: 100 }).withMessage('Limit must be between 1 and 100'),
+
+    query('category')
+        .optional()
+        .isMongoId().withMessage('Category must be a valid MongoDB ObjectId'),
+
+    query('status')
+        .optional()
+        .isIn(Object.values(CourseEnum.CourseStatus))
+        .withMessage(`Status must be one of: ${Object.values(CourseEnum.CourseStatus).join(', ')}`),
+
+    query('search')
+        .optional()
+        .isString().withMessage('Search term must be a string'),
+]
+
 export const getCourseDetails = [
     param('identifier')
         .notEmpty().withMessage('courseId or slug is required')
