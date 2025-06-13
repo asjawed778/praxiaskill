@@ -45,9 +45,12 @@ const NotesSection = ({ courseId, section }) => {
   const [filter, setFilter] = useState("latest");
   const [editNoteId, setEditNoteId] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-
   const [createNotes, { isLoading }] = useCreateCourseNotesMutation();
-  const { data: notesData, isLoading: notesLoading, isError } = useGetNotesQuery(
+  const {
+    data: notesData,
+    isLoading: notesLoading,
+    isError,
+  } = useGetNotesQuery(
     {
       courseId,
       page,
@@ -61,8 +64,8 @@ const NotesSection = ({ courseId, section }) => {
       skip: !courseId,
     }
   );
-  const [deleteNotes] = useDeleteNotesMutation();
-  const [updateNotes] = useUpdateNotesMutation();
+  const [deleteNotes, {isLoading: noteDeleteLoading}] = useDeleteNotesMutation();
+  const [updateNotes, {isLoading: noteUpdateLoading}] = useUpdateNotesMutation();
 
   useEffect(() => {
     if (notesData?.data?.notes?.length) {
@@ -109,6 +112,8 @@ const NotesSection = ({ courseId, section }) => {
   const filterOptions = [
     { label: "Latest", value: "latest" },
     { label: "Oldest", value: "oldest" },
+    // {label: "Course", value: courseId},
+    // {label: "Course Lecture", value: section?.subSectionId}
   ];
 
   const onSubmit = async (data) => {
@@ -206,32 +211,60 @@ const NotesSection = ({ courseId, section }) => {
             {allNotes.map((note) => (
               <ListItem
                 key={note._id}
-                sx={{ border: "1px solid #ddd", borderRadius: 1, mb: 1, px: 2 }}
-                secondaryAction={
-                  <>
-                    <IconButton
-                      edge="end"
-                      onClick={() => handleEditNoteClick(note._id, note.notes)}
-                      color="secondary"
-                    >
-                      <Edit />
-                    </IconButton>
-                    <IconButton
-                      edge="end"
-                      onClick={() => handleDeleteNote(note._id)}
-                      color="primary"
-                    >
-                      <Delete />
-                    </IconButton>
-                  </>
-                }
+                disablePadding
+                sx={{
+                  position: "relative",
+                  border: "1px solid #ddd",
+                  borderRadius: 2,
+                  mb: 2,
+                  p: 2,
+                  bgcolor: "#fafafa",
+                  display: "block", 
+                  wordWrap: "break-word", 
+                }}
               >
-                <ListItemText
-                  primary={note.notes}
-                  secondary={`Created on: ${new Date(
-                    note.createdAt
-                  ).toLocaleString()}`}
-                />
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 8,
+                    right: 8,
+                    display: "flex",
+                  }}
+                >
+                  <IconButton
+                    size="small"
+                    onClick={() => handleEditNoteClick(note._id, note.notes)}
+                    color="secondary"
+                  >
+                    <Edit fontSize="small" />
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    onClick={() => handleDeleteNote(note._id)}
+                    color="primary"
+                  >
+                    <Delete fontSize="small" />
+                  </IconButton>
+                </Box>
+                <Box sx={{ pr: 8 }}>
+                  {" "}
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      whiteSpace: "pre-wrap", 
+                      wordBreak: "break-word", 
+                    }}
+                  >
+                    {note.notes}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ mt: 1, display: "block" }}
+                  >
+                    Created on: {new Date(note.createdAt).toLocaleString()}
+                  </Typography>
+                </Box>
               </ListItem>
             ))}
           </List>
@@ -282,7 +315,7 @@ const NotesSection = ({ courseId, section }) => {
               <CustomButton
                 label={editNoteId ? "Update" : "Submit"}
                 type="submit"
-                loading={isLoading}
+                loading={isLoading || noteUpdateLoading || noteDeleteLoading}
               />
             </DialogActions>
           </form>

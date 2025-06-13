@@ -11,6 +11,7 @@ import Collaboration from "./Collaboration";
 import SEOHelmet from "../../SEO/SEOHelmet";
 import { generateOrganizationSchema } from "../../SEO/SEOHelper";
 import CustomButton from "@/components/CustomButton";
+import MentorCarousal from "./MentorCarousal"
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -260,6 +261,7 @@ function HomePage() {
 
         <Container maxWidth="lg">
           <Benefits />
+          <MentorCarousal />
           <Collaboration />
         </Container>
 

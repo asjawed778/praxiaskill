@@ -135,3 +135,8 @@ export const pricingPublishSchema = yup.object().shape({
       .required("Course status is required")
       .oneOf(Object.values(Enum.CourseStatus), "Invalid course status")
 });
+
+// Notes Create Schemae
+export const noteCreateSchema = yup.object().shape({
+  content: yup.string().required("Note content is required").min(5),
+});

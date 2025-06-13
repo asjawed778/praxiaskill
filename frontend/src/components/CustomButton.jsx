@@ -23,8 +23,9 @@ const CustomButton = ({
   return (
     <Box
       sx={{
-        display: "inline-block",
-        cursor: isDisabled ? "not-allowed" : "pointer", 
+        display: fullWidth ? "block" : "inline-block",
+        width: fullWidth ? "100%" : "auto",
+        cursor: isDisabled ? "not-allowed" : "pointer",
       }}
     >
       <Button
@@ -46,7 +47,7 @@ const CustomButton = ({
           maxWidth: fullWidth ? "100%" : "none",
           display: "inline-flex",
           minWidth: 75,
-          pointerEvents: "auto", 
+          pointerEvents: "auto",
           ...sx,
         }}
         style={style}

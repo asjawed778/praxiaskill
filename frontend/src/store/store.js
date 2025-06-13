@@ -8,6 +8,7 @@ import authReducer from "./reducers/authReducer";
 import coursesReducer from "./reducers/coursesReducer";
 import sidebarReducer from "../store/reducers/sidebarSlice"
 import splashScreenReducer from "./reducers/splashScreenReducer";
+// import noteReducer from "./reducers/notesSlice"
 
 // Importing Apis
 import { apiAuth } from "../services/auth.api";
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   courses: coursesReducer,
   sidebar: sidebarReducer,
   splashScreen: splashScreenReducer,
+  // notes: notesReducer,
 
   [apiAuth.reducerPath]: apiAuth.reducer,
   [apiCourse.reducerPath]: apiCourse.reducer,
