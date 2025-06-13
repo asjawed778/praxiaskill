@@ -71,7 +71,7 @@ const Header = () => {
         <Toolbar disableGutters>
           <Box
             sx={{
-              px: {xs: 1, md: 6, lg: 15 }, // Adjust horizontal padding for different screen sizes
+              px: {xs: 1, md: 6, lg: 15 }, 
               width: "100%",
               display: "flex",
               justifyContent: "space-between",
