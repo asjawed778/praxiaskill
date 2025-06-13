@@ -272,12 +272,13 @@ export const changeEnquiryStatus = asyncHandler(async (req: Request, res: Respon
 
 // this controller will stay and all redudnat code removes
 export const getCourses = asyncHandler(async (req: Request, res: Response) => {
-    const pageNo = parseInt(req.query.pageNo as string) || 1;
+    const pageNo = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
     const category = req.query.category as string | undefined;
     const status = req.query.status as CourseEnum.CourseStatus | undefined;
+    const search = req.query.search as string | undefined;
 
-    const result = await courseService.getCourses(pageNo, limit, category, status);
+    const result = await courseService.getCourses(pageNo, limit, category, status, search);
     res.send(createResponse(result, "courses fetched successfully"));
 });
 

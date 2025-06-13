@@ -322,7 +322,7 @@ export const changeEnquiryStatus = async (enquiryId: string, status: string): Pr
 };
 
 // this will be final course get service all redundant codes
-export const getCourses = async (pageNo: number = 1, limit: number = 10, category?: string, status?: courseEnum.CourseStatus): Promise<any> => {
+export const getCourses = async (pageNo: number = 1, limit: number = 10, category?: string, status?: courseEnum.CourseStatus, search?: string): Promise<any> => {
     const skip = (pageNo - 1) * limit;
     const query: any = {
         courseStatus: status || courseEnum.CourseStatus.PUBLISHED

@@ -9,6 +9,7 @@ const router = Router();
 router
     // user course routes
     .get("/my-courses", authMiddlerware.auth, courseController.getMyCourses)
+    .get("/all", courseValidation.getCourses, courseController.getCourses)
 
     // admin course upload routes
     .post("/file", authMiddlerware.auth, authMiddlerware.isSuperAdmin, fileUploadMiddleware.validateFileUpload, catchError, courseController.uploadPublicFile)
