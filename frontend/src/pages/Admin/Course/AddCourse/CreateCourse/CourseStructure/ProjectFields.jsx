@@ -1,38 +1,38 @@
 import { FaPlus } from "react-icons/fa6";
 import { Delete } from "@mui/icons-material";
-import { Grid, IconButton, Typography } from "@mui/material";
-
+import { Grid, IconButton, Typography, Button } from "@mui/material";
 import { useEffect, useRef } from "react";
 import { useFieldArray, useWatch } from "react-hook-form";
-import CustomInputField from "../../../../../components/CustomInputField";
-import CustomButton from "../../../../../components/CustomButton";
+import CustomInputField from "@/components/CustomInputField";
+import CustomButton from "@/components/CustomButton";
 
-export default function AssignmentFields({ control, sectionIndex, errors }) {
+export default function ProjectFields({ control, sectionIndex, errors }) {
   const { fields, append, remove } = useFieldArray({
     control,
-    name: `sections.${sectionIndex}.assignments`,
+    name: `sections.${sectionIndex}.projects`,
   });
+
   const initialized = useRef(false);
   useEffect(() => {
     if (!initialized.current && fields.length === 0) {
-      append({ assignment: "" });
+      append({ project: "" });
       initialized.current = true;
     }
   }, [fields, append]);
-  const assignmentValues = useWatch({
+  const projectValues = useWatch({
     control,
-    name: `sections.${sectionIndex}.assignments`,
+    name: `sections.${sectionIndex}.projects`,
   });
-  const handleAddAssignment = () => {
-    const last = assignmentValues?.[assignmentValues.length - 1]?.assignment;
+  const handleAddProject = () => {
+    const last = projectValues?.[projectValues.length - 1]?.project;
     if (!last || last.trim() === "") return;
-    append({ assignment: "" });
+    append({ project: "" });
   };
 
   return (
-    <Grid item xs={12}>
+    <Grid item xs={12} mt={2}>
       <Typography variant="h6" sx={{ mb: 1, fontSize: "18px" }}>
-        Assignments
+        Projects
       </Typography>
 
       {fields.map((field, index) => (
@@ -45,21 +45,17 @@ export default function AssignmentFields({ control, sectionIndex, errors }) {
         >
           <Grid size={{ xs: 12 }} display="flex">
             <CustomInputField
-              name={`sections.${sectionIndex}.assignments.${index}.assignment`}
-              label={`Assignment ${index + 1}`}
+              name={`sections.${sectionIndex}.projects.${index}.project`}
+              label={`Project ${index + 1}`}
               required={false}
               sx={{
                 backgroundColor: "white",
                 borderRadius: 2,
               }}
             />
-            {errors?.sections?.[sectionIndex]?.assignments?.[index]
-              ?.assignment && (
+            {errors?.sections?.[sectionIndex]?.projects?.[index]?.project && (
               <Typography color="error" variant="caption">
-                {
-                  errors.sections[sectionIndex].assignments[index].assignment
-                    .message
-                }
+                {errors.sections[sectionIndex].projects[index].project.message}
               </Typography>
             )}
             {fields.length > 1 && (
@@ -76,8 +72,8 @@ export default function AssignmentFields({ control, sectionIndex, errors }) {
       ))}
 
       <CustomButton
-        label="Add More Assignment"
-        onClick={handleAddAssignment}
+        label="Add More Project"
+        onClick={handleAddProject}
         startIcon={<FaPlus />}
         variant="outlined"
       />

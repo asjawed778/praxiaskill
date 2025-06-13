@@ -4,8 +4,8 @@ import { Grid, IconButton, Typography } from "@mui/material";
 
 import { useEffect, useRef } from "react";
 import { useFieldArray, useWatch } from "react-hook-form";
-import CustomInputField from "../../../../../components/CustomInputField";
-import CustomButton from "../../../../../components/CustomButton";
+import CustomInputField from "@/components/CustomInputField";
+import CustomButton from "@/components/CustomButton";
 
 export default function AssignmentFields({ control, sectionIndex, errors }) {
   const { fields, append, remove } = useFieldArray({

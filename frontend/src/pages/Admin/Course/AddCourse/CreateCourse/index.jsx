@@ -1,25 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import CourseFirstStep from "./Add Course/CourseFirstStep";
-import CourseStructure from "./Add Course/CourseStructure";
-import Pricing from "./Add Course/Pricing";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-import firstStepValidationSchema from "./Add Course/Schema/firstStepValidationSchema";
-import secondStepValidationSchema from "./Add Course/Schema/secondStepValidationSchema";
-import thirdStepValidationSchema from "./Add Course/Schema/thirdStepValidationSchema";
-import fifthStepValidationSchema from "./Add Course/Schema/fifthStepValidationSchema";
 import {
   useGetFullCourseDetailsQuery,
   useUpdateCourseDetailsMutation,
   useUploadCourseMutation,
-} from "../../../services/course.api";
+} from "../../../../../services/course.api";
 import { toast } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
-import AdditionalDetails from "./Add Course/AdditionalDetails";
-import { cleanData } from "../../../utils/helper";
+import CourseDetails from "./CourseDetails";
+import AdditionalDetails from "./AdditionalDetails";
+import CourseStructure from "./CourseStructure";
+import PricingPublish from "./PricingPublish";
+import { additionalDetailsSchema, courseDetailsSchema, courseStructureSchema, pricingPublishSchema } from "../../../../../../yup";
+import { cleanData } from "../../../../../utils/helper";
 
-const AddCourse = () => {
+const CreateCourse = () => {
   const [uploadCourse, { isLoading, errors }] = useUploadCourseMutation();
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -47,13 +43,13 @@ const AddCourse = () => {
   const resolver = useMemo(() => {
     switch (currentStep) {
       case 0:
-        return yupResolver(firstStepValidationSchema);
+        return yupResolver(courseDetailsSchema);
       case 1:
-        return yupResolver(secondStepValidationSchema);
+        return yupResolver(additionalDetailsSchema);
       case 2:
-        return yupResolver(thirdStepValidationSchema);
+        return yupResolver(courseStructureSchema);
       case 3:
-        return yupResolver(fifthStepValidationSchema);
+        return yupResolver(pricingPublishSchema);
       default:
         return undefined;
     }
@@ -71,7 +67,7 @@ const AddCourse = () => {
         keypoints: loadCourse.data.keypoints || [""],
         sections: loadCourse.data.sections?.length
           ? loadCourse.data.sections
-          : [{ title: "", description: "", subSections: [{ title: "" }] }],
+          : [{ title: "", description: "", subSections: [{ title: "", description: "" }] }],
         price: {
           actualPrice: loadCourse.data.price?.actualPrice || "",
           discountPercentage: loadCourse.data.price?.discountPercentage || 0,
@@ -93,7 +89,7 @@ const AddCourse = () => {
       description: "",
       duration: "",
       totalLectures: "",
-      sections: [{ title: "", description: "", subSections: [{ title: "" }] }],
+      sections: [{ title: "", description: "", subSections: [{ title: "", description: "" }] }],
       price: {
         actualPrice: "",
         discountPercentage: 0,
@@ -106,6 +102,7 @@ const AddCourse = () => {
     resolver,
     mode: "onChange",
     defaultValues,
+    shouldUnregister: true,
   });
   useEffect(() => {
     if (loadCourse?.data && !isCourseLoading) {
@@ -119,7 +116,7 @@ const AddCourse = () => {
         keypoints: loadCourse.data.keypoints || [""],
         sections: loadCourse.data.sections?.length
           ? loadCourse.data.sections
-          : [{ title: "", description: "", subSections: [{ title: "" }] }],
+          : [{ title: "", description: "", subSections: [{ title: "", description: "" }] }],
         price: {
           actualPrice: loadCourse.data.price?.actualPrice || "",
           discountPercentage: loadCourse.data.price?.discountPercentage || 0,
@@ -232,7 +229,7 @@ const AddCourse = () => {
         {/* Step Content */}
         {/* <div className="bg-[#F5F5F5] rounded-lg p-2 w-full"> */}
         <div className="brounded-lg p-2 w-full">
-          {currentStep === 0 && <CourseFirstStep handleNext={handleNext} />}
+          {currentStep === 0 && <CourseDetails handleNext={handleNext} />}
           {currentStep === 1 && (
             <AdditionalDetails
               handleNext={handleNext}
@@ -243,7 +240,7 @@ const AddCourse = () => {
             <CourseStructure handleNext={handleNext} handlePrev={handlePrev} />
           )}
           {currentStep === 3 && (
-            <Pricing
+            <PricingPublish
               isLoading={isLoading}
               isCourseUpdate={isCourseUpdate}
               editMode={editMode}
@@ -256,4 +253,4 @@ const AddCourse = () => {
   );
 };
 
-export default AddCourse;
+export default CreateCourse;

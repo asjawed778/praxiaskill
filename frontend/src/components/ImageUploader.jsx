@@ -4,8 +4,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useAppTheme } from "@/context/ThemeContext";
 import { CloudUploadOutlined } from "@mui/icons-material";
-import { useUploadThumbnailMutation } from "../services/course.api";
 import { useSelector } from "react-redux";
+import { useUploadFileMutation } from "@/services/course.api";
 
 const ImageUploader = ({
   name,
@@ -28,8 +28,7 @@ const ImageUploader = ({
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { accessToken } = useSelector((store) => store.auth);
-  const [uploadImage, { isLoading: isUploading }] =
-    useUploadThumbnailMutation();
+  const [uploadImage, { isLoading: isUploading }] = useUploadFileMutation();
 
   const watchedValue = useWatch({ control: activeControl, name });
 
@@ -73,10 +72,10 @@ const ImageUploader = ({
       }
 
       const formData = new FormData();
-      formData.append("thumbnail", file);
+      formData.append("file", file);
 
       try {
-        const response = await uploadImage({ formData, accessToken }).unwrap();
+        const response = await uploadImage(formData).unwrap();
         const uploadedUrl = response?.data?.url;
 
         if (uploadedUrl) {
@@ -104,6 +103,9 @@ const ImageUploader = ({
     setPreviewUrl(null);
     onChange("");
     setError(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
   };
 
   return (

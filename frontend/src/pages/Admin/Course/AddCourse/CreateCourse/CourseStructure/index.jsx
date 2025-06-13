@@ -2,11 +2,11 @@ import { Box, Typography, Stack } from "@mui/material";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
 import required from "/imgs/required.svg";
-import CustomButton from "../../../../components/CustomButton";
-import SubSectionFields from "./Course Structure/SubSectionFields";
-import ProjectFields from "./Course Structure/ProjectFields";
-import AssignmentFields from "./Course Structure/AssignmentsFields";
-import CustomInputField from "../../../../components/CustomInputField";
+import CustomButton from "@/components/CustomButton";
+import SubSectionFields from "./SubSectionFields";
+import ProjectFields from "./ProjectFields";
+import AssignmentFields from "./AssignmentsFields";
+import CustomInputField from "@/components/CustomInputField";
 
 const CourseStructure = ({ handleNext, handlePrev }) => {
   const {

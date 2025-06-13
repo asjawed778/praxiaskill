@@ -112,6 +112,7 @@ export default function EnquiryForm({ onClose }) {
           <CustomInputField label="Interested Course" name="interestedCourse" />
           <WhatsAppCheckbox />
           <CustomButton
+            fullWidth
             label="Submit"
             variant="contained"
             color="primary"

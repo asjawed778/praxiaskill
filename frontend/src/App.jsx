@@ -28,7 +28,7 @@ const AdminDashboard = lazy(() => import("./pages/Admin/AdminDashboard"));
 const CourseLandingPage = lazy(() => import("./pages/CourseLandingPage"));
 // const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
 const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
-const AddCourse = lazy(() => import("./pages/Admin/Course/index"));
+const AddCourse = lazy(() => import("./pages/Admin/Course/AddCourse/CreateCourse"));
 const MyEnrollment = lazy(() => import("./pages/Admin/My Enrollment"));
 const ManageCourse = lazy(() => import("./pages/Admin/Course/ManageCourse"));
 const EventPage = lazy(() => import("./pages/EventPage"));

@@ -51,7 +51,6 @@ router.post("/rate/:courseId", authMiddlerware.auth, courseValidation.rateCourse
 router.get("/ratings/:courseId", authMiddlerware.auth, courseValidation.getRatings, catchError, courseController.getRatings)
 
 // course notes routes
-
 router.post("/notes", authMiddlerware.auth, courseValidation.createCourseNotes, catchError, courseController.createCourseNotes)
 router.get("/notes/my", authMiddlerware.auth, courseValidation.getCourseNotes, catchError, courseController.getCourseNotes)
 router.delete("/notes/:noteId", authMiddlerware.auth, courseValidation.deleteCourseNotes, catchError, courseController.deleteNotes)

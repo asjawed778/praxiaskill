@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { useFormContext, Controller } from "react-hook-form";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import JoditEditor from "jodit-react";
 
 import TagsInput from "./TagsInput";
@@ -9,7 +9,7 @@ import ToolsGrid from "./ToolsGrid";
 import AddKeyPoints from "./AddKeyPoints";
 import WhatYouWillLearn from "./WhatYouWillLearn";
 import CustomInputField from "@/components/CustomInputField";
-import CustomButton from "../../../../../components/CustomButton";
+import CustomButton from "@/components/CustomButton";
 
 const AdditionalDetails = ({ handleNext, handlePrev }) => {
   const {

@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { detailedSEO } from "./data";
 
-const defaultSEO = { ...detailedSEO }
+const defaultSEO = { ...detailedSEO };
 
 const SEOHelmet = ({
   title,
@@ -66,13 +66,12 @@ const SEOHelmet = ({
           `,
         }}
       />
-
-      {/* JSON-LD Structured Data */}
       {schema && (
         <script type="application/ld+json">
           {JSON.stringify(schema)}
         </script>
       )}
+      {/* Google tag (gtag.js) */}
     </Helmet>
   );
 };

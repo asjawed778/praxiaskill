@@ -1,15 +1,15 @@
 import { Box, Grid } from "@mui/material";
-import CustomInputField from "../../../../components/CustomInputField";
-import { CourseMode, Language } from "../../../../utils/enum";
-import CustomDropdownField from "../../../../components/CustomDropdownField";
-import CustomRadioButton from "../../../../components/CustomRadioButton";
-import CustomButton from "../../../../components/CustomButton";
-import ImageUploader from "../../../../components/ImageUploader";
-import FileUploader from "../../../../components/FileUploader";
+import CustomInputField from "@/components/CustomInputField";
+import { CourseMode, Language } from "@/utils/enum";
+import CustomDropdownField from "@/components/CustomDropdownField";
+import CustomRadioButton from "@/components/CustomRadioButton";
+import CustomButton from "@/components/CustomButton";
+import ImageUploader from "@/components/ImageUploader";
+import FileUploader from "@/components/FileUploader";
 
-const CourseFirstStep = ({ handleNext }) => {
+const CourseDetails = ({ handleNext }) => {
   const languageOptions = [
-    { label: "English", value: Language.ENGLISH },
+    { label: "English", value: Language },
     { label: "Hindi", value: Language.HINDI },
     { label: "English + Hindi", value: Language.ENGLISH_HINDI },
   ];
@@ -95,4 +95,4 @@ const CourseFirstStep = ({ handleNext }) => {
   );
 };
 
-export default CourseFirstStep;
+export default CourseDetails;

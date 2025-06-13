@@ -6,7 +6,7 @@ const thirdStepValidationSchema = yup.object().shape({
     .of(
       yup.object().shape({
         title: yup.string().required("Section title is required"),
-        description: yup.string().required("Section description is required"),
+        description: yup.string().optional(),
         subSections: yup
           .array()
           .of(

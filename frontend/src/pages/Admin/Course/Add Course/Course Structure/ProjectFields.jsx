@@ -1,13 +1,12 @@
 import { FaPlus } from "react-icons/fa6";
 import { Delete } from "@mui/icons-material";
 import { Grid, IconButton, Typography, Button } from "@mui/material";
-
 import { useEffect, useRef } from "react";
-import { useFormContext, useFieldArray } from "react-hook-form";
+import { useFieldArray, useWatch } from "react-hook-form";
 import CustomInputField from "../../../../../components/CustomInputField";
+import CustomButton from "../../../../../components/CustomButton";
 
 export default function ProjectFields({ control, sectionIndex, errors }) {
-
   const { fields, append, remove } = useFieldArray({
     control,
     name: `sections.${sectionIndex}.projects`,
@@ -20,9 +19,18 @@ export default function ProjectFields({ control, sectionIndex, errors }) {
       initialized.current = true;
     }
   }, [fields, append]);
+  const projectValues = useWatch({
+    control,
+    name: `sections.${sectionIndex}.projects`,
+  });
+  const handleAddProject = () => {
+    const last = projectValues?.[projectValues.length - 1]?.project;
+    if (!last || last.trim() === "") return;
+    append({ project: "" });
+  };
 
   return (
-    <Grid item xs={12}>
+    <Grid item xs={12} mt={2}>
       <Typography variant="h6" sx={{ mb: 1, fontSize: "18px" }}>
         Projects
       </Typography>
@@ -35,14 +43,14 @@ export default function ProjectFields({ control, sectionIndex, errors }) {
           spacing={2}
           sx={{ mb: 1 }}
         >
-          <Grid size={{xs: 12}} display="flex">
+          <Grid size={{ xs: 12 }} display="flex">
             <CustomInputField
               name={`sections.${sectionIndex}.projects.${index}.project`}
               label={`Project ${index + 1}`}
               required={false}
               sx={{
                 backgroundColor: "white",
-                borderRadius:2
+                borderRadius: 2,
               }}
             />
             {errors?.sections?.[sectionIndex]?.projects?.[index]?.project && (
@@ -50,7 +58,7 @@ export default function ProjectFields({ control, sectionIndex, errors }) {
                 {errors.sections[sectionIndex].projects[index].project.message}
               </Typography>
             )}
-            {index > 0 && (
+            {fields.length > 1 && (
               <IconButton
                 onClick={() => remove(index)}
                 color="error"
@@ -63,14 +71,12 @@ export default function ProjectFields({ control, sectionIndex, errors }) {
         </Grid>
       ))}
 
-      <Button
-        onClick={() => append({ project: "" })}
+      <CustomButton
+        label="Add More Project"
+        onClick={handleAddProject}
         startIcon={<FaPlus />}
         variant="outlined"
-        sx={{ mt: 2 }}
-      >
-        Add More Project
-      </Button>
+      />
     </Grid>
   );
 }

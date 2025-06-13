@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import {
-  TextField,
   Slider,
   Typography,
   Box,
   Grid,
-  Button,
 } from "@mui/material";
-import ButtonLoading from "../../../../components/Button/ButtonLoading";
+import ButtonLoading from "@/components/Button/ButtonLoading";
 import CustomInputField from "@/components/CustomInputField";
 import CustomDropdownField from "@/components/CustomDropdownField";
 import { CourseValidity, CourseStatus } from "@/utils/enum";
-import CustomButton from "../../../../components/CustomButton";
+import CustomButton from "@/components/CustomButton";
 
-const Pricing = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => {
+const PricingPublish = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => {
   const {
     register,
     control,
@@ -156,4 +154,4 @@ const Pricing = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => {
   );
 };
 
-export default Pricing;
+export default PricingPublish;
