@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import debounce from "lodash/debounce";
-import { toast } from 'react-hot-toast';
-import CustomTable from "../../components/CustomTable";
+import { toast } from "react-hot-toast";
 import {
   useGetAllUsersQuery,
   useUpdateStatusMutation,
@@ -13,6 +12,7 @@ import AddNewUser from "./AddNewUser";
 import DialogBoxWrapper from "../../components/DialogBoxWrapper";
 import AssignCourse from "./AssignCourse";
 import CustomDropdownField from "../../components/CustomDropdownField";
+import TableWrapper from "../../components/TableWrapper";
 
 const Users = () => {
   const [page, setPage] = useState(0);
@@ -32,6 +32,7 @@ const Users = () => {
     query,
     active: statusFilter,
   });
+  console.log("user: ", data);
   const [updateStatus] = useUpdateStatusMutation();
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -95,11 +96,30 @@ const Users = () => {
     // refetch();
   };
   const columns = [
-    { id: "sno.", label: "S No." },
-    { id: "name", label: "Name" },
-    { id: "email", label: "Email" },
-    { id: "coursesEnrolled", label: "CoursesEnrolled" },
-    { id: "role", label: "Role" },
+    { key: "sno.", label: "S No." },
+    { key: "name", label: "Name" },
+    { key: "email", label: "Email" },
+    { key: "coursesEnrolled", label: "CoursesEnrolled" },
+    { key: "role", label: "Role" },
+  ];
+  const actionsList = [
+    {
+      action: "status",
+      label: selectedUser?.active ? "Deactivate" : "Activate",
+      color: selectedUser?.active ? "success" : "error",
+    },
+    {
+      action: "updateUserDetails",
+      label: "Update User Details",
+    },
+    {
+      action: "assign",
+      label: "Assign Courese",
+    },
+    // {
+    //   action: "terminateCourse",
+    //   label: "Terminate Course",
+    // },
   ];
 
   return (
@@ -149,7 +169,7 @@ const Users = () => {
           />
         </Box>
       </Box>
-      <CustomTable
+      <TableWrapper
         columns={columns}
         rows={data?.data?.users || []}
         totalCount={data?.data?.totalDocs || 0}
@@ -159,16 +179,16 @@ const Users = () => {
         onRowsPerPageChange={handleRowsPerPageChange}
         onActionClick={handleActionClick}
         isLoading={isLoading || isFetching}
-        cellHeight={40}
+        actionsList={actionsList}
       />
-      <AddNewUser 
-        open={addUserModal} 
+      <AddNewUser
+        open={addUserModal}
         onClose={() => {
           setAddUserModal(false);
           setIsEditMode(false);
           setSelectedUser(null);
           // refetch();
-        }} 
+        }}
         refetch={refetch}
         isEditMode={isEditMode}
         userData={selectedUser}
@@ -181,11 +201,12 @@ const Users = () => {
           selectedUser?.active ? "Deactivation" : "Activation"
         }`}
         message={
-          selectedUser?.active ? 
-          `Are you sure you want to deactivate ${selectedUser?.name} account? After this user will no longer able to login or perform any action.` : 
-          `Are you sure you want to activate ${selectedUser?.name}? After this user will be able to login or perform any action `}
+          selectedUser?.active
+            ? `Are you sure you want to deactivate ${selectedUser?.name} account? After this user will no longer able to login or perform any action.`
+            : `Are you sure you want to activate ${selectedUser?.name}? After this user will be able to login or perform any action `
+        }
       />
-      <AssignCourse 
+      <AssignCourse
         open={openAssignCoureModal}
         onClose={() => setOpenAssignCoureModal(false)}
         user={selectedUser}

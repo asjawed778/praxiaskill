@@ -53,7 +53,7 @@ const CourseTable = ({
             spaceBelow < dropdownHeight + 100
               ? rect.bottom - dropdownHeight - 100
               : rect.top + dropdownHeight - 65,
-          left: rect.left - 120, // Adjust for proper alignment
+          left: rect.left - 120, 
           zIndex: 1000,
         });
       }
@@ -87,7 +87,7 @@ const CourseTable = ({
                       {currentPage * 10 + 1 + index}
                     </td>
                     <td className="px-4 py-1">{course?.title}</td>
-                    <td className="px-4 py-1">{course?.instructor?.name}</td>
+                    {/* <td className="px-4 py-1">{course?.instructor?.name}</td> */}
                     <td className="px-4 py-1">{course?.category?.name}</td>
                     <td className="px-4 py-1 relative">
                       <button

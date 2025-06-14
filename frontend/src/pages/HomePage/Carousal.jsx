@@ -16,8 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import {
   useGetAllCategoryQuery,
-  useGetAllPublishedCourseQuery,
   useGetCategoryCourseQuery,
+  useGetCoursesQuery,
 } from "../../services/course.api";
 import { setCourses } from "../../store/reducers/coursesReducer";
 import { setCategories } from "../../store/reducers/adminCategoryReducer";
@@ -41,19 +41,31 @@ const Carousel = () => {
   const [cardsPerView, setCardsPerView] = useState(1);
   const cardWidth = 300;
   const gap = 16;
+  console.log("category: ", activeTab);
+  const {
+    data: courses,
+    isLoading,
+    isFetching,
+    isError,
+  } = useGetCoursesQuery(
+    activeTab === "all" ? {} : { category: activeTab }
+    // status: statusFilter,
+  );
 
   const { data: allCategories, isFetching: allCategoriesLoading } =
     useGetAllCategoryQuery();
+  const isAll = activeTab === "all";
   const { data: categoryCourse, isFetching: categoryCourseLoading } =
     useGetCategoryCourseQuery(activeTab, {
-      skip: !activeTab || activeTab === "all",
+      skip: !activeTab || isAll,
     });
-  const { data: publishedCourses, isFetching: publishedCourseLoading } =
-    useGetAllPublishedCourseQuery(1);
 
   const allCoursesOption = { _id: "all", name: "All Courses" };
   const filteredCategories = useMemo(() => {
-    return [allCoursesOption, ...categories.filter((cat) => cat?.courses?.length > 0)];
+    return [
+      allCoursesOption,
+      ...categories.filter((cat) => cat?.courses?.length > 0),
+    ];
   }, [categories]);
 
   useEffect(() => {
@@ -69,12 +81,12 @@ const Carousel = () => {
   }, [filteredCategories, activeTab]);
 
   useEffect(() => {
-    if (activeTab === "all" && publishedCourses?.success) {
-      dispatch(setCourses(publishedCourses.data?.courses || []));
+    if (activeTab === "all" && courses?.data?.success) {
+      dispatch(setCourses(courses.data?.courses || []));
     } else if (activeTab && categoryCourse?.success) {
       dispatch(setCourses(categoryCourse?.data?.courses || []));
     }
-  }, [activeTab, categoryCourse, publishedCourses, dispatch]);
+  }, [activeTab, categoryCourse, courses, dispatch]);
 
   useEffect(() => {
     const updateCardsPerView = () => {
@@ -111,7 +123,13 @@ const Carousel = () => {
       <Box mb={1}>
         <Typography
           sx={{
-            fontSize: { xs: "20px", sm: "24px", md: "28px", lg: "32px", xl: "36px" },
+            fontSize: {
+              xs: "20px",
+              sm: "24px",
+              md: "28px",
+              lg: "32px",
+              xl: "36px",
+            },
             color: "primary.main",
             fontWeight: 600,
           }}
@@ -120,7 +138,13 @@ const Carousel = () => {
         </Typography>
         <Typography
           sx={{
-            fontSize: { xs: "14px", sm: "16px", md: "18px", lg: "20px", xl: "22px" },
+            fontSize: {
+              xs: "14px",
+              sm: "16px",
+              md: "18px",
+              lg: "20px",
+              xl: "22px",
+            },
             color: "text.secondary",
           }}
         >
@@ -161,7 +185,9 @@ const Carousel = () => {
         </Tabs>
       )}
 
-      {allCategoriesLoading || categoryCourseLoading || (activeTab === "all" && publishedCourseLoading) ? (
+      {allCategoriesLoading ||
+      categoryCourseLoading ||
+      (activeTab === "all" && isLoading) ? (
         <CourseSkeleton />
       ) : coursesAll?.length ? (
         <Box sx={{ position: "relative" }}>

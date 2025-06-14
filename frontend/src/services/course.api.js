@@ -54,7 +54,6 @@ export const apiCourse = createApi({
     }),
     uploadCourseStructure: builder.mutation({
       query: ({ data, id }) => {
-        // here id is courseId
         return {
           url: `course/structure/${id}`,
           method: "PUT",
@@ -289,9 +288,9 @@ export const apiCourse = createApi({
       })
     }),
     getCourses: builder.query({
-      query: ({ pageNo = 1, limit = 10, category, status, search }) => ({
+      query: ({ page = 1, limit = 10, category, status, search }) => ({
         url: `/course/all?${new URLSearchParams({
-          pageNo,
+          page,
           limit,
           ...(category && { category }),
           ...(status && { status }),
@@ -336,5 +335,5 @@ export const {
   useGetNotesQuery,
   useDeleteNotesMutation,
   useUpdateNotesMutation,
-  useGetCoursesQuery
+  useGetCoursesQuery,
 } = apiCourse;

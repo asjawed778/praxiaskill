@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useGetAllPublishedCourseQuery, useTerminateCourseMutation } from '../../../../services/course.api';
+// import { useGetAllPublishedCourseQuery, useTerminateCourseMutation } from '../../../../services/course.api';
 
 const TerminateCourseModal = ({ open, onClose, course }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [terminateCourse] = useTerminateCourseMutation();
-  const { refetch } = useGetAllPublishedCourseQuery();
+  // const { refetch } = useGetAllPublishedCourseQuery();
 
   const handleConfirm = async () => {
     try {
