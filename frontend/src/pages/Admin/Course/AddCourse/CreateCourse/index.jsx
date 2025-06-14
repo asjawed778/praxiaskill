@@ -102,7 +102,6 @@ const CreateCourse = () => {
     resolver,
     mode: "onChange",
     defaultValues,
-    shouldUnregister: true,
   });
   useEffect(() => {
     if (loadCourse?.data && !isCourseLoading) {

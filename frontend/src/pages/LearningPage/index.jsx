@@ -59,9 +59,6 @@ const LearningPage = () => {
   const handleNavigate = (slug) => {
     navigate(`/course/${slug}`);
   };
-  useEffect(() => {
-    console.log("Courses data is : ", coursesData)
-  }, [coursesData])
   return (
     <Container maxWidth="lg">
       <Box py={2}>
@@ -114,10 +111,6 @@ const LearningPage = () => {
                 gap: 2,
               }}
             >
-              {/* <Typography fontWeight={600} flexShrink={0}>
-                Filter by Category:
-              </Typography> */}
-
               <Stack
                 direction={{ xs: "row", sm: "row" }}
                 spacing={2}
@@ -150,8 +143,6 @@ const LearningPage = () => {
                     height: 45,
                   }}
                 />
-                {/* Clear Filters
-                </Button> */}
               </Stack>
             </Box>
           </Grid>
@@ -175,28 +166,6 @@ const LearningPage = () => {
             No courses found. Try again!
           </Typography>
         ) : (
-          // <Grid
-          //   container
-          //   spacing={1}
-          // sx={{
-          //   justifyContent: {
-          //     xs: "center",
-          //     sm: "flex-start",
-          //   },
-          // }}
-          // >
-          //   {courses.map((course) => (
-          //     <Grid
-          //       item
-          //       xs={12}
-          //       sm={6}
-          //       md={4}
-          //       key={course._id}
-          //     >
-          //       <CourseCard course={course} onClick={handleNavigate} />
-          //     </Grid>
-          //   ))}
-          // </Grid>
           <Box
             display="flex"
             flexWrap="wrap"

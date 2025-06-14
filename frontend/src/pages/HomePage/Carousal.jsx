@@ -2,10 +2,9 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import {
   Box,
   Typography,
-  Button,
+  IconButton,
   Tabs,
   Tab,
-  IconButton,
   Card,
   CardActions,
   Divider,
@@ -17,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import {
   useGetAllCategoryQuery,
+  useGetAllPublishedCourseQuery,
   useGetCategoryCourseQuery,
 } from "../../services/course.api";
 import { setCourses } from "../../store/reducers/coursesReducer";
@@ -46,8 +46,15 @@ const Carousel = () => {
     useGetAllCategoryQuery();
   const { data: categoryCourse, isFetching: categoryCourseLoading } =
     useGetCategoryCourseQuery(activeTab, {
-      skip: !activeTab,
+      skip: !activeTab || activeTab === "all",
     });
+  const { data: publishedCourses, isFetching: publishedCourseLoading } =
+    useGetAllPublishedCourseQuery(1);
+
+  const allCoursesOption = { _id: "all", name: "All Courses" };
+  const filteredCategories = useMemo(() => {
+    return [allCoursesOption, ...categories.filter((cat) => cat?.courses?.length > 0)];
+  }, [categories]);
 
   useEffect(() => {
     if (allCategories?.success) {
@@ -56,16 +63,18 @@ const Carousel = () => {
   }, [allCategories, dispatch]);
 
   useEffect(() => {
-    if (categories.length && !activeTab) {
-      setActiveTab(categories[0]._id);
+    if (filteredCategories.length && !activeTab) {
+      setActiveTab(filteredCategories[0]._id);
     }
-  }, [categories, activeTab]);
+  }, [filteredCategories, activeTab]);
 
   useEffect(() => {
-    if (activeTab && categoryCourse?.success) {
-      dispatch(setCourses(categoryCourse?.data?.courses));
+    if (activeTab === "all" && publishedCourses?.success) {
+      dispatch(setCourses(publishedCourses.data?.courses || []));
+    } else if (activeTab && categoryCourse?.success) {
+      dispatch(setCourses(categoryCourse?.data?.courses || []));
     }
-  }, [activeTab, categoryCourse, dispatch]);
+  }, [activeTab, categoryCourse, publishedCourses, dispatch]);
 
   useEffect(() => {
     const updateCardsPerView = () => {
@@ -80,21 +89,17 @@ const Carousel = () => {
   }, []);
 
   const scrollNext = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({
-        left: (cardWidth + gap) * cardsPerView,
-        behavior: "smooth",
-      });
-    }
+    sliderRef.current?.scrollBy({
+      left: (cardWidth + gap) * cardsPerView,
+      behavior: "smooth",
+    });
   };
 
   const scrollPrev = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({
-        left: -(cardWidth + gap) * cardsPerView,
-        behavior: "smooth",
-      });
-    }
+    sliderRef.current?.scrollBy({
+      left: -(cardWidth + gap) * cardsPerView,
+      behavior: "smooth",
+    });
   };
 
   const handleCourseClick = (slug) => {
@@ -106,13 +111,7 @@ const Carousel = () => {
       <Box mb={1}>
         <Typography
           sx={{
-            fontSize: {
-              xs: "20px",
-              sm: "24px",
-              md: "28px",
-              lg: "32px",
-              xl: "36px",
-            },
+            fontSize: { xs: "20px", sm: "24px", md: "28px", lg: "32px", xl: "36px" },
             color: "primary.main",
             fontWeight: 600,
           }}
@@ -121,14 +120,8 @@ const Carousel = () => {
         </Typography>
         <Typography
           sx={{
-            fontSize: {
-              xs: "14px",
-              sm: "16px",
-              md: "18px",
-              lg: "20px",
-              xl: "22px",
-            },
-            color: "text.secondary"
+            fontSize: { xs: "14px", sm: "16px", md: "18px", lg: "20px", xl: "22px" },
+            color: "text.secondary",
           }}
         >
           From critical skills to technical topics, Praxia Skill supports your
@@ -146,32 +139,29 @@ const Carousel = () => {
             mb: 2,
             pl: 2,
             ml: -2,
-            // borderBottom: "1px solid #ccc",
             "& .MuiTabs-flexContainer": {
               borderBottom: "1px solid #ccc",
             },
           }}
         >
-          {categories
-            .filter((cat) => cat.courses.length > 0)
-            .map((tab) => (
-              <Tab
-                key={tab._id}
-                label={tab.name}
-                value={tab._id}
-                sx={{
-                  fontSize: { xs: "14px", sm: "16px" },
-                  textTransform: "none",
-                  fontWeight: activeTab === tab._id ? "bold" : "normal",
-                  color:
-                    activeTab === tab._id ? "primary.main" : "text.secondary",
-                }}
-              />
-            ))}
+          {filteredCategories.map((tab) => (
+            <Tab
+              key={tab._id}
+              label={tab.name}
+              value={tab._id}
+              sx={{
+                fontSize: { xs: "14px", sm: "16px" },
+                textTransform: "none",
+                fontWeight: activeTab === tab._id ? "bold" : "normal",
+                color:
+                  activeTab === tab._id ? "primary.main" : "text.secondary",
+              }}
+            />
+          ))}
         </Tabs>
       )}
 
-      {allCategoriesLoading || categoryCourseLoading ? (
+      {allCategoriesLoading || categoryCourseLoading || (activeTab === "all" && publishedCourseLoading) ? (
         <CourseSkeleton />
       ) : coursesAll?.length ? (
         <Box sx={{ position: "relative" }}>

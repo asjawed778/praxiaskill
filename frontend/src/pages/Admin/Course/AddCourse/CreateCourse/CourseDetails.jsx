@@ -9,7 +9,7 @@ import FileUploader from "@/components/FileUploader";
 
 const CourseDetails = ({ handleNext }) => {
   const languageOptions = [
-    { label: "English", value: Language },
+    { label: "English", value: Language.ENGLISH },
     { label: "Hindi", value: Language.HINDI },
     { label: "English + Hindi", value: Language.ENGLISH_HINDI },
   ];

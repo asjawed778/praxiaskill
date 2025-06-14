@@ -86,9 +86,9 @@ const CourseTable = ({
                     <td className="px-4 py-1">
                       {currentPage * 10 + 1 + index}
                     </td>
-                    <td className="px-4 py-1">{course.title}</td>
-                    <td className="px-4 py-1">{course.instructor.name}</td>
-                    <td className="px-4 py-1">{course.category.name}</td>
+                    <td className="px-4 py-1">{course?.title}</td>
+                    <td className="px-4 py-1">{course?.instructor?.name}</td>
+                    <td className="px-4 py-1">{course?.category?.name}</td>
                     <td className="px-4 py-1 relative">
                       <button
                         ref={(el) => (buttonRefs.current[index] = el)}
