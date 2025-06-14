@@ -287,6 +287,7 @@ export const getPublishedCourses = asyncHandler(async (req: Request, res: Respon
     const limit = parseInt(req.query.limit as string) || 10;
     const category = req.query.category as string | undefined;
     const result = await courseService.getPublishedCourses(pageNo, limit, category);
+    console.log("Published couse: ", result);
     res.send(createResponse(result, "Published courses fetched successfully"));
 });
 

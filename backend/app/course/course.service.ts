@@ -417,6 +417,7 @@ export const getPublishedCourses = async (pageNo: number = 1, limit: number = 10
     if (category) {
         query.category = new mongoose.Types.ObjectId(category);
     }
+    const totalCourses = await courseSchema.countDocuments(query);
 
     const result = await courseSchema.aggregate([
         {
@@ -487,7 +488,7 @@ export const getPublishedCourses = async (pageNo: number = 1, limit: number = 10
 
     return {
         success: true,
-        totalCourses: result.length,
+        totalCourses: totalCourses,
         page: pageNo,
         pageSize: limit,
         courses: result
