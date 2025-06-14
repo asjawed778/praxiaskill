@@ -32,7 +32,6 @@ const Users = () => {
     query,
     active: statusFilter,
   });
-  console.log("user: ", data);
   const [updateStatus] = useUpdateStatusMutation();
   const handlePageChange = (newPage) => {
     setPage(newPage);

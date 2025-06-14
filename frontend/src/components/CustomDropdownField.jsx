@@ -261,7 +261,7 @@ const CustomDropdownField = ({
             sx={{
               minWidth: 200,
               "& .MuiOutlinedInput-root": {
-                borderRadius: "8px",
+                borderRadius: "6px",
               },
               ...sx, 
             }}

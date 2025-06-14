@@ -2,20 +2,24 @@ import { Stack } from "@mui/material";
 import CustomButton from "../../components/CustomButton";
 import CustomInputField from "../../components/CustomInputField";
 import ModalWrapper from "../../components/ModalWrapper";
-// import { useGetAllPublishedCourseQuery } from "../../services/course.api";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useAssignCourseMutation } from "../../services/usersApi";
 import { assignCourseSchema } from "../../../yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import CustomDropdownField from "../../components/CustomDropdownField";
+import { useState } from "react";
+import { useGetCoursesQuery } from "../../services/course.api";
 
 const AssignCourse = ({ open, onClose, user }) => {
-  // const { data, isLoading } = useGetAllPublishedCourseQuery();
+  const [page, setPage] = useState(1);
   const [assignCourse, { isLoading: assignCourseLoading }] =
     useAssignCourseMutation();
   const { control, handleSubmit, reset } = useForm({
     resolver: yupResolver(assignCourseSchema),
+  });
+  const {data, isLoading} = useGetCoursesQuery({
+    page: page
   });
   const courseData = data?.data?.courses || data?.courses || [];
   const courseOptions = courseData.map((course) => ({
@@ -43,8 +47,8 @@ const AssignCourse = ({ open, onClose, user }) => {
 
   return (
     <ModalWrapper open={open} onClose={onClose} title="Assign Course to User">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={2} mt={2}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Stack spacing={2}>
           <CustomInputField
             disabled={true}
             label="User Name"

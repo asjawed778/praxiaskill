@@ -40,19 +40,10 @@ const ManageCourses = () => {
       ...course,
     category: course?.category.name
   }));
-  useEffect(() => {
-    if (courses) {
-      console.log("Courses: ", courses?.data?.courses);
-    }
-  }, [courses]);
 
   const theme = useTheme();
   const { colors } = useAppTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  // useEffect(() => {
-  //   refetch();
-  // }, []);
 
   const tabLabels = [
     { label: "All Courses", value: 1 },
@@ -109,7 +100,6 @@ const actionsList = [
     }
   };
   const handleChange = (val) => {
-    console.log("status: ", val);
     setStatusFilter(val);
     setPage(0);
   };

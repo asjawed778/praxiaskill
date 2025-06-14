@@ -7,30 +7,22 @@ import {
   CircularProgress,
   Stack,
 } from "@mui/material";
-import {
-  useGetAllCategoryQuery,
-  useGetCategoryCourseQuery,
-} from "@/services/course.api";
+
 import { useNavigate } from "react-router-dom";
 import CourseCard from "./CourseCard";
-import CustomButton from "../../components/CustomButton";
+import CustomButton from "@/components/CustomButton";
 import CoursePagination from "./CoursePagination";
-import { useGetCoursesQuery } from "../../services/course.api";
+import { useGetCoursesQuery } from "@/services/course.api";
 import CustomSearchField from "@/components/CustomSearchField";
-import CustomDropdownField from "../../components/CustomDropdownField";
+import CustomDropdownField from "@/components/CustomDropdownField";
 
 const LearningPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [categoryId, setCategoryId] = useState("");
+  const [limit, setLimit] = useState(12);
   const [selectedCourseCategory, setSelectedCourseCategory] = useState(null);
 
   const navigate = useNavigate();
-  const limit = 12;
-
-  const { data: categoriesData } = useGetAllCategoryQuery();
-  const { data: CategoryCourses, isLoading: categoryCoursesLoading } =
-    useGetCategoryCourseQuery(categoryId, { skip: !categoryId });
 
   const {
     data: courses,
@@ -42,12 +34,11 @@ const LearningPage = () => {
     search: searchQuery,
     category: selectedCourseCategory,
   });
-
+  
   const totalCourses = courses?.data?.totalCourses || 0;
   const totalPages = Math.ceil(totalCourses / limit);
-  console.log("courses: ", courses);
+  
   const handleClearFilter = () => {
-    setCategoryId("");
     setSearchQuery("");
     setSelectedCourseCategory(null);
     setCurrentPage(1);
@@ -84,6 +75,7 @@ const LearningPage = () => {
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomSearchField
               placeholder="Search Courses..."
+              value={searchQuery}
               onSearch={setSearchQuery}
             />
           </Grid>
@@ -140,7 +132,20 @@ const LearningPage = () => {
             </Typography>
             <CircularProgress />
           </Box>
-        ) : courses?.data?.courses.length === 0 ? (
+        ) : isError ? (
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            height="100%"
+            py={4}
+          >
+            <Typography align="center" color="primary" mb={2}>
+              Somethings worngs. Please try again!
+            </Typography>
+          </Box>
+        ): courses?.data?.courses.length === 0 ? (
           <Typography align="center" color="red">
             No courses found.
           </Typography>
@@ -188,6 +193,8 @@ const LearningPage = () => {
                 currentPage={currentPage}
                 totalPages={totalPages}
                 setCurrentPage={setCurrentPage}
+                limit={limit}
+                totalCourses={totalCourses}
               />
             </Box>
           </>
