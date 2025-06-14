@@ -87,7 +87,7 @@ const Collaboration = () => {
             zIndex: 1,
           }}
         >
-          <Avatar
+          {/* <Avatar
             sx={{
               bgcolor: theme.palette.primary.main,
               color: theme.palette.primary.contrastText,
@@ -98,7 +98,7 @@ const Collaboration = () => {
             }}
           >
             <GroupsOutlined fontSize="medium" />
-          </Avatar>
+          </Avatar> */}
           <Typography
             sx={{
               fontSize: {

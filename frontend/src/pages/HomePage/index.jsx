@@ -55,7 +55,7 @@ function HomePage() {
         animate="visible"
         variants={containerVariants}
       >
-        <Box sx={{ position: "relative", width: "100%", overflow: "hidden" }}>
+        <Box sx={{ position: "relative", width: "100%", overflow: "hidden", }}>
           <video
             autoPlay
             loop
