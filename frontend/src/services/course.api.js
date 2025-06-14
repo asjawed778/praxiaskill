@@ -242,10 +242,10 @@ export const apiCourse = createApi({
       }),
     }),
     createCourseNotes: builder.mutation({
-      query: ({courseId, sectionId, subSectionId, body}) => ({
+      query: ({ courseId, sectionId, subSectionId, body }) => ({
         url: "/course/notes",
         method: "POST",
-        params:{
+        params: {
           courseId,
           sectionId,
           subSectionId
@@ -255,37 +255,49 @@ export const apiCourse = createApi({
       })
     }),
     getNotes: builder.query({
-      query: ({ courseId="", sectionId="", subSectionId="", page = 1, limit = 10, search = "", sort = "latest" }) => {
+      query: ({ courseId = "", sectionId = "", subSectionId = "", page = 1, limit = 10, search = "", sort = "latest" }) => {
         const params = {
-      ...(courseId && { courseId }),
-      ...(sectionId && { sectionId }),
-      ...(subSectionId && { subSectionId }),
-      ...(search && { search }),
-      page,
-      limit,
-      sort,
-    };
+          ...(courseId && { courseId }),
+          ...(sectionId && { sectionId }),
+          ...(subSectionId && { subSectionId }),
+          ...(search && { search }),
+          page,
+          limit,
+          sort,
+        };
         return {
-      url: "/course/notes/my",
-      params,
-      method: "GET",
-      credentials: "include",
-    };
+          url: "/course/notes/my",
+          params,
+          method: "GET",
+          credentials: "include",
+        };
       },
     }),
     deleteNotes: builder.mutation({
-      query:(notesId) => ({
+      query: (notesId) => ({
         url: `/course/notes/${notesId}`,
         method: "DELETE",
         credentials: "include",
       })
     }),
     updateNotes: builder.mutation({
-      query:({noteId, notes}) => ({
+      query: ({ noteId, notes }) => ({
         url: `/course/notes/${noteId}`,
         method: "PUT",
         body: notes,
         credentials: "include",
+      })
+    }),
+    getCourses: builder.query({
+      query: ({ pageNo = 1, limit = 10, category, status, search }) => ({
+        url: `/course/all?${new URLSearchParams({
+          pageNo,
+          limit,
+          ...(category && { category }),
+          ...(status && { status }),
+          ...(search && { search }),
+        })}`,
+        method: "GET",
       })
     })
   }),
@@ -323,5 +335,6 @@ export const {
   useCreateCourseNotesMutation,
   useGetNotesQuery,
   useDeleteNotesMutation,
-  useUpdateNotesMutation
+  useUpdateNotesMutation,
+  useGetCoursesQuery
 } = apiCourse;
