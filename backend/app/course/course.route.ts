@@ -9,6 +9,8 @@ const router = Router();
 router
     // user course routes
     .get("/my-courses", authMiddlerware.auth, courseController.getMyCourses)
+    
+    // public api for courses
     .get("/all", courseValidation.getCourses, courseController.getCourses)
 
     // admin course upload routes
@@ -19,23 +21,20 @@ router
     .delete("/:courseId/:sectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.deleteSection, catchError, courseController.deleteSection)
     .delete("/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.deleteSubSection, catchError, courseController.deleteSubSection)
 
+    .patch("/status/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.updateStatus, catchError, courseController.updateStatus)
+
+
     // course content upload routes
     .post("/start-upload/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.courseUpload, catchError, courseController.startUpload)
     .post("/chunk-upload/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.uploadChunk, fileUploadMiddleware.validateChunkUpload, catchError, courseController.uploadChunk)
     .post("/complete-upload/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.completeUpload, catchError, courseController.completeUpload)
     .get("/presigned/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, courseValidation.courseContentPresignedUrl, catchError, courseController.getCourseVideoAccessUrl)
 
-    .patch("/publish/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.publishCourse, catchError, courseController.publishCourse)
-    .patch("/terminate/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.terminateCourse, catchError, courseController.terminateCourse)
-    .patch("/draft/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.draftCourse, catchError, courseController.draftCourse)
     .get("/content/:courseId", authMiddlerware.auth, courseController.getCourseContent)
-    .get("/published/:categoryId", courseValidation.getPublishedCourseByCategory, courseController.getPublishedCourseByCategory)
-    .get("/published", courseController.getPublishedCourses)
     .post("/enquiry", courseValidation.courseEnquiry, catchError, courseController.courseEnquiry)
     .get("/enquiry", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseController.getCourseEnquiry)
     .patch("/enquiry-status/:enquiryId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.changeEnquiryStatus, catchError, courseController.changeEnquiryStatus)
     .get("/:identifier", courseValidation.getCourseDetails, courseController.getCourseDetails)
-
 
     // course qna routes
     .post("/qna", authMiddlerware.auth, courseValidation.createQna, catchError, courseController.createQna)

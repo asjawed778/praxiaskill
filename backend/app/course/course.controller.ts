@@ -175,47 +175,18 @@ export const getCourseContent = asyncHandler(async (req: Request, res: Response)
     res.send(createResponse(courseContent, "Course content fetched successfully"));
 });
 
-export const publishCourse = asyncHandler(async (req: Request, res: Response) => {
+export const updateStatus = asyncHandler(async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
     const isCourseExist = await courseService.isCourseExist(courseId);
     if (!isCourseExist) {
         throw createHttpError(404, "Course id is invalid, Not found");
     }
-    await courseService.publishCourse(courseId);
+    const status = req.query.status as CourseEnum.CourseStatus;
+    await courseService.updateStatus(courseId, status);
     res.send(createResponse({}, "Course published successfully"));
 });
 
-export const draftCourse = asyncHandler(async (req: Request, res: Response) => {
-    const courseId = req.params.courseId;
-    const isCourseExist = await courseService.isCourseExist(courseId);
-    if (!isCourseExist) {
-        throw createHttpError(404, "Course id is invalid, Not found");
-    }
-    await courseService.draftCourse(courseId);
-    res.send(createResponse({}, "Course drafted successfully"));
-});
 
-export const terminateCourse = asyncHandler(async (req: Request, res: Response) => {
-    const courseId = req.params.courseId;
-    const isCourseExist = await courseService.isCourseExist(courseId);
-    if (!isCourseExist) {
-        throw createHttpError(404, "Course id is invalid, Not found");
-    }
-    await courseService.terminateCourse(courseId);
-    res.send(createResponse({}, "Course terminated successfully"));
-});
-
-export const getPublishedCourseByCategory = asyncHandler(async (req: Request, res: Response) => {
-    const categoryId = req.params.categoryId;
-    const pageNo = parseInt(req.query.pageNo as string) || 1;
-    const category = await CourseCategoryService.getCourseCategoryById(categoryId);
-    if (!category) {
-        throw createHttpError(404, "Category id invalid, category not found")
-    }
-
-    const courses = await courseService.getPublishedCoursesByCategory(categoryId, pageNo);
-    res.send(createResponse(courses, "Published courses by category fetched successfully"));
-});
 
 export const getCourseDetails = asyncHandler(async (req: Request, res: Response) => {
     const { identifier } = req.params;
@@ -282,14 +253,6 @@ export const getCourses = asyncHandler(async (req: Request, res: Response) => {
     res.send(createResponse(result, "courses fetched successfully"));
 });
 
-export const getPublishedCourses = asyncHandler(async (req: Request, res: Response) => {
-    const pageNo = parseInt(req.query.pageNo as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10;
-    const category = req.query.category as string | undefined;
-    const result = await courseService.getPublishedCourses(pageNo, limit, category);
-    console.log("Published couse: ", result);
-    res.send(createResponse(result, "Published courses fetched successfully"));
-});
 
 export const rateCourse = asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) {

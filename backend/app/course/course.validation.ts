@@ -527,19 +527,18 @@ export const coursePreview = [
         .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
 ];
 
-export const publishCourse = [
+export const updateStatus = [
     param('courseId')
         .notEmpty().withMessage('courseId is required')
         .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+
+    query('status')
+        .notEmpty().withMessage("Status is required")
+        .isIn(Object.values(CourseEnum.CourseStatus))
+
 ];
 
 export const unpublishCourse = [
-    param('courseId')
-        .notEmpty().withMessage('courseId is required')
-        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
-];
-
-export const terminateCourse = [
     param('courseId')
         .notEmpty().withMessage('courseId is required')
         .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
@@ -551,17 +550,6 @@ export const getFullCourseDetails = [
         .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
 ];
 
-export const draftCourse = [
-    param('courseId')
-        .notEmpty().withMessage('courseId is required')
-        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
-];
-
-export const getPublishedCourseByCategory = [
-    param('categoryId')
-        .notEmpty().withMessage('categoryId is required')
-        .isMongoId().withMessage('Invalid categoryId. Must be a valid MongoDB ObjectId'),
-];
 
 export const changeEnquiryStatus = [
     param('enquiryId')
@@ -595,7 +583,7 @@ export const getCourses = [
     query('search')
         .optional()
         .isString().withMessage('Search term must be a string'),
-]
+];
 
 export const getCourseDetails = [
     param('identifier')

@@ -146,9 +146,9 @@ export const terminateCourse = async (courseId: string): Promise<any> => {
     return result;
 };
 
-export const publishCourse = async (courseId: string): Promise<any> => {
+export const updateStatus = async (courseId: string, status: courseEnum.CourseStatus): Promise<any> => {
     const result = await courseSchema.findByIdAndUpdate
-        (courseId, { courseStatus: "PUBLISHED" }, { new: true });
+        (courseId, { courseStatus: status }, { new: true });
     return result;
 };
 
@@ -204,88 +204,6 @@ export const getCourseDetails = async (identifier: string): Promise<any> => {
     };
 };
 
-export const getPublishedCoursesByCategory = async (categoryId: string, pageNo: number = 1): Promise<any> => {
-    const pageSize = 10;
-    const skip = (pageNo - 1) * pageSize;
-
-    const result = await courseSchema.aggregate([
-        {
-            $match: {
-                category: new mongoose.Types.ObjectId(categoryId),
-                courseStatus: courseEnum.CourseStatus.PUBLISHED
-            }
-        },
-        {
-            $lookup: {
-                from: "ratingandreviews",
-                localField: "_id",
-                foreignField: "courseId",
-                as: "ratingsData"
-            }
-        },
-        {
-            $lookup: {
-                from: "users",
-                localField: "instructor",
-                foreignField: "_id",
-                as: "instructorDetails"
-            }
-        },
-        {
-            $lookup: {
-                from: "coursecategories",
-                localField: "category",
-                foreignField: "_id",
-                as: "categoryDetails"
-            }
-        },
-        {
-            $addFields: {
-                totalRatings: { $size: "$ratingsData" },
-                averageRating: {
-                    $cond: {
-                        if: { $eq: [{ $size: "$ratingsData" }, 0] },
-                        then: 0,
-                        else: { $avg: "$ratingsData.rating" }
-                    }
-                },
-                instructor: { $arrayElemAt: ["$instructorDetails", 0] },
-                category: { $arrayElemAt: ["$categoryDetails", 0] }
-            }
-        },
-        {
-            $project: {
-                _id: 1,
-                title: 1,
-                subtitle: 1,
-                tags: 1,
-                slug: 1,
-                duration: 1,
-                thumbnail: 1,
-                language: 1,
-                courseMode: 1,
-                totalLectures: 1,
-                totalRatings: 1,
-                averageRating: 1,
-                "instructor._id": 1,
-                "instructor.name": 1,
-                "instructor.profilePic": 1,
-                "category._id": 1,
-                "category.name": 1
-            }
-        },
-        { $skip: skip },
-        { $limit: pageSize }
-    ]);
-
-    return {
-        success: true,
-        totalCourses: result.length,
-        page: pageNo,
-        pageSize,
-        courses: result
-    };
-};
 
 export const courseEnquiry = async (data: CourseDTO.ICourseEnquiry): Promise<any> => {
     const enquiry = new CourseEnquirySchema(data);
@@ -321,8 +239,13 @@ export const changeEnquiryStatus = async (enquiryId: string, status: string): Pr
     return enquiry as CourseDTO.ICourseEnquiry;
 };
 
-// this will be final course get service all redundant codes
-export const getCourses = async (pageNo: number = 1, limit: number = 10, category?: string, status?: courseEnum.CourseStatus, search?: string): Promise<any> => {
+export const getCourses = async (
+    pageNo: number = 1,
+    limit: number = 10,
+    category?: string,
+    status?: courseEnum.CourseStatus,
+    search?: string
+): Promise<any> => {
     const skip = (pageNo - 1) * limit;
     const query: any = {
         courseStatus: status || courseEnum.CourseStatus.PUBLISHED
@@ -332,94 +255,22 @@ export const getCourses = async (pageNo: number = 1, limit: number = 10, categor
         query.category = new mongoose.Types.ObjectId(category);
     }
 
-    const result = await courseSchema.aggregate([
-        {
-            $match: query
-        },
-        {
-            $lookup: {
-                from: "ratingandreviews",
-                localField: "_id",
-                foreignField: "courseId",
-                as: "ratingsData"
-            }
-        },
-        {
-            $lookup: {
-                from: "users",
-                localField: "instructor",
-                foreignField: "_id",
-                as: "instructorDetails"
-            }
-        },
-        {
-            $lookup: {
-                from: "coursecategories",
-                localField: "category",
-                foreignField: "_id",
-                as: "categoryDetails"
-            }
-        },
-        {
-            $addFields: {
-                totalRatings: { $size: "$ratingsData" },
-                averageRating: {
-                    $cond: {
-                        if: { $eq: [{ $size: "$ratingsData" }, 0] },
-                        then: 0,
-                        else: { $avg: "$ratingsData.rating" }
-                    }
-                },
-                instructor: { $arrayElemAt: ["$instructorDetails", 0] },
-                category: { $arrayElemAt: ["$categoryDetails", 0] }
-            }
-        },
-        {
-            $project: {
-                _id: 1,
-                title: 1,
-                subtitle: 1,
-                tags: 1,
-                slug: 1,
-                duration: 1,
-                thumbnail: 1,
-                language: 1,
-                courseMode: 1,
-                totalLectures: 1,
-                totalRatings: 1,
-                averageRating: 1,
-                "instructor._id": 1,
-                "instructor.name": 1,
-                "instructor.profilePic": 1,
-                "category._id": 1,
-                "category.name": 1
-            }
-        },
-        { $skip: skip },
-        { $limit: limit }
-    ]);
+    if (search) {
+        const searchRegex = new RegExp(search, 'i');
 
-    return {
-        success: true,
-        totalCourses: result.length,
-        page: pageNo,
-        pageSize: limit,
-        courses: result
-    };
-};
+        const searchConditions = [
+            { title: searchRegex },
+            { subtitle: searchRegex },
+            { description: searchRegex },
+            { tags: searchRegex },
+            { language: searchRegex },
+            { courseMode: searchRegex },
+        ];
 
-export const getPublishedCourses = async (pageNo: number = 1, limit: number = 10, category?: string): Promise<any> => {
-    const skip = (pageNo - 1) * limit;
-    const query: any = {
-        courseStatus: courseEnum.CourseStatus.PUBLISHED
-    };
-
-    if (category) {
-        query.category = new mongoose.Types.ObjectId(category);
+        query.$or = searchConditions;
     }
-    const totalCourses = await courseSchema.countDocuments(query);
 
-    const result = await courseSchema.aggregate([
+    const aggregationPipeline: any[] = [
         {
             $match: query
         },
@@ -460,7 +311,21 @@ export const getPublishedCourses = async (pageNo: number = 1, limit: number = 10
                 instructor: { $arrayElemAt: ["$instructorDetails", 0] },
                 category: { $arrayElemAt: ["$categoryDetails", 0] }
             }
-        },
+        }
+    ];
+
+    if (search) {
+        aggregationPipeline.push({
+            $match: {
+                $or: [
+                    ...(query.$or || []),
+                    { "category.name": new RegExp(search, 'i') }
+                ]
+            }
+        });
+    }
+
+    aggregationPipeline.push(
         {
             $project: {
                 _id: 1,
@@ -484,11 +349,48 @@ export const getPublishedCourses = async (pageNo: number = 1, limit: number = 10
         },
         { $skip: skip },
         { $limit: limit }
-    ]);
+    );
+
+    const result = await courseSchema.aggregate(aggregationPipeline);
+
+    const countPipeline: any[] = [
+        {
+            $match: query
+        },
+        {
+            $lookup: {
+                from: "coursecategories",
+                localField: "category",
+                foreignField: "_id",
+                as: "categoryDetails"
+            }
+        },
+        {
+            $addFields: {
+                category: { $arrayElemAt: ["$categoryDetails", 0] }
+            }
+        }
+    ];
+
+    if (search) {
+        countPipeline.push({
+            $match: {
+                $or: [
+                    ...(query.$or || []),
+                    { "category.name": new RegExp(search, 'i') }
+                ]
+            }
+        });
+    }
+
+    countPipeline.push({ $count: "total" });
+
+    const totalCountResult = await courseSchema.aggregate(countPipeline).exec();
+    const totalCourses = totalCountResult.length > 0 ? totalCountResult[0].total : 0;
 
     return {
         success: true,
-        totalCourses: totalCourses,
+        totalCourses,
         page: pageNo,
         pageSize: limit,
         courses: result
@@ -605,7 +507,6 @@ export const deleteSection = async (courseId: string, sectionId: string): Promis
         await subSectionSchema.deleteMany({ _id: { $in: section.subSections } });
     }
     await sectionSchema.findByIdAndDelete(sectionId);
-
 };
 
 export const deleteSubSection = async (courseId: string, sectionId: string, subSectionId: string): Promise<any> => {
