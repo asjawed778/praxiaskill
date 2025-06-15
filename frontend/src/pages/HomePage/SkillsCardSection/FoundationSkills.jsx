@@ -32,7 +32,6 @@ const offers = [
 export default function FoundationalSkills() {
   return (
     <Container maxWidth="lg" sx={{ my: 4 }}>
-      {/* Hero Section */}
       <Grid
         container
         spacing={4}
@@ -76,40 +75,31 @@ export default function FoundationalSkills() {
         <Grid size={{ sx: 12, sm: 6 }}>
           <Box
             sx={{
-              width: 340,
-              height: 340,
+              width: { xs: 354, sm: 382, md: 382, lg: 382, xl: 382 },
+              height: { xs: 367, sm: 400, md: 400, lg: 400, xl: 400 },
               bgcolor: "#F83E5F",
               borderRadius: "50%",
               overflow: "hidden",
               display: "flex",
-              alignItems: "center",
+              alignItems: "flex-end",
               justifyContent: "center",
               mx: "auto",
+              position: "relative",
             }}
           >
-            <Box
-              sx={{
-                width: "100%",
-                height: 400,
-                overflow: "hidden",
-                borderRadius: 2,
+            <img
+              src={herosection}
+              alt="Hero section"
+              style={{
+                height: '95%',
+                width: '95%',
+                objectFit: 'cover',
+                marginBottom: -38
               }}
-            >
-              <img
-                src={herosection}
-                alt="Hero section"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "contain",
-                  display: "block",
-                }}
-              />
-            </Box>
+            />
           </Box>
         </Grid>
       </Grid>
-      {/* What We Offer */}
       <Typography
         sx={{
           mt: 6,
@@ -188,7 +178,13 @@ export default function FoundationalSkills() {
         >
           Program Framework
         </Typography>
-        <Grid container spacing={2} display="flex" alignItems="center">
+        <Grid container spacing={2} display="flex" alignItems="center"
+          sx={{
+            flexDirection: {
+              xs: "column-reverse", sm: "row"
+            }
+          }}
+            >
           <Grid size={{ xs: 12, sm: 6 }} pb={0}>
             <List dense>
               {[
@@ -258,9 +254,9 @@ export default function FoundationalSkills() {
             </Box>
           </Grid>
         </Grid>
-      </Box>
+    </Box>
 
-      {/* Career Readiness Section */}
+      {/* Career Readiness Section */ }
       <Typography
         sx={{
           fontSize: {
@@ -361,6 +357,6 @@ export default function FoundationalSkills() {
           </Grid>
         </Grid>
       </Box>
-    </Container>
+    </Container >
   );
 }
