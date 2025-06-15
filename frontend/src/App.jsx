@@ -41,7 +41,7 @@ const CoursePayment = lazy(() => import("./pages/CoursePayment"));
 const CourseLectures = lazy(() => import("./pages/Course Lectures"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const Users = lazy(() => import("./pages/Users"));
-const StaticPage = lazy(() => import("./pages/StaticPage"));
+const FoundationalSkills = lazy(() => import("./pages/HomePage/SkillsCardSection/FoundationSkills"));
 
 const publicRoutes = [
   {
@@ -119,29 +119,13 @@ const publicRoutes = [
     ),
   },
   {
-    path: "StaticPage",
+    path: "skills/foundational",
     element: (
       <LazyComponent>
-        <StaticPage />
+        <FoundationalSkills />
       </LazyComponent>
-    ),
-  },
-  // {
-  //   path: "full-stack-web-development-pro-level",
-  //   element: (
-  //     <LazyComponent>
-  //       <FullStackDevelopment />
-  //     </LazyComponent>
-  //   )
-  // },
-  // {
-  //   path: "ai-powered-digital-marketing",
-  //   element: (
-  //     <LazyComponent>
-  //       <DigitalMarketing />
-  //     </LazyComponent>
-  //   )
-  // }
+    )
+  }
 ];
 
 const authRoutes = [
