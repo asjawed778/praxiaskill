@@ -11,7 +11,6 @@ import CategoryManagement from "./pages/Admin/Category/CategoryManagement";
 import { useDispatch, useSelector } from "react-redux";
 import SplashScreen from "./components/SplashScreen";
 import { setSplashShown } from "./store/reducers/splashScreenReducer";
-import ScrollToTop from "./components/ScrollToTop";
 import useScrollToTop from "./hooks/useScrollToTop";
 const ViewCategories = lazy(() =>
   import("./pages/Admin/Category/ViewCategories")
@@ -41,7 +40,7 @@ const CoursePayment = lazy(() => import("./pages/CoursePayment"));
 const CourseLectures = lazy(() => import("./pages/Course Lectures"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const Users = lazy(() => import("./pages/Users"));
-const StaticPage = lazy(() => import("./pages/StaticPage"));
+const Foundationalskills = lazy(() => import("./pages/HomePage/SkillsCardSection/FoundationSkills"));
 
 const publicRoutes = [
   {
@@ -119,29 +118,13 @@ const publicRoutes = [
     ),
   },
   {
-    path: "StaticPage",
+    path: "foundational-skill",
     element: (
       <LazyComponent>
-        <StaticPage />
+        <Foundationalskills />
       </LazyComponent>
     ),
   },
-  // {
-  //   path: "full-stack-web-development-pro-level",
-  //   element: (
-  //     <LazyComponent>
-  //       <FullStackDevelopment />
-  //     </LazyComponent>
-  //   )
-  // },
-  // {
-  //   path: "ai-powered-digital-marketing",
-  //   element: (
-  //     <LazyComponent>
-  //       <DigitalMarketing />
-  //     </LazyComponent>
-  //   )
-  // }
 ];
 
 const authRoutes = [
