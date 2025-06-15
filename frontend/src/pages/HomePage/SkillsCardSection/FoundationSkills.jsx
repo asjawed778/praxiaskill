@@ -1,20 +1,14 @@
-import React from "react";
 import {
   Box,
   Grid,
   Typography,
   Card,
-  CardContent,
-  Button,
-  Avatar,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Container,
 } from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import SchoolIcon from "@mui/icons-material/School";
 import herosection from "../../../../public/foundationalskills/herosection.png";
 import programframework from "../../../../public/foundationalskills/programframework.png";
 import careerguidance from "../../../../public/foundationalskills/careerguidance.png";
@@ -29,9 +23,9 @@ const offers = [
   "Teacher Capacity Building",
 ];
 
-export default function FoundationalSkills() {
+const FoundationalSkills = () => {
   return (
-    <Container maxWidth="lg" sx={{ my: 4 }}>
+    <Container maxWidth="lg" sx={{ my: { xs: 2, sm: 4 }, pb: 1}}>
       <Grid
         container
         spacing={4}
@@ -41,7 +35,7 @@ export default function FoundationalSkills() {
           justifyContent: "space-between",
         }}
       >
-        <Grid size={{ xs: 12, sm: 6 }}>
+        <Grid size={{ xs: 12, sm: 6 }} sx={{textAlign: {xs: "center", md: "start"}}}>
           <Typography
             sx={{
               fontSize: {
@@ -75,8 +69,10 @@ export default function FoundationalSkills() {
         <Grid size={{ sx: 12, sm: 6 }}>
           <Box
             sx={{
-              width: { xs: 354, sm: 382, md: 382, lg: 382, xl: 382 },
-              height: { xs: 367, sm: 400, md: 400, lg: 400, xl: 400 },
+              // width: { xs: 354, sm: 382, md: 382, lg: 382, xl: 382 },
+              // height: { xs: 367, sm: 400, md: 400, lg: 400, xl: 400 },
+              maxWidth: 350,
+              maxHeight: 380,
               bgcolor: "#F83E5F",
               borderRadius: "50%",
               overflow: "hidden",
@@ -91,10 +87,10 @@ export default function FoundationalSkills() {
               src={herosection}
               alt="Hero section"
               style={{
-                height: '95%',
-                width: '95%',
-                objectFit: 'cover',
-                marginBottom: -38
+                height: "95%",
+                width: "95%",
+                objectFit: "cover",
+                marginBottom: -76,
               }}
             />
           </Box>
@@ -103,6 +99,7 @@ export default function FoundationalSkills() {
       <Typography
         sx={{
           mt: 6,
+          mb: 1,
           fontSize: {
             xs: "20px",
             sm: "22px",
@@ -110,15 +107,16 @@ export default function FoundationalSkills() {
             lg: "26px",
             xl: "28px",
           },
+          textAlign: { xs: "center", sm: "start" },
           fontWeight: 600,
           color: "#F83E5F",
         }}
       >
         What We Offer
       </Typography>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} display="flex" justifyContent="center">
         {offers.map((item, idx) => (
-          <Grid size={{ xs: 6, sm: 2.4 }} key={idx}>
+          <Grid size={{ xs: 6, sm: 2.4 }} key={idx} textAlign="center">
             <Card
               sx={{
                 bgcolor: "#F83E5F",
@@ -137,8 +135,6 @@ export default function FoundationalSkills() {
               >
                 {item}
               </Typography>
-
-              {/* Bottom-right icon */}
               <Box
                 sx={{
                   position: "absolute",
@@ -152,13 +148,12 @@ export default function FoundationalSkills() {
           </Grid>
         ))}
       </Grid>
-      {/* Program Framework */}
       <Box
         sx={{
-          mt: { xs: 4, md: 6 },
-          bgcolor: "#2e7d72",
+          mt: { xs: 8, md: 10 },
+          bgcolor: "#568776",
           px: 4,
-          // pb: {xs: 0, md: 2},
+          py: 2,
           borderRadius: 4,
           color: "white",
         }}
@@ -172,20 +167,29 @@ export default function FoundationalSkills() {
               lg: "36px",
               xl: "40px",
             },
-            pt: 2,
             fontWeight: 600,
           }}
         >
           Program Framework
         </Typography>
-        <Grid container spacing={2} display="flex" alignItems="center"
+
+        <Box
           sx={{
+            display: "flex",
             flexDirection: {
-              xs: "column-reverse", sm: "row"
-            }
+              xs: "column-reverse",
+              sm: "row",
+            },
+            alignItems: "center",
+            justifyContent: "center",
           }}
-            >
-          <Grid size={{ xs: 12, sm: 6 }} pb={0}>
+        >
+          <Box
+            sx={{
+              flex: 1,
+              width: { xs: "100%", sm: "50%" },
+            }}
+          >
             <List dense>
               {[
                 "Inaugural Motivation Session",
@@ -197,7 +201,7 @@ export default function FoundationalSkills() {
                 <ListItem
                   key={idx}
                   disableGutters
-                  sx={{ py: { xs: 0 }, pl: { xs: 2, md: 8 } }}
+                  sx={{ py: { xs: 0, md: 0.5  }, pl: { xs: 2, md: 4 } }}
                 >
                   <ListItemIcon sx={{ minWidth: 32 }}>
                     <TaskAltOutlinedIcon
@@ -219,10 +223,11 @@ export default function FoundationalSkills() {
                       sx: {
                         color: "white",
                         fontSize: {
-                          xs: "14px",
-                          sm: "16px",
-                          md: "18px",
-                          lg: "20px",
+                          xs: "16px",
+                          sm: "18px",
+                          md: "20px",
+                          lg: "22px",
+                          xl: "24px",
                         },
                         fontWeight: 500,
                       },
@@ -231,32 +236,33 @@ export default function FoundationalSkills() {
                 </ListItem>
               ))}
             </List>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <Box
-              sx={{
+          </Box>
+          <Box
+            sx={{
+              flex: 1,
+              width: { xs: "100%", sm: "50%" },
+              maxWidth: 543,
+              height: { xs: 250, sm: 300, md: 342 },
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
+            <img
+              src={programframework}
+              alt="Program"
+              style={{
                 width: "100%",
-                height: { xs: 250, sm: 280, md: 300 },
-                overflow: "hidden",
-                borderRadius: 2,
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
               }}
-            >
-              <img
-                src={programframework}
-                alt="Program"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  // display: "block",
-                }}
-              />
-            </Box>
-          </Grid>
-        </Grid>
-    </Box>
-
-      {/* Career Readiness Section */ }
+            />
+          </Box>
+        </Box>
+      </Box>
       <Typography
         sx={{
           fontSize: {
@@ -266,7 +272,8 @@ export default function FoundationalSkills() {
             lg: "32px",
             xl: "36px",
           },
-          mt: { xs: 4, md: 6 },
+          mt: { xs: 6, md: 8 },
+          mb: 1,
           fontWeight: 600,
           textAlign: "center",
         }}
@@ -275,19 +282,22 @@ export default function FoundationalSkills() {
       </Typography>
       <Box
         sx={{
-          bgcolor: "#005fbb",
+          backgroundImage: "linear-gradient(to right, #0085FD, #00C5F0)",
           borderRadius: 4,
           color: "white",
+          py: 2,
         }}
       >
-        <Grid container spacing={3} alignItems="center">
+        <Grid container spacing={2} alignItems="center">
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box
               sx={{
-                width: "100%",
-                maxHeight: 500,
+                width: { xs: "100%", sm: "70%" },
+                maxWidth: 543,
+                height: { xs: 250, sm: 300, md: 342 },
                 borderRadius: 2,
                 overflow: "hidden",
+                ml: {xs: 0, sm: 4},
               }}
             >
               <img
@@ -295,7 +305,7 @@ export default function FoundationalSkills() {
                 alt="Framework Illustration"
                 style={{
                   width: "100%",
-                  height: "auto",
+                  height: "100%",
                   objectFit: "cover",
                   display: "block",
                 }}
@@ -357,6 +367,8 @@ export default function FoundationalSkills() {
           </Grid>
         </Grid>
       </Box>
-    </Container >
+    </Container>
   );
 }
+
+export default FoundationalSkills;
