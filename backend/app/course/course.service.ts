@@ -340,6 +340,7 @@ export const getCourses = async (
                 totalLectures: 1,
                 totalRatings: 1,
                 averageRating: 1,
+                courseStatus: 1,
                 "instructor._id": 1,
                 "instructor.name": 1,
                 "instructor.profilePic": 1,
