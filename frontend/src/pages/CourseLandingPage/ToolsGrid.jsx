@@ -18,7 +18,7 @@ const getIconComponent = (iconName) => {
 };
 
 const ToolsGrid = ({ course }) => {
-  if (!course?.tools?.length === 0 || !course?.tools) return;
+  if (course?.tools?.length === 0 || !course?.tools) return;
 
   return (
     <Box
@@ -29,9 +29,19 @@ const ToolsGrid = ({ course }) => {
         textAlign: "center",
       }}
     >
-      <Typography
-        variant="h1"
-        textAlign="center"
+       <Typography
+        sx={{
+          color: "white",
+          fontWeight: 600,
+          fontSize: {
+            xs: "32px",
+            sm: "36px",
+            md: "40px",
+            lg: "44px",
+            xl: "48px",
+          },
+          textAlign: "center",
+        }}
       >
         {course?.tools?.length < 5
           ? `Master ${course?.tools?.length} Tools`

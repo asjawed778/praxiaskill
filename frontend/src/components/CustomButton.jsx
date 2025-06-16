@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress, Box } from "@mui/material";
 
 const CustomButton = ({
   label,
@@ -7,7 +7,7 @@ const CustomButton = ({
   type = "button",
   variant = "contained",
   color = "primary",
-  size = "small",
+  size = "medium",
   fullWidth = false,
   disabled = false,
   loading = false,
@@ -18,28 +18,45 @@ const CustomButton = ({
   style = {},
   ...rest
 }) => {
+  const isDisabled = disabled || loading;
+
   return (
-    <Button
-      type={type}
-      variant={variant}
-      color={color}
-      size={size}
-      fullWidth={fullWidth}
-      disabled={disabled || loading}
-      onClick={onClick}
-      startIcon={!loading && startIcon}
-      endIcon={!loading && endIcon}
-      className={className}
+    <Box
       sx={{
-        fontSize: "14px",
-        borderRadius: 2,
-        textTransform: "none",
-        ...sx,
+        display: fullWidth ? "block" : "inline-block",
+        width: fullWidth ? "100%" : "auto",
+        cursor: isDisabled ? "not-allowed" : "pointer",
       }}
-      {...rest}
     >
-      {loading ? <CircularProgress size={25} color="inherit" /> : label}
-    </Button>
+      <Button
+        type={type}
+        variant={variant}
+        color={color}
+        size={size}
+        fullWidth={fullWidth}
+        disabled={isDisabled}
+        onClick={onClick}
+        startIcon={!loading && startIcon}
+        endIcon={!loading && endIcon}
+        className={className}
+        sx={{
+          fontSize: "14px",
+          borderRadius: 1.5,
+          // py: "8px",
+          textTransform: "none",
+          width: fullWidth ? "100%" : "max-content",
+          maxWidth: fullWidth ? "100%" : "none",
+          display: "inline-flex",
+          minWidth: 75,
+          pointerEvents: "auto",
+          ...sx,
+        }}
+        style={style}
+        {...rest}
+      >
+        {loading ? <CircularProgress size={25} color="inherit" /> : label}
+      </Button>
+    </Box>
   );
 };
 

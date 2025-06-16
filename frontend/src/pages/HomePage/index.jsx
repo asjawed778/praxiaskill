@@ -11,6 +11,8 @@ import Collaboration from "./Collaboration";
 import SEOHelmet from "../../SEO/SEOHelmet";
 import { generateOrganizationSchema } from "../../SEO/SEOHelper";
 import CustomButton from "@/components/CustomButton";
+import MentorCarousal from "./MentorCarousal"
+import SkillsCardSection from "./SkillsCardSection";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -54,7 +56,7 @@ function HomePage() {
         animate="visible"
         variants={containerVariants}
       >
-        <Box sx={{ position: "relative", width: "100%", overflow: "hidden" }}>
+        <Box sx={{ position: "relative", width: "100%", overflow: "hidden", }}>
           <video
             autoPlay
             loop
@@ -74,70 +76,126 @@ function HomePage() {
             Your browser does not support the video tag.
           </video>
 
-          
-           <Container maxWidth="lg" sx={{ my: 4,}}>
-
-              <Grid
+          <Container
+            maxWidth="lg"
+            sx={{
+              my: {xs: 1, sm: 2},
+              pb: 1
+            }}
+          >
+            <Grid
               container
               spacing={2}
               alignItems="center"
               alignContent="center"
               sx={{
                 justifyContent: {
-                  xs: "center", 
-                  sm: "space-between", 
+                  xs: "center",
+                  sm: "space-between",
                 },
               }}
             >
-               <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={6}>
                 <motion.div variants={itemVariants}>
                   <Typography
-                    variant="h1"
-                    sx={{ color: "white" }}
-                    // gutterBottom
+                    sx={{
+                      color: "white",
+                      fontWeight: 600,
+                      fontSize: {
+                        xs: "32px",
+                        sm: "36px",
+                        md: "40px",
+                        lg: "44px",
+                        xl: "48px",
+                      },
+                    }}
                   >
                     Ready For the Future
                   </Typography>
                   <Typography
-                    variant="h2"
-                    sx={{ color: "white", }}
-                    // gutterBottom
+                    sx={{
+                      fontSize: {
+                        xs: "32px",
+                        sm: "36px",
+                        md: "40px",
+                        lg: "44px",
+                        xl: "48px",
+                      },
+                      fontWeight: 600,
+                      color: "white",
+                    }}
                   >
                     At Praxia Skill
                   </Typography>
 
-                  <Typography variant="body1" sx={{ color: "white", mt: 3 }}>
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        xs: "14px",
+                        sm: "16px",
+                        md: "18px",
+                        lg: "20px",
+                        xl: "22px",
+                      },
+                      color: "white",
+                      mt: 2,
+                      fontWeight: 100,
+                    }}
+                  >
                     Join this 20 weeks, Job-ready Program to master
                   </Typography>
-                  <Typography variant="body1" sx={{ color: "white" }}>
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        xs: "14px",
+                        sm: "16px",
+                        md: "18px",
+                        lg: "20px",
+                        xl: "22px",
+                      },
+                      color: "white",
+                      fontWeight: 100,
+                    }}
+                  >
                     Data Analytics from scratch with Top Data Analysts
                   </Typography>
-                  <Typography variant="body1" sx={{ color: "white", mb: 2 }}>
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        xs: "14px",
+                        sm: "16px",
+                        md: "18px",
+                        lg: "20px",
+                        xl: "22px",
+                      },
+                      color: "white",
+                      mb: 2,
+                      fontWeight: 100,
+                    }}
+                  >
                     from Microsoft, KPMG, Amazon, and Rapido.
                   </Typography>
 
                   <CustomButton
-                  label="Explore Program"
+                    label="Explore Program"
                     component={Link}
                     to="/courses"
                     variant="contained"
                     color="primary"
-                    sx={{  px: 3 }}
+                    sx={{ px: 3 }}
                   />
                 </motion.div>
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                  <BookDemoClass />
+                <BookDemoClass />
               </Grid>
             </Grid>
-            </Container>
-
-           
+          </Container>
         </Box>
 
-        <Container maxWidth="lg" sx={{ mt: 4 }}>
-          <Grid container spacing={2} justifyContent="center">
+        <Container maxWidth="lg" sx={{ mt: 2 }}>
+          {/* <Grid container spacing={2} justifyContent="center">
             {["Foundational", "Employability", "Entrepreneurial"].map(
               (skill, index) => (
                 <Grid size={{ xs: 12, sm: 4 }} key={index}>
@@ -162,8 +220,32 @@ function HomePage() {
                         color: "white",
                       }}
                     >
-                      <Typography variant="h3">{skill}</Typography>
-                      <Typography variant="h5" fontWeight="bold">
+                      <Typography
+                        sx={{
+                          fontSize: {
+                            xs: "24px",
+                            sm: "28px",
+                            md: "32px",
+                            lg: "36px",
+                            xl: "40px",
+                          },
+                          fontWeight: 600,
+                        }}
+                      >
+                        {skill}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: {
+                            xs: "20px",
+                            sm: "24px",
+                            md: "28px",
+                            lg: "32px",
+                            xl: "36px",
+                          },
+                          fontWeight: 600,
+                        }}
+                      >
                         Skills
                       </Typography>
                     </Box>
@@ -171,15 +253,17 @@ function HomePage() {
                 </Grid>
               )
             )}
-          </Grid>
+          </Grid> */}
+          <SkillsCardSection />
         </Container>
 
-        <Container maxWidth="lg" sx={{ pt: 3 }}>
+        <Container maxWidth="lg" sx={{ pt: 2 }}>
           <Courses />
         </Container>
 
         <Container maxWidth="lg">
           <Benefits />
+          <MentorCarousal />
           <Collaboration />
         </Container>
 

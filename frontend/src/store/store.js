@@ -8,6 +8,7 @@ import authReducer from "./reducers/authReducer";
 import coursesReducer from "./reducers/coursesReducer";
 import sidebarReducer from "../store/reducers/sidebarSlice"
 import splashScreenReducer from "./reducers/splashScreenReducer";
+// import noteReducer from "./reducers/notesSlice"
 
 // Importing Apis
 import { apiAuth } from "../services/auth.api";
@@ -16,6 +17,7 @@ import { paymentApi } from "../services/payment.api";
 import { contactApi } from "../services/contactApi"
 import { usersApi } from "../services/usersApi";
 import { qnaApi } from "../services/qnaApi";
+import { generalApi } from "../services/generalApi";
 
 // Persist configuration
 const persistConfig = {
@@ -31,6 +33,7 @@ const rootReducer = combineReducers({
   courses: coursesReducer,
   sidebar: sidebarReducer,
   splashScreen: splashScreenReducer,
+  // notes: notesReducer,
 
   [apiAuth.reducerPath]: apiAuth.reducer,
   [apiCourse.reducerPath]: apiCourse.reducer,
@@ -38,6 +41,7 @@ const rootReducer = combineReducers({
   [contactApi.reducerPath]: contactApi.reducer,
   [usersApi.reducerPath]: usersApi.reducer,
   [qnaApi.reducerPath]: qnaApi.reducer,
+  [generalApi.reducerPath]: generalApi.reducer,
 });
 
 // Create a persisted reducer
@@ -58,6 +62,7 @@ export const store = configureStore({
       contactApi.middleware,
       usersApi.middleware,
       qnaApi.middleware,
+      generalApi.middleware,
     ),
 });
 

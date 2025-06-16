@@ -88,9 +88,19 @@ export default function EnquiryForm({ onClose }) {
   };
 
   return (
-    <FormProvider {...methods}>
+      <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Typography variant="h6" color="primary" mb={2}>
+        <Typography 
+          sx={{
+            fontSize: {
+              xs: "20px", 
+            },
+            color: "primary.main",
+            fontWeight: 600,
+            textAlign: "center",
+            mb: 1
+          }}
+        >
           Book a Live Class, For Free!
         </Typography>
         <Stack spacing={2}>
@@ -102,6 +112,7 @@ export default function EnquiryForm({ onClose }) {
           <CustomInputField label="Interested Course" name="interestedCourse" />
           <WhatsAppCheckbox />
           <CustomButton
+            fullWidth
             label="Submit"
             variant="contained"
             color="primary"

@@ -1,225 +1,97 @@
-import React from "react";
-import { useFormContext } from "react-hook-form";
-import InputField from "../../../../components/Input Field";
-import Button from "../../../../components/Button/Button";
-import Dropdown from "../../../../components/Dropdown/Dropdown";
+import { Box, Grid } from "@mui/material";
+import CustomInputField from "../../../../components/CustomInputField";
+import { CourseMode, Language } from "../../../../utils/enum";
+import CustomDropdownField from "../../../../components/CustomDropdownField";
+import CustomRadioButton from "../../../../components/CustomRadioButton";
+import CustomButton from "../../../../components/CustomButton";
+import ImageUploader from "../../../../components/ImageUploader";
+import FileUploader from "../../../../components/FileUploader";
 
 const CourseFirstStep = ({ handleNext }) => {
-  const {
-    register,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useFormContext();
-
-  const selectedMode = watch("courseMode", "");
-  const thumbnail = watch("thumbnail", "");
-  const brouchure = watch("brouchure", "");
-  const category = watch("category", "");
-  const instructor = watch("instructor", "");
-
+  const languageOptions = [
+    { label: "English", value: Language.ENGLISH },
+    { label: "Hindi", value: Language.HINDI },
+    { label: "English + Hindi", value: Language.ENGLISH_HINDI },
+  ];
+  const courseModeOptons = [
+    { label: "Online", value: CourseMode.ONLINE },
+    { label: "Offline", value: CourseMode.OFFLINE },
+    { label: "Hybrid", value: CourseMode.HYBRID },
+  ];
   return (
-    <div className="w-full">
-      <div className="p-3 flex flex-col gap-6 px-4">
-        <div>
-          <InputField
+    <Box>
+      <Grid container spacing={2}>
+        <Grid size={{ xs: 12 }}>
+          <CustomInputField
+            name="title"
+            label="Title"
             placeholder="Enter the course title"
-            className="bg-white"
-            {...register("title")}
-          >
-            Course Title <span className="text-red-600">*</span>
-          </InputField>
-          {errors?.title && (
-            <p className="text-red-600 text-xs ml-1 mt-0.5">
-              {errors?.title.message}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <InputField
-            placeholder="Enter the subtitle"
-            {...register("subtitle")}
-          >
-            Subtitle <span className="text-red-600">*</span>
-          </InputField>
-          {errors?.subtitle && (
-            <p className="text-red-600 text-xs ml-1 mt-0.5">
-              {errors?.subtitle.message}
-            </p>
-          )}
-        </div>
-
-        <div className=" flex flex-col md:flex-row gap-4 md:gap-0 md:items-center justify-between">
-          <div className="flex flex-col gap-2 md:w-[49%] w-full">
-            <div className="flex gap-1">
-              <label htmlFor="language" className="cursor-pointer">
-                Language
-              </label>
-              <span className="text-red-600">*</span>
-            </div>
-
-            <select
-              id="language"
-              placeholder="select"
-              className="border p-2 rounded-lg border-neutral-300 outline-none cursor-pointer bg-white"
-              {...register("language")}
-            >
-              <option value="">Select Language</option>
-              <option value="HINDI">Hindi</option>
-              <option value="ENGLISH">English</option>
-              <option value="ENGLISH_HINDI">Hindi + English</option>
-            </select>
-            {errors?.language && (
-              <p className="text-red-600 text-xs ml-1 -mt-1.5">
-                {errors?.language.message}
-              </p>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-2 md:w-[49%] w-full">
-            <Dropdown
-              required={true}
-              className="w-full"
-              placeholder="Select a Category"
-              label="Category"
-              value={category}
-              {...register("category")}
-              endpoint={"course/category"}
-            />
-            {errors?.category && (
-              <p className="text-red-600 text-xs ml-1 -mt-1.5">
-                {errors?.category.message}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <Dropdown
-            required={true}
-            className="w-full"
-            placeholder="Select an Instuctor"
-            label="Instructor"
-            value={instructor}
-            {...register("instructor")}
-            endpoint={"course/instructors"}
           />
-          {errors?.instructor && (
-            <p className="text-red-600 text-xs ml-1 -mt-1.5">
-              {errors?.instructor.message}
-            </p>
-          )}
-        </div>
-
-        <div className="flex flex-col md:flex-row md:justify-between gap-4">
-          <div className="flex flex-col gap-2 w-full md:w-1/2">
-            <div>
-              Mode: <span className="text-red-600">*</span>{" "}
-            </div>
-            <div className="flex w-full border border-neutral-300 rounded-md overflow-hidden bg-white">
-              {["OFFLINE", "ONLINE", "HYBRID"].map((mode) => (
-                <label
-                  key={mode}
-                  htmlFor={mode}
-                  className={`text-sm cursor-pointer px-4 py-2 flex-1 text-center capitalize ${
-                    (mode === "OFFLINE" &&
-                      "rounded-l-md border-r border-neutral-200") ||
-                    (mode === "HYBRID" &&
-                      "rounded-r-md border-l border-neutral-200")
-                  } ${selectedMode === mode ? "bg-[#9CA1CD]" : ""}`}
-                >
-                  {mode.toLowerCase()}
-                  <input
-                    hidden
-                    id={mode}
-                    type="radio"
-                    value={mode}
-                    {...register("courseMode")}
-                  />
-                </label>
-              ))}
-            </div>
-            {errors?.courseMode && (
-              <p className="text-red-600 text-xs ml-1 -mt-1.5">
-                {errors?.courseMode.message}
-              </p>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-2 w-full md:w-1/2">
-            <InputField
-              placeholder="Enter course level"
-              className="bg-white"
-              {...register("courseLevel")}
-            >
-              Course Level <span className="text-red-600">*</span>
-            </InputField>
-            {errors?.title && (
-              <p className="text-red-600 text-xs ml-1 mt-0.5">
-                {errors?.courseLevel.message}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className="flex gap-20 flex-col md:flex-row">
-          <div>
-            <InputField setvalue={setValue} type="image" id="thumbnail">
-              Thumbnail Image <span className="text-red-600">*</span>
-            </InputField>
-            {thumbnail && (
-              <div className="h-30 w-full rounded-md mt-2">
-                <img
-                  className="h-full w-full rounded-md"
-                  src={thumbnail}
-                  alt="thumnail"
-                />
-                <p className="text-sm text-green-500">Uploaded Image Preview</p>
-              </div>
-            )}
-            {!thumbnail && errors?.thumbnail && (
-              <p className="text-red-600 text-xs ml-1 mt-0.5">
-                {errors?.thumbnail.message}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <InputField setvalue={setValue} type="pdf" id="pdf">
-              Brochure pdf <span className="text-red-600">*</span>
-            </InputField>
-            {brouchure && (
-              <div>
-                <a
-                  href={brouchure}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="z-10 mt-1 flex items-center justify-center text-xl text-white bg-black/55 w-full h-10 rounded-md cursor-pointer"
-                >
-                  Preview
-                </a>
-                <p className="text-sm">Click to Preview Brouchure</p>
-              </div>
-            )}
-            {!brouchure && errors?.brouchure && (
-              <p className="text-red-600 text-xs ml-1 mt-0.5">
-                {errors?.brouchure.message}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className={`flex justify-end items-center text-white`}>
-          <Button
-            onClick={handleNext}
-            className={`flex items-center justify-center w-40 `}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
-    </div>
+        </Grid>
+        <Grid size={{ xs: 12 }}>
+          <CustomInputField
+            name="subtitle"
+            label="SubTitle"
+            placeholder="Enter the course subtitle"
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <CustomDropdownField
+            name="language"
+            label="Seclect Language"
+            options={languageOptions}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <CustomDropdownField
+            name="category"
+            label="Seclect Category"
+            endpoint="course/category"
+          />
+        </Grid>
+        {/* <Grid size={{ xs: 12, sm: 6 }}>
+          <CustomDropdownField
+            name="instructor"
+            label="Seclect Instructor"
+            endpoint="course/instructors"
+          />
+        </Grid> */}
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <CustomRadioButton
+            name="courseMode"
+            label="Course Mode:"
+            options={courseModeOptons}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6 }} mt={3}>
+          <CustomInputField
+            name="courseLevel"
+            label="Course Level"
+            placeholder="Enter course level (e.g: Intermediate to advance)"
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <ImageUploader
+            name="thumbnail"
+            label="Upload Thumbnail"
+            width={500}
+            height={250}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <FileUploader name="brouchure" label="Upload Brouchure" />
+        </Grid>
+      </Grid>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          mt: 4,
+        }}
+      >
+        <CustomButton label="Next" onClick={handleNext} />
+      </Box>
+    </Box>
   );
 };
 

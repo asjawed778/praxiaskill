@@ -17,7 +17,7 @@ const AddNewUser = ({ open, onClose, userData, isEditMode, refetch }) => {
   
 
   const roleOptions = Object.entries(UserRole).map(([key, value]) => ({
-    label: key.replace("_", " "), // Optional: Format the key for better readability
+    label: key.replace("_", " "), 
     value: value,
   }));
 
@@ -68,8 +68,8 @@ const AddNewUser = ({ open, onClose, userData, isEditMode, refetch }) => {
 
   return (
     <ModalWrapper open={open} onClose={onClose} title={isEditMode ? "Update User Details" : "Add New User"}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={2} mt={2}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Stack spacing={2}>
           <CustomInputField
             name="name"
             label="Full Name"

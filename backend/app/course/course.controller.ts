@@ -7,36 +7,26 @@ import * as AWSservice from '../common/services/AWS.service';
 import * as courseService from './course.service';
 import * as UserService from '../user/user.service';
 import * as CourseDTO from './course.dto';
+import * as CourseEnum from './course.enum';
 import * as CourseCategoryService from "../category/category.service";
 import { courseEnquiryEmailTemplate } from '../common/template/courseEnquiry.template';
 import { emailQueue } from '../common/queue/queues/email.queue';
 import { UserRole } from '../user/user.schema';
+import mongoose from 'mongoose';
 
-
+// This controller handles the upload of public files related to courses, such as thumbnails, brochures, trailers, and videos.
 export const uploadPublicFile = asyncHandler(async (req: Request, res: Response) => {
-    const allowedFields = ["thumbnail", "brouchure", "trailerVideo", "video"];
 
-    // Ensure req.files is not null or undefined
-    if (!req.files) {
-        throw createHttpError(400, "No files were selected.");
+    if (!req.files || !req.files.file) {
+        throw createHttpError(400, "No file were selected.");
     }
-
-    // Find which file is being uploaded
-    let fileKey = allowedFields.find(field => req.files?.[field]);
-
-    if (!fileKey) {
-        throw createHttpError(400, "Please select a valid file to upload");
-    }
-
-    const file = req.files[fileKey] as UploadedFile;
-
-    const uploadPath = `public/course/${fileKey}`;
-
+    const file = req.files.file as UploadedFile;
+    const uploadPath = `public/course/assets/${file.name}`;
     const result = await AWSservice.putObject(file, uploadPath);
-
-    res.send(createResponse(result, `${fileKey} uploaded successfully to AWS`));
+    res.send(createResponse(result, `File uploaded successfully to AWS`));
 });
 
+// course content upload controllers
 export const startUpload = asyncHandler(async (req: Request, res: Response) => {
     const { fileName, fileType, courseTitle } = req.body;
     const { courseId, sectionId, subSectionId } = req.params;
@@ -185,47 +175,18 @@ export const getCourseContent = asyncHandler(async (req: Request, res: Response)
     res.send(createResponse(courseContent, "Course content fetched successfully"));
 });
 
-export const publishCourse = asyncHandler(async (req: Request, res: Response) => {
+export const updateStatus = asyncHandler(async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
     const isCourseExist = await courseService.isCourseExist(courseId);
     if (!isCourseExist) {
         throw createHttpError(404, "Course id is invalid, Not found");
     }
-    await courseService.publishCourse(courseId);
+    const status = req.query.status as CourseEnum.CourseStatus;
+    await courseService.updateStatus(courseId, status);
     res.send(createResponse({}, "Course published successfully"));
 });
 
-export const draftCourse = asyncHandler(async (req: Request, res: Response) => {
-    const courseId = req.params.courseId;
-    const isCourseExist = await courseService.isCourseExist(courseId);
-    if (!isCourseExist) {
-        throw createHttpError(404, "Course id is invalid, Not found");
-    }
-    await courseService.draftCourse(courseId);
-    res.send(createResponse({}, "Course drafted successfully"));
-});
 
-export const terminateCourse = asyncHandler(async (req: Request, res: Response) => {
-    const courseId = req.params.courseId;
-    const isCourseExist = await courseService.isCourseExist(courseId);
-    if (!isCourseExist) {
-        throw createHttpError(404, "Course id is invalid, Not found");
-    }
-    await courseService.terminateCourse(courseId);
-    res.send(createResponse({}, "Course terminated successfully"));
-});
-
-export const getPublishedCourseByCategory = asyncHandler(async (req: Request, res: Response) => {
-    const categoryId = req.params.categoryId;
-    const pageNo = parseInt(req.query.pageNo as string) || 1;
-    const category = await CourseCategoryService.getCourseCategoryById(categoryId);
-    if (!category) {
-        throw createHttpError(404, "Category id invalid, category not found")
-    }
-
-    const courses = await courseService.getPublishedCoursesByCategory(categoryId, pageNo);
-    res.send(createResponse(courses, "Published courses by category fetched successfully"));
-});
 
 export const getCourseDetails = asyncHandler(async (req: Request, res: Response) => {
     const { identifier } = req.params;
@@ -280,11 +241,18 @@ export const changeEnquiryStatus = asyncHandler(async (req: Request, res: Respon
     res.send(createResponse({}, "Enquiry status changed successfully"));
 });
 
-export const getPublishedCourses = asyncHandler(async (req: Request, res: Response) => {
-    const pageNo = parseInt(req.query.pageNo as string) || 1;
-    const result = await courseService.getPublishedCourses(pageNo);
-    res.send(createResponse(result, "Published courses fetched successfully"));
+// this controller will stay and all redudnat code removes
+export const getCourses = asyncHandler(async (req: Request, res: Response) => {
+    const pageNo = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const category = req.query.category as string | undefined;
+    const status = req.query.status as CourseEnum.CourseStatus | undefined;
+    const search = req.query.search as string | undefined;
+
+    const result = await courseService.getCourses(pageNo, limit, category, status, search);
+    res.send(createResponse(result, "courses fetched successfully"));
 });
+
 
 export const rateCourse = asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) {
@@ -366,6 +334,8 @@ export const getMyCourses = asyncHandler(async (req: Request, res: Response) => 
     res.send(createResponse(result, "My Course fetched successfull"));
 });
 
+
+// QNA related controllers
 export const createQna = asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) {
         throw createHttpError(401, "Unauthorized user, login again");
@@ -584,3 +554,84 @@ export const getQnas = asyncHandler(async (req: Request, res: Response) => {
     res.send(createResponse(result, "QnAs fetched successfully"));
 });
 
+// Notes related controllers
+export const createCourseNotes = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+    const userId = req.user._id;
+    const { courseId, sectionId, subSectionId } = req.query;
+
+    if (req.user.role === UserRole.USER && courseId) {
+        const isAlreadyEnrolledInCourse = await courseService.isUserCoursePurchased(courseId as string, userId);
+        if (!isAlreadyEnrolledInCourse) {
+            throw createHttpError(401, "Unauthorized user, course not purchased");
+        }
+    }
+
+    const data: CourseDTO.ICourseNotesCreate = {
+        userId: new mongoose.Types.ObjectId(userId),
+        courseId: courseId ? new mongoose.Types.ObjectId(courseId as string) : undefined,
+        sectionId: sectionId ? new mongoose.Types.ObjectId(sectionId as string) : undefined,
+        subSectionId: subSectionId ? new mongoose.Types.ObjectId(subSectionId as string) : undefined,
+        notes: req.body.notes
+    };
+
+
+    const result = await courseService.createCourseNotes(data);
+    res.send(createResponse(result, "Course notes created successfully"));
+});
+
+export const updateCourseNotes = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+
+    const result = await courseService.updateCourseNotes(req.params.noteId, req.body.notes);
+    res.send(createResponse(result, "Course notes updated successfully"));
+});
+
+export const deleteNotes = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+    const noteId = req.params.noteId;
+
+    const result = await courseService.deleteNotes(noteId);
+    res.send(createResponse(result, "Course notes deleted successfully"));
+});
+
+export const getCourseNotes = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+        throw createHttpError(401, "Unauthorized user, login again");
+    }
+    const userId = req.user._id;
+    const { courseId, sectionId, subSectionId, page, limit, search, sort } = req.query;
+    const pageNo = page ? parseInt(page as string, 10) : 1;
+    const pageSize = limit ? parseInt(limit as string, 10) : 10;
+
+    const query: Record<string, any> = {
+        userId: userId as string,
+        pageNo,
+        pageSize
+    }
+    if (courseId) {
+        query.courseId = courseId as string;
+    }
+    if (sectionId) {
+        query.sectionId = sectionId as string;
+    }
+    if (subSectionId) {
+        query.subSectionId = subSectionId as string;
+    }
+    if (search) {
+        query.search = search as string;
+    }
+    if(sort) {
+        query.sort = sort as string
+    }
+
+
+    const result = await courseService.getCourseNotes(query);
+    res.send(createResponse(result, "Course notes fetched successfully"));
+});

@@ -51,7 +51,7 @@ const TableActionButtons = ({menuStyles, setOpenMenu, setMenuStyles, courses, op
             </div>
             <button
               onClick={() =>
-                navigate(`/dashboard/course/content/${courses[openMenu]._id}`)
+                openMenu
               }
               className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 rounded-md"
             >
