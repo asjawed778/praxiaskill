@@ -38,6 +38,7 @@ const ContactUs = lazy(() => import("./pages/ContactUs"));
 const Users = lazy(() => import("./pages/Users"));
 const Foundationalskills = lazy(() => import("./pages/HomePage/SkillsCardSection/FoundationSkills"));
 const EntrepreneurialSkills = lazy(() => import("./pages/HomePage/SkillsCardSection/EntrepreneurialSkills"));
+const EmployabilitySkills = lazy(() => import("./pages/HomePage/SkillsCardSection/EmployabilitySkills"));
 
 const publicRoutes = [
   {
@@ -127,6 +128,14 @@ const publicRoutes = [
     element: (
       <LazyComponent>
         <EntrepreneurialSkills />
+      </LazyComponent>
+    ),
+  },
+  {
+    path: "employability-skill",
+    element: (
+      <LazyComponent>
+        <EmployabilitySkills />
       </LazyComponent>
     ),
   },

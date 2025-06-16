@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const skills = [
   { title: "Foundational", path: "/foundational-skill" },
-  { title: "Employability", path: "#" },
+  { title: "Employability", path: "/employability-skill" },
   { title: "Entrepreneurial", path: "/entrepreneurial-skill" },
 ];
 

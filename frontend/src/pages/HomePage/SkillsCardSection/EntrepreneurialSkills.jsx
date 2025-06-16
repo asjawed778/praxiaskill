@@ -6,10 +6,6 @@ import {
   Stack,
   useMediaQuery,
   useTheme,
-  List,
-  ListItemIcon,
-  ListItem,
-  ListItemText,
 } from "@mui/material";
 import growth from "/entrepreneurialskills/growth.png";
 import Companyamico from "/entrepreneurialskills/Companyamico.png";
@@ -82,7 +78,7 @@ const EntrepreneurialSkills = () => {
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   return (
     <Box>
-      <Box sx={{ bgcolor: "#FFF8F8", py: {xs: 2, sm: 4}}}>
+      <Box sx={{ bgcolor: "#FFF8F8", py: { xs: 1, sm: 2, md: 4 } }}>
         <Container maxWidth="lg">
           <Grid
             container
@@ -101,7 +97,7 @@ const EntrepreneurialSkills = () => {
                       lg: "44px",
                       xl: "48px",
                     },
-                    mb: 2,
+                    mb: { xs: 1, md: 2 },
                     fontWeight: 600,
                     color: "#F83E5F",
                   }}
@@ -109,7 +105,15 @@ const EntrepreneurialSkills = () => {
                   Entrepreneurial Skills
                 </Typography>
 
-                <Typography>
+                <Typography
+                  sx={{
+                    fontSize: {
+                      xs: "14px",
+                      sm: "16px",
+                      md: "18px",
+                    },
+                  }}
+                >
                   Our Entrepreneurial Skills program equips learners with
                   essential business knowledge, hands-on sector-specific
                   training, financial literacy, marketing, legal know-how, and
@@ -121,8 +125,8 @@ const EntrepreneurialSkills = () => {
                 </Typography>
                 <Stack
                   direction={{ xs: "column", sm: "row" }}
-                  spacing={{ xs: 1, sm: 4 }}
-                  mt={3}
+                  spacing={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+                  mt={{ xs: 1, sm: 2, md: 3 }}
                 >
                   {[
                     "Practical Business Skills",
@@ -134,11 +138,27 @@ const EntrepreneurialSkills = () => {
                       sx={{ display: "flex", alignItems: "center", gap: 1 }}
                     >
                       <VerifiedOutlined
-                        fontSize="small"
-                        sx={{ color: "#FF0000" }}
+                        sx={{
+                          color: "#FF0000",
+                          fontSize: {
+                            xs: "14px",
+                            sm: "15px",
+                            md: "16px",
+                          },
+                        }}
                       />
 
-                      <Typography sx={{ fontSize: "14px" }}>{point}</Typography>
+                      <Typography
+                        sx={{
+                          fontSize: {
+                            xs: "12px",
+                            md: "14px",
+                            xl: "15px",
+                          },
+                        }}
+                      >
+                        {point}
+                      </Typography>
                     </Box>
                   ))}
                 </Stack>
@@ -149,6 +169,7 @@ const EntrepreneurialSkills = () => {
                 sx={{
                   maxWidth: 350,
                   maxHeight: 398,
+                  // height: {xs: 300, sm: 350, md: 358},
                   bgcolor: "inherit",
                   mx: "auto",
                   position: "relative",
@@ -171,7 +192,7 @@ const EntrepreneurialSkills = () => {
         </Container>
       </Box>
       <Box sx={{ bgcolor: "#EEF4FF" }}>
-        <Container maxWidth="md" sx={{ py: {xs: 2, sm: 4} }}>
+        <Container maxWidth="md" sx={{ py: { xs: 2, sm: 4 } }}>
           <Typography
             sx={{
               fontSize: {
@@ -183,7 +204,7 @@ const EntrepreneurialSkills = () => {
               color: "#F60101",
               textAlign: "center",
               fontWeight: 600,
-              mb: 3,
+              mb: { xs: 1, sm: 2, md: 3 },
             }}
           >
             Vocational Training for Rural Area
@@ -193,7 +214,7 @@ const EntrepreneurialSkills = () => {
             sx={{
               display: "flex",
               flexWrap: "wrap",
-              gap: 3,
+              gap: { xs: 2, md: 3 },
               justifyContent: "center",
             }}
           >
@@ -219,7 +240,16 @@ const EntrepreneurialSkills = () => {
                     textWrap: "balance",
                   }}
                 >
-                  <Typography sx={{ fontSize: "16px", fontWeight: 500 }}>
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        xs: "14px",
+                        sm: "16px",
+                        lg: "18px",
+                      },
+                      fontWeight: 500,
+                    }}
+                  >
                     {firstPart} <br /> {lastWord}
                   </Typography>
                 </Box>
@@ -228,7 +258,7 @@ const EntrepreneurialSkills = () => {
           </Box>
         </Container>
       </Box>
-      <Box sx={{py: {xs: 2, sm: 4} }}>
+      <Box sx={{ py: { xs: 2, sm: 2, md: 4 } }}>
         <Typography
           sx={{
             fontSize: {
@@ -240,7 +270,6 @@ const EntrepreneurialSkills = () => {
             color: "#F60101",
             textAlign: "center",
             fontWeight: 600,
-            mb: 3,
           }}
         >
           Entrepreneurship Skill Set Development Courses
@@ -250,12 +279,12 @@ const EntrepreneurialSkills = () => {
             <Grid
               key={index}
               container
-              spacing={4}
+              spacing={{ xs: 2, md: 4 }}
               direction={
                 isSmDown ? "column" : index % 2 === 0 ? "row" : "row-reverse"
               }
               alignItems="center"
-              sx={{ mb: 6 }}
+              sx={{ mt: { xs: 2, sm: 3, md: 4 } }}
             >
               <Grid size={{ xs: 12, sm: 6 }}>
                 <Box
@@ -275,13 +304,21 @@ const EntrepreneurialSkills = () => {
                       lg: "32px",
                     },
                     fontWeight: 600,
-                    mb: 1,
+                    mt: { xs: 0, sm: 0.5 },
                     color: "#000",
                   }}
                 >
                   {section.title}
                 </Typography>
-                <Typography sx={{ fontSize: "16px" }}>
+                <Typography
+                  sx={{
+                    fontSize: {
+                      xs: "14px",
+                      sm: "16px",
+                      lg: "18px",
+                    },
+                  }}
+                >
                   {section.description}
                 </Typography>
               </Grid>
@@ -289,23 +326,34 @@ const EntrepreneurialSkills = () => {
           ))}
         </Container>
       </Box>
-      <Box sx={{ bgcolor: "#0C1B32", py: {xs: 4, sm: 6,}, color: "#fff" }}>
+      <Box
+        sx={{ bgcolor: "#0C1B32", py: { xs: 2, sm: 4, md: 6 }, color: "#fff" }}
+      >
         <Container maxWidth="lg">
           <Typography
-            variant="h5"
             sx={{
+              fontSize: {
+                xs: "24px",
+                sm: "28px",
+                md: "32px",
+                lg: "36px",
+              },
               textAlign: "center",
               fontWeight: 600,
-              mb: 4,
               color: "#fff",
             }}
           >
             Entrepreneurship Skill Set Development Courses
           </Typography>
 
-          <Grid container spacing={4} alignItems="center">
+          <Grid container spacing={{xs: 2, sm: 4, lg: 6}} alignItems="center">
             {/* Left Image */}
-            <Grid size={{xs:12, sm: 6}}>
+            <Grid
+              size={{ xs: 12, sm: 6 }}
+              sx={{
+                mt: { xs: 2, sm: 3, md: 4 },
+              }}
+            >
               <Box
                 component="img"
                 src={skillset}
@@ -320,7 +368,7 @@ const EntrepreneurialSkills = () => {
             </Grid>
 
             {/* Right Content */}
-            <Grid size={{xs:12, sm: 6}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Box>
                 {courses?.map((course) => (
                   <Box
@@ -328,14 +376,30 @@ const EntrepreneurialSkills = () => {
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      gap: 2,
-                      mb: {xs: 1, md: 2},
+                      gap: {xs: 1, sm: 2},
+                      mt: { xs: 1, md: 2, },
                     }}
                   >
                     <TaskAltOutlinedIcon
-                      sx={{ fontSize: "18px", color: "#fff" }}
+                      sx={{
+                        fontSize: {
+                          xs: "14px",
+                          sm: "16px",
+                          md: "18px",
+                        },
+                        color: "#fff",
+                      }}
                     />
-                    <Typography sx={{ fontSize: "16px", color: "#fff" }}>
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          xs: "14px",
+                          sm: "16px",
+                          md: "18px",
+                        },
+                        color: "#fff",
+                      }}
+                    >
                       {course}
                     </Typography>
                   </Box>
