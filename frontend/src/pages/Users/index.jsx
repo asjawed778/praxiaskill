@@ -90,9 +90,7 @@ const Users = () => {
     }
   };
   const handleAddUser = () => {
-    // alert("Add user")
     setAddUserModal(true);
-    // refetch();
   };
   const columns = [
     { key: "sno.", label: "S No." },

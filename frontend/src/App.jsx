@@ -25,22 +25,19 @@ const BlogPage = lazy(() => import("./pages/Blog/landingpage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 const AdminDashboard = lazy(() => import("./pages/Admin/AdminDashboard"));
 const CourseLandingPage = lazy(() => import("./pages/CourseLandingPage"));
-// const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
 const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
-const AddCourse = lazy(() => import("./pages/Admin/Course/AddCourse/CreateCourse"));
+const AddCourses = lazy(() => import("./pages/Admin/Course/AddCourses/CreateCourse"));
 const MyEnrollment = lazy(() => import("./pages/Admin/My Enrollment"));
-// const ManageCourse = lazy(() => import("./pages/Admin/Course/ManageCourse"));
-const ManageCourse = lazy(() => import("./pages/Admin/Course/ManageCourses"));
+const ManageCourses = lazy(() => import("./pages/Admin/Course/ManageCourses"));
 const EventPage = lazy(() => import("./pages/EventPage"));
 const EventForm = lazy(() => import("./pages/EventPage/EventForm"));
-const CourseContent = lazy(() =>
-  import("./pages/Admin/Course/Add Course/CourseContent")
-);
+const AddCourseContent = lazy(() => import("./pages/Admin/Course/AddCourses/AddCourseContent"));
 const CoursePayment = lazy(() => import("./pages/CoursePayment"));
 const CourseLectures = lazy(() => import("./pages/Course Lectures"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const Users = lazy(() => import("./pages/Users"));
 const Foundationalskills = lazy(() => import("./pages/HomePage/SkillsCardSection/FoundationSkills"));
+const EntrepreneurialSkills = lazy(() => import("./pages/HomePage/SkillsCardSection/EntrepreneurialSkills"));
 
 const publicRoutes = [
   {
@@ -125,6 +122,14 @@ const publicRoutes = [
       </LazyComponent>
     ),
   },
+  {
+    path: "entrepreneurial-skill",
+    element: (
+      <LazyComponent>
+        <EntrepreneurialSkills />
+      </LazyComponent>
+    ),
+  },
 ];
 
 const authRoutes = [
@@ -205,7 +210,7 @@ const adminRoutes = [
         path: "add-course",
         element: (
           <LazyComponent>
-            <AddCourse />
+            <AddCourses />
           </LazyComponent>
         ),
       },
@@ -213,7 +218,7 @@ const adminRoutes = [
         path: "course/content/:courseId",
         element: (
           <LazyComponent>
-            <CourseContent />
+            <AddCourseContent />
           </LazyComponent>
         ),
       },
@@ -221,7 +226,7 @@ const adminRoutes = [
         path: "manage-course",
         element: (
           <LazyComponent>
-            <ManageCourse />
+            <ManageCourses />
           </LazyComponent>
         ),
       },

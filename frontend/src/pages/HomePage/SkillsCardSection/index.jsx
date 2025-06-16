@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 
 const skills = [
   { title: "Foundational", path: "/foundational-skill" },
-  { title: "Employability", path: "/#" },
-  { title: "Entrepreneurial", path: "#" },
+  { title: "Employability", path: "#" },
+  { title: "Entrepreneurial", path: "/entrepreneurial-skill" },
 ];
 
 const SkillCard = ({ title, path }) => (

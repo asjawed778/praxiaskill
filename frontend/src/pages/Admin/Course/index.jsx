@@ -19,7 +19,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AdditionalDetails from "./Add Course/AdditionalDetails";
 import { cleanData } from "../../../utils/helper";
 
-const AddCourse = () => {
+const AddCourses = () => {
   const [uploadCourse, { isLoading, errors }] = useUploadCourseMutation();
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -256,4 +256,4 @@ const AddCourse = () => {
   );
 };
 
-export default AddCourse;
+export default AddCourses;

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   useGetFullCourseDetailsQuery,
@@ -12,7 +12,12 @@ import CourseDetails from "./CourseDetails";
 import AdditionalDetails from "./AdditionalDetails";
 import CourseStructure from "./CourseStructure";
 import PricingPublish from "./PricingPublish";
-import { additionalDetailsSchema, courseDetailsSchema, courseStructureSchema, pricingPublishSchema } from "../../../../../../yup";
+import {
+  additionalDetailsSchema,
+  courseDetailsSchema,
+  courseStructureSchema,
+  pricingPublishSchema,
+} from "../../../../../../yup";
 import { cleanData } from "../../../../../utils/helper";
 
 const CreateCourse = () => {
@@ -31,6 +36,8 @@ const CreateCourse = () => {
     isLoading: isCourseLoading,
     isError,
   } = useGetFullCourseDetailsQuery(course?.course?._id, { skip: !editMode });
+  console.log("course: ", loadCourse);
+
   useEffect(() => {
     if (isError) {
       console.error("Error fetching course details:", loadCourse?.data.data);
@@ -59,15 +66,24 @@ const CreateCourse = () => {
     if (loadCourse?.data) {
       return {
         ...loadCourse.data,
-        category: loadCourse.data.category?._id || "",
-        instructor: loadCourse.data.instructor?._id || "",
+        category: loadCourse?.data?.category?._id || "",
+        // category: {
+        //   label: loadCourse?.data?.category?.name || "",
+        //   value: loadCourse?.data?.category?._id || "",
+        // },
         tags:
           loadCourse.data.tags?.map((tag) => ({ label: tag, value: tag })) ||
           [],
         keypoints: loadCourse.data.keypoints || [""],
         sections: loadCourse.data.sections?.length
           ? loadCourse.data.sections
-          : [{ title: "", description: "", subSections: [{ title: "", description: "" }] }],
+          : [
+              {
+                title: "",
+                description: "",
+                subSections: [{ title: "", description: "" }],
+              },
+            ],
         price: {
           actualPrice: loadCourse.data.price?.actualPrice || "",
           discountPercentage: loadCourse.data.price?.discountPercentage || 0,
@@ -89,7 +105,13 @@ const CreateCourse = () => {
       description: "",
       duration: "",
       totalLectures: "",
-      sections: [{ title: "", description: "", subSections: [{ title: "", description: "" }] }],
+      sections: [
+        {
+          title: "",
+          description: "",
+          subSections: [{ title: "", description: "" }],
+        },
+      ],
       price: {
         actualPrice: "",
         discountPercentage: 0,
@@ -97,7 +119,7 @@ const CreateCourse = () => {
       },
     };
   }, [loadCourse]);
-
+  
   const methods = useForm({
     resolver,
     mode: "onChange",
@@ -107,7 +129,11 @@ const CreateCourse = () => {
     if (loadCourse?.data && !isCourseLoading) {
       const courseData = {
         ...loadCourse.data,
-        category: loadCourse.data.category?._id || "",
+        // category: {
+        //   label: loadCourse?.data?.category?.name || "",
+        //   value: loadCourse?.data?.category?._id || "",
+        // },
+        category: loadCourse?.data?.category?._id || "",
         instructor: loadCourse.data.instructor?._id || "",
         tags:
           loadCourse.data.tags?.map((tag) => ({ label: tag, value: tag })) ||
@@ -115,7 +141,13 @@ const CreateCourse = () => {
         keypoints: loadCourse.data.keypoints || [""],
         sections: loadCourse.data.sections?.length
           ? loadCourse.data.sections
-          : [{ title: "", description: "", subSections: [{ title: "", description: "" }] }],
+          : [
+              {
+                title: "",
+                description: "",
+                subSections: [{ title: "", description: "" }],
+              },
+            ],
         price: {
           actualPrice: loadCourse.data.price?.actualPrice || "",
           discountPercentage: loadCourse.data.price?.discountPercentage || 0,
@@ -127,7 +159,6 @@ const CreateCourse = () => {
   }, [loadCourse, isCourseLoading, methods]);
 
   const handleNext = async () => {
-    
     const isValid = await methods.trigger();
     if (!isValid) return;
 
@@ -157,23 +188,29 @@ const CreateCourse = () => {
       data?.sections?.forEach((section) => {
         section.projects = section.projects?.map((item) => item.project);
       });
-      const payload = cleanData(data)
-      
-      const result = editMode ? await updateCourse({
-        courseId: data._id,
-        data: payload
-      }) : await uploadCourse(payload);
+      const payload = cleanData(data);
+
+      const result = editMode
+        ? await updateCourse({
+            courseId: data._id,
+            data: payload,
+          })
+        : await uploadCourse(payload);
       if (result.error) {
         if (result.error.status === 400) {
-          toast.error("Please fill all steps before submitting!")
+          toast.error("Please fill all steps before submitting!");
         }
-        throw new Error(result.error.data.message)
+        throw new Error(result.error.data.message);
       }
       methods.reset();
-      toast.success(editMode ? "Course updated successfully" : "Course published successfully!")
+      toast.success(
+        editMode
+          ? "Course updated successfully"
+          : "Course published successfully!"
+      );
       navigate("/dashboard/manage-course", { replace: true });
     } catch (err) {
-      console.log("Error", err)
+      console.log("Error", err);
     }
   };
   return (

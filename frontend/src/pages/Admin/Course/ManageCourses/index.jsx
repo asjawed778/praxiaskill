@@ -5,6 +5,7 @@ import {
   Tab,
   useTheme,
   useMediaQuery,
+  Grid,
 } from "@mui/material";
 import { useAppTheme } from "../../../../context/ThemeContext";
 import CustomDropdownField from "@/components/CustomDropdownField";
@@ -21,6 +22,8 @@ const ManageCourses = () => {
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
   const [searchQuery, setSearchQuery] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+
   const [selectedCourseCategory, setSelectedCourseCategory] = useState(null);
   const navigate = useNavigate();
 
@@ -90,13 +93,22 @@ const ManageCourses = () => {
   const handleActionClick = (action, row) => {
     switch (action) {
       case "addContent":
-        alert("addContent");
+        // alert("addContent");
+        navigate(`/dashboard/course/content/${row?._id}`)
         break;
       case "lectures":
         navigate(`/course-lecture/${row?._id}`);
         break;
       case "updateCourse":
-        alert("updateCourse");
+        // alert("updateCourse");
+        setEditMode(true);
+        navigate("/dashboard/add-course", {
+          state: {
+            course: row,
+            editMode
+          },
+          replace: false
+        })
         break;
       case "terminateCourse":
         alert("terminateCourse");
@@ -225,20 +237,23 @@ const ManageCourses = () => {
         </Box>
       </Paper>
 
-      <Box
+      <Grid container spacing={2}
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", md: "row" },
+          flexDirection: { xs: "column", sm: "row" },
           alignItems: "center",
           gap: 2,
           mb: 2,
         }}
       >
-        <CustomSearchField
+        <Grid size={{xs: 12, sm: 6}}>
+          <CustomSearchField
           placeholder="Search courses..."
           onSearch={setSearchQuery}
         />
-        <Box
+        </Grid>
+        <Grid size={{xs: 12, sm: 6}}>
+          <Box
           sx={{
             display: "flex",
             alignItems: "center",
@@ -263,7 +278,8 @@ const ManageCourses = () => {
             }}
           />
         </Box>
-      </Box>
+        </Grid>
+      </Grid>
 
       <TableWrapper
         columns={courseColumns}

@@ -1,4 +1,4 @@
-// import  { useMemo } from "react";
+// import { useMemo, useState } from "react";
 // import {
 //   Autocomplete,
 //   TextField,
@@ -9,7 +9,9 @@
 //   useFormContext,
 //   useFormState,
 // } from "react-hook-form";
-// import { useAppTheme } from "@/context/ThemeContext"; 
+// import { useAppTheme } from "@/context/ThemeContext";
+// import { useGetDropdownOptionsQuery } from "../services/course.api";
+
 // const getErrorMessage = (errors, name) => {
 //   const keys = name.split(".");
 //   let error = errors;
@@ -23,42 +25,58 @@
 //   return error?.message;
 // };
 
-// const CustomDropdownField = (props) => {
-//   const {
-//     label,
-//     options = [],
-//     placeholder = "",
-//     multiple = false,
-//     disabled = false,
-//     required = true,
-//     fullWidth = true,
-//     loading = false,
-//     control: incomingControl,
-//     name,
-//     value: propValue,
-//     onChange: propOnChange,
-//   } = props;
-
+// const CustomDropdownField = ({
+//   label,
+//   placeholder = "",
+//   multiple = false,
+//   disabled = false,
+//   required = true,
+//   fullWidth = true,
+//   loading: manualLoading = false,
+//   control: incomingControl,
+//   name,
+//   value: propValue,
+//   onChange: propOnChange,
+//   options = [],
+//   endpoint, 
+//   sx = {},
+//   ...restProps 
+// }) => {
 //   const formContext = useFormContext();
 //   const control = incomingControl ?? formContext?.control;
 //   const isUsingHookForm = !!name && !!control;
 
 //   const { colors } = useAppTheme();
 
+//   const [fetchEnabled, setFetchEnabled] = useState(false);
+
+//   const { data: fetchedData, isFetching } = useGetDropdownOptionsQuery(endpoint, {
+//     skip: !endpoint || !fetchEnabled,
+//   });
+//   const combinedOptions = useMemo(() => {
+//   if (endpoint && fetchedData?.data) {
+//     return fetchedData.data.map((item) => ({
+//       label: item.name, 
+//       value: item._id 
+//     }));
+//   }
+//   return options;
+// }, [endpoint, fetchedData, options]);
+
 //   const renderAutocomplete = (value, onChange, errorMsg) => {
 //     const displayValue = useMemo(() => {
 //       if (multiple) {
-//         return options?.filter((opt) =>
+//         return combinedOptions?.filter((opt) =>
 //           Array.isArray(value) ? value.includes(opt.value) : false
 //         );
 //       }
-//       return options?.find((opt) => opt.value === value) || null;
-//     }, [value, options, multiple]);
+//       return combinedOptions?.find((opt) => opt.value === value) || null;
+//     }, [value, combinedOptions, multiple]);
 
 //     return (
 //       <Autocomplete
 //         multiple={multiple}
-//         options={options}
+//         options={combinedOptions}
 //         value={displayValue}
 //         onChange={(_, newValue) => {
 //           const selected = multiple
@@ -70,7 +88,10 @@
 //         isOptionEqualToValue={(a, b) => a?.value === b?.value}
 //         disabled={disabled}
 //         fullWidth={fullWidth}
-//         loading={loading}
+//         loading={manualLoading || isFetching}
+//         onOpen={() => {
+//           if (endpoint && !fetchEnabled) setFetchEnabled(true);
+//         }}
 //         loadingText={
 //           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
 //             <CircularProgress size={20} />
@@ -100,9 +121,11 @@
 //             sx={{
 //               minWidth: 200,
 //               "& .MuiOutlinedInput-root": {
-//                 borderRadius: "8px",
+//                 borderRadius: "6px",
 //               },
+//               ...sx, 
 //             }}
+//             {...restProps}
 //           />
 //         )}
 //         renderOption={(props, option) => (
@@ -110,6 +133,7 @@
 //             {option?.label}
 //           </li>
 //         )}
+//         {...restProps}
 //       />
 //     );
 //   };
@@ -133,6 +157,8 @@
 // };
 
 // export default CustomDropdownField;
+
+
 
 
 
@@ -177,47 +203,63 @@ const CustomDropdownField = ({
   value: propValue,
   onChange: propOnChange,
   options = [],
-  endpoint, 
+  endpoint,
   sx = {},
-  ...restProps 
+  ...restProps
 }) => {
   const formContext = useFormContext();
   const control = incomingControl ?? formContext?.control;
   const isUsingHookForm = !!name && !!control;
 
   const { colors } = useAppTheme();
-
   const [fetchEnabled, setFetchEnabled] = useState(false);
 
   const { data: fetchedData, isFetching } = useGetDropdownOptionsQuery(endpoint, {
     skip: !endpoint || !fetchEnabled,
   });
-  const combinedOptions = useMemo(() => {
+
+const combinedOptions = useMemo(() => {
+  let rawOptions = [];
+
   if (endpoint && fetchedData?.data) {
-    return fetchedData.data.map((item) => ({
-      label: item.name, 
-      value: item._id 
+    rawOptions = fetchedData.data.map((item) => ({
+      label: item.name,
+      value: item._id,
     }));
+  } else if (Array.isArray(options)) {
+    // Handle string[] -> { label, value }
+    rawOptions = options.map((opt) =>
+      typeof opt === "string" ? { label: opt, value: opt } : opt
+    );
   }
-  return options;
+
+  return rawOptions;
 }, [endpoint, fetchedData, options]);
 
 
+  const getDisplayValue = (value) => {
+    if (multiple) {
+      return combinedOptions?.filter((opt) =>
+        Array.isArray(value) ? value.includes(opt.value) : false
+      );
+    }
+
+    // If value is already an object with label & value (from reset), return as is
+    if (value && typeof value === "object" && value.value) {
+      return value;
+    }
+
+    return combinedOptions?.find((opt) => opt.value === value) || null;
+  };
+
   const renderAutocomplete = (value, onChange, errorMsg) => {
-    const displayValue = useMemo(() => {
-      if (multiple) {
-        return combinedOptions?.filter((opt) =>
-          Array.isArray(value) ? value.includes(opt.value) : false
-        );
-      }
-      return combinedOptions?.find((opt) => opt.value === value) || null;
-    }, [value, combinedOptions, multiple]);
+    const displayValue = getDisplayValue(value);
 
     return (
       <Autocomplete
         multiple={multiple}
         options={combinedOptions}
-        value={displayValue}
+        value={displayValue ?? (multiple ? [] : null)}
         onChange={(_, newValue) => {
           const selected = multiple
             ? newValue.map((opt) => opt?.value)
@@ -263,7 +305,7 @@ const CustomDropdownField = ({
               "& .MuiOutlinedInput-root": {
                 borderRadius: "6px",
               },
-              ...sx, 
+              ...sx,
             }}
             {...restProps}
           />

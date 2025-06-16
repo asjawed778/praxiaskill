@@ -176,8 +176,8 @@ const Carousel = () => {
         </Tabs>
       )}
 
-      {allCategoriesLoading || isLoading ||
-      (activeTab === "all" && isLoading) ? (
+      {allCategoriesLoading || isLoading || isFetching ||
+      (activeTab === "all" && isLoading ) ? (
         <CourseSkeleton />
       ) : courses?.data?.courses?.length ? (
         <Box sx={{ position: "relative" }}>
