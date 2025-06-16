@@ -11,14 +11,14 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
-import growth from "../../../../public/entrepreneurialskills/growth.png";
-import Companyamico from "../../../../public/entrepreneurialskills/Companyamico.png";
-import Moneymotivationbro from "../../../../public/entrepreneurialskills/Moneymotivationbro.png";
-import Marketingamico from "../../../../public/entrepreneurialskills/Marketingamico.png";
-import Lawfirmbro from "../../../../public/entrepreneurialskills/Lawfirmbro.png";
-import Teamworkrafiki from "../../../../public/entrepreneurialskills/Teamworkrafiki.png";
-import Taskbro from "../../../../public/entrepreneurialskills/Taskbro.png";
-import skillset from "../../../../public/entrepreneurialskills/skillset.png";
+import growth from "/entrepreneurialskills/growth.png";
+import Companyamico from "/entrepreneurialskills/Companyamico.png";
+import Moneymotivationbro from "/entrepreneurialskills/Moneymotivationbro.png";
+import Marketingamico from "/entrepreneurialskills/Marketingamico.png";
+import Lawfirmbro from "/entrepreneurialskills/Lawfirmbro.png";
+import Teamworkrafiki from "/entrepreneurialskills/Teamworkrafiki.png";
+import Taskbro from "/entrepreneurialskills/Taskbro.png";
+import skillset from "/entrepreneurialskills/skillset.png";
 import VerifiedOutlined from "@mui/icons-material/VerifiedOutlined";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
 

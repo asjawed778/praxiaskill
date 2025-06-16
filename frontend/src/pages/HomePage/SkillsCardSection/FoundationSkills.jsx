@@ -9,9 +9,9 @@ import {
   ListItemText,
   Container,
 } from "@mui/material";
-import herosection from "../../../../public/foundationalskills/herosection.png";
-import programframework from "../../../../public/foundationalskills/programframework.png";
-import careerguidance from "../../../../public/foundationalskills/careerguidance.png";
+import herosection from "/foundationalskills/herosection.png";
+import programframework from "/foundationalskills/programframework.png";
+import careerguidance from "/foundationalskills/careerguidance.png";
 import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
 

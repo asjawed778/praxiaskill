@@ -2,11 +2,9 @@
 import { RxCross2 } from "react-icons/rx";
 
 import clsx from "clsx";
-import { forwardRef, useState } from "react";
+import { forwardRef } from "react";
 import Basic from "./Basic";
-import Pdf from "./Pdf";
-import Image from "./Image";
-import Video from "./Video";
+
 
 const InputField = forwardRef(
   (
