@@ -15,7 +15,7 @@ import seminarpana from "/employabilityskills/seminarpana.png";
 import lessionamico from "/employabilityskills/lessionamico.png";
 import researcherscuate from "/employabilityskills/researcherscuate.png";
 import libraryrafiki from "/employabilityskills/libraryrafiki.png";
-
+import CoursesSection from "./CoursesSection";
 const courses = [
   { title: "Certification <br /> Courses" },
   { title: "Summer & Winter <br /> Training for colleges" },
@@ -211,6 +211,7 @@ const EmployabilitySkills = () => {
           </Grid>
         </Container>
       </Box>
+      {/* <CoursesSection /> */}
       <Box sx={{ bgcolor: "#FFF9F3", py: { xs: 2, md: 4 } }}>
         <Container maxWidth="md">
           <Typography
