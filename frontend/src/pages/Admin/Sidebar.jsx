@@ -16,6 +16,7 @@ import {
   useMediaQuery,
   IconButton,
   Box,
+  Typography,
 } from "@mui/material";
 import * as Icons from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -173,7 +174,7 @@ const Sidebar = () => {
             sx={{
               display: "flex",
               justifyContent: open ? "flex-end" : "center",
-              px: 1,
+              // px: 1,
             }}
           >
             <IconButton onClick={handleToggle}>
@@ -201,8 +202,8 @@ const Sidebar = () => {
                         sx={{
                           color: colors.sidebarText,
                           minWidth: 40,
-                          transition: 'all 0.3s ease',
-                          // ...(isRouteActive(path) ? activeStyles : {}),
+                          transition: "all 0.3s ease",
+                          ...(isRouteActive(path) ? activeStyles : {}),
                         }}
                       >
                         {renderIcon(icon)}
@@ -212,11 +213,11 @@ const Sidebar = () => {
                           <ListItemText
                             primary={label}
                             primaryTypographyProps={{
-                              // fontSize: "0.875rem",
-                              fontSize: "10px",
+                              fontSize: "14px",
                               fontWeight: "600",
+                              pl: 1,
                               color: colors.sidebarText,
-                              transition: 'all 0.3s ease',
+                              transition: "all 0.3s ease",
                             }}
                           />
                           {isOpen ? (
@@ -247,6 +248,7 @@ const Sidebar = () => {
                                 pl: 4,
                                 fontSize: "0.875rem",
                                 fontWeight: "600",
+                                // pl: 2,
                                 borderRadius: "8px",
                                 ...(isRouteActive(subPath) ? activeStyles : {}),
                               }}
@@ -262,6 +264,7 @@ const Sidebar = () => {
                                   primaryTypographyProps={{
                                     fontSize: "0.875rem",
                                     fontWeight: "600",
+                                    // pl: 2,
                                     color: colors.sidebarText,
                                   }}
                                 />
@@ -284,7 +287,7 @@ const Sidebar = () => {
                   sx={{
                     fontSize: "0.875rem",
                     fontWeight: "600",
-                    // color: colors.sidebarText,
+                    color: colors.sidebarText,
                     borderRadius: "8px",
                     ...(isRouteActive(path) ? activeStyles : {}),
                   }}
@@ -293,14 +296,18 @@ const Sidebar = () => {
                     {renderIcon(icon)}
                   </ListItemIcon>
                   {open && (
-                    <ListItemText
-                      primary={label}
-                      primaryTypographyProps={{
-                        fontSize: "0.875rem",
-                        fontWeight: "600",
-                        color: colors.sidebarText,
-                      }}
-                    />
+                    <Box sx={{ pl: 1 }}>
+                      <Typography
+                        sx={{
+                          fontSize: "14px", 
+                          fontWeight: 600,
+                          color: colors.sidebarText,
+                          ...(isRouteActive(path) ? activeStyles : {}),
+                        }}
+                      >
+                        {label}
+                      </Typography>
+                    </Box>
                   )}
                 </ListItemButton>
               </Tooltip>

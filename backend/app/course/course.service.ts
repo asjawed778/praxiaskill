@@ -11,33 +11,34 @@ import createHttpError from "http-errors";
 import qnaSchema from "./qna.schema";
 import { SortOrder } from 'mongoose';
 import slugify from "slugify";
+import courseNotesSchema from "./course.notes.schema";
 
-export const courseSlug = async(title: string, excludeId?: string | mongoose.Types.ObjectId): Promise<string> => {
-  const baseSlug = slugify(title, {
-    lower: true,
-    strict: true,
-    trim: true,
-  });
+export const courseSlug = async (title: string, excludeId?: string | mongoose.Types.ObjectId): Promise<string> => {
+    const baseSlug = slugify(title, {
+        lower: true,
+        strict: true,
+        trim: true,
+    });
 
-  let slug = baseSlug;
-  let count = 1;
-  let exists = true;
+    let slug = baseSlug;
+    let count = 1;
+    let exists = true;
 
-  while (exists) {
-    const query: any = { slug };
-    if (excludeId) {
-      query._id = { $ne: excludeId };
+    while (exists) {
+        const query: any = { slug };
+        if (excludeId) {
+            query._id = { $ne: excludeId };
+        }
+
+        const existing = await courseSchema.findOne(query);
+        exists = !!existing;
+
+        if (exists) {
+            slug = `${baseSlug}-${count++}`;
+        }
     }
 
-    const existing = await courseSchema.findOne(query);
-    exists = !!existing;
-
-    if (exists) {
-      slug = `${baseSlug}-${count++}`;
-    }
-  }
-
-  return slug;
+    return slug;
 }
 
 export const isCourseExist = async (identifier: string): Promise<boolean> => {
@@ -74,7 +75,7 @@ export const createCourse = async (data: Omit<CourseDTO.ICourse, "sections"> & {
 
     const { sections, ...courseDetails } = data;
     const slug = await courseSlug(data.title);
-    const course = await courseSchema.create({...courseDetails, slug});
+    const course = await courseSchema.create({ ...courseDetails, slug });
     let totalLectures = 0;
     // Step 1: Check if sections exist and process them
     if (data.sections && data.sections.length > 0) {
@@ -112,7 +113,7 @@ export const createCourse = async (data: Omit<CourseDTO.ICourse, "sections"> & {
 
 export const updateCourseDetails = async (courseId: string, data: CourseDTO.IUpdateCourseDetails): Promise<any> => {
     const slug = await courseSlug(data.title);
-    const course = await courseSchema.findByIdAndUpdate(courseId, {...data, slug}, { new: true });
+    const course = await courseSchema.findByIdAndUpdate(courseId, { ...data, slug }, { new: true });
     return course as CourseDTO.ICourse;
 };
 
@@ -145,9 +146,9 @@ export const terminateCourse = async (courseId: string): Promise<any> => {
     return result;
 };
 
-export const publishCourse = async (courseId: string): Promise<any> => {
+export const updateStatus = async (courseId: string, status: courseEnum.CourseStatus): Promise<any> => {
     const result = await courseSchema.findByIdAndUpdate
-        (courseId, { courseStatus: "PUBLISHED" }, { new: true });
+        (courseId, { courseStatus: status }, { new: true });
     return result;
 };
 
@@ -203,88 +204,6 @@ export const getCourseDetails = async (identifier: string): Promise<any> => {
     };
 };
 
-export const getPublishedCoursesByCategory = async (categoryId: string, pageNo: number = 1): Promise<any> => {
-    const pageSize = 10;
-    const skip = (pageNo - 1) * pageSize;
-
-    const result = await courseSchema.aggregate([
-        {
-            $match: {
-                category: new mongoose.Types.ObjectId(categoryId),
-                courseStatus: courseEnum.CourseStatus.PUBLISHED
-            }
-        },
-        {
-            $lookup: {
-                from: "ratingandreviews",
-                localField: "_id",
-                foreignField: "courseId",
-                as: "ratingsData"
-            }
-        },
-        {
-            $lookup: {
-                from: "users",
-                localField: "instructor",
-                foreignField: "_id",
-                as: "instructorDetails"
-            }
-        },
-        {
-            $lookup: {
-                from: "coursecategories",
-                localField: "category",
-                foreignField: "_id",
-                as: "categoryDetails"
-            }
-        },
-        {
-            $addFields: {
-                totalRatings: { $size: "$ratingsData" },
-                averageRating: {
-                    $cond: {
-                        if: { $eq: [{ $size: "$ratingsData" }, 0] },
-                        then: 0,
-                        else: { $avg: "$ratingsData.rating" }
-                    }
-                },
-                instructor: { $arrayElemAt: ["$instructorDetails", 0] },
-                category: { $arrayElemAt: ["$categoryDetails", 0] }
-            }
-        },
-        {
-            $project: {
-                _id: 1,
-                title: 1,
-                subtitle: 1,
-                tags: 1,
-                slug: 1,
-                duration: 1,
-                thumbnail: 1,
-                language: 1,
-                courseMode: 1,
-                totalLectures: 1,
-                totalRatings: 1,
-                averageRating: 1,
-                "instructor._id": 1,
-                "instructor.name": 1,
-                "instructor.profilePic": 1,
-                "category._id": 1,
-                "category.name": 1
-            }
-        },
-        { $skip: skip },
-        { $limit: pageSize }
-    ]);
-
-    return {
-        success: true,
-        totalCourses: result.length,
-        page: pageNo,
-        pageSize,
-        courses: result
-    };
-};
 
 export const courseEnquiry = async (data: CourseDTO.ICourseEnquiry): Promise<any> => {
     const enquiry = new CourseEnquirySchema(data);
@@ -320,15 +239,40 @@ export const changeEnquiryStatus = async (enquiryId: string, status: string): Pr
     return enquiry as CourseDTO.ICourseEnquiry;
 };
 
-export const getPublishedCourses = async (pageNo: number = 1): Promise<any> => {
-    const pageSize = 10;
-    const skip = (pageNo - 1) * pageSize;
+export const getCourses = async (
+    pageNo: number = 1,
+    limit: number = 10,
+    category?: string,
+    status?: courseEnum.CourseStatus,
+    search?: string
+): Promise<any> => {
+    const skip = (pageNo - 1) * limit;
+    const query: any = {
+        courseStatus: status || courseEnum.CourseStatus.PUBLISHED
+    };
 
-    const result = await courseSchema.aggregate([
+    if (category) {
+        query.category = new mongoose.Types.ObjectId(category);
+    }
+
+    if (search) {
+        const searchRegex = new RegExp(search, 'i');
+
+        const searchConditions = [
+            { title: searchRegex },
+            { subtitle: searchRegex },
+            { description: searchRegex },
+            { tags: searchRegex },
+            { language: searchRegex },
+            { courseMode: searchRegex },
+        ];
+
+        query.$or = searchConditions;
+    }
+
+    const aggregationPipeline: any[] = [
         {
-            $match: {
-                courseStatus: courseEnum.CourseStatus.PUBLISHED
-            }
+            $match: query
         },
         {
             $lookup: {
@@ -367,7 +311,21 @@ export const getPublishedCourses = async (pageNo: number = 1): Promise<any> => {
                 instructor: { $arrayElemAt: ["$instructorDetails", 0] },
                 category: { $arrayElemAt: ["$categoryDetails", 0] }
             }
-        },
+        }
+    ];
+
+    if (search) {
+        aggregationPipeline.push({
+            $match: {
+                $or: [
+                    ...(query.$or || []),
+                    { "category.name": new RegExp(search, 'i') }
+                ]
+            }
+        });
+    }
+
+    aggregationPipeline.push(
         {
             $project: {
                 _id: 1,
@@ -382,6 +340,7 @@ export const getPublishedCourses = async (pageNo: number = 1): Promise<any> => {
                 totalLectures: 1,
                 totalRatings: 1,
                 averageRating: 1,
+                courseStatus: 1,
                 "instructor._id": 1,
                 "instructor.name": 1,
                 "instructor.profilePic": 1,
@@ -390,14 +349,51 @@ export const getPublishedCourses = async (pageNo: number = 1): Promise<any> => {
             }
         },
         { $skip: skip },
-        { $limit: pageSize }
-    ]);
+        { $limit: limit }
+    );
+
+    const result = await courseSchema.aggregate(aggregationPipeline);
+
+    const countPipeline: any[] = [
+        {
+            $match: query
+        },
+        {
+            $lookup: {
+                from: "coursecategories",
+                localField: "category",
+                foreignField: "_id",
+                as: "categoryDetails"
+            }
+        },
+        {
+            $addFields: {
+                category: { $arrayElemAt: ["$categoryDetails", 0] }
+            }
+        }
+    ];
+
+    if (search) {
+        countPipeline.push({
+            $match: {
+                $or: [
+                    ...(query.$or || []),
+                    { "category.name": new RegExp(search, 'i') }
+                ]
+            }
+        });
+    }
+
+    countPipeline.push({ $count: "total" });
+
+    const totalCountResult = await courseSchema.aggregate(countPipeline).exec();
+    const totalCourses = totalCountResult.length > 0 ? totalCountResult[0].total : 0;
 
     return {
         success: true,
-        totalCourses: result.length,
+        totalCourses,
         page: pageNo,
-        pageSize,
+        pageSize: limit,
         courses: result
     };
 };
@@ -512,7 +508,6 @@ export const deleteSection = async (courseId: string, sectionId: string): Promis
         await subSectionSchema.deleteMany({ _id: { $in: section.subSections } });
     }
     await sectionSchema.findByIdAndDelete(sectionId);
-
 };
 
 export const deleteSubSection = async (courseId: string, sectionId: string, subSectionId: string): Promise<any> => {
@@ -1011,4 +1006,164 @@ export const getQnas = async ({
         hasNext,
         hasPrev
     };
+};
+
+// course notes service
+export const createCourseNotes = async (data: CourseDTO.ICourseNotesCreate): Promise<any> => {
+    const courseNotes = await courseNotesSchema.create(data);
+    return courseNotes;
+};
+
+export const updateCourseNotes = async (notesId: string, notes: string): Promise<any> => {
+    const updatedNotes = await courseNotesSchema.findByIdAndUpdate(
+        notesId,
+        { $set: { notes } },
+        { new: true }
+    );
+    if (!updatedNotes) {
+        throw createHttpError(404, "Course notes not found");
+    }
+    return updatedNotes;
+};
+
+export const deleteNotes = async (notesId: string): Promise<any> => {
+    const deletedNotes = await courseNotesSchema.findByIdAndDelete(notesId);
+    if (!deletedNotes) {
+        throw createHttpError(404, "Course notes not found");
+    }
+    return deletedNotes;
+};
+
+export const getCourseNotes = async (queryParam: Record<string, any>): Promise<any> => {
+    const skip = (queryParam.pageNo - 1) * queryParam.pageSize;
+    const query: any = { userId: new mongoose.Types.ObjectId(queryParam.userId) };
+
+    if (queryParam.courseId) {
+        query.courseId = new mongoose.Types.ObjectId(queryParam.courseId);
+    }
+    if (queryParam.sectionId) {
+        query.sectionId = new mongoose.Types.ObjectId(queryParam.sectionId);
+    }
+    if (queryParam.subSectionId) {
+        query.subSectionId = new mongoose.Types.ObjectId(queryParam.subSectionId);
+    }
+    if (queryParam.search) {
+        query.notes = { $regex: queryParam.search, $options: 'i' };
+    }
+
+    const sortOptions: Record<string, SortOrder> = queryParam.sort === 'latest'
+        ? { createdAt: -1 }
+        : { createdAt: 1 };
+
+    const totalNotes = await courseNotesSchema.countDocuments(query);
+    const totalPages = Math.ceil(totalNotes / queryParam.pageSize);
+
+    const notes = await courseNotesSchema.find(query)
+        .sort(sortOptions)
+        .skip(skip)
+        .limit(queryParam.pageSize)
+        .lean();
+
+    return {
+        notes,
+        totalNotes,
+        totalPages,
+        currentPage: queryParam.pageNo,
+        pageSize: queryParam.pageSize,
+    };
+};
+
+export const getCourseAnalytics = async () => {
+    const results = await Promise.all([
+        courseSchema.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    total: { $sum: 1 },
+                    active: {
+                        $sum: { $cond: [{ $eq: ["$courseStatus", courseEnum.CourseStatus.PUBLISHED] }, 1, 0] }
+                    },
+                    draft: {
+                        $sum: { $cond: [{ $eq: ["$courseStatus", courseEnum.CourseStatus.DRAFT] }, 1, 0] }
+                    },
+                    terminated: {
+                        $sum: { $cond: [{ $eq: ["$courseStatus", courseEnum.CourseStatus.TERMINATED] }, 1, 0] }
+                    }
+                }
+            }
+        ]),
+        enrollmentSchema.countDocuments({})
+    ]);
+
+    return {
+        courseOverview: {
+            totalCourses: results[0][0]?.total || 0,
+            activeCourses: results[0][0]?.active || 0,
+            draftCourses: results[0][0]?.draft || 0,
+            terminatedCourses: results[0][0]?.archived || 0
+        },
+        enrollmentMetrics: {
+            totalEnrollments: results[1] || 0
+        }
+    };
+};
+
+export const getEnquiryAnalytics = async () => {
+    const now = new Date();
+
+    const periods = {
+        today: new Date(now.setHours(0, 0, 0, 0)),
+        week: new Date(now.setDate(now.getDate() - 7)),
+        month: new Date(now.setMonth(now.getMonth() - 1)),
+        sixMonths: new Date(now.setMonth(now.getMonth() - 6)),
+        year: new Date(now.setFullYear(now.getFullYear() - 1))
+    };
+
+    const results = await CourseEnquirySchema.aggregate([
+        {
+            $facet: {
+                total: [{ $count: "count" }],
+                today: [
+                    { $match: { createdAt: { $gte: periods.today } } },
+                    { $count: "count" }
+                ],
+                thisWeek: [
+                    { $match: { createdAt: { $gte: periods.week } } },
+                    { $count: "count" }
+                ],
+                thisMonth: [
+                    { $match: { createdAt: { $gte: periods.month } } },
+                    { $count: "count" }
+                ],
+                lastSixMonths: [
+                    { $match: { createdAt: { $gte: periods.sixMonths } } },
+                    { $count: "count" }
+                ],
+                thisYear: [
+                    { $match: { createdAt: { $gte: periods.year } } },
+                    { $count: "count" }
+                ],
+                byStatus: [
+                    { $group: { _id: "$status", count: { $sum: 1 } } }
+                ]
+            }
+        }
+    ]);
+
+    const getCount = (field: string) => results[0][field][0]?.count || 0;
+
+
+
+    return {
+        totalEnquiries: getCount("total"),
+        today: getCount("today"),
+        thisWeek: getCount("thisWeek"),
+        thisMonth: getCount("thisMonth"),
+        lastSixMonths: getCount("lastSixMonths"),
+        thisYear: getCount("thisYear"),
+        byStatus: (results[0].byStatus as CourseDTO.EnquiryStatusCount[]).reduce((acc: Record<string, number>, curr: CourseDTO.EnquiryStatusCount) => {
+            acc[curr._id] = curr.count;
+            return acc;
+        }, {})
+    } as CourseDTO.EnquiryAnalyticsResult;
 };

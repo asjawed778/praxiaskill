@@ -55,9 +55,19 @@ const ProgramHighlights = ({ course }) => {
     >
       <Container maxWidth="lg">
         <Typography
-          variant="h1"
-          textAlign="center"
-          mb={3}
+          sx={{
+            color: "white",
+            fontWeight: 600,
+            fontSize: {
+              xs: "32px",
+              sm: "36px",
+              md: "40px",
+              lg: "44px",
+              xl: "48px",
+            },
+            textAlign: "center",
+            mb: 2,
+          }}
         >
           Program Highlights
         </Typography>

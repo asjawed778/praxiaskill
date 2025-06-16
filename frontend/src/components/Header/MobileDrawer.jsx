@@ -62,6 +62,7 @@ const MobileDrawer = ({ open, onClose, navItems, colors }) => {
                   onClick={() => handleNavigate(item.to)}
                   sx={{
                     borderRadius: 1,
+                    my: 0.5,
                     backgroundColor: isActive ? colors.primary : "transparent",
                     color: isActive ? "#fff" : "black",
                     "&:hover": {
@@ -70,7 +71,7 @@ const MobileDrawer = ({ open, onClose, navItems, colors }) => {
                     },
                   }}
                 >
-                  <ListItemText primary={item.label} />
+                  <ListItemText primary={item.label}  />
                 </ListItemButton>
               </ListItem>
             );

@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import CourseTable from "./Manage Course/CourseTable";
-import { useGetAllPublishedCourseQuery } from "../../../services/course.api";
+// import { useGetAllPublishedCourseQuery } from "../../../services/course.api";
 
 
 const ManageCourse = () => {
   const [currentPage, setCurrentPage] = useState(0);
-  const { data: publishedCourses, isFetching: isLoading, refetch } = useGetAllPublishedCourseQuery(currentPage + 1);
+  // const { data: publishedCourses, isFetching: isLoading, refetch } = useGetAllPublishedCourseQuery(currentPage + 1);
   const courseManagePageRef = useRef(null);
   const [filter, setFilter] = useState(2);
   useEffect(() => {

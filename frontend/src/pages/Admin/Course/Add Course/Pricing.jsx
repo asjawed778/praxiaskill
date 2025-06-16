@@ -12,6 +12,7 @@ import ButtonLoading from "../../../../components/Button/ButtonLoading";
 import CustomInputField from "@/components/CustomInputField";
 import CustomDropdownField from "@/components/CustomDropdownField";
 import { CourseValidity, CourseStatus } from "@/utils/enum";
+import CustomButton from "../../../../components/CustomButton";
 
 const Pricing = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => {
   const {
@@ -19,6 +20,7 @@ const Pricing = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => {
     control,
     watch,
     setValue,
+    getValues,
     formState: { errors },
   } = useFormContext();
 
@@ -38,27 +40,41 @@ const Pricing = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => {
       setValue("price.finalPrice", 0);
     }
   }, [actualPrice, discount, setValue]);
-  const validityOptions = Object.entries(CourseValidity).map(
-    ([key, value]) => ({
-      label: key.replace("_", " "),
-      value: value,
-    })
-  );
-  const courseStatusOptions = Object.entries(CourseStatus).map(
-    ([key, value]) => ({
-      label: key.replace("_", " "),
-      value: value,
-    })
-  );
+  const validityOptions = [
+    {
+      label: "One Year",
+      value: CourseValidity.ONE_YEAR,
+    },
+    {
+      label: "Two Year",
+      value: CourseValidity.TWO_YEAR,
+    },
+    {
+      label: "Life Time",
+      value: CourseValidity.LIFETIME,
+    },
+  ];
+  const courseStatusOptions = [
+    {
+      label: "Save as Draft",
+      value: CourseStatus.DRAFT,
+    },
+    {
+      label: "Publish",
+      value: CourseStatus.PUBLISHED,
+    },
+  ];
+  const validity = watch("courseStatus");
+
   return (
     <Box p={4}>
-      <Grid container spacing={2} mb={2}>
+      <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 6 }}>
           <CustomDropdownField
             name="validity"
             label="Select Course Validity"
             options={validityOptions}
-            margin="normal"
+            // margin="normal"
             sx={{
               backgroundColor: "white",
               borderRadius: 2,
@@ -70,10 +86,10 @@ const Pricing = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => {
             name="courseStatus"
             label="Select Course Status"
             options={courseStatusOptions}
-            margin="normal"
             sx={{
               backgroundColor: "white",
               borderRadius: 2,
+              mb: 2,
             }}
           />
         </Grid>
@@ -118,26 +134,22 @@ const Pricing = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => {
       </Box>
       <Grid container spacing={2} justifyContent="space-between">
         <Grid item>
-          <Button variant="contained" onClick={handlePrev}>
-            Previous
-          </Button>
+          <CustomButton label="Back" onClick={handlePrev} />
         </Grid>
         <Grid item>
-          <Button
-            variant="contained"
-            color="primary"
+          <CustomButton
+            label={
+              isLoading || isCourseUpdate ? (
+                <ButtonLoading />
+              ) : editMode ? (
+                "Update"
+              ) : (
+                "Submit"
+              )
+            }
             type="submit"
             disabled={isLoading || isCourseUpdate}
-            sx={{ width: 140 }}
-          >
-            {isLoading || isCourseUpdate ? (
-              <ButtonLoading />
-            ) : editMode ? (
-              "Update"
-            ) : (
-              "Submit"
-            )}
-          </Button>
+          />
         </Grid>
       </Grid>
     </Box>

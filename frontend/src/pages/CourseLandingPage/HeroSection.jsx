@@ -69,17 +69,38 @@ const HeroSection = ({ syllabusRef, course }) => {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: { xs: "center", lg: "flex-start" },
-                zIndex: 1
+                zIndex: 1,
               }}
             >
               <Stack spacing={{ xs: 2, md: 3 }}>
-                <Typography variant="h2">
+                <Typography
+                  sx={{
+                    fontSize: {
+                      xs: "28px",
+                      sm: "32px",
+                      md: "36px",
+                      lg: "40px",
+                      xl: "44px",
+                    },
+                    fontWeight: 600,
+                    color: "white",
+                    // lineHeight: 1.2
+                  }}
+                >
                   {course?.title}
                 </Typography>
 
                 <Typography
-                  variant="body1"
-                  color="grey.300"
+                  sx={{
+                    fontSize: {
+                      xs: "14px",
+                      sm: "16px",
+                      md: "18px",
+                      lg: "20px",
+                      xl: "22px",
+                    },
+                    color: "gray.300"
+                  }}
                 >
                   {course?.subtitle}
                 </Typography>

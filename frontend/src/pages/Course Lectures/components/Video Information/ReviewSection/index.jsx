@@ -78,7 +78,7 @@ const handleAdd = (review) => {
       } else {
         setAllReviews(prev => [...prev, ...data.data.ratings]);
       }
-      console.log("Fetched reviews:", data);
+      // console.log("Fetched reviews:", data);
     }
   }, [data, pageNo]);
 

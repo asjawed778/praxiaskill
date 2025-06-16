@@ -2,10 +2,9 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import {
   Box,
   Typography,
-  Button,
+  IconButton,
   Tabs,
   Tab,
-  IconButton,
   Card,
   CardActions,
   Divider,
@@ -17,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import {
   useGetAllCategoryQuery,
-  useGetCategoryCourseQuery,
+  useGetCoursesQuery,
 } from "../../services/course.api";
 import { setCourses } from "../../store/reducers/coursesReducer";
 import { setCategories } from "../../store/reducers/adminCategoryReducer";
@@ -36,18 +35,30 @@ const Carousel = () => {
 
   const categories = useSelector((state) => state.categories.categories);
   const coursesAll = useSelector((state) => state.courses.courses);
-
   const [activeTab, setActiveTab] = useState(null);
   const [cardsPerView, setCardsPerView] = useState(1);
   const cardWidth = 300;
   const gap = 16;
+  const {
+    data: courses,
+    isLoading,
+    isFetching,
+    isError,
+  } = useGetCoursesQuery(
+    activeTab === "all" ? {} : { category: activeTab }
+  );
+  
 
   const { data: allCategories, isFetching: allCategoriesLoading } =
     useGetAllCategoryQuery();
-  const { data: categoryCourse, isFetching: categoryCourseLoading } =
-    useGetCategoryCourseQuery(activeTab, {
-      skip: !activeTab,
-    });
+
+  const allCoursesOption = { _id: "all", name: "All Courses" };
+  const filteredCategories = useMemo(() => {
+    return [
+      allCoursesOption,
+      ...categories.filter((cat) => cat?.courses?.length > 0),
+    ];
+  }, [categories]);
 
   useEffect(() => {
     if (allCategories?.success) {
@@ -56,16 +67,17 @@ const Carousel = () => {
   }, [allCategories, dispatch]);
 
   useEffect(() => {
-    if (categories.length && !activeTab) {
-      setActiveTab(categories[0]._id);
+    if (filteredCategories.length && !activeTab) {
+      setActiveTab(filteredCategories[0]._id);
     }
-  }, [categories, activeTab]);
+    
+  }, [filteredCategories, activeTab]);
 
   useEffect(() => {
-    if (activeTab && categoryCourse?.success) {
-      dispatch(setCourses(categoryCourse?.data?.courses));
-    }
-  }, [activeTab, categoryCourse, dispatch]);
+    if (activeTab === "all" && courses?.data?.success) {
+      dispatch(setCourses(courses.data?.courses || []));
+    } 
+  }, [activeTab, courses, dispatch]);
 
   useEffect(() => {
     const updateCardsPerView = () => {
@@ -80,21 +92,17 @@ const Carousel = () => {
   }, []);
 
   const scrollNext = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({
-        left: (cardWidth + gap) * cardsPerView,
-        behavior: "smooth",
-      });
-    }
+    sliderRef.current?.scrollBy({
+      left: (cardWidth + gap) * cardsPerView,
+      behavior: "smooth",
+    });
   };
 
   const scrollPrev = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({
-        left: -(cardWidth + gap) * cardsPerView,
-        behavior: "smooth",
-      });
-    }
+    sliderRef.current?.scrollBy({
+      left: -(cardWidth + gap) * cardsPerView,
+      behavior: "smooth",
+    });
   };
 
   const handleCourseClick = (slug) => {
@@ -103,11 +111,34 @@ const Carousel = () => {
 
   return (
     <Box ref={containerRef}>
-      <Box mb={2}>
-        <Typography variant="h4" color="primary">
+      <Box mb={1}>
+        <Typography
+          sx={{
+            fontSize: {
+              xs: "20px",
+              sm: "24px",
+              md: "28px",
+              lg: "32px",
+              xl: "36px",
+            },
+            color: "primary.main",
+            fontWeight: 600,
+          }}
+        >
           All the skills you need in one place
         </Typography>
-        <Typography variant="body1" color="textSecondary">
+        <Typography
+          sx={{
+            fontSize: {
+              xs: "14px",
+              sm: "16px",
+              md: "18px",
+              lg: "20px",
+              xl: "22px",
+            },
+            color: "text.secondary",
+          }}
+        >
           From critical skills to technical topics, Praxia Skill supports your
           professional development.
         </Typography>
@@ -115,23 +146,20 @@ const Carousel = () => {
 
       {activeTab && (
         <Tabs
-        value={activeTab}
-        onChange={(e, val) => setActiveTab(val)}
-        variant="scrollable"
-        scrollButtons="auto"
-        sx={{
-          mb: 2,
-          pl: 2,
-          ml: -4,
-          // borderBottom: "1px solid #ccc",
-          "& .MuiTabs-flexContainer": {
+          value={activeTab}
+          onChange={(e, val) => setActiveTab(val)}
+          variant="scrollable"
+          scrollButtons="auto"
+          sx={{
+            mb: 2,
+            pl: 2,
+            ml: -2,
+            "& .MuiTabs-flexContainer": {
               borderBottom: "1px solid #ccc",
             },
-        }}
-      >
-        {categories
-          .filter((cat) => cat.courses.length > 0)
-          .map((tab) => (
+          }}
+        >
+          {filteredCategories.map((tab) => (
             <Tab
               key={tab._id}
               label={tab.name}
@@ -145,14 +173,13 @@ const Carousel = () => {
               }}
             />
           ))}
-      </Tabs>
+        </Tabs>
       )}
 
-        
-
-      {allCategoriesLoading || categoryCourseLoading ? (
+      {allCategoriesLoading || isLoading || isFetching ||
+      (activeTab === "all" && isLoading ) ? (
         <CourseSkeleton />
-      ) : coursesAll?.length ? (
+      ) : courses?.data?.courses?.length ? (
         <Box sx={{ position: "relative" }}>
           {!isMobile && (
             <Box display="flex" justifyContent="flex-end" gap={2} mb={1}>
@@ -182,7 +209,7 @@ const Carousel = () => {
               pb: 1,
             }}
           >
-            {coursesAll.map((course) => (
+            {courses?.data?.courses?.map((course) => (
               <Card
                 key={course._id}
                 onClick={() => handleCourseClick(course.slug)}

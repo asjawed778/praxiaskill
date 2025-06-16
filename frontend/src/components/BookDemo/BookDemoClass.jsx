@@ -74,7 +74,22 @@ const BookDemoClass = () => {
           backgroundColor: "#fff",
         }}
       >
-        <Typography variant="body1" fontWeight="bold" align="center" color="primary" gutterBottom>
+        {/* <Typography variant="body1" fontWeight="bold" align="center" color="primary" gutterBottom> */}
+        <Typography 
+          sx={{
+            fontSize: {
+              xs: "14px",
+              sm: "16px",
+              md: "18px",
+              lg: "20px",
+              xl: "22px"
+            },
+            fontWeight: 600,
+            textAlign: "center",
+            color: "primary.main",
+            mb: 1
+          }}
+        >
           Book a Live Class, For Free!
         </Typography>
 
@@ -148,6 +163,7 @@ const BookDemoClass = () => {
           />
 
           <CustomButton
+            fullWidth
             label="Submit"
             type="submit"
             variant="contained"

@@ -1,15 +1,19 @@
-import React from "react";
+import { Box, Typography, Stack } from "@mui/material";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
 import required from "/imgs/required.svg";
-import InputField from "../../../../components/Input Field";
-import Button from "../../../../components/Button/Button";
+import CustomButton from "../../../../components/CustomButton";
 import SubSectionFields from "./Course Structure/SubSectionFields";
 import ProjectFields from "./Course Structure/ProjectFields";
 import AssignmentFields from "./Course Structure/AssignmentsFields";
+import CustomInputField from "../../../../components/CustomInputField";
 
 const CourseStructure = ({ handleNext, handlePrev }) => {
-  const { control, register, formState: { errors } } = useFormContext();
+  const {
+    control,
+    register,
+    formState: { errors },
+  } = useFormContext();
 
   const {
     fields: sectionFields,
@@ -21,62 +25,55 @@ const CourseStructure = ({ handleNext, handlePrev }) => {
   });
 
   return (
-    <div className="flex flex-col gap-3">
-      <h1 className="relative w-fit">
-        <span>Section</span>
-
-        <img
+    <Box display="flex" flexDirection="column" gap={2}>
+      <Box position="relative" width="fit-content">
+        <Typography variant="h6" fontWeight={600}>
+          Section
+        </Typography>
+        <Box
+          component="img"
           src={required}
           alt="required"
-          className="size-2 absolute -right-3 top-1"
+          sx={{
+            width: 8,
+            height: 8,
+            position: "absolute",
+            top: 6,
+            right: -12,
+          }}
         />
-      </h1>
+      </Box>
 
-      <div className="space-y-6">
+      <Box display="flex" flexDirection="column" gap={4}>
         {sectionFields.map((_, sectionIndex) => (
-          <div
+          <Box
             key={sectionIndex}
-            className="relative flex flex-col gap-3 px-5 py-4 border border-gray-300 rounded-md"
+            p={3}
+            border="1px solid #ccc"
+            borderRadius={2}
+            position="relative"
           >
-            <p className="absolute right-5 -top-0">{sectionIndex + 1}</p>
-
-            <div>
-              {/* Section Title */}
-              <InputField
-                id="step3-title"
-                {...register(`sections.${sectionIndex}.title`)}
-                placeholder="Title"
-              >
-                Title :
-              </InputField>
-
-              {Array.isArray(errors?.sections) &&
-                errors?.sections[sectionIndex]?.title && (
-                  <p className="text-red-600 text-xs ml-1 mt-0.5">
-                    {errors?.sections[sectionIndex]?.title?.message}
-                  </p>
-                )}
-            </div>
-
-            {/* Section Description */}
-            <div>
-              <label htmlFor="step3-description">Description :</label>
-              <textarea
-                id="step3-description"
-                {...register(`sections.${sectionIndex}.description`)}
-                placeholder="Description"
-                className="bg-white w-full p-2 mt-2 border border-gray-300 rounded outline-none"
+            <Typography
+              variant="body2"
+              sx={{ position: "absolute", top: 8, right: 12 }}
+            >
+              {sectionIndex + 1}
+            </Typography>
+            <Stack spacing={2}>
+              <CustomInputField
+                name={`sections.${sectionIndex}.title`}
+                label="Title"
+                placeholder="Enter section title"
               />
-
-              {Array.isArray(errors?.sections) &&
-                errors?.sections[sectionIndex]?.description && (
-                  <p className="text-red-600 text-xs ml-1 mt-0.5">
-                    {errors?.sections[sectionIndex]?.description?.message}
-                  </p>
-                )}
-            </div>
-
-            {/* Subsections */}
+              <CustomInputField
+                name={`sections.${sectionIndex}.description`}
+                label="Description"
+                placeholder="Enter section description"
+                multiline
+                row={3}
+                required={false}
+              />
+            </Stack>
             <SubSectionFields
               control={control}
               sectionIndex={sectionIndex}
@@ -93,24 +90,19 @@ const CourseStructure = ({ handleNext, handlePrev }) => {
               sectionIndex={sectionIndex}
               errors={errors}
             />
-
-            {/* Remove Section Button */}
             {sectionFields.length > 1 && (
-              <button
-                type="button"
+              <CustomButton
+                label="Remove Section"
+                color="error"
+                variant="outlined"
                 onClick={() => removeSection(sectionIndex)}
-                className="text-red-500 ml-auto px-5 py-1 border border-red-500 rounded-md cursor-pointer"
-              >
-                Remove Section
-              </button>
+                sx={{ mt: 2, ml: "auto", display: "block" }}
+              />
             )}
-
-          </div>
+          </Box>
         ))}
-
-        {/* Add Section Button */}
-        <Button
-          type="button"
+        <CustomButton
+          label="Add More Section"
           onClick={() =>
             appendSection({
               title: "",
@@ -118,25 +110,14 @@ const CourseStructure = ({ handleNext, handlePrev }) => {
               subSections: [{ title: "", description: "" }],
             })
           }
-          className="flex items-center gap-2"
-        >
-          <span>Add Section</span>
-          <FaPlus />
-        </Button>
-
-        <div className="flex gap-5 justify-between">
-          <Button onClick={handlePrev}>Previous</Button>
-
-          {/* Submit Button */}
-          <Button
-            onClick={handleNext}
-            className={`flex items-center justify-center w-40`}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
-    </div>
+          startIcon={<FaPlus />}
+        />
+        <Stack direction="row" justifyContent="space-between" mt={2}>
+          <CustomButton label="Back" onClick={handlePrev} />
+          <CustomButton label="Next" onClick={handleNext} />
+        </Stack>
+      </Box>
+    </Box>
   );
 };
 

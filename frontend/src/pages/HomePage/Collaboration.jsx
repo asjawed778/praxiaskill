@@ -28,8 +28,8 @@ const PartnerLogo = ({ name, logo }) => {
         sx={{
           width: 60,
           height: 60,
-          bgcolor: "transparent", 
-          border: "none", 
+          bgcolor: "transparent",
+          border: "none",
           borderRadius: 2,
           transition: "all 0.3s ease",
           "&:hover": {
@@ -38,7 +38,20 @@ const PartnerLogo = ({ name, logo }) => {
           mb: 1,
         }}
       />
-      <Typography variant="body1" align="center">{name}</Typography>
+      <Typography
+        sx={{
+          fontSize: {
+            xs: "14px",
+            sm: "16px",
+            md: "18px",
+            lg: "20px",
+            xl: "22px",
+          },
+          textAlign: "center"
+        }}
+      >
+        {name}
+      </Typography>
     </Box>
   );
 };
@@ -59,6 +72,7 @@ const Collaboration = () => {
   return (
     <Box
       sx={{
+        borderRadius: "4px",
         backgroundColor: "#f9fafc",
         py: 2,
         my: 2,
@@ -73,7 +87,7 @@ const Collaboration = () => {
             zIndex: 1,
           }}
         >
-          <Avatar
+          {/* <Avatar
             sx={{
               bgcolor: theme.palette.primary.main,
               color: theme.palette.primary.contrastText,
@@ -84,24 +98,22 @@ const Collaboration = () => {
             }}
           >
             <GroupsOutlined fontSize="medium" />
-          </Avatar>
-          <Typography variant="h3" gutterBottom>
-            {/* sx={{
-              fontWeight: 700,
-              mb: 2,
-              color: theme.palette.text.primary,
-              fontSize: { xs: "1rem", md: "1.25rem" },
+          </Avatar> */}
+          <Typography
+            sx={{
+              fontSize: {
+                xs: "24px",
+                sm: "28px",
+                md: "32px",
+                lg: "36px",
+                xl: "40px",
+              },
+              fontWeight: 600,
             }}
-          > */}
-            Backed by a strong placement support system offering access to 100+ recruiting companies.
-          </Typography>
-          {/* <Typography
-            variant="body1"
-            color="textSecondary"
           >
-            Partnering with top institutions worldwide to deliver exceptional
-            learning experiences
-          </Typography> */}
+            Backed by a strong placement support system offering access to 100+
+            recruiting companies.
+          </Typography>
         </Box>
 
         <Grid
@@ -129,19 +141,6 @@ const Collaboration = () => {
             </Grid>
           ))}
         </Grid>
-
-        {/* <Box sx={{ textAlign: "center", mt: 4 }}>
-          <Typography
-            variant="body2"
-            sx={{
-              color: theme.palette.text.secondary,
-              fontStyle: "italic",
-              fontSize: { xs: "0.8rem", md: "1rem" },
-            }}
-          >
-            And 45+ other prestigious institutions worldwide
-          </Typography>
-        </Box> */}
       </Container>
     </Box>
   );

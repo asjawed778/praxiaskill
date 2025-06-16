@@ -1,13 +1,11 @@
 import { Card, Typography, Box } from "@mui/material";
-import { Star, StarBorder, StarHalf } from "@mui/icons-material";
-import { useAppTheme } from "@/context/ThemeContext";
+// import { Star, StarBorder, StarHalf } from "@mui/icons-material";
 
 const CourseCard = ({ course, onClick }) => {
   const {
     _id,
     title,
     thumbnail,
-    instructor,
     type = "Professional Certificate",
     level = "Beginner to Advanced",
     tags = [],
@@ -16,34 +14,33 @@ const CourseCard = ({ course, onClick }) => {
     duration = "",
   } = course;
 
-  const { colors } = useAppTheme();
-  const renderStars = (average) => {
-    const fullStars = Math.floor(average);
-    const hasHalfStar = average % 1 >= 0.5;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  // const renderStars = (average) => {
+  //   const fullStars = Math.floor(average);
+  //   const hasHalfStar = average % 1 >= 0.5;
+  //   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
-    return (
-      <Box display="flex" alignItems="center">
-        {[...Array(fullStars)].map((_, i) => (
-          <Star
-            key={`full-${i}`}
-            sx={{ color: colors.primary, fontSize: 15 }}
-          />
-        ))}
-        {hasHalfStar && (
-          <StarHalf sx={{ color: colors.primary, fontSize: 15 }} />
-        )}
-        {[...Array(emptyStars)].map((_, i) => (
-          <StarBorder
-            key={`empty-${i}`}
-            sx={{ color: colors.primary, fontSize: 15 }}
-          />
-        ))}
-      </Box>
-    );
-  };
+  //   return (
+  //     <Box display="flex" alignItems="center">
+  //       {[...Array(fullStars)].map((_, i) => (
+  //         <Star
+  //           key={`full-${i}`}
+  //           sx={{ color: colors.primary, fontSize: 15 }}
+  //         />
+  //       ))}
+  //       {hasHalfStar && (
+  //         <StarHalf sx={{ color: colors.primary, fontSize: 15 }} />
+  //       )}
+  //       {[...Array(emptyStars)].map((_, i) => (
+  //         <StarBorder
+  //           key={`empty-${i}`}
+  //           sx={{ color: colors.primary, fontSize: 15 }}
+  //         />
+  //       ))}
+  //     </Box>
+  //   );
+  // };
 
-  const averageRating = reviews ? totalRatings / reviews : 4.5;
+  // const averageRating = reviews ? totalRatings / reviews : 4.5;
 
   return (
     <Card
@@ -103,14 +100,9 @@ const CourseCard = ({ course, onClick }) => {
         >
           {title}
         </Typography>
-
-        {/* <Typography variant="body2" color="text.secondary" noWrap>
-          {instructor?.name}
-        </Typography> */}
         <Typography variant="caption" display="block" color="text.secondary">
           {type} • {level}
         </Typography>
-
         <Typography
           variant="body2"
           mt={1}

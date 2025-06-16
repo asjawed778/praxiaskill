@@ -3,56 +3,44 @@ import {
   Box,
   Typography,
   Grid,
-  Select,
-  MenuItem,
-  Button,
-  TextField,
-  InputAdornment,
-  IconButton,
-  Pagination,
   Container,
   CircularProgress,
   Stack,
 } from "@mui/material";
-import { Search as SearchIcon } from "@mui/icons-material";
-import {
-  useGetAllPublishedCourseQuery,
-  useGetAllCategoryQuery,
-  useGetCategoryCourseQuery,
-} from "@/services/course.api";
+
 import { useNavigate } from "react-router-dom";
 import CourseCard from "./CourseCard";
-import CustomButton from "../../components/CustomButton";
+import CustomButton from "@/components/CustomButton";
+import CoursePagination from "./CoursePagination";
+import { useGetCoursesQuery } from "@/services/course.api";
+import CustomSearchField from "@/components/CustomSearchField";
+import CustomDropdownField from "@/components/CustomDropdownField";
 
 const LearningPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [categoryId, setCategoryId] = useState("");
+  const [limit, setLimit] = useState(12);
+  const [selectedCourseCategory, setSelectedCourseCategory] = useState(null);
 
   const navigate = useNavigate();
 
-  const { data: categoriesData } = useGetAllCategoryQuery();
-  const { data: publishedCourses, isFetching: isLoading } =
-    useGetAllPublishedCourseQuery(currentPage);
-  const { data: CategoryCourses, isLoading: categoryCoursesLoading } =
-    useGetCategoryCourseQuery(categoryId, { skip: !categoryId });
-  const categories = categoriesData?.data || [];
-  const coursesData = categoryId
-    ? CategoryCourses?.data
-    : publishedCourses?.data;
-  const courses = coursesData?.courses || [];
-
-  const totalPages = coursesData?.totalPages || 1;
-
-  const handleSearch = () => {
-    setSearchTerm(searchQuery.trim());
-  };
-
+  const {
+    data: courses,
+    isLoading,
+    isError,
+  } = useGetCoursesQuery({
+    page: currentPage,
+    limit,
+    search: searchQuery,
+    category: selectedCourseCategory,
+  });
+  
+  const totalCourses = courses?.data?.totalCourses || 0;
+  const totalPages = Math.ceil(totalCourses / limit);
+  
   const handleClearFilter = () => {
-    setCategoryId("");
     setSearchQuery("");
-    setSearchTerm("");
+    setSelectedCourseCategory(null);
     setCurrentPage(1);
   };
 
@@ -60,35 +48,35 @@ const LearningPage = () => {
     navigate(`/course/${slug}`);
   };
   useEffect(() => {
-    console.log("Courses data is : ", coursesData)
-  }, [coursesData])
+    setCurrentPage(1);
+  }, [searchQuery, selectedCourseCategory]);
+
   return (
     <Container maxWidth="lg">
       <Box py={2}>
-        <Typography align="center" variant="h1" mb={2}>
+        <Typography
+          sx={{
+            textAlign: "center",
+            mb: 2,
+            fontWeight: 600,
+            fontSize: {
+              xs: "32px",
+              sm: "36px",
+              md: "40px",
+              lg: "44px",
+              xl: "48px",
+            },
+          }}
+        >
           Explore Our Courses
         </Typography>
 
         <Grid container spacing={2} mb={4} px={1}>
           <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
+            <CustomSearchField
+              placeholder="Search Courses..."
               value={searchQuery}
-              size="small"
-              borderRadius="8px"
-              fullWidth
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              placeholder="Search courses..."
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleSearch}>
-                      <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              sx={{ flexGrow: 1, minWidth: 250 }}
+              onSearch={setSearchQuery}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }} noWrap>
@@ -101,31 +89,20 @@ const LearningPage = () => {
                 gap: 2,
               }}
             >
-              {/* <Typography fontWeight={600} flexShrink={0}>
-                Filter by Category:
-              </Typography> */}
-
               <Stack
                 direction={{ xs: "row", sm: "row" }}
                 spacing={2}
                 alignItems={{ xs: "stretch", sm: "center" }}
                 width="100%"
               >
-                <Select
-                  value={categoryId}
-                  size="small"
-                  onChange={(e) => setCategoryId(e.target.value)}
-                  displayEmpty
-                  fullWidth
-                  sx={{ minWidth: 150 }}
-                >
-                  <MenuItem value="">All Categories</MenuItem>
-                  {categories.map((cat) => (
-                    <MenuItem key={cat._id} value={cat._id}>
-                      {cat.name}
-                    </MenuItem>
-                  ))}
-                </Select>
+                <CustomDropdownField
+                  label="Filter by Category"
+                  placeholder="Select Category"
+                  value={selectedCourseCategory}
+                  onChange={setSelectedCourseCategory}
+                  endpoint="course/category"
+                  required={false}
+                />
 
                 <CustomButton
                   label="Clear Filters"
@@ -134,16 +111,14 @@ const LearningPage = () => {
                   sx={{
                     whiteSpace: "nowrap",
                     flexShrink: 0,
-                    height: 45,
+                    height: 40,
                   }}
                 />
-                {/* Clear Filters
-                </Button> */}
               </Stack>
             </Box>
           </Grid>
         </Grid>
-        {isLoading || categoryCoursesLoading ? (
+        {isLoading ? (
           <Box
             display="flex"
             flexDirection="column"
@@ -157,33 +132,24 @@ const LearningPage = () => {
             </Typography>
             <CircularProgress />
           </Box>
-        ) : courses.length === 0 ? (
+        ) : isError ? (
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            height="100%"
+            py={4}
+          >
+            <Typography align="center" color="primary" mb={2}>
+              Somethings worngs. Please try again!
+            </Typography>
+          </Box>
+        ): courses?.data?.courses.length === 0 ? (
           <Typography align="center" color="red">
-            No courses found. Try again!
+            No courses found.
           </Typography>
         ) : (
-          // <Grid
-          //   container
-          //   spacing={1}
-          // sx={{
-          //   justifyContent: {
-          //     xs: "center",
-          //     sm: "flex-start",
-          //   },
-          // }}
-          // >
-          //   {courses.map((course) => (
-          //     <Grid
-          //       item
-          //       xs={12}
-          //       sm={6}
-          //       md={4}
-          //       key={course._id}
-          //     >
-          //       <CourseCard course={course} onClick={handleNavigate} />
-          //     </Grid>
-          //   ))}
-          // </Grid>
           <Box
             display="flex"
             flexWrap="wrap"
@@ -197,25 +163,41 @@ const LearningPage = () => {
             }}
             gap={1}
           >
-            {courses?.map((course) => (
+            {courses?.data?.courses?.map((course) => (
               <CourseCard
                 key={course?._id}
                 course={course}
-                onClick={()=>handleNavigate(course.slug)}
+                onClick={() => handleNavigate(course.slug)}
               />
             ))}
           </Box>
         )}
-        {courses.length > 0 && (
-          <Box display="flex" justifyContent="center" mt={5}>
-            <Pagination
-              count={totalPages}
-              page={currentPage}
-              onChange={(_, page) => setCurrentPage(page)}
-              shape="rounded"
-              color="primary"
-            />
-          </Box>
+        {courses?.data?.courses.length > 0 && (
+          <>
+            <Box
+              display="flex"
+              flexWrap="wrap"
+              sx={{
+                alignItems: "center",
+                justifyContent: {
+                  xs: "center",
+                  sm: "flex-start",
+                },
+              }}
+              gap={2}
+            >
+            </Box>
+
+            <Box display="flex" justifyContent="center" mt={5}>
+              <CoursePagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                setCurrentPage={setCurrentPage}
+                limit={limit}
+                totalCourses={totalCourses}
+              />
+            </Box>
+          </>
         )}
       </Box>
     </Container>

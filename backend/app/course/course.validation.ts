@@ -527,19 +527,18 @@ export const coursePreview = [
         .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
 ];
 
-export const publishCourse = [
+export const updateStatus = [
     param('courseId')
         .notEmpty().withMessage('courseId is required')
         .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+
+    query('status')
+        .notEmpty().withMessage("Status is required")
+        .isIn(Object.values(CourseEnum.CourseStatus))
+
 ];
 
 export const unpublishCourse = [
-    param('courseId')
-        .notEmpty().withMessage('courseId is required')
-        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
-];
-
-export const terminateCourse = [
     param('courseId')
         .notEmpty().withMessage('courseId is required')
         .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
@@ -551,17 +550,6 @@ export const getFullCourseDetails = [
         .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
 ];
 
-export const draftCourse = [
-    param('courseId')
-        .notEmpty().withMessage('courseId is required')
-        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
-];
-
-export const getPublishedCourseByCategory = [
-    param('categoryId')
-        .notEmpty().withMessage('categoryId is required')
-        .isMongoId().withMessage('Invalid categoryId. Must be a valid MongoDB ObjectId'),
-];
 
 export const changeEnquiryStatus = [
     param('enquiryId')
@@ -572,6 +560,29 @@ export const changeEnquiryStatus = [
         .notEmpty().withMessage('Status is required')
         .isIn(Object.values(CourseEnum.EnquiryStatus))
         .withMessage(`Status must be one of: ${Object.values(CourseEnum.EnquiryStatus).join(', ')}`)
+];
+
+export const getCourses = [
+    query('page')
+        .optional()
+        .isInt({ min: 1 }).withMessage('Page must be a positive integer'),
+
+    query('limit')
+        .optional()
+        .isInt({ min: 1, max: 100 }).withMessage('Limit must be between 1 and 100'),
+
+    query('category')
+        .optional()
+        .isMongoId().withMessage('Category must be a valid MongoDB ObjectId'),
+
+    query('status')
+        .optional()
+        .isIn(Object.values(CourseEnum.CourseStatus))
+        .withMessage(`Status must be one of: ${Object.values(CourseEnum.CourseStatus).join(', ')}`),
+
+    query('search')
+        .optional()
+        .isString().withMessage('Search term must be a string'),
 ];
 
 export const getCourseDetails = [
@@ -851,4 +862,75 @@ export const getRatings = [
         .optional()
         .isInt({ min: 1, max: 100 }).withMessage('PerPage must be between 1 and 100')
         .toInt(),
+];
+
+// course notes validation
+
+export const createCourseNotes = [
+    body("notes")
+        .notEmpty().withMessage("Notes is required")
+        .isString().withMessage("Notes must be a string")
+        .trim(),
+
+    query("courseId")
+        .optional()
+        .isMongoId().withMessage("Invalid courseId. Must be a valid MongoDB ObjectId"),
+
+    query("sectionId")
+        .optional()
+        .isMongoId().withMessage("Invalid sectionId. Must be a valid MongoDB ObjectId"),
+
+    query("subSectionId")
+        .optional()
+        .isMongoId().withMessage("Invalid subSectionId. Must be a valid MongoDB ObjectId"),
+
+];
+
+export const updateCourseNotes = [
+    body("notes")
+        .notEmpty().withMessage("Notes is required"),
+
+    param("noteId")
+        .notEmpty().withMessage("Notes ID is required")
+        .isMongoId().withMessage("Invalid notesId. Must be a valid MongoDB ObjectId")
+];
+
+export const deleteCourseNotes = [
+    param("noteId")
+        .notEmpty().withMessage("Notes ID is required")
+        .isMongoId().withMessage("Invalid notesId. Must be a valid MongoDB ObjectId"),
+];
+
+export const getCourseNotes = [
+    query("courseId")
+        .optional()
+        .isMongoId().withMessage("Invalid courseId. Must be a valid MongoDB ObjectId"),
+
+    query("sectionId")
+        .optional()
+        .isMongoId().withMessage("Invalid sectionId. Must be a valid MongoDB ObjectId"),
+
+    query("subSectionId")
+        .optional()
+        .isMongoId().withMessage("Invalid subSectionId. Must be a valid MongoDB ObjectId"),
+
+    query("pageNo")
+        .optional()
+        .isInt({ min: 1 }).withMessage("Page must be a positive integer")
+        .toInt(),
+
+    query("limit")
+        .optional()
+        .isInt({ min: 1, max: 100 }).withMessage("PerPage must be between 1 and 100")
+        .toInt(),
+
+    query("search")
+        .optional()
+        .isString().withMessage("Search query must be a string")
+        .trim(),
+
+    query("sort")
+        .optional()
+        .isIn(['latest', 'oldest']).withMessage('Sort must be either "latest" or "oldest"')
+
 ];

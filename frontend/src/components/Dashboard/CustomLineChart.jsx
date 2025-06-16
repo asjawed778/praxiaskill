@@ -13,11 +13,11 @@ const CustomLineChart = ({ data }) => {
             <LineChart
               data={data}
               margin={{
-                top: 10, right: 20, left: 10, bottom: 5,
+                top: 5, right: 20, left: 5, bottom: 10,
               }}
             >
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="month" axisLine={false} tickLine={false} />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} padding={{ left: 30, right: 10, top: 5 }} />
               <YAxis axisLine={false} tickLine={false} />
               <Tooltip />
               <Line 
