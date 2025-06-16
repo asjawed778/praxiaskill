@@ -18,7 +18,7 @@ const getIconComponent = (iconName) => {
 };
 
 const ToolsGrid = ({ course }) => {
-  if (!course?.tools?.length === 0 || !course?.tools) return;
+  if (course?.tools?.length === 0 || !course?.tools) return;
 
   return (
     <Box

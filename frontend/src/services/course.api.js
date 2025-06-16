@@ -5,69 +5,12 @@ export const apiCourse = createApi({
   reducerPath: "apiCourse",
   baseQuery: authBaseQuery,
   endpoints: (builder) => ({
-    // Courses APIs
-    uploadThumbnail: builder.mutation({
-      query: ({ formData, accessToken }) => {
-        return {
-          url: "course/thumbnail",
-          method: "POST",
-          body: formData,
-          headers: {
-            Authorization: `Bearer ${accessToken}`, // Send token in Authorization header
-          },
-          credentials: "include",
-        };
-      },
-    }),
-    uploadBrouchure: builder.mutation({
-      query: ({ formData, accessToken }) => {
-        return {
-          url: "course/brouchure",
-          method: "POST",
-          body: formData,
-          headers: {
-            Authorization: `Bearer ${accessToken}`, // Send token in Authorization header
-          },
-          credentials: "include",
-        };
-      },
-    }),
     uploadCourse: builder.mutation({
       query: (data) => {
         return {
           url: "course",
           method: "POST",
           body: data,
-          credentials: "include",
-        };
-      },
-    }),
-    uploadAdditionalDetails: builder.mutation({
-      query: ({ data, id }) => {
-        return {
-          url: `course/additional-details/${id}`,
-          method: "PUT",
-          body: data,
-          credentials: "include",
-        };
-      },
-    }),
-    uploadCourseStructure: builder.mutation({
-      query: ({ data, id }) => {
-        // here id is courseId
-        return {
-          url: `course/structure/${id}`,
-          method: "PUT",
-          body: data,
-          credentials: "include",
-        };
-      },
-    }),
-    publishCourse: builder.mutation({
-      query: ({ id: courseId }) => {
-        return {
-          url: `course/publish/${courseId}`,
-          method: "POST",
           credentials: "include",
         };
       },
@@ -102,14 +45,6 @@ export const apiCourse = createApi({
         credentials: "include",
       }),
     }),
-    addCourse: builder.mutation({
-      //update
-      query: (data) => ({
-        url: "course/add-course",
-        method: "POST",
-        body: data,
-      }),
-    }),
     sendEnquiry: builder.mutation({
       query: (data) => ({
         url: "course/enquiry",
@@ -123,21 +58,7 @@ export const apiCourse = createApi({
         method: "GET",
       }),
     }),
-    getAllPublishedCourse: builder.query({
-      query: (pageNo) => ({
-        url: `course/published?pageNo=${pageNo}`,
-        method: "GET",
-      }),
-    }),
-    getCategoryCourse: builder.query({
-      //name update
-      query: (categoryId) => ({
-        url: `course/published/${categoryId}`,
-        method: "GET",
-      }),
-    }),
     getFullCourseDetails: builder.query({
-      // identifier means either slug or course ID
       query: (identifier) => ({
         url: `course/${identifier}`,
         method: "GET",
@@ -289,9 +210,9 @@ export const apiCourse = createApi({
       })
     }),
     getCourses: builder.query({
-      query: ({ pageNo = 1, limit = 10, category, status, search }) => ({
+      query: ({ page = 1, limit = 10, category, status, search }) => ({
         url: `/course/all?${new URLSearchParams({
-          pageNo,
+          page,
           limit,
           ...(category && { category }),
           ...(status && { status }),
@@ -304,22 +225,13 @@ export const apiCourse = createApi({
 });
 
 export const {
-  // Courses
-  useUploadThumbnailMutation,
-  useUploadBrouchureMutation,
   useUploadCourseMutation,
-  useUploadAdditionalDetailsMutation,
-  useUploadCourseStructureMutation,
-  usePublishCourseMutation,
   useGetDropdownOptionsQuery,
   useGetAllCategoryQuery,
   useAddCategoryMutation,
   useSetEnquiryStatusMutation,
-  useAddCourseMutation,
   useSendEnquiryMutation,
   useGetAllEnquiryQuery,
-  useGetAllPublishedCourseQuery,
-  useGetCategoryCourseQuery,
   useGetFullCourseDetailsQuery,
   useGetFullCourseContentQuery,
   useStartUploadMutation,
@@ -336,5 +248,5 @@ export const {
   useGetNotesQuery,
   useDeleteNotesMutation,
   useUpdateNotesMutation,
-  useGetCoursesQuery
+  useGetCoursesQuery,
 } = apiCourse;

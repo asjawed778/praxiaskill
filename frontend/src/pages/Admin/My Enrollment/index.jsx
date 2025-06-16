@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import {
-  useGetAllPublishedCourseQuery,
+  // useGetAllPublishedCourseQuery,
   useGetMyCoursesQuery,
 } from "../../../services/course.api";
 import { useEffect, useState } from "react";

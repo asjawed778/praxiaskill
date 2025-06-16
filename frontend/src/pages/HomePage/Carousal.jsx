@@ -16,8 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import {
   useGetAllCategoryQuery,
-  useGetAllPublishedCourseQuery,
-  useGetCategoryCourseQuery,
+  useGetCoursesQuery,
 } from "../../services/course.api";
 import { setCourses } from "../../store/reducers/coursesReducer";
 import { setCategories } from "../../store/reducers/adminCategoryReducer";
@@ -36,24 +35,29 @@ const Carousel = () => {
 
   const categories = useSelector((state) => state.categories.categories);
   const coursesAll = useSelector((state) => state.courses.courses);
-
   const [activeTab, setActiveTab] = useState(null);
   const [cardsPerView, setCardsPerView] = useState(1);
   const cardWidth = 300;
   const gap = 16;
+  const {
+    data: courses,
+    isLoading,
+    isFetching,
+    isError,
+  } = useGetCoursesQuery(
+    activeTab === "all" ? {} : { category: activeTab }
+  );
+  
 
   const { data: allCategories, isFetching: allCategoriesLoading } =
     useGetAllCategoryQuery();
-  const { data: categoryCourse, isFetching: categoryCourseLoading } =
-    useGetCategoryCourseQuery(activeTab, {
-      skip: !activeTab || activeTab === "all",
-    });
-  const { data: publishedCourses, isFetching: publishedCourseLoading } =
-    useGetAllPublishedCourseQuery(1);
 
   const allCoursesOption = { _id: "all", name: "All Courses" };
   const filteredCategories = useMemo(() => {
-    return [allCoursesOption, ...categories.filter((cat) => cat?.courses?.length > 0)];
+    return [
+      allCoursesOption,
+      ...categories.filter((cat) => cat?.courses?.length > 0),
+    ];
   }, [categories]);
 
   useEffect(() => {
@@ -66,15 +70,14 @@ const Carousel = () => {
     if (filteredCategories.length && !activeTab) {
       setActiveTab(filteredCategories[0]._id);
     }
+    
   }, [filteredCategories, activeTab]);
 
   useEffect(() => {
-    if (activeTab === "all" && publishedCourses?.success) {
-      dispatch(setCourses(publishedCourses.data?.courses || []));
-    } else if (activeTab && categoryCourse?.success) {
-      dispatch(setCourses(categoryCourse?.data?.courses || []));
-    }
-  }, [activeTab, categoryCourse, publishedCourses, dispatch]);
+    if (activeTab === "all" && courses?.data?.success) {
+      dispatch(setCourses(courses.data?.courses || []));
+    } 
+  }, [activeTab, courses, dispatch]);
 
   useEffect(() => {
     const updateCardsPerView = () => {
@@ -111,7 +114,13 @@ const Carousel = () => {
       <Box mb={1}>
         <Typography
           sx={{
-            fontSize: { xs: "20px", sm: "24px", md: "28px", lg: "32px", xl: "36px" },
+            fontSize: {
+              xs: "20px",
+              sm: "24px",
+              md: "28px",
+              lg: "32px",
+              xl: "36px",
+            },
             color: "primary.main",
             fontWeight: 600,
           }}
@@ -120,7 +129,13 @@ const Carousel = () => {
         </Typography>
         <Typography
           sx={{
-            fontSize: { xs: "14px", sm: "16px", md: "18px", lg: "20px", xl: "22px" },
+            fontSize: {
+              xs: "14px",
+              sm: "16px",
+              md: "18px",
+              lg: "20px",
+              xl: "22px",
+            },
             color: "text.secondary",
           }}
         >
@@ -161,9 +176,10 @@ const Carousel = () => {
         </Tabs>
       )}
 
-      {allCategoriesLoading || categoryCourseLoading || (activeTab === "all" && publishedCourseLoading) ? (
+      {allCategoriesLoading || isLoading || isFetching ||
+      (activeTab === "all" && isLoading ) ? (
         <CourseSkeleton />
-      ) : coursesAll?.length ? (
+      ) : courses?.data?.courses?.length ? (
         <Box sx={{ position: "relative" }}>
           {!isMobile && (
             <Box display="flex" justifyContent="flex-end" gap={2} mb={1}>
@@ -193,7 +209,7 @@ const Carousel = () => {
               pb: 1,
             }}
           >
-            {coursesAll.map((course) => (
+            {courses?.data?.courses?.map((course) => (
               <Card
                 key={course._id}
                 onClick={() => handleCourseClick(course.slug)}

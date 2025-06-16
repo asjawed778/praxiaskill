@@ -21,7 +21,7 @@ export default function ReviewCard({ review, onDelete, onEdit }) {
   
   useEffect(() => {
     console.log("User in ReviewCard:", user._id);
-    console.log("ReviewCard mounted with review:", review);
+    ("ReviewCard mounted with review:", review);
   }, []);
 
   const isOwner = user && review.userId && (user._id === review.userId._id);

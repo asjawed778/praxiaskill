@@ -11,7 +11,6 @@ import CategoryManagement from "./pages/Admin/Category/CategoryManagement";
 import { useDispatch, useSelector } from "react-redux";
 import SplashScreen from "./components/SplashScreen";
 import { setSplashShown } from "./store/reducers/splashScreenReducer";
-import ScrollToTop from "./components/ScrollToTop";
 import useScrollToTop from "./hooks/useScrollToTop";
 const ViewCategories = lazy(() =>
   import("./pages/Admin/Category/ViewCategories")
@@ -26,21 +25,20 @@ const BlogPage = lazy(() => import("./pages/Blog/landingpage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 const AdminDashboard = lazy(() => import("./pages/Admin/AdminDashboard"));
 const CourseLandingPage = lazy(() => import("./pages/CourseLandingPage"));
-// const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
 const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
-const AddCourse = lazy(() => import("./pages/Admin/Course/AddCourse/CreateCourse"));
+const AddCourses = lazy(() => import("./pages/Admin/Course/AddCourses/CreateCourse"));
 const MyEnrollment = lazy(() => import("./pages/Admin/My Enrollment"));
-const ManageCourse = lazy(() => import("./pages/Admin/Course/ManageCourse"));
+const ManageCourses = lazy(() => import("./pages/Admin/Course/ManageCourses"));
 const EventPage = lazy(() => import("./pages/EventPage"));
 const EventForm = lazy(() => import("./pages/EventPage/EventForm"));
-const CourseContent = lazy(() =>
-  import("./pages/Admin/Course/Add Course/CourseContent")
-);
+const AddCourseContent = lazy(() => import("./pages/Admin/Course/AddCourses/AddCourseContent"));
 const CoursePayment = lazy(() => import("./pages/CoursePayment"));
 const CourseLectures = lazy(() => import("./pages/Course Lectures"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const Users = lazy(() => import("./pages/Users"));
-const StaticPage = lazy(() => import("./pages/StaticPage"));
+const Foundationalskills = lazy(() => import("./pages/HomePage/SkillsCardSection/FoundationSkills"));
+const EntrepreneurialSkills = lazy(() => import("./pages/HomePage/SkillsCardSection/EntrepreneurialSkills"));
+const EmployabilitySkills = lazy(() => import("./pages/HomePage/SkillsCardSection/EmployabilitySkills"));
 
 const publicRoutes = [
   {
@@ -118,29 +116,29 @@ const publicRoutes = [
     ),
   },
   {
-    path: "StaticPage",
+    path: "foundational-skill",
     element: (
       <LazyComponent>
-        <StaticPage />
+        <Foundationalskills />
       </LazyComponent>
     ),
   },
-  // {
-  //   path: "full-stack-web-development-pro-level",
-  //   element: (
-  //     <LazyComponent>
-  //       <FullStackDevelopment />
-  //     </LazyComponent>
-  //   )
-  // },
-  // {
-  //   path: "ai-powered-digital-marketing",
-  //   element: (
-  //     <LazyComponent>
-  //       <DigitalMarketing />
-  //     </LazyComponent>
-  //   )
-  // }
+  {
+    path: "entrepreneurial-skill",
+    element: (
+      <LazyComponent>
+        <EntrepreneurialSkills />
+      </LazyComponent>
+    ),
+  },
+  {
+    path: "employability-skill",
+    element: (
+      <LazyComponent>
+        <EmployabilitySkills />
+      </LazyComponent>
+    ),
+  },
 ];
 
 const authRoutes = [
@@ -221,7 +219,7 @@ const adminRoutes = [
         path: "add-course",
         element: (
           <LazyComponent>
-            <AddCourse />
+            <AddCourses />
           </LazyComponent>
         ),
       },
@@ -229,7 +227,7 @@ const adminRoutes = [
         path: "course/content/:courseId",
         element: (
           <LazyComponent>
-            <CourseContent />
+            <AddCourseContent />
           </LazyComponent>
         ),
       },
@@ -237,7 +235,7 @@ const adminRoutes = [
         path: "manage-course",
         element: (
           <LazyComponent>
-            <ManageCourse />
+            <ManageCourses />
           </LazyComponent>
         ),
       },

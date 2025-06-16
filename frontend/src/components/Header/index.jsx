@@ -32,14 +32,15 @@ const Header = () => {
   const NavItem = ({ to, label }) => (
     <Box
       sx={{
-        color: colors.primary,
+        // color: colors.primary,
+        color: "black",
         fontWeight: 500,
         paddingBottom: "4px",
         borderBottom: "2px solid transparent",
         transition: "all 0.2s ease",
         "&:hover": {
-          color: colors.secondary,
-          transform: "scale(1.1)",
+          color: colors.primary,
+          transform: "scale(1.05)",
         },
       }}
     >
@@ -48,9 +49,9 @@ const Header = () => {
         style={({ isActive }) => ({
           textDecoration: "none",
           fontWeight: "bold",
-          color: isActive ? colors.secondary : "inherit",
+          color: isActive ? colors.primary : "inherit",
           borderBottom: isActive
-            ? `2px solid ${colors.primary}`
+            ? `3px solid ${colors.primary}`
             : "2px solid transparent",
         })}
       >
@@ -108,7 +109,7 @@ const Header = () => {
               }}
             >
               {!isMobile && (
-                <Link
+                <Link 
                   href="tel:+919123735554"
                   underline="none"
                   sx={{

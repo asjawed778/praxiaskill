@@ -12,6 +12,7 @@ import SEOHelmet from "../../SEO/SEOHelmet";
 import { generateOrganizationSchema } from "../../SEO/SEOHelper";
 import CustomButton from "@/components/CustomButton";
 import MentorCarousal from "./MentorCarousal"
+import SkillsCardSection from "./SkillsCardSection";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -55,7 +56,7 @@ function HomePage() {
         animate="visible"
         variants={containerVariants}
       >
-        <Box sx={{ position: "relative", width: "100%", overflow: "hidden" }}>
+        <Box sx={{ position: "relative", width: "100%", overflow: "hidden", }}>
           <video
             autoPlay
             loop
@@ -194,7 +195,7 @@ function HomePage() {
         </Box>
 
         <Container maxWidth="lg" sx={{ mt: 2 }}>
-          <Grid container spacing={2} justifyContent="center">
+          {/* <Grid container spacing={2} justifyContent="center">
             {["Foundational", "Employability", "Entrepreneurial"].map(
               (skill, index) => (
                 <Grid size={{ xs: 12, sm: 4 }} key={index}>
@@ -252,7 +253,8 @@ function HomePage() {
                 </Grid>
               )
             )}
-          </Grid>
+          </Grid> */}
+          <SkillsCardSection />
         </Container>
 
         <Container maxWidth="lg" sx={{ pt: 2 }}>
