@@ -82,14 +82,12 @@ const CoursesSection = () => {
       <Grid
         sx={{
           backgroundColor: '#fff',
-          // minHeight: '626px',
           clipPath: 'circle(87.5% at 0 52%);',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
           maxWidth: '30%',
-          backgroundColor: 'red'
         }}
       >
         <img
