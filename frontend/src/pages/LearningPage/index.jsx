@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-import CourseCard from "./CourseCard";
+import CourseCard from "@/components/CourseCard";
 import CustomButton from "@/components/CustomButton";
 import CoursePagination from "./CoursePagination";
 import { useGetCoursesQuery } from "@/services/course.api";
@@ -27,6 +27,7 @@ const LearningPage = () => {
   const {
     data: courses,
     isLoading,
+    isFetching,
     isError,
   } = useGetCoursesQuery({
     page: currentPage,
@@ -118,7 +119,7 @@ const LearningPage = () => {
             </Box>
           </Grid>
         </Grid>
-        {isLoading ? (
+        {isLoading || isFetching ? (
           <Box
             display="flex"
             flexDirection="column"

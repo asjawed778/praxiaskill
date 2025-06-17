@@ -51,7 +51,7 @@ const Benefits = () => {
     <Box
       sx={{
         py: 1.5,
-        my: 2,
+        mt: {xs: 4, md: 6, xl: 8},
         borderRadius: "4px",
         background: "linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%)",
         position: "relative",

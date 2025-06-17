@@ -37,7 +37,7 @@ export default function AdminLayout() {
           </div>
 
           {/* Right Component Admin Panel */}
-          <div className="h-[calc(100vh-5rem)] overflow-y-auto w-full">
+          <div className="h-[calc(100vh-5rem)] overflow-y-auto w-full pt-64px">
             <Outlet />
           </div>
         </main>

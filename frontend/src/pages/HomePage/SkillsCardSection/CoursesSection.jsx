@@ -12,24 +12,8 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { styled } from '@mui/material/styles';
-import seminarpana from "../../../../public/employabilityskills/seminarpana.png";
-// Styled components
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#fff',
-  borderRadius: '12px',
-  padding: '20px',
-  width: '280px',
-  height: '200px',
-  position: 'relative',
-  zIndex: 2,
-  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
-}));
-
-
-
+import seminarpana from "/employabilityskills/seminarpana.png";
+import checkIcon from "../../../../public/icons/tick-mark.svg";
 
 const CoursesSection = () => {
   const theme = useTheme();
@@ -68,72 +52,81 @@ const CoursesSection = () => {
   return (
     <Box
       sx={{
-        minHeight: '626px',
-        width: '100%',
-        py: 6,
-        position: 'relative',
-        overflow: 'hidden',
+        backgroundColor: '#0F121F',
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: { lg: 'row', md: 'column', sm: 'column', xs: 'column' },
         alignItems: 'center',
         justifyContent: 'center',
+        minHeight: 500,
       }}
     >
       <Grid
         sx={{
           backgroundColor: '#fff',
-          clipPath: 'circle(87.5% at 0 52%);',
+          width: { md: '100%', lg: '40%' },
+          minHeight: { ls: '500px', md: '500px', sm: '400px', xs: '300px' },
           display: 'flex',
+          justifyContent: 'flex-end',
           alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          maxWidth: '30%',
+          clipPath: { lg: 'circle(81.2% at 16% 26%)', xs: 'circle(81.2% at 34% 8%)' }
         }}
       >
-        <img
-          src={seminarpana}
-          alt="Hero section"
-          style={{
-            height: "100%",
-            objectFit: "cover",
+        <Box
+          sx={{
+            marginRight: { lg: '-124px', md: 0, xs: 0 },
+            height: { md: '100%', lg: '100%', sm: '50%', xs: '50%' },
+            width: { md: '100%', lg: '100%' },
           }}
-        />
-      </Grid>
+        >
+          <img
+            src={seminarpana}
+            alt="Hero section"
+            style={{
+              objectFit: "cover",
+            }}
+          />
+        </Box>
+      </Grid >
 
-      <Grid item xs={12} md={7}
+      <Grid
         sx={{
           backgroundColor: '#0F121F',
+          width: { md: '100%', lg: '60%' },
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center'
         }}
       >
-        <Box sx={{ pl: { md: 4 } }}>
+        <Box>
           <Typography
             variant="h4"
             sx={{
               color: '#fff',
               fontFamily: 'Roboto',
               fontWeight: 600,
-              fontSize: { xs: '32px', md: '48px' },
+              fontSize: { xs: '32px', md: '36px' },
               lineHeight: '117%',
-              mb: 4,
-              letterSpacing: '0%'
+              letterSpacing: '0%',
+              marginBottom: 4
             }}
           >
             Courses We Offer
           </Typography>
 
-          <Grid container spacing={3}>
-            {/* Left column of courses */}
+          <Grid
+            sx={{
+              display: 'flex',
+              gap: { md: 6, sm: 8, xs: 0 },
+              marginBottom: { lg: 0, md: 4, sm: 4, xs: 4 },
+              flexDirection: { lg: 'row', md: 'row', sm: 'row', xs: 'column' },
+            }}
+          >
             <Grid item xs={12} sm={6}>
               <List sx={{ p: 0 }}>
                 {leftColumnCourses.map((course, index) => (
                   <ListItem key={index} sx={{ p: 0, mb: 1 }}>
                     <ListItemIcon sx={{ minWidth: '30px' }}>
-                      <CheckCircleIcon
-                        sx={{
-                          color: '#4CAF50',
-                          fontSize: '16px'
-                        }}
-                      />
+                      <img src={checkIcon} alt="check" style={{ width: '16px', height: '16px' }} />
                     </ListItemIcon>
                     <ListItemText
                       primary={course}
@@ -143,7 +136,7 @@ const CoursesSection = () => {
                           fontFamily: 'Roboto',
                           fontWeight: 400,
                           fontSize: '14px',
-                          lineHeight: '140%'
+                          lineHeight: '117%'
                         }
                       }}
                     />
@@ -151,19 +144,12 @@ const CoursesSection = () => {
                 ))}
               </List>
             </Grid>
-
-            {/* Right column of courses */}
             <Grid item xs={12} sm={6}>
               <List sx={{ p: 0 }}>
                 {rightColumnCourses.map((course, index) => (
                   <ListItem key={index} sx={{ p: 0, mb: 1 }}>
                     <ListItemIcon sx={{ minWidth: '30px' }}>
-                      <CheckCircleIcon
-                        sx={{
-                          color: '#4CAF50',
-                          fontSize: '16px'
-                        }}
-                      />
+                      <img src={checkIcon} alt="check" style={{ width: '16px', height: '16px' }} />
                     </ListItemIcon>
                     <ListItemText
                       primary={course}
@@ -173,7 +159,7 @@ const CoursesSection = () => {
                           fontFamily: 'Roboto',
                           fontWeight: 400,
                           fontSize: '14px',
-                          lineHeight: '140%'
+                          lineHeight: '117%'
                         }
                       }}
                     />
@@ -184,7 +170,7 @@ const CoursesSection = () => {
           </Grid>
         </Box>
       </Grid>
-    </Box>
+    </Box >
   );
 };
 
