@@ -15,20 +15,7 @@ import {
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { styled } from '@mui/material/styles';
-import seminarpana from "../../../../public/employabilityskills/seminarpana.png";
-// Styled components
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#fff',
-  borderRadius: '12px',
-  padding: '20px',
-  width: '280px',
-  height: '200px',
-  position: 'relative',
-  zIndex: 2,
-  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
-}));
-
-
+import seminarpana from "../../../../public/employabilityskills/Seminar-pana.png";
 
 
 const CoursesSection = () => {
@@ -68,44 +55,46 @@ const CoursesSection = () => {
   return (
     <Box
       sx={{
-        minHeight: '626px',
-        width: '100%',
-        py: 6,
-        position: 'relative',
-        overflow: 'hidden',
+        backgroundColor: '#0F121F',
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: isMobile ? 'column' : 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        height: isMobile ? 'auto' : 626,
       }}
     >
       <Grid
         sx={{
           backgroundColor: '#fff',
-          clipPath: 'circle(87.5% at 0 52%);',
+          width: isMobile ? '100%' : '50%',
+          height: '100%',
           display: 'flex',
-          alignItems: 'center',
           justifyContent: 'center',
-          position: 'relative',
-          maxWidth: '30%',
+          alignItems: 'center',
+          paddingBottom: isMobile ? 24 : 0,
+          clipPath: isMobile ? 'circle(81.2% at 34% 8%)' : 'circle(81.2% at 16% 26%)'
         }}
       >
         <img
           src={seminarpana}
           alt="Hero section"
           style={{
-            height: "100%",
+            height: {lg: 626, md: 500, sm: 400, xs: 300},
+            width: {lg: 625, md: 500, sm: 400, xs: 300},
             objectFit: "cover",
+            display: 'block'
           }}
         />
       </Grid>
 
-      <Grid item xs={12} md={7}
+      <Grid
         sx={{
           backgroundColor: '#0F121F',
+          width: isMobile? '100%' : '50%',
+          paddingLeft: isMobile ? 2 : 0,
         }}
       >
-        <Box sx={{ pl: { md: 4 } }}>
+        <Box>
           <Typography
             variant="h4"
             sx={{
@@ -114,15 +103,14 @@ const CoursesSection = () => {
               fontWeight: 600,
               fontSize: { xs: '32px', md: '48px' },
               lineHeight: '117%',
-              mb: 4,
               letterSpacing: '0%'
             }}
           >
             Courses We Offer
           </Typography>
 
-          <Grid container spacing={3}>
-            {/* Left column of courses */}
+          <Grid container spacing={3}
+          >
             <Grid item xs={12} sm={6}>
               <List sx={{ p: 0 }}>
                 {leftColumnCourses.map((course, index) => (
@@ -151,8 +139,6 @@ const CoursesSection = () => {
                 ))}
               </List>
             </Grid>
-
-            {/* Right column of courses */}
             <Grid item xs={12} sm={6}>
               <List sx={{ p: 0 }}>
                 {rightColumnCourses.map((course, index) => (
