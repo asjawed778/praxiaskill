@@ -193,70 +193,11 @@ function HomePage() {
           </Container>
         </Box>
 
-        <Container maxWidth="lg" sx={{ mt: 2 }}>
-          {/* <Grid container spacing={2} justifyContent="center">
-            {["Foundational", "Employability", "Entrepreneurial"].map(
-              (skill, index) => (
-                <Grid size={{ xs: 12, sm: 4 }} key={index}>
-                  <motion.div
-                    whileHover={{ scale: 1.06 }}
-                    whileTap={{ scale: 0.95 }}
-                    variants={itemVariants}
-                    style={{
-                      ...gradientBackground,
-                      borderRadius: 16,
-                      overflow: "hidden",
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        p: 4,
-                        boxShadow: 2,
-                        height: { xs: 150, md: 200 },
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        color: "white",
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontSize: {
-                            xs: "24px",
-                            sm: "28px",
-                            md: "32px",
-                            lg: "36px",
-                            xl: "40px",
-                          },
-                          fontWeight: 600,
-                        }}
-                      >
-                        {skill}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: {
-                            xs: "20px",
-                            sm: "24px",
-                            md: "28px",
-                            lg: "32px",
-                            xl: "36px",
-                          },
-                          fontWeight: 600,
-                        }}
-                      >
-                        Skills
-                      </Typography>
-                    </Box>
-                  </motion.div>
-                </Grid>
-              )
-            )}
-          </Grid> */}
+        <Container maxWidth="lg" >
           <SkillsCardSection />
         </Container>
 
-        <Container maxWidth="lg" sx={{ pt: 2 }}>
+        <Container maxWidth="lg" >
           <Courses />
         </Container>
 

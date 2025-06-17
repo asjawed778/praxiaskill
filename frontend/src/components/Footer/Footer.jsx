@@ -39,7 +39,7 @@ const Footer = () => {
   ];
 
   return (
-    <Box component="footer" sx={{ bgcolor: "#1f2737", color: "white" }}>
+    <Box component="footer" sx={{ bgcolor: "#1f2737", color: "white", mt: {xs: 4, md: 6, xl: 8} }}>
       <Container maxWidth="lg">
         <Grid
           container

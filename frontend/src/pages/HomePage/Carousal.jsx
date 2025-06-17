@@ -5,9 +5,6 @@ import {
   IconButton,
   Tabs,
   Tab,
-  Card,
-  CardActions,
-  Divider,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
@@ -21,9 +18,8 @@ import {
 import { setCourses } from "../../store/reducers/coursesReducer";
 import { setCategories } from "../../store/reducers/adminCategoryReducer";
 import CourseSkeleton from "../../components/skeletons/CourseSkeleton";
-import userIcon from "/imgs/slider/user_icon2.png";
-import clockIcon from "/imgs/slider/language2.png";
-import CustomButton from "@/components/CustomButton";
+import CourseCard from "../../components/CourseCard";
+import CustomButton from "../../components/CustomButton";
 
 const Carousel = () => {
   const dispatch = useDispatch();
@@ -39,15 +35,12 @@ const Carousel = () => {
   const [cardsPerView, setCardsPerView] = useState(1);
   const cardWidth = 300;
   const gap = 16;
+
   const {
     data: courses,
     isLoading,
     isFetching,
-    isError,
-  } = useGetCoursesQuery(
-    activeTab === "all" ? {} : { category: activeTab }
-  );
-  
+  } = useGetCoursesQuery(activeTab === "all" ? {} : { category: activeTab });
 
   const { data: allCategories, isFetching: allCategoriesLoading } =
     useGetAllCategoryQuery();
@@ -70,13 +63,12 @@ const Carousel = () => {
     if (filteredCategories.length && !activeTab) {
       setActiveTab(filteredCategories[0]._id);
     }
-    
   }, [filteredCategories, activeTab]);
 
   useEffect(() => {
     if (activeTab === "all" && courses?.data?.success) {
       dispatch(setCourses(courses.data?.courses || []));
-    } 
+    }
   }, [activeTab, courses, dispatch]);
 
   useEffect(() => {
@@ -110,37 +102,48 @@ const Carousel = () => {
   };
 
   return (
-    <Box ref={containerRef}>
-      <Box mb={1}>
+    <Box ref={containerRef} mt={{ xs: 4, md: 6, xl: 8 }}>
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+      >
         <Typography
           sx={{
+            maxWidth: "sm",
             fontSize: {
               xs: "20px",
-              sm: "24px",
-              md: "28px",
-              lg: "32px",
-              xl: "36px",
+              sm: "22px",
+              md: "24px",
+              lg: "26px",
+              xl: "28px",
             },
-            color: "primary.main",
+            color: "#101828",
             fontWeight: 600,
+            textAlign: "center",
           }}
         >
-          All the skills you need in one place
+          Career-Ready or Startup-Ready <br /> Your Journey Begins at Praxia
+          Skill
         </Typography>
         <Typography
           sx={{
+            maxWidth: "md",
             fontSize: {
               xs: "14px",
-              sm: "16px",
-              md: "18px",
-              lg: "20px",
-              xl: "22px",
+              sm: "15px",
+              lg: "16px",
             },
             color: "text.secondary",
+            textAlign: "center",
+            mt: { xs: 0.5, sm: 1 },
           }}
         >
-          From critical skills to technical topics, Praxia Skill supports your
-          professional development.
+          Whether you're just entering the workforce, upskilling for a better
+          role, or laying the foundation to launch your own startup, our
+          job-oriented courses equip you with the real-world skills that top
+          companies and innovative ventures demand.
         </Typography>
       </Box>
 
@@ -151,6 +154,7 @@ const Carousel = () => {
           variant="scrollable"
           scrollButtons="auto"
           sx={{
+            mt: { xs: 1, md: 2 },
             mb: 2,
             pl: 2,
             ml: -2,
@@ -176,28 +180,13 @@ const Carousel = () => {
         </Tabs>
       )}
 
-      {allCategoriesLoading || isLoading || isFetching ||
-      (activeTab === "all" && isLoading ) ? (
+      {allCategoriesLoading ||
+      isLoading ||
+      isFetching ||
+      (activeTab === "all" && isLoading) ? (
         <CourseSkeleton />
       ) : courses?.data?.courses?.length ? (
         <Box sx={{ position: "relative" }}>
-          {!isMobile && (
-            <Box display="flex" justifyContent="flex-end" gap={2} mb={1}>
-              <IconButton
-                onClick={scrollPrev}
-                sx={{ bgcolor: "primary.main", color: "#fff" }}
-              >
-                <IoIosArrowBack />
-              </IconButton>
-              <IconButton
-                onClick={scrollNext}
-                sx={{ bgcolor: "primary.main", color: "#fff" }}
-              >
-                <IoIosArrowForward />
-              </IconButton>
-            </Box>
-          )}
-
           <Box
             ref={sliderRef}
             sx={{
@@ -210,103 +199,84 @@ const Carousel = () => {
             }}
           >
             {courses?.data?.courses?.map((course) => (
-              <Card
+              <Box
                 key={course._id}
-                onClick={() => handleCourseClick(course.slug)}
                 sx={{
-                  width: cardWidth,
-                  minWidth: cardWidth,
-                  height: 300,
                   flex: "0 0 auto",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  cursor: "pointer",
-                  boxShadow: 3,
-                  borderRadius: 2,
                   scrollSnapAlign: "start",
                 }}
               >
-                <Box
-                  sx={{
-                    height: 160,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    bgcolor: "#f5f5f5",
-                    borderTopLeftRadius: 8,
-                    borderTopRightRadius: 8,
-                  }}
-                >
-                  <img
-                    src={course.thumbnail}
-                    alt={course.title}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      display: "block",
-                    }}
-                  />
-                </Box>
-
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    fontWeight: 600,
-                    lineHeight: 1.4,
-                    px: 1,
-                    mt: 1,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                  }}
-                >
-                  {course.title}
-                </Typography>
-
-                <Divider sx={{ my: 1 }} />
-
-                <CardActions
-                  sx={{ px: 2, pb: 1, pt: 0, justifyContent: "space-between" }}
-                >
-                  <Box display="flex" alignItems="center" gap={0.5}>
-                    <img src={userIcon} alt="mode" width={20} height={20} />
-                    <Typography variant="caption" color="text.secondary">
-                      {course.courseMode?.[0]?.toUpperCase() +
-                        course.courseMode?.slice(1).toLowerCase()}
-                    </Typography>
-                  </Box>
-
-                  <Box display="flex" alignItems="center" gap={0.5}>
-                    <img src={clockIcon} alt="lang" width={20} height={20} />
-                    <Typography variant="caption" color="text.secondary">
-                      {course.language === "ENGLISH_HINDI"
-                        ? "Bilingual"
-                        : course.language?.[0]?.toUpperCase() +
-                          course.language?.slice(1).toLowerCase()}
-                    </Typography>
-                  </Box>
-
-                  <CustomButton
-                    label="Learn More"
-                    size="small"
-                    variant="contained"
-                    sx={{ fontSize: 12 }}
-                  />
-                </CardActions>
-              </Card>
+                <CourseCard
+                  course={course}
+                  onClick={() => handleCourseClick(course.slug)}
+                />
+              </Box>
             ))}
           </Box>
+          <Box
+            mt={2}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            width="100%"
+            position="relative"
+          >
+            <CustomButton
+              label="Explore All Program"
+              onClick={() => navigate("/courses")}
+              sx={{
+                color: "#667085",
+                bgcolor: "#00FFB7",
+                FontSize: {
+                  xs: "15px",
+                  md: "16px",
+                },
+                borderRadius: "8px",
+                fontWeight: 600,
+              }}
+            />
+            {!isMobile && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  right: 0,
+                  display: "flex",
+                  gap: 1.5,
+                }}
+              >
+                <IconButton
+                  onClick={scrollPrev}
+                  sx={{
+                    bgcolor: "#101828",
+                    color: "#fff",
+                    transition:
+                      "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                    "&:hover": {
+                      bgcolor: "#090d14",
+                      transform: "scale(1.05)",
+                    },
+                  }}
+                >
+                  <IoIosArrowBack />
+                </IconButton>
 
-          <Box mt={2} display="flex" justifyContent="flex-end">
-            <Link to="/courses" style={{ textDecoration: "none" }}>
-              <Typography variant="body2" fontWeight="bold" color="primary">
-                View More
-              </Typography>
-            </Link>
+                <IconButton
+                  onClick={scrollNext}
+                  sx={{
+                    bgcolor: "#101828",
+                    color: "#fff",
+                    transition:
+                      "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                    "&:hover": {
+                      bgcolor: "#090d14",
+                      transform: "scale(1.05)",
+                    },
+                  }}
+                >
+                  <IoIosArrowForward />
+                </IconButton>
+              </Box>
+            )}
           </Box>
         </Box>
       ) : (

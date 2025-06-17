@@ -56,7 +56,7 @@ const MentorCarousel = () => {
   }, [isSmall]);
 
   return (
-    <Box sx={{ borderRadius: 2, py: 2, mt: 4 }}>
+    <Box sx={{ borderRadius: 2, py: 2, mt: {xs: 4, md: 6, xl: 8} }}>
       <Box sx={{ textAlign: "center", mb: 4, position: "relative", zIndex: 1 }}>
         <Typography
           sx={{
