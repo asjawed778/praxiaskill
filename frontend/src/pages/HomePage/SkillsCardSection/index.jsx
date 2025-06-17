@@ -99,10 +99,10 @@ const SkillCard = ({ title, path }) => (
   </Link>
 );
 
-export default function SkillsCardSection() {
+const SkillsCardSection = () => {
   return (
     <Box>
-      <Grid container spacing={2} justifyContent="center">
+      <Grid container spacing={2} justifyContent="center" mt={{xs: 4, md: 6, xl: 8}}>
         {skills.map((skill, index) => (
           <Grid size={{ xs: 12, sm: 4 }} key={index}>
             <SkillCard title={skill.title} path={skill.path} />
@@ -112,3 +112,5 @@ export default function SkillsCardSection() {
     </Box>
   );
 }
+
+export default SkillsCardSection;

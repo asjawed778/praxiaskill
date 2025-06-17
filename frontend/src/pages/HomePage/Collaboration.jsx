@@ -75,7 +75,7 @@ const Collaboration = () => {
         borderRadius: "4px",
         backgroundColor: "#f9fafc",
         py: 2,
-        my: 2,
+        mt: {xs: 4, md: 6, xl: 8}
       }}
     >
       <Container maxWidth="lg">
