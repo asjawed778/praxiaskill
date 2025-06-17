@@ -135,9 +135,9 @@ const EmployabilitySkills = () => {
       </Box>
       <Box
         sx={{
-          py: { xs: 1, sm: 2, lg: 3 },
+          py: { xs: 4, sm: 2, lg: 3 },
           textAlign: "center",
-          bgcolor: "#fff7f5",
+          backgroundColor: '#fff7f5'
         }}
       >
         <Container maxWidth="lg">
