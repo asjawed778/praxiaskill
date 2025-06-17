@@ -9,7 +9,12 @@ const displayCourseMode = (mode) => {
   if(mode == CourseMode.OFFLINE) return "Classroom + Recorded"
 }
 
-const CourseCard = ({ course, onClick }) => {
+const CourseCard = ({ 
+  course, 
+  onClick, 
+  // height = 380,
+  // width = 280
+}) => {
   const {
     _id,
     title,
@@ -57,7 +62,7 @@ const CourseCard = ({ course, onClick }) => {
       onClick={() => onClick(_id, title)}
       sx={{
         cursor: "pointer",
-        width: { xs: 350, md: 280 },
+        width: {xs: 320, md: 280},
         height: 380,
         display: "flex",
         flexDirection: "column",
@@ -95,6 +100,7 @@ const CourseCard = ({ course, onClick }) => {
             bgcolor: "#00FFB7",
             borderRadius: "5px",
             px: 1.5,
+            py: "3px",
             alignSelf: "flex-start",
           }}
         >

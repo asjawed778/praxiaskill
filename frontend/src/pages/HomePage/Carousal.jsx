@@ -152,7 +152,7 @@ const Carousel = () => {
           value={activeTab}
           onChange={(e, val) => setActiveTab(val)}
           variant="scrollable"
-          scrollButtons="auto"
+          // scrollButtons="auto"
           sx={{
             mt: { xs: 1, md: 2 },
             mb: 2,

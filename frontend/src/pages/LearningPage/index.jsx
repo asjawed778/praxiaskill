@@ -27,6 +27,7 @@ const LearningPage = () => {
   const {
     data: courses,
     isLoading,
+    isFetching,
     isError,
   } = useGetCoursesQuery({
     page: currentPage,
@@ -118,7 +119,7 @@ const LearningPage = () => {
             </Box>
           </Grid>
         </Grid>
-        {isLoading ? (
+        {isLoading || isFetching ? (
           <Box
             display="flex"
             flexDirection="column"
