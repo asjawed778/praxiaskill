@@ -1,16 +1,4 @@
-import {
-  Box,
-  Container,
-  Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Paper,
-  Typography,
-} from "@mui/material";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-
+import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import seminarpana from "/employabilityskills/seminarpana.png";
 import lessionamico from "/employabilityskills/lessionamico.png";
 import researcherscuate from "/employabilityskills/researcherscuate.png";
@@ -93,14 +81,14 @@ const EmployabilitySkills = () => {
               textAlign: "center",
             }}
           >
-            Employability Skills{" "}
+            Employability Skills
           </Typography>
           <Typography
             sx={{
               fontSize: {
                 xs: "14px",
                 sm: "16px",
-                md: "18px",
+                lg: "18px",
               },
               textAlign: "center",
             }}
@@ -117,28 +105,36 @@ const EmployabilitySkills = () => {
       </Box>
       <Box
         sx={{
-          py: { xs: 1, sm: 2, lg: 3 },
+          py: { xs: 1, md: 2, },
           textAlign: "center",
           bgcolor: "#fff",
         }}
       >
         <Typography
-          variant="h6"
-          sx={{ mb: 4, fontWeight: 600, color: "text.secondary" }}
+          sx={{
+            fontSize: {
+              xs: "28px",
+              sm: "32px",
+              md: "36px",
+              lg: "40px",
+              xl: "44px",
+            },
+            fontWeight: 600,
+            color: "#646464",
+          }}
         >
           UG/PG Segment
         </Typography>
 
-        <Grid container spacing={3} justifyContent="center" alignItems="center">
+        <Grid container spacing={{xs: 2, md: 3}} justifyContent="center" alignItems="center" mt={{xs: 1, md: 2}}>
           {courses.map((item, index) => (
             <Grid item xs={10} sm={6} md={3} key={index}>
-              <Paper
-                elevation={3}
+              <Box
                 sx={{
                   p: 3,
                   height: 120,
                   width: 200,
-                  bgcolor: "#f4436b",
+                  bgcolor: "#F83E5F",
                   color: "#fff",
                   display: "flex",
                   alignItems: "center",
@@ -149,12 +145,17 @@ const EmployabilitySkills = () => {
                 }}
               >
                 <Typography
-                  variant="body1"
                   component="div"
                   dangerouslySetInnerHTML={{ __html: item.title }}
-                  sx={{ lineHeight: 1.5 }}
+                  sx={{
+                    fontSize: {
+                      xs: "16px",
+                      sm: "17px",
+                      lg: "18px"
+                    }, 
+                  }}
                 />
-              </Paper>
+              </Box>
             </Grid>
           ))}
         </Grid>
@@ -168,23 +169,32 @@ const EmployabilitySkills = () => {
       >
         <Container maxWidth="lg">
           <Typography
-            variant="h6"
-            sx={{ mb: 4, fontWeight: 600, color: "text.primary" }}
+            sx={{ 
+              fontSize: {
+              xs: "28px",
+              sm: "32px",
+              md: "36px",
+              lg: "40px",
+              xl: "44px",
+            }, 
+              fontWeight: 600,  
+            }}
           >
             Hybrid Skill Training Course type
           </Typography>
 
           <Grid
             container
-            spacing={3}
+            spacing={{xs: 2, md: 3}}
             justifyContent="center"
             alignItems="center"
+            mt={{xs: 1, md: 2}}
           >
             {hybridCourses.map((course, index) => (
               <Grid item xs={10} sm={6} md={2.4} key={index}>
                 <Box
                   sx={{
-                    bgcolor: "#f4436b",
+                    bgcolor: "#F83E5F",
                     color: "#fff",
                     p: 2,
                     height: 130,
@@ -197,11 +207,26 @@ const EmployabilitySkills = () => {
                     borderRadius: 2,
                   }}
                 >
-                  <Typography variant="body2">{course.title}</Typography>
+                  <Typography 
+                    sx={{
+                      fontSize: {
+                        xs: "15px",
+                        sm: "16px",
+                        lg: "18"
+                      }
+                    }}
+                  >{course.title}</Typography>
                   <Typography
-                    variant="body2"
-                    fontWeight="medium"
-                    sx={{ mt: 0.5 }}
+                    // variant="body2"
+                    // fontWeight="medium"
+                    sx={{ 
+                      mt: 0.5, 
+                      fontSize: {
+                        xs: "15px",
+                        sm: "16px",
+                        lg: "18"
+                      }
+                    }}
                   >
                     (Duration: {course.duration})
                   </Typography>
@@ -215,16 +240,16 @@ const EmployabilitySkills = () => {
       <Box sx={{ bgcolor: "#FFF9F3", py: { xs: 2, md: 4 } }}>
         <Container maxWidth="md">
           <Typography
-            sx={{
+            sx={{ 
               fontSize: {
-                xs: "20px",
-                sm: "24px",
-                md: "28px",
-                lg: "32px",
-                xl: "36px",
-              },
-              fontWeight: 600,
-              textAlign: "center",
+              xs: "28px",
+              sm: "32px",
+              md: "36px",
+              lg: "40px",
+              xl: "44px",
+            }, 
+              fontWeight: 600, 
+              textAlign: "center" 
             }}
           >
             Corporate Training
@@ -383,37 +408,25 @@ const EmployabilitySkills = () => {
         <Typography
           sx={{
             fontSize: {
-              xs: "20px",
-              sm: "24px",
-              md: "28px",
-              lg: "32px",
-              xl: "36px",
-            },
+              xs: "28px",
+              sm: "32px",
+              md: "36px",
+              lg: "40px",
+              xl: "44px",
+            }, 
             fontWeight: 600,
             textAlign: "center",
           }}
         >
           Infrastructure & Facilities
         </Typography>
-
-        {/* <Box sx={{ px: { xs: 2, md: 8 }, py: 4, bgcolor: "#5c6670" }}>
-      <Typography
-        variant="h5"
-        align="center"
-        fontWeight="bold"
-        gutterBottom
-        sx={{ mb: 4, color: "#fff" }}
-      >
-        Infrastructure & Facilities
-      </Typography> */}
-
         <Box
           sx={{
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "center",
-            gap: {xs: 1, sm: 2, lg: 3}, 
-            mt: {xs: 1, sm: 2}
+            gap: { xs: 1, sm: 2, lg: 3 },
+            mt: { xs: 1, sm: 2 },
           }}
         >
           {facilities.map((item, index) => (
@@ -423,8 +436,8 @@ const EmployabilitySkills = () => {
                 p: 3,
                 borderRadius: 4,
                 textAlign: "center",
-                width: 300,
-                height: 320,
+                maxWidth: 300,
+                maxHeight: 320,
                 bgcolor: "#fff",
                 display: "flex",
                 flexDirection: "column",
@@ -447,7 +460,7 @@ const EmployabilitySkills = () => {
 
               <Box
                 sx={{
-                  height: 180,
+                  maxHeight: 180,
                   width: "100%",
                   display: "flex",
                   justifyContent: "center",
@@ -467,14 +480,14 @@ const EmployabilitySkills = () => {
                 />
               </Box>
 
-              <Typography 
+              <Typography
                 sx={{
                   fontSize: {
                     xs: "16px",
                     sm: "17px",
                     lg: "18px",
                   },
-                  color: "#000"
+                  color: "#000",
                 }}
               >
                 {item.description}
