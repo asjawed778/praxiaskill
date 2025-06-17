@@ -15,32 +15,6 @@ const hybridCourses = [
   { title: "Executive Diploma Course", duration: "90–120 hours" },
   { title: "Summer/Winter Training for College", duration: "20–30 hours" },
 ];
-const coursesOffers = [
-  "AI & ML using Python",
-  "Industrial IOT",
-  "Data Science and Machine Learning",
-  "Full Stack Web Developer",
-  "Core JAVA",
-  "App Developer",
-  "Python",
-  "Cyber Security",
-  "Block chain Development",
-  "DevOps Engineering",
-  "Big Data Analytics",
-  "Embedded Systems and Robotics",
-  "Natural Language Processing (NLP)",
-  "Graphic Design",
-  "Social Media & Digital Marketing",
-  "SEO",
-  "Video Editing",
-  "Photoshop",
-  "Financial Modeling & Valuation Analytics",
-  "Investment banking",
-  "GST & taxation courses",
-  "C & Data Structure",
-  "AWS & Cloud Infra",
-  "Red Hat Linux",
-];
 const facilities = [
   {
     title: "Classrooms",

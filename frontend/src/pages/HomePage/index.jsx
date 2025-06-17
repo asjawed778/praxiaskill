@@ -182,7 +182,6 @@ function HomePage() {
                     to="/courses"
                     variant="contained"
                     color="primary"
-                    sx={{ px: 3 }}
                   />
                 </motion.div>
               </Grid>
