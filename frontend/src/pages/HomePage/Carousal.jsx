@@ -181,9 +181,9 @@ const Carousel = () => {
       )}
 
       {allCategoriesLoading ||
-      isLoading ||
-      isFetching ||
-      (activeTab === "all" && isLoading) ? (
+        isLoading ||
+        isFetching ||
+        (activeTab === "all" && isLoading) ? (
         <CourseSkeleton />
       ) : courses?.data?.courses?.length ? (
         <Box sx={{ position: "relative" }}>
@@ -233,6 +233,42 @@ const Carousel = () => {
                 },
                 borderRadius: "8px",
                 fontWeight: 600,
+                position: "relative",
+                overflow: "hidden",
+                transition: "all 0.3s ease",
+                boxShadow: "0 4px 15px rgba(0, 255, 183, 0.2)",
+                "&:hover": {
+                  transform: "scale(1.08)",
+                  boxShadow: "0 12px 30px rgba(0, 255, 183, 0.4)",
+                  bgcolor: "#00E6A3",
+                  color: "#333"
+                },
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  top: 0,
+                  left: "-100%",
+                  width: "100%",
+                  height: "100%",
+                  background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
+                  animation: "wave 2.5s ease-in-out infinite"
+                },
+                "&::after": {
+                  content: '""',
+                  position: "absolute",
+                  inset: 0,
+                  background: "linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%)",
+                  animation: "shimmer 3s ease-in-out infinite"
+                },
+                "@keyframes wave": {
+                  "0%": { left: "-100%" },
+                  "50%": { left: "100%" },
+                  "100%": { left: "100%" }
+                },
+                "@keyframes shimmer": {
+                  "0%": { transform: "translateX(-100%) rotate(45deg)" },
+                  "100%": { transform: "translateX(100%) rotate(45deg)" }
+                }
               }}
             />
             {!isMobile && (

@@ -377,7 +377,7 @@ const EmployabilitySkills = () => {
           </Grid>
         </Container>
       </Box>
-      <Box sx={{ bgcolor: "#667085", py: { xs: 2, md: 4 }, color: "#fff" }}>
+      <Box sx={{ bgcolor: "#667085", py: { xs: 4 }, color: "#fff" }}>
         <Typography
           sx={{
             fontSize: {
