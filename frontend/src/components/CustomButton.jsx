@@ -110,7 +110,7 @@ const CustomButton = ({
           borderRadius: 1.5,
           textTransform: "none",
            minWidth: 75,
-          width: "100%", 
+          // width: "100%", 
           ...sx,
         }}
         style={style}
