@@ -1,4 +1,13 @@
 import cshekharyadav from "@/assets/MentorsImage/cshekharyadav.jpeg"
+
+import zohoLogo from "/PartnersIcons/zoho.png";
+import rapidoLogo from "/PartnersIcons/rapido.png";
+
+export const partners = [
+    { name: "Zoho", logo: zohoLogo },
+    { name: "Rapido", logo: rapidoLogo },
+  ];
+
 export const mentors = [
   {
     name: "C Shekhar Yadav",

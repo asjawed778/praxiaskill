@@ -12,8 +12,8 @@ const displayCourseMode = (mode) => {
 const CourseCard = ({ 
   course, 
   onClick, 
-  // height = 380,
-  // width = 280
+  width=320,
+  height=380,
 }) => {
   const {
     _id,
@@ -28,7 +28,6 @@ const CourseCard = ({
     courseMode,
     duration,
   } = course;
-  console.log("course: ", course);
   // const renderStars = (average) => {
   //   const fullStars = Math.floor(average);
   //   const hasHalfStar = average % 1 >= 0.5;
@@ -62,8 +61,9 @@ const CourseCard = ({
       onClick={() => onClick(_id, title)}
       sx={{
         cursor: "pointer",
-        width: {xs: 320, md: 280},
-        height: 380,
+        // width: {xs: 320, md: 280},
+        width,
+        height,
         display: "flex",
         flexDirection: "column",
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
@@ -117,6 +117,7 @@ const CourseCard = ({
 
         {/* Title */}
         <Typography
+          component="h2"
           fontWeight="bold"
           sx={{
             fontSize: { xs: "14px", md: "15px" },
@@ -135,6 +136,7 @@ const CourseCard = ({
 
         {/* Subtitle */}
         <Typography
+          component="h3"
           sx={{
             fontSize: { 
               xs: "12px", 

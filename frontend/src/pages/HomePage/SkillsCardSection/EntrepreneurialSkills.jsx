@@ -89,6 +89,7 @@ const EntrepreneurialSkills = () => {
             <Grid size={{ xs: 12, sm: 7 }}>
               <Box sx={{ textAlign: { xs: "center", sm: "start" } }}>
                 <Typography
+                  component="h1"
                   sx={{
                     fontSize: {
                       xs: "32px",
@@ -106,6 +107,7 @@ const EntrepreneurialSkills = () => {
                 </Typography>
 
                 <Typography
+                  component="h2"
                   sx={{
                     fontSize: {
                       xs: "14px",
@@ -194,6 +196,7 @@ const EntrepreneurialSkills = () => {
       <Box sx={{ bgcolor: "#EEF4FF" }}>
         <Container maxWidth="md" sx={{ py: { xs: 2, sm: 4 } }}>
           <Typography
+            component="h2"
             sx={{
               fontSize: {
                 xs: "24px",
@@ -260,6 +263,7 @@ const EntrepreneurialSkills = () => {
       </Box>
       <Box sx={{ py: { xs: 2, sm: 2, md: 4 } }}>
         <Typography
+          component="h2"
           sx={{
             fontSize: {
               xs: "24px",
@@ -331,6 +335,7 @@ const EntrepreneurialSkills = () => {
       >
         <Container maxWidth="lg">
           <Typography
+            component="h2"
             sx={{
               fontSize: {
                 xs: "24px",

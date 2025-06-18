@@ -110,6 +110,7 @@ const Carousel = () => {
         alignItems="center"
       >
         <Typography
+        component="h2"
           sx={{
             maxWidth: "sm",
             fontSize: {
@@ -128,6 +129,7 @@ const Carousel = () => {
           Skill
         </Typography>
         <Typography
+        component="h3"
           sx={{
             maxWidth: "md",
             fontSize: {
@@ -207,6 +209,7 @@ const Carousel = () => {
                 }}
               >
                 <CourseCard
+                  width={280}
                   course={course}
                   onClick={() => handleCourseClick(course.slug)}
                 />
