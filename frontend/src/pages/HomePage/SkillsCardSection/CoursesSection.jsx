@@ -12,7 +12,7 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material';
-import seminarpana from "/employabilityskills/seminarpana.png";
+import seminarpana from "../../../../public/employabilityskills/seminar-pana.png";
 import checkIcon from "../../../../public/icons/tick-mark.svg";
 
 const CoursesSection = () => {
@@ -83,6 +83,7 @@ const CoursesSection = () => {
             alt="Hero section"
             style={{
               objectFit: "cover",
+              width: 280
             }}
           />
         </Box>
