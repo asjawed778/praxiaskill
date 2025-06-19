@@ -6,13 +6,10 @@ import { EnquirySchema } from "../../../yup";
 
 import {
   Box,
-  Button,
   Checkbox,
   FormControlLabel,
   Typography,
   Paper,
-  CircularProgress,
-  TextField,
 } from "@mui/material";
 import { useSendEnquiryMutation } from "../../services/course.api";
 import { toast } from "react-hot-toast";
@@ -65,24 +62,21 @@ const BookDemoClass = () => {
       <Paper
         elevation={2}
         sx={{
-          // width: "100%",
           width: {xs: 320},
-          // maxWidth: { xs: "100%", sm: 400 },
-          py: {xs: 1.5, md: 2},
+          py: 1,
           px: 2,
           borderRadius: 2,
           backgroundColor: "#fff",
         }}
       >
-        {/* <Typography variant="body1" fontWeight="bold" align="center" color="primary" gutterBottom> */}
         <Typography 
           sx={{
             fontSize: {
-              xs: "14px",
-              sm: "16px",
-              md: "18px",
-              lg: "20px",
-              xl: "22px"
+              xs: "18px",
+              sm: "18px",
+              md: "20px",
+              lg: "22px",
+              xl: "24px"
             },
             fontWeight: 600,
             textAlign: "center",
@@ -102,7 +96,6 @@ const BookDemoClass = () => {
           <CustomInputField label="Full Name" name="name" control={control} />
           <CustomInputField
             label="Education"
-            // placeholder="Enter Education"
             name="education"
             control={control}
           />

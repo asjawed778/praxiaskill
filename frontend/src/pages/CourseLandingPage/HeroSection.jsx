@@ -7,6 +7,7 @@ import {
   useTheme,
   Fade,
   Container,
+  useMediaQuery,
 } from "@mui/material";
 import CustomButton from "@/components/CustomButton";
 import ModalWrapper from "@/components/ModalWrapper";
@@ -14,6 +15,8 @@ import EnquiryForm from "./EnquiryForm";
 
 const HeroSection = ({ syllabusRef, course }) => {
   const [openEnquiry, setOpenEnquiry] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleScrollToSyllabus = () => {
     if (syllabusRef?.current) {
@@ -74,6 +77,7 @@ const HeroSection = ({ syllabusRef, course }) => {
             >
               <Stack spacing={{ xs: 2, md: 3 }}>
                 <Typography
+                  component="h1"
                   sx={{
                     fontSize: {
                       xs: "28px",
@@ -91,6 +95,7 @@ const HeroSection = ({ syllabusRef, course }) => {
                 </Typography>
 
                 <Typography
+                  component="h2"
                   sx={{
                     fontSize: {
                       xs: "14px",
@@ -115,6 +120,7 @@ const HeroSection = ({ syllabusRef, course }) => {
                     label="Enquire Now"
                     variant="contained"
                     size="large"
+                    fullWidth={isMobile? true : false}
                     onClick={handleEnquiry}
                     sx={{
                       background: "linear-gradient(135deg, #ef4444, #f97316)",
@@ -138,6 +144,7 @@ const HeroSection = ({ syllabusRef, course }) => {
                     label="View Curriculum"
                     variant="outlined"
                     size="large"
+                    fullWidth={isMobile? true : false}
                     color="inherit"
                     onClick={handleScrollToSyllabus}
                   />

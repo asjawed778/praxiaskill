@@ -1,11 +1,14 @@
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { Box, Typography, IconButton, TextField } from "@mui/material";
+import { Box, Typography, IconButton, TextField, Button } from "@mui/material";
 import { RxCross2 } from "react-icons/rx";
+import { useState, useEffect } from "react";
+import CustomButton from "../../../../../../components/CustomButton";
 
 const TagsInput = () => {
   const {
     control,
     formState: { errors },
+    getValues,
   } = useFormContext();
 
   const {
@@ -17,10 +20,19 @@ const TagsInput = () => {
     name: "tags",
   });
 
+  const [showInput, setShowInput] = useState(false);
+
+  useEffect(() => {
+    const tagValues = getValues("tags");
+    if (!tagValues || tagValues.length === 0) {
+      setShowInput(true);
+    }
+  }, [getValues]);
+
   const handleAddTag = () => {
     const tagInput = document.getElementById("tags");
     if (tagInput && tagInput.value.trim()) {
-      append({ value: tagInput.value });
+      append({ value: tagInput.value.trim() });
       tagInput.value = "";
     }
   };
@@ -34,17 +46,25 @@ const TagsInput = () => {
         </Box>
       </Typography>
 
-      <TextField
-        id="tags"
-        size="small"
-        placeholder="Enter Tags"
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            handleAddTag();
-          }
-        }}
-      />
+      {showInput ? (
+        <TextField
+          id="tags"
+          size="small"
+          placeholder="Enter Tags"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleAddTag();
+            }
+          }}
+        />
+      ) : (
+        <CustomButton 
+          label="Add More Tags"
+          variant="outlined"
+          onClick={() => setShowInput(true)}
+        />
+      )}
 
       {tags?.length > 0 && (
         <Box
@@ -67,11 +87,7 @@ const TagsInput = () => {
               borderRadius={20}
             >
               <Typography>{field.value}</Typography>
-              <IconButton
-                onClick={() => remove(index)}
-                size="small"
-                sx={{ p: 0.5 }}
-              >
+              <IconButton onClick={() => remove(index)} size="small" sx={{ p: 0.5 }}>
                 <RxCross2 />
               </IconButton>
             </Box>

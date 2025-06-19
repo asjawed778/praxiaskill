@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Paper,
@@ -13,7 +13,7 @@ import CustomSearchField from "@/components/CustomSearchField";
 import CustomButton from "../../../../components/CustomButton";
 import TableWrapper from "../../../../components/TableWrapper";
 import { useGetCoursesQuery } from "../../../../services/course.api";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CourseStatus } from "../../../../utils/enum";
 
 const ManageCourses = () => {
@@ -26,15 +26,17 @@ const ManageCourses = () => {
 
   const [selectedCourseCategory, setSelectedCourseCategory] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     data: courses,
     isLoading,
     isFetching,
     isError,
+    refetch
   } = useGetCoursesQuery({
     page: page + 1,
-    limit: 10,
+    limit,
     search: searchQuery,
     category: selectedCourseCategory,
     status: filter,
@@ -89,6 +91,9 @@ const ManageCourses = () => {
     setLimit(newLimit);
     setPage(0);
   };
+//   useEffect(() => {
+//   refetch();
+// }, [location]);
 
   const handleActionClick = (action, row) => {
     switch (action) {
@@ -105,7 +110,7 @@ const ManageCourses = () => {
         navigate("/dashboard/add-course", {
           state: {
             course: row,
-            editMode
+            editMode,
           },
           replace: false
         })
@@ -121,7 +126,6 @@ const ManageCourses = () => {
     setPage(0);
   };
 
-  // Get active tab index for sliding animation
   const activeTabIndex = tabLabels.findIndex(tab => tab.value === filter);
 
   return (
@@ -248,7 +252,7 @@ const ManageCourses = () => {
       >
         <Grid size={{xs: 12, sm: 6}}>
           <CustomSearchField
-          placeholder="Search courses..."
+          placeholder="Search Courses..."
           onSearch={setSearchQuery}
         />
         </Grid>

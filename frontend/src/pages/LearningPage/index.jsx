@@ -56,6 +56,7 @@ const LearningPage = () => {
     <Container maxWidth="lg">
       <Box py={2}>
         <Typography
+          component="h1"
           sx={{
             textAlign: "center",
             mb: 2,
@@ -83,17 +84,17 @@ const LearningPage = () => {
           <Grid size={{ xs: 12, md: 6 }} noWrap>
             <Box
               sx={{
-                width: "100%",
+                // width: "100%",
                 display: "flex",
                 flexDirection: { xs: "column", md: "row" },
-                alignItems: { xs: "flex-start", md: "center" },
+                alignItems: { xs: "center", md: "center" },
                 gap: 2,
               }}
             >
               <Stack
-                direction={{ xs: "row", sm: "row" }}
-                spacing={2}
-                alignItems={{ xs: "stretch", sm: "center" }}
+                direction="row"
+                spacing={1}
+                alignItems="center"
                 width="100%"
               >
                 <CustomDropdownField
@@ -110,8 +111,6 @@ const LearningPage = () => {
                   variant="outlined"
                   onClick={handleClearFilter}
                   sx={{
-                    whiteSpace: "nowrap",
-                    flexShrink: 0,
                     height: 40,
                   }}
                 />
@@ -166,6 +165,7 @@ const LearningPage = () => {
           >
             {courses?.data?.courses?.map((course) => (
               <CourseCard
+                width={{xs: 320, md: 280}}
                 key={course?._id}
                 course={course}
                 onClick={() => handleNavigate(course.slug)}
