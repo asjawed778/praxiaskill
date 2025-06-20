@@ -48,28 +48,29 @@ const Benefits = () => {
   ];
 
   return (
-    <Box
-      sx={{
-        py: 1.5,
-        mt: {xs: 4, md: 6, xl: 8},
-        borderRadius: "4px",
-        background: "linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%)",
-        position: "relative",
-        overflow: "hidden",
-        "&:before": {
-          content: '""',
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          background:
-            "radial-gradient(circle at 20% 50%, rgba(25, 118, 210, 0.08) 0%, transparent 50%)",
-          zIndex: 0,
-        },
-      }}
-    >
-      <Container maxWidth="lg">
+    <Container maxWidth="lg">
+      <Box
+        sx={{
+          px: {xs: 1, md: 1.5, lg: 3},
+          py: 1.5,
+          mt: { xs: 4, md: 6, xl: 8 },
+          borderRadius: "4px",
+          background: "linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%)",
+          position: "relative",
+          overflow: "hidden",
+          "&:before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background:
+              "radial-gradient(circle at 20% 50%, rgba(25, 118, 210, 0.08) 0%, transparent 50%)",
+            zIndex: 0,
+          },
+        }}
+      >
         <Box
           sx={{
             textAlign: "center",
@@ -79,6 +80,7 @@ const Benefits = () => {
           }}
         >
           <Typography
+          component="h2"
             sx={{
               fontSize: {
                 xs: "24px",
@@ -93,6 +95,7 @@ const Benefits = () => {
             How Praxia Skill help you?
           </Typography>
           <Typography
+          component="h3"
             sx={{
               fontSize: {
                 xs: "14px",
@@ -148,7 +151,7 @@ const Benefits = () => {
                         lg: "20px",
                         xl: "22px",
                       },
-                      fontWeight: 600
+                      fontWeight: 600,
                     }}
                     gutterBottom
                   >
@@ -162,8 +165,8 @@ const Benefits = () => {
             </Grid>
           ))}
         </Grid>
-      </Container>
-    </Box>
+      </Box>
+    </Container>
   );
 };
 

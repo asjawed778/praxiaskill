@@ -55,6 +55,7 @@ const ProgramHighlights = ({ course }) => {
     >
       <Container maxWidth="lg">
         <Typography
+          component="h2"
           sx={{
             color: "white",
             fontWeight: 600,

@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Typography, Grid, Card, CardContent } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Link } from "react-router-dom";

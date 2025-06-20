@@ -33,6 +33,7 @@ const CourseSyllabus = ({ course }) => {
     >
       <Container maxWidth="lg">
         <Typography
+          component="h2"
           sx={{
             color: "#00e676",
             fontWeight: 600,

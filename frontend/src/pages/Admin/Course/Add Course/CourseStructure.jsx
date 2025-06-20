@@ -1,7 +1,7 @@
 import { Box, Typography, Stack } from "@mui/material";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
-import required from "/imgs/required.svg";
+import required from "@/assets/icons/required.svg";
 import CustomButton from "../../../../components/CustomButton";
 import SubSectionFields from "./Course Structure/SubSectionFields";
 import ProjectFields from "./Course Structure/ProjectFields";

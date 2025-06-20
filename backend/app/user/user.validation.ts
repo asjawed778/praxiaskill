@@ -1,5 +1,6 @@
 
 import { body, param } from 'express-validator';
+import { UserRole } from './user.schema';
 
 export const sendSignupOTP = [
     body('name')
@@ -98,7 +99,7 @@ export const addUserByAdmin = [
     body('role')
         .notEmpty().withMessage('Role is required')
         .isString().withMessage('Role must be a string')
-        .isIn(['INSTRUCTOR', 'USER']).withMessage('Invalid role'),
+        .isIn([UserRole.USER, UserRole.INSTRUCTOR, UserRole.SUPER_ADMIN]).withMessage('Invalid role'),
 ];
 
 export const updateUserByAdmin = [

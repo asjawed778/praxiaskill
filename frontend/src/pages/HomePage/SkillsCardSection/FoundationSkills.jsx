@@ -9,9 +9,9 @@ import {
   ListItemText,
   Container,
 } from "@mui/material";
-import herosection from "/foundationalskills/herosection.png";
-import programframework from "/foundationalskills/programframework.png";
-import careerguidance from "/foundationalskills/careerguidance.png";
+import herosection from "@/assets/images/fingerup-boy.png";
+import programframework from "@/assets/images/programframework.png";
+import careerguidance from "@/assets/images/careerguidance.png";
 import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
 
@@ -37,6 +37,7 @@ const FoundationalSkills = () => {
       >
         <Grid size={{ xs: 12, sm: 6 }} sx={{textAlign: {xs: "center", md: "start"}}}>
           <Typography
+            component="h1"
             sx={{
               fontSize: {
                 xs: "32px",
@@ -50,9 +51,10 @@ const FoundationalSkills = () => {
               color: "#F83E5F",
             }}
           >
-            Foundational Skill
+            Foundational Skills
           </Typography>
           <Typography
+          component="h2"
             sx={{
               fontSize: {
                 xs: "14px",
@@ -97,6 +99,7 @@ const FoundationalSkills = () => {
         </Grid>
       </Grid>
       <Typography
+      component="h2"
         sx={{
           mt: 6,
           mb: 1,
@@ -159,6 +162,7 @@ const FoundationalSkills = () => {
         }}
       >
         <Typography
+        component="h2"
           sx={{
             fontSize: {
               xs: "24px",
@@ -264,6 +268,7 @@ const FoundationalSkills = () => {
         </Box>
       </Box>
       <Typography
+      component="h2"
         sx={{
           fontSize: {
             xs: "24px",

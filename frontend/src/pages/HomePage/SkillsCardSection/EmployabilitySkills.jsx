@@ -1,7 +1,7 @@
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
-import lessionamico from "/employabilityskills/lessionamico.png";
-import researcherscuate from "/employabilityskills/researcherscuate.png";
-import libraryrafiki from "/employabilityskills/libraryrafiki.png";
+import lessionamico from "@/assets/images/lessionamico.png";
+import researcherscuate from "@/assets/images/researcherscuate.png";
+import libraryrafiki from "@/assets/images/libraryrafiki.png";
 import CoursesSection from "./CoursesSection";
 const courses = [
   { title: "Certification <br /> Courses" },
@@ -41,6 +41,7 @@ const EmployabilitySkills = () => {
           sx={{ textAlign: { xs: "center", sm: "start" } }}
         >
           <Typography
+            component="h1"
             sx={{
               fontSize: {
                 xs: "32px",
@@ -57,6 +58,7 @@ const EmployabilitySkills = () => {
             Employability Skills
           </Typography>
           <Typography
+            component="h2"
             sx={{
               fontSize: {
                 xs: "14px",
@@ -84,6 +86,7 @@ const EmployabilitySkills = () => {
         }}
       >
         <Typography
+          component="h2"
           sx={{
             fontSize: {
               xs: "28px",
@@ -142,6 +145,7 @@ const EmployabilitySkills = () => {
       >
         <Container maxWidth="lg">
           <Typography
+            component="h2"
             sx={{ 
               fontSize: {
               xs: "28px",
@@ -213,6 +217,7 @@ const EmployabilitySkills = () => {
       <Box sx={{ bgcolor: "#FFF9F3", py: { xs: 2, md: 4 } }}>
         <Container maxWidth="md">
           <Typography
+            component="h2"
             sx={{ 
               fontSize: {
               xs: "28px",
@@ -379,6 +384,7 @@ const EmployabilitySkills = () => {
       </Box>
       <Box sx={{ bgcolor: "#667085", py: { xs: 4 }, color: "#fff" }}>
         <Typography
+          component="h2"
           sx={{
             fontSize: {
               xs: "28px",

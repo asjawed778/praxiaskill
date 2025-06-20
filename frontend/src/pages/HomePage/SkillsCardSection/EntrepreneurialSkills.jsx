@@ -7,14 +7,14 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import growth from "/entrepreneurialskills/growth.png";
-import Companyamico from "/entrepreneurialskills/Companyamico.png";
-import Moneymotivationbro from "/entrepreneurialskills/Moneymotivationbro.png";
-import Marketingamico from "/entrepreneurialskills/Marketingamico.png";
-import Lawfirmbro from "/entrepreneurialskills/Lawfirmbro.png";
-import Teamworkrafiki from "/entrepreneurialskills/Teamworkrafiki.png";
-import Taskbro from "/entrepreneurialskills/Taskbro.png";
-import skillset from "/entrepreneurialskills/skillset.png";
+import growth from "@/assets/images/growth.png";
+import Companyamico from "@/assets/images/Companyamico.png";
+import Moneymotivationbro from "@/assets/images/Moneymotivationbro.png";
+import Marketingamico from "@/assets/images/Marketingamico.png";
+import Lawfirmbro from "@/assets/images/Lawfirmbro.png";
+import Teamworkrafiki from "@/assets/images/Teamworkrafiki.png";
+import Taskbro from "@/assets/images/Taskbro.png";
+import skillset from "@/assets/images/skillset.png";
 import VerifiedOutlined from "@mui/icons-material/VerifiedOutlined";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
 
@@ -89,6 +89,7 @@ const EntrepreneurialSkills = () => {
             <Grid size={{ xs: 12, sm: 7 }}>
               <Box sx={{ textAlign: { xs: "center", sm: "start" } }}>
                 <Typography
+                  component="h1"
                   sx={{
                     fontSize: {
                       xs: "32px",
@@ -106,6 +107,7 @@ const EntrepreneurialSkills = () => {
                 </Typography>
 
                 <Typography
+                  component="h2"
                   sx={{
                     fontSize: {
                       xs: "14px",
@@ -194,6 +196,7 @@ const EntrepreneurialSkills = () => {
       <Box sx={{ bgcolor: "#EEF4FF" }}>
         <Container maxWidth="md" sx={{ py: { xs: 2, sm: 4 } }}>
           <Typography
+            component="h2"
             sx={{
               fontSize: {
                 xs: "24px",
@@ -260,6 +263,7 @@ const EntrepreneurialSkills = () => {
       </Box>
       <Box sx={{ py: { xs: 2, sm: 2, md: 4 } }}>
         <Typography
+          component="h2"
           sx={{
             fontSize: {
               xs: "24px",
@@ -331,6 +335,7 @@ const EntrepreneurialSkills = () => {
       >
         <Container maxWidth="lg">
           <Typography
+            component="h2"
             sx={{
               fontSize: {
                 xs: "24px",
