@@ -12,7 +12,7 @@ import CustomDropdownField from "@/components/CustomDropdownField";
 import { CourseValidity, CourseStatus } from "@/utils/enum";
 import CustomButton from "@/components/CustomButton";
 
-const PricingPublish = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => {
+const PricingPublish = ({ handlePrev, isLoading, editMode, courseUpdating }) => {
   const {
     register,
     control,
@@ -136,17 +136,14 @@ const PricingPublish = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => 
         </Grid>
         <Grid item>
           <CustomButton
-            label={
-              isLoading || isCourseUpdate ? (
-                <ButtonLoading />
-              ) : editMode ? (
+            label={ editMode ? (
                 "Update"
               ) : (
                 "Submit"
               )
             }
             type="submit"
-            disabled={isLoading || isCourseUpdate}
+            loading={isLoading || courseUpdating}
           />
         </Grid>
       </Grid>

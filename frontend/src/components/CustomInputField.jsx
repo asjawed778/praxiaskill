@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-  TextField,
-  InputAdornment,
-  IconButton
-} from "@mui/material";
+import { TextField, InputAdornment, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Controller, useFormContext } from "react-hook-form";
 import { useAppTheme } from "../context/ThemeContext";
@@ -38,25 +34,26 @@ const CustomInputField = ({
   const renderTextField = (field, error) => (
     <TextField
       {...field}
+      onChange={(e) => {
+        const value = e.target.value.trimStart();
+        field.onChange(value);
+      }}
+      onBlur={(e) => {
+        const value = e.target.value.trim();
+        field.onChange(value);
+      }}
       label={
         <span>
-          {label} {required && <span style={{ color: 'red' }}>*</span>}
+          {label} {required && <span style={{ color: "red" }}>*</span>}
         </span>
       }
       multiline={!!row}
       rows={row}
       disabled={disabled}
       value={typeof field.value === "undefined" ? "" : field.value}
-
       placeholder={isDate ? undefined : placeholder}
       size={size}
-      type={  
-        isDate
-          ? "date"
-          : isPassword && !showPassword
-          ? "password"
-          : type
-      }
+      type={isDate ? "date" : isPassword && !showPassword ? "password" : "text"}
       fullWidth={fullWidth}
       variant="outlined"
       error={!!error}
@@ -69,7 +66,7 @@ const CustomInputField = ({
           "&.Mui-focused": { borderColor: colors.inputFocus },
           "& input": {
             padding: "8px 10px",
-            fontSize: "15px"
+            fontSize: "15px",
           },
         },
         ...sx,
@@ -80,7 +77,10 @@ const CustomInputField = ({
         ),
         endAdornment: isPassword ? (
           <InputAdornment position="end">
-            <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+            <IconButton
+              onClick={() => setShowPassword(!showPassword)}
+              edge="end"
+            >
               {showPassword ? <VisibilityOff /> : <Visibility />}
             </IconButton>
           </InputAdornment>
@@ -98,7 +98,9 @@ const CustomInputField = ({
     <Controller
       name={name}
       control={activeControl}
-      render={({ field, fieldState: { error } }) => renderTextField(field, error)}
+      render={({ field, fieldState: { error } }) =>
+        renderTextField(field, error)
+      }
     />
   ) : (
     renderTextField(

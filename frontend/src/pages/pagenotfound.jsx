@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import pageNotFoundImage from "/imgs/notFoundError.jpg";
+import notfounderror from "@/assets/images/notfounderror.jpg";
 
 function PageNotFound() {
   const navigate = useNavigate();
@@ -10,7 +10,12 @@ function PageNotFound() {
 
   return (
     <div className="flex flex-col gap-5 items-center justify-center h-screen">
-      <img src={pageNotFoundImage} alt="Page Not Found" className="w-[350px]" />
+      <img 
+        src={notfounderror} 
+        alt="Page Not Found" 
+        loading="lazy"
+        className="w-[350px]" 
+      />
 
       <div className="flex flex-col items-center gap-3">
         <h1 className="text-4xl text-orange-400">

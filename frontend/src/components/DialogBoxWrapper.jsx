@@ -1,16 +1,26 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography } from "@mui/material";
+import CustomButton from "./CustomButton";
 
-const DialogBoxWrapper = ({ open, onClose, onConfirm, title, message }) => (
+const DialogBoxWrapper = ({ open, onClose, onConfirm, title, message, isLoading }) => (
   <Dialog open={open} onClose={onClose}>
     <DialogTitle>{title}</DialogTitle>
     <DialogContent>
       <Typography>{message}</Typography>
     </DialogContent>
     <DialogActions>
-      <Button onClick={onClose}>Cancel</Button>
-      <Button color="secondary" onClick={onConfirm} autoFocus>
-        Confirm
-      </Button>
+      <CustomButton 
+        label="Cancel"
+        variant="text"
+        color="error"
+        onClick={onClose}
+      /> 
+      <CustomButton 
+        label="Confirm"
+        variant="text"
+        color="secondary"
+        loading={isLoading}
+        onClick={onConfirm}
+      />
     </DialogActions>
   </Dialog>
 );

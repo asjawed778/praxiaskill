@@ -7,50 +7,50 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import growth from "/entrepreneurialskills/growth.png";
-import Companyamico from "/entrepreneurialskills/Companyamico.png";
-import Moneymotivationbro from "/entrepreneurialskills/Moneymotivationbro.png";
-import Marketingamico from "/entrepreneurialskills/Marketingamico.png";
-import Lawfirmbro from "/entrepreneurialskills/Lawfirmbro.png";
-import Teamworkrafiki from "/entrepreneurialskills/Teamworkrafiki.png";
-import Taskbro from "/entrepreneurialskills/Taskbro.png";
-import skillset from "/entrepreneurialskills/skillset.png";
+import growth from "@/assets/images/growth.png";
+import companyamico from "@/assets/images/Companyamico.png";
+import moneymotivationbro from "@/assets/images/Moneymotivationbro.png";
+import marketingamico from "@/assets/images/Marketingamico.png";
+import lawfirmbro from "@/assets/images/Lawfirmbro.png";
+import teamworkrafiki from "@/assets/images/Teamworkrafiki.png";
+import taskbro from "@/assets/images/Taskbro.png";
+import skillset from "@/assets/images/skillset.png";
 import VerifiedOutlined from "@mui/icons-material/VerifiedOutlined";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
 
 const sections = [
   {
-    img: Companyamico,
+    img: companyamico,
     title: "Foundation Business Skills",
     description:
       "Develop a strong entrepreneurial foundation by learning essential business practices such as planning, operations management, decision-making, communication, and customer service—skills needed to confidently start and run a business.",
   },
   {
-    img: Moneymotivationbro,
+    img: moneymotivationbro,
     title: "Financial Literacy",
     description:
       "Gain practical knowledge of financial management, including budgeting, profit calculation, bookkeeping, taxation, pricing strategies, investment planning, and understanding funding sources to make informed business decisions.",
   },
   {
-    img: Marketingamico,
+    img: marketingamico,
     title: "Marketing and Sales",
     description:
       "Master the core principles of identifying target markets, building brand identity, creating compelling marketing campaigns, and executing sales strategies—both traditional and digital—to effectively promote and grow your venture.",
   },
   {
-    img: Lawfirmbro,
+    img: lawfirmbro,
     title: "Legal and Regulatory Knowledge",
     description:
       "Understand key legal requirements for setting up and running a business, including registrations, licenses, intellectual property rights, contracts, labor laws, and tax regulations to ensure compliance and reduce risk.",
   },
   {
-    img: Teamworkrafiki,
+    img: teamworkrafiki,
     title: "Sector-Specific Training",
     description:
       "Receive in-depth, hands-on training customized to specific industries such as Agribusiness, IT, Tourism, Food Processing, and more—equipping you with the specialized skills and insights needed to thrive in your chosen field.",
   },
   {
-    img: Taskbro,
+    img: taskbro,
     title: "Government Schemes and Support",
     description:
       "Get guidance on navigating and utilizing various government initiatives, funding programs, startup schemes, and subsidies that are designed to support new and small business owners in launching and scaling their ventures.",

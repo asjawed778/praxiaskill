@@ -27,7 +27,7 @@ const CreateCourse = () => {
   const location = useLocation();
   const course = location.state || null;
   const editMode = Boolean(course);
-  const [updateCourse, { isLoading: isCourseUpdate, errors: isUpdateError }] =
+  const [updateCourse, { isLoading: courseUpdating, errors: isUpdateError }] =
     useUpdateCourseDetailsMutation();
   const navigate = useNavigate();
 
@@ -114,7 +114,7 @@ const CreateCourse = () => {
       },
     };
   }, [loadCourse]);
-  
+
   const methods = useForm({
     resolver,
     mode: "onChange",
@@ -170,7 +170,6 @@ const CreateCourse = () => {
       const { tags } = formData;
       const newTags = tags.map((tag) => tag.value);
       const data = { ...formData, tags: newTags };
-      // const result = await uploadCourse(data);
       data?.sections?.forEach((section) => {
         section.assignments = section.assignments?.map(
           (item) => item.assignment
@@ -256,20 +255,33 @@ const CreateCourse = () => {
         {/* Step Content */}
         {/* <div className="bg-[#F5F5F5] rounded-lg p-2 w-full"> */}
         <div className="brounded-lg p-2 w-full">
-          {currentStep === 0 && <CourseDetails handleNext={handleNext} />}
+          {currentStep === 0 && (
+            <CourseDetails
+              handleNext={handleNext}
+              editMode={editMode}
+              onSubmit={onSubmit}
+              courseUpdating={courseUpdating}
+            />
+          )}
           {currentStep === 1 && (
             <AdditionalDetails
               handleNext={handleNext}
               handlePrev={handlePrev}
+              editMode={editMode}
+              onSubmit={onSubmit}
+              courseUpdating={courseUpdating}
             />
           )}
           {currentStep === 2 && (
-            <CourseStructure handleNext={handleNext} handlePrev={handlePrev} />
+            <CourseStructure
+              handleNext={handleNext}
+              handlePrev={handlePrev}
+            />
           )}
           {currentStep === 3 && (
             <PricingPublish
               isLoading={isLoading}
-              isCourseUpdate={isCourseUpdate}
+              courseUpdating={courseUpdating}
               editMode={editMode}
               handlePrev={handlePrev}
             />

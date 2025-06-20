@@ -9,9 +9,9 @@ import {
   ListItemText,
   Container,
 } from "@mui/material";
-import herosection from "/foundationalskills/herosection.png";
-import programframework from "/foundationalskills/programframework.png";
-import careerguidance from "/foundationalskills/careerguidance.png";
+import herosection from "@/assets/images/herosection.png";
+import programframework from "@/assets/images/programframework.png";
+import careerguidance from "@/assets/images/careerguidance.png";
 import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
 
@@ -25,7 +25,7 @@ const offers = [
 
 const FoundationalSkills = () => {
   return (
-    <Container maxWidth="lg" sx={{ my: { xs: 2, sm: 4 }, pb: 1}}>
+    <Container maxWidth="lg" sx={{ my: { xs: 2, sm: 4 }, pb: 1 }}>
       <Grid
         container
         spacing={4}
@@ -35,7 +35,10 @@ const FoundationalSkills = () => {
           justifyContent: "space-between",
         }}
       >
-        <Grid size={{ xs: 12, sm: 6 }} sx={{textAlign: {xs: "center", md: "start"}}}>
+        <Grid
+          size={{ xs: 12, sm: 6 }}
+          sx={{ textAlign: { xs: "center", md: "start" } }}
+        >
           <Typography
             component="h1"
             sx={{
@@ -54,7 +57,7 @@ const FoundationalSkills = () => {
             Foundational Skills
           </Typography>
           <Typography
-          component="h2"
+            component="h2"
             sx={{
               fontSize: {
                 xs: "14px",
@@ -87,7 +90,8 @@ const FoundationalSkills = () => {
           >
             <img
               src={herosection}
-              alt="Hero section"
+              alt="Illustration of a student learning tech skills"
+              loading="lazy"
               style={{
                 height: "95%",
                 width: "95%",
@@ -99,7 +103,7 @@ const FoundationalSkills = () => {
         </Grid>
       </Grid>
       <Typography
-      component="h2"
+        component="h2"
         sx={{
           mt: 6,
           mb: 1,
@@ -162,7 +166,7 @@ const FoundationalSkills = () => {
         }}
       >
         <Typography
-        component="h2"
+          component="h2"
           sx={{
             fontSize: {
               xs: "24px",
@@ -205,7 +209,7 @@ const FoundationalSkills = () => {
                 <ListItem
                   key={idx}
                   disableGutters
-                  sx={{ py: { xs: 0, md: 0.5  }, pl: { xs: 2, md: 4 } }}
+                  sx={{ py: { xs: 0, md: 0.5 }, pl: { xs: 2, md: 4 } }}
                 >
                   <ListItemIcon sx={{ minWidth: 32 }}>
                     <TaskAltOutlinedIcon
@@ -268,7 +272,7 @@ const FoundationalSkills = () => {
         </Box>
       </Box>
       <Typography
-      component="h2"
+        component="h2"
         sx={{
           fontSize: {
             xs: "24px",
@@ -302,7 +306,7 @@ const FoundationalSkills = () => {
                 height: { xs: 250, sm: 300, md: 342 },
                 borderRadius: 2,
                 overflow: "hidden",
-                ml: {xs: 0, sm: 4},
+                ml: { xs: 0, sm: 4 },
               }}
             >
               <img
@@ -374,6 +378,6 @@ const FoundationalSkills = () => {
       </Box>
     </Container>
   );
-}
+};
 
 export default FoundationalSkills;

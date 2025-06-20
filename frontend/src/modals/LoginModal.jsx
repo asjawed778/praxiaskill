@@ -1,7 +1,7 @@
 // import logo from "/logopng.png";
-import logo from "../assets/logo-red-transparent-bg.png";
-import google from "/imgs/google.svg";
-import apple from "/imgs/apple.svg";
+import logo from "@/assets/logo-red-transparent-bg.png";
+import google from "@/assets/logo-red-transparent-bg.png";
+import apple from "@/assets/logo-red-transparent-bg.png";
 
 import { RxCross2 } from "react-icons/rx";
 import { FiEye } from "react-icons/fi";

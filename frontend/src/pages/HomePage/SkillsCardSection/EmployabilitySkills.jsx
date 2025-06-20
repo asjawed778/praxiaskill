@@ -1,7 +1,7 @@
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
-import lessionamico from "/employabilityskills/lessionamico.png";
-import researcherscuate from "/employabilityskills/researcherscuate.png";
-import libraryrafiki from "/employabilityskills/libraryrafiki.png";
+import lessionamico from "@/assets/images/lessionamico.png";
+import researcherscuate from "@/assets/images/researcherscuate.png";
+import libraryrafiki from "@/assets/images/libraryrafiki.png";
 import CoursesSection from "./CoursesSection";
 const courses = [
   { title: "Certification <br /> Courses" },

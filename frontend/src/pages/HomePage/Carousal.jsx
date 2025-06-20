@@ -100,6 +100,7 @@ const Carousel = () => {
   const handleCourseClick = (slug) => {
     navigate(`/course/${slug}`);
   };
+  console.log("Courses: ", courses);
 
   return (
     <Box ref={containerRef} mt={{ xs: 4, md: 6, xl: 8 }}>
@@ -150,19 +151,15 @@ const Carousel = () => {
       </Box>
 
       {activeTab && (
-        <Tabs
+       <Box sx={{ borderBottom: "1px solid #ccc", borderColor: 'divider' }}>
+         <Tabs
           value={activeTab}
           onChange={(e, val) => setActiveTab(val)}
           variant="scrollable"
-          // scrollButtons="auto"
+          scrollButtons="auto"
           sx={{
-            mt: { xs: 1, md: 2 },
-            mb: 2,
             pl: 2,
-            ml: -2,
-            "& .MuiTabs-flexContainer": {
-              borderBottom: "1px solid #ccc",
-            },
+            ml: {xs: -2, sm: -6, lg: -2},
           }}
         >
           {filteredCategories.map((tab) => (
@@ -171,7 +168,7 @@ const Carousel = () => {
               label={tab.name}
               value={tab._id}
               sx={{
-                fontSize: { xs: "14px", sm: "16px" },
+                fontSize: { xs: "14px", sm: "15px" },
                 textTransform: "none",
                 fontWeight: activeTab === tab._id ? "bold" : "normal",
                 color:
@@ -180,13 +177,16 @@ const Carousel = () => {
             />
           ))}
         </Tabs>
+       </Box>
       )}
 
       {allCategoriesLoading ||
         isLoading ||
         isFetching ||
         (activeTab === "all" && isLoading) ? (
-        <CourseSkeleton />
+        <Box sx={{py: {xs: 1, md: 1.5}, mb: 2}}>
+          <CourseSkeleton/>
+        </Box>
       ) : courses?.data?.courses?.length ? (
         <Box sx={{ position: "relative" }}>
           <Box
@@ -197,13 +197,14 @@ const Carousel = () => {
               gap: `${gap}px`,
               scrollSnapType: "x mandatory",
               "&::-webkit-scrollbar": { display: "none" },
-              pb: 1,
+              // pb: 1,
             }}
           >
             {courses?.data?.courses?.map((course) => (
               <Box
                 key={course._id}
                 sx={{
+                  py: {xs: 1, md: 1.5},
                   flex: "0 0 auto",
                   scrollSnapAlign: "start",
                 }}

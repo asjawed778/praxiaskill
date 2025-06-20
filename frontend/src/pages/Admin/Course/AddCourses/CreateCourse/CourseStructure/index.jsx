@@ -1,7 +1,6 @@
 import { Box, Typography, Stack } from "@mui/material";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
-import required from "/imgs/required.svg";
 import CustomButton from "@/components/CustomButton";
 import SubSectionFields from "./SubSectionFields";
 import ProjectFields from "./ProjectFields";
@@ -30,7 +29,7 @@ const CourseStructure = ({ handleNext, handlePrev }) => {
         <Typography variant="h6" fontWeight={600}>
           Section
         </Typography>
-        <Box
+        {/* <Box
           component="img"
           src={required}
           alt="required"
@@ -41,7 +40,7 @@ const CourseStructure = ({ handleNext, handlePrev }) => {
             top: 6,
             right: -12,
           }}
-        />
+        /> */}
       </Box>
 
       <Box display="flex" flexDirection="column" gap={4}>
@@ -113,7 +112,7 @@ const CourseStructure = ({ handleNext, handlePrev }) => {
           startIcon={<FaPlus />}
         />
         <Stack direction="row" justifyContent="space-between" mt={2}>
-          <CustomButton label="Back" onClick={handlePrev} />
+          <CustomButton label="Back" onClick={handlePrev} /> 
           <CustomButton label="Next" onClick={handleNext} />
         </Stack>
       </Box>

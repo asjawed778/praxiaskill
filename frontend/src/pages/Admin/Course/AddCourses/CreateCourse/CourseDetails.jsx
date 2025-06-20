@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Stack } from "@mui/material";
 import CustomInputField from "@/components/CustomInputField";
 import { CourseMode, Language } from "@/utils/enum";
 import CustomDropdownField from "@/components/CustomDropdownField";
@@ -6,9 +6,9 @@ import CustomRadioButton from "@/components/CustomRadioButton";
 import CustomButton from "@/components/CustomButton";
 import ImageUploader from "@/components/ImageUploader";
 import FileUploader from "@/components/FileUploader";
+import { useFormContext } from "react-hook-form";
 
-const CourseDetails = ({ handleNext }) => {
-  const languageOptions = [
+const languageOptions = [
     { label: "English", value: Language.ENGLISH },
     { label: "Hindi", value: Language.HINDI },
     { label: "English + Hindi", value: Language.ENGLISH_HINDI },
@@ -18,6 +18,9 @@ const CourseDetails = ({ handleNext }) => {
     { label: "Offline", value: CourseMode.OFFLINE },
     { label: "Hybrid", value: CourseMode.HYBRID },
   ];
+
+const CourseDetails = ({ handleNext, editMode, onSubmit, courseUpdating }) => {
+  const {handleSubmit} = useFormContext();
   return (
     <Box>
       <Grid container spacing={2}>
@@ -49,13 +52,6 @@ const CourseDetails = ({ handleNext }) => {
             endpoint="course/category"
           />
         </Grid>
-        {/* <Grid size={{ xs: 12, sm: 6 }}>
-          <CustomDropdownField
-            name="instructor"
-            label="Seclect Instructor"
-            endpoint="course/instructors"
-          />
-        </Grid> */}
         <Grid size={{ xs: 12, sm: 6 }}>
           <CustomRadioButton
             name="courseMode"
@@ -89,7 +85,17 @@ const CourseDetails = ({ handleNext }) => {
           mt: 4,
         }}
       >
+        <Stack spacing={2} direction="row">
+          {editMode && (
+        <CustomButton 
+          label="Update" 
+          type="submit"
+          onClick={onSubmit}
+          loading={courseUpdating}
+        />
+        )}
         <CustomButton label="Next" onClick={handleNext} />
+        </Stack>
       </Box>
     </Box>
   );

@@ -55,6 +55,7 @@ const CourseCard = ({
   // };
 
   // const averageRating = reviews ? totalRatings / reviews : 4.5;
+  console.log("course: ", course);
   const category = course?.category?.name;
   return (
     <Card
