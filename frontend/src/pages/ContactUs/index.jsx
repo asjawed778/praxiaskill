@@ -45,6 +45,7 @@ const PageHeader = () => (
     }}
   >
     <Typography
+      component="h1"
       sx={{
         fontSize: {
           xs: "24px",
@@ -64,6 +65,7 @@ const PageHeader = () => (
     </Typography>
 
     <Typography
+      component="h2"
       sx={{
         fontSize: {
           xs: "14px",

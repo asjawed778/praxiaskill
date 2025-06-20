@@ -10,17 +10,21 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 3000,
+    allowedHosts: [
+      "localhost",
+      "4b1e-2409-408a-138e-e226-245b-6c87-b774-89c3.ngrok-free.app"
+    ],
     proxy: {
-          "/api": {
-            target: "http://localhost:4000",
-            changeOrigin: true,
-            secure: false,
-          }
-        }
+      "/api": {
+        target: "http://localhost:4000",
+        changeOrigin: true,
+        secure: false,
+      }
+    }
   },
   resolve: {
-      alias: {
-        '@': path.resolve(__dirname, 'src'), 
-      },
-    }
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  }
 });

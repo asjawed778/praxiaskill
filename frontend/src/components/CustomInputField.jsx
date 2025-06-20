@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   TextField,
   InputAdornment,
@@ -46,7 +46,6 @@ const CustomInputField = ({
       multiline={!!row}
       rows={row}
       disabled={disabled}
-      // value={field?.value ?? ""}
       value={typeof field.value === "undefined" ? "" : field.value}
 
       placeholder={isDate ? undefined : placeholder}
@@ -68,41 +67,11 @@ const CustomInputField = ({
           transition: "border-color 0.3s",
           "&:hover": { borderColor: colors.inputHover },
           "&.Mui-focused": { borderColor: colors.inputFocus },
-
-          // Responsive font size and padding for input
-          // fontSize: {
-          //   xs: "0.75rem",   // mobile
-          //   sm: "0.875rem",  // tablet
-          //   md: "1rem",      // desktop
-          //   // lg: "1.125rem",  // large screens
-          // },
           "& input": {
             padding: "8px 10px",
-            fontSize: "0.875rem"
+            fontSize: "15px"
           },
         },
-        // Responsive font size for placeholder
-        // "& input::placeholder": {
-        //   fontSize: {
-        //     xs: "0.75rem",
-        //     sm: "0.875rem",
-        //     md: "1rem",
-        //     // lg: "1.125rem",
-        //   },
-        //   opacity: 1,
-        //   color: "#aaa",
-        // },
-        // Responsive font size for label
-        // "& label": {
-        //   fontSize: {
-        //     xs: "0.75rem",
-        //     sm: "0.875rem",
-        //     md: "1rem",
-        //     // lg: "1.125rem",
-        //   },
-        //   color: colors.inputLabel,
-        // },
-
         ...sx,
       }}
       InputProps={{

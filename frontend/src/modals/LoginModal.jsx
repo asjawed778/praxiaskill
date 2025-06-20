@@ -1,7 +1,7 @@
 // import logo from "/logopng.png";
-import logo from "../assets/logo-red-transparent-bg.png";
-import google from "/imgs/google.svg";
-import apple from "/imgs/apple.svg";
+import logo from "@/assets/logo/logo-red-transparent-bg.png";
+// import google from "/imgs/google.svg";
+// import apple from "/imgs/apple.svg";
 
 import { RxCross2 } from "react-icons/rx";
 import { FiEye } from "react-icons/fi";
@@ -208,18 +208,18 @@ function LoginModal({
 
           <div className="flex items-center justify-center gap-3">
             <div className="flex justify-center items-center border h-9 w-16 relative border-neutral-300 hover:bg-neutral-100 rounded-lg">
-              <img
+              {/* <img
                 src={apple}
                 className="h-[60%] w-[70%] absolute"
                 alt="apple-logo"
-              />
+              /> */}
             </div>
             <div className="flex justify-center items-center border h-9 w-16 relative border-neutral-300 hover:bg-neutral-100 rounded-lg">
-              <img
+              {/* <img
                 src={google}
                 className="h-[60%] w-[70%] absolute"
                 alt="google-logo"
-              />
+              /> */}
             </div>
           </div>
         </div>

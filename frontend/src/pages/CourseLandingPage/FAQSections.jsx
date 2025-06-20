@@ -55,6 +55,7 @@ export default function FAQSections({ course }) {
   return (
     <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 4 } }}>
       <Typography
+        component="h2"
         sx={{
           color: "white",
           fontWeight: 600,

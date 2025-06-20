@@ -1,6 +1,6 @@
-import logo from "/logopng.png";
-import googleImage from "/imgs/google.svg";
-import appleImage from "/imgs/apple.svg";
+// import logo from "@/assets/logo/logopng.png";
+// import googleImage from "/imgs/google.svg";
+// import appleImage from "/imgs/apple.svg";
 import { FaArrowLeft } from "react-icons/fa6";
 
 
@@ -57,7 +57,7 @@ function AuthPage({ reset = false }) {
       <div className="flex flex-wrap items-center justify-between h-screen py-10 px-20">
         {/* First Row */}
         <div className="flex flex-col items-start gap-2 mb-6 mx-auto">
-          <img onClick={() => navigate("/")} src={logo} alt="logo" className="w-[450px] h-auto -ml-9 cursor-pointer" />
+          {/* <img onClick={() => navigate("/")} src={logo} alt="logo" className="w-[450px] h-auto -ml-9 cursor-pointer" /> */}
           <p className="font-bold text-lg text-[var(--alt-secondary-color)] flex flex-col ml-3">
             <span>Ready For the Future</span>
             <span>At Praxia Skill</span>

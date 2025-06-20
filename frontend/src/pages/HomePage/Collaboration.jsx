@@ -1,149 +1,135 @@
-import {
-  Box,
-  Typography,
-  Grid,
-  Container,
-  useTheme,
-  Avatar,
-} from "@mui/material";
-import { GroupsOutlined } from "@mui/icons-material";
-import zohoLogo from "@/assets/PartnersIcons/zoho.png";
-import rapidoLogo from "@/assets/PartnersIcons/rapido.png";
+import { Box, Typography, Avatar, Container } from "@mui/material";
+import { keyframes } from "@mui/system";
+import { useEffect, useRef, useState } from "react";
+import { partners } from "../../../data";
 
-const PartnerLogo = ({ name, logo }) => {
-  const theme = useTheme();
+const scroll = keyframes`
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+`;
 
-  return (
-    <Box
+const PartnerLogo = ({ name, logo }) => (
+  <Box
+    sx={{
+      flex: "0 0 auto",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      mx: 3,
+    }}
+  >
+    <Avatar
+      variant="rounded"
+      src={logo}
+      alt={`${name} logo`}
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        width: 60,
+        height: 60,
+        bgcolor: "transparent",
+        borderRadius: 2,
+        transition: "transform 0.3s ease",
+        "&:hover": {
+          transform: "scale(1.05)",
+        },
+        mb: 1,
+      }}
+    />
+    <Typography
+      sx={{
+        fontSize: {
+          xs: "14px",
+          sm: "16px",
+          md: "18px",
+        },
+        textAlign: "center",
       }}
     >
-      <Avatar
-        variant="rounded"
-        src={logo}
-        alt={`${name} logo`}
-        sx={{
-          width: 60,
-          height: 60,
-          bgcolor: "transparent",
-          border: "none",
-          borderRadius: 2,
-          transition: "all 0.3s ease",
-          "&:hover": {
-            transform: "scale(1.05)",
-          },
-          mb: 1,
-        }}
-      />
-      <Typography
-        sx={{
-          fontSize: {
-            xs: "14px",
-            sm: "16px",
-            md: "18px",
-            lg: "20px",
-            xl: "22px",
-          },
-          textAlign: "center"
-        }}
-      >
-        {name}
-      </Typography>
-    </Box>
-  );
-};
+      {name}
+    </Typography>
+  </Box>
+);
 
 const Collaboration = () => {
-  const theme = useTheme();
-  const partners = [
-    {
-      name: "Zoho",
-      logo: zohoLogo,
-    },
-    {
-      name: "Rapido",
-      logo: rapidoLogo,
-    },
-  ];
+  const scrollRef = useRef(null);
+  const wrapperRef = useRef(null);
+  const [shouldScroll, setShouldScroll] = useState(false);
+
+  useEffect(() => {
+    const scrollWidth = scrollRef.current?.scrollWidth || 0;
+    const wrapperWidth = wrapperRef.current?.offsetWidth || 0;
+    setShouldScroll(scrollWidth > wrapperWidth);
+  }, [partners]);
 
   return (
-    <Box
-      sx={{
-        borderRadius: "4px",
-        backgroundColor: "#f9fafc",
-        py: 2,
-        mt: {xs: 4, md: 6, xl: 8}
-      }}
+    <Box 
+    sx={{
+      mt: {xs: 2, md: 6, xl: 8},
+      py: {xs: 2, md: 3, lg: 4}, 
+      backgroundColor: "#f9fafc"
+    }}
     >
       <Container maxWidth="lg">
-        <Box
+        <Typography
+          variant="h2"
+          component="h2"
+          textAlign="center"
           sx={{
-            textAlign: "center",
+            fontSize: {
+              xs: "24px",
+              sm: "28px",
+              md: "32px",
+              lg: "36px",
+            },
+            fontWeight: 600,
             mb: 4,
-            position: "relative",
-            zIndex: 1,
           }}
         >
-          {/* <Avatar
-            sx={{
-              bgcolor: theme.palette.primary.main,
-              color: theme.palette.primary.contrastText,
-              width: 60,
-              height: 60,
-              mb: 2,
-              mx: "auto",
-            }}
-          >
-            <GroupsOutlined fontSize="medium" />
-          </Avatar> */}
-          <Typography
-            sx={{
-              fontSize: {
-                xs: "24px",
-                sm: "28px",
-                md: "32px",
-                lg: "36px",
-                xl: "40px",
-              },
-              fontWeight: 600,
-            }}
-          >
-            Backed by a strong placement support system offering access to 100+
-            recruiting companies.
-          </Typography>
-        </Box>
-
-        <Grid
-          container
-          spacing={4}
-          justifyContent="center"
+          Backed by a strong placement support system offering access to 100+
+          recruiting companies.
+        </Typography>
+        <Box
+          ref={wrapperRef}
           sx={{
+            overflow: "hidden",
             position: "relative",
-            zIndex: 1,
+            width: "100%",
           }}
         >
-          {partners.map((partner, index) => (
-            <Grid
-              item
-              xs={6}
-              sm={4}
-              md={3}
-              key={index}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <PartnerLogo name={partner.name} logo={partner.logo} />
-            </Grid>
-          ))}
-        </Grid>
+          <Box
+            ref={scrollRef}
+            sx={{
+              display: "flex",
+              whiteSpace: "nowrap",
+              width: "max-content",
+              animation: shouldScroll
+                ? `${scroll} 15s linear infinite`
+                : "none",
+              justifyContent: shouldScroll ? "initial" : "center",
+              mx: shouldScroll ? 0 : "auto", // center the container itself if needed
+              "&:hover": {
+                animationPlayState: "paused",
+              },
+            }}
+          >
+            {partners.map((partner, index) => (
+              <PartnerLogo
+                key={index}
+                name={partner.name}
+                logo={partner.logo}
+              />
+            ))}
+          </Box>
+        </Box>
       </Container>
     </Box>
   );
 };
 
 export default Collaboration;
+
+
+

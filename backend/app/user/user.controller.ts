@@ -306,11 +306,11 @@ export const addUserByAdmin = asyncHandler(async (req: Request, res: Response) =
     throw createHttpError(409, "User already Exits");
   }
 
-  if ("role" in data) {
-    if (![UserRole.USER, UserRole.INSTRUCTOR].includes(data.role)) {
-      throw createHttpError(400, "Invalid role. Role must be either USER or INSTRUCTOR.");
-    }
-  }
+  // if ("role" in data) {
+  //   if (![UserRole.USER, UserRole.INSTRUCTOR].includes(data.role)) {
+  //     throw createHttpError(400, "Invalid role. Role must be either USER or INSTRUCTOR.");
+  //   }
+  // }
 
   const result = await userService.createUserByAdmin(data);
 
@@ -336,11 +336,11 @@ export const updateUserByAdmin = asyncHandler(async (req: Request, res: Response
   const userId = req.params.userId;
   const data: ICreateUser = req.body;
 
-  if ("role" in data) {
-    if (![UserRole.USER, UserRole.INSTRUCTOR].includes(data.role)) {
-      throw createHttpError(400, "Invalid role. Role must be either USER or INSTRUCTOR.");
-    }
-  }
+  // if ("role" in data) {
+  //   if (![UserRole.USER, UserRole.INSTRUCTOR].includes(data.role)) {
+  //     throw createHttpError(400, "Invalid role. Role must be either USER or INSTRUCTOR.");
+  //   }
+  // }
 
   const result = await userService.updateUserByAdmin(userId, data);
 
