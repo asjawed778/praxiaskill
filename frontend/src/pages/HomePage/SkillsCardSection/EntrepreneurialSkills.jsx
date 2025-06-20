@@ -7,14 +7,14 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import growth from "/entrepreneurialskills/growth.png";
-import Companyamico from "/entrepreneurialskills/Companyamico.png";
-import Moneymotivationbro from "/entrepreneurialskills/Moneymotivationbro.png";
-import Marketingamico from "/entrepreneurialskills/Marketingamico.png";
-import Lawfirmbro from "/entrepreneurialskills/Lawfirmbro.png";
-import Teamworkrafiki from "/entrepreneurialskills/Teamworkrafiki.png";
-import Taskbro from "/entrepreneurialskills/Taskbro.png";
-import skillset from "/entrepreneurialskills/skillset.png";
+import growth from "@/assets/images/growth.png";
+import Companyamico from "@/assets/images/Companyamico.png";
+import Moneymotivationbro from "@/assets/images/Moneymotivationbro.png";
+import Marketingamico from "@/assets/images/Marketingamico.png";
+import Lawfirmbro from "@/assets/images/Lawfirmbro.png";
+import Teamworkrafiki from "@/assets/images/Teamworkrafiki.png";
+import Taskbro from "@/assets/images/Taskbro.png";
+import skillset from "@/assets/images/skillset.png";
 import VerifiedOutlined from "@mui/icons-material/VerifiedOutlined";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
 

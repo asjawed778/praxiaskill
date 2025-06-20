@@ -1,7 +1,7 @@
-import cshekharyadav from "@/assets/MentorsImage/cshekharyadav.jpeg"
+import cshekharyadav from "@/assets/images/cshekharyadav.jpeg"
 
-import zohoLogo from "/PartnersIcons/zoho.png";
-import rapidoLogo from "/PartnersIcons/rapido.png";
+import zohoLogo from "@/assets/icons/partners-company/zoho.png";
+import rapidoLogo from "@/assets/icons/partners-company/rapido.png";
 
 export const partners = [
     { name: "Zoho", logo: zohoLogo },

@@ -4,7 +4,6 @@ import {
   useGetLectureVideoQuery,
 } from "../../services/course.api";
 import { useParams } from "react-router-dom";
-import backgroundVideo from "/video/background_video.mp4";
 import VideoPlayer from "./components/VideoPlayer";
 import Sections from "./components/Sections";
 import ButtonLoading from "../../components/Button/ButtonLoading";

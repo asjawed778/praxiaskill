@@ -12,8 +12,8 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material';
-import seminarpana from "../../../../public/employabilityskills/seminar-pana.png";
-import checkIcon from "../../../../public/icons/tick-mark.svg";
+import seminarpana from "@/assets/images/seminar-pana.png";
+import checkIcon from "@/assets/icons/tick-mark.svg";
 
 const CoursesSection = () => {
   const theme = useTheme();

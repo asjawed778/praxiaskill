@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography, Button, Grid, Container } from "@mui/material";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import backgroundVideo from "/video/background_video.mp4";
+import backgroundVideo from "@/assets/videos/background_video.mp4";
 import BookDemoClass from "../../components/BookDemo/BookDemoClass";
 import Courses from "./Carousal";
 import Benefits from "./Benefits";
@@ -41,15 +41,7 @@ function HomePage() {
 
   return (
     <>
-      <SEOHelmet
-        title={"Praxia Skill"}
-        description={"Join Praxia Skill for the best Data Analytics program"}
-        keywords={"Data Analytics, Praxia Skill"}
-        image={backgroundVideo}
-        url={"https://praxiaskill.com"}
-        robots="index, follow"
-        schema={generateOrganizationSchema()}
-      />
+      <SEOHelmet />
 
       <motion.div
         initial="hidden"

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CustomButton from "../CustomButton";
-import logo from "../../../src/assets/logo-red-transparent-bg.png";
+import logo from "@/assets/logo/logo-red-transparent-bg.png";
 import { useAppTheme } from "../../context/ThemeContext";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, NavLink } from "react-router-dom";
