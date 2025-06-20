@@ -63,6 +63,7 @@ export default function Testimonials({ course }) {
       }}
     >
       <Typography
+        component="h2"
         sx={{
           color: "white",
           fontWeight: 600,

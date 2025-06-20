@@ -12,12 +12,11 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material';
-import seminarpana from "/employabilityskills/seminarpana.png";
-import checkIcon from "../../../../public/icons/tick-mark.svg";
+import seminarpana from "@/assets/images/seminarpana.png";
+import checkIcon from "@/assets/icons/tick-mark.svg";
 
 const CoursesSection = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const leftColumnCourses = [
     'AI & ML using Python',
@@ -58,6 +57,7 @@ const CoursesSection = () => {
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: 500,
+        maxHeight: { lg: 580 }
       }}
     >
       <Grid
@@ -65,6 +65,7 @@ const CoursesSection = () => {
           backgroundColor: '#fff',
           width: { md: '100%', lg: '40%' },
           minHeight: { ls: '500px', md: '500px', sm: '400px', xs: '300px' },
+          maxHeight: { lg: 580 },
           display: 'flex',
           justifyContent: 'flex-end',
           alignItems: 'center',
@@ -94,7 +95,8 @@ const CoursesSection = () => {
           width: { md: '100%', lg: '60%' },
           height: '100%',
           display: 'flex',
-          justifyContent: 'center'
+          justifyContent: {lg: 'left', md: 'center', sm: 'center', xs: 'center'},
+          marginLeft: { lg: '24px' }
         }}
       >
         <Box>
@@ -107,7 +109,7 @@ const CoursesSection = () => {
               fontSize: { xs: '32px', md: '36px' },
               lineHeight: '117%',
               letterSpacing: '0%',
-              marginBottom: 4
+              marginBottom: 4,
             }}
           >
             Courses We Offer

@@ -14,6 +14,7 @@ import routes from "./app/routes";
 import swaggerUi from "swagger-ui-express";
 import apiLimiter from "./app/common/middleware/rate-limit.middleware";
 import './app/common/queue/jobProcessor';
+import swaggerDocument from "./app/swagger/swagger";
 
 loadConfig();
 
@@ -31,6 +32,11 @@ const port = Number(process.env.PORT) ?? 5000;
 
 const app: Express = express();
 
+const allowedOrigins = [
+  "http://localhost:3000", 
+  "https://www.praxiaskill.com",
+  "https://praxiaskill.com"
+];
 
 app.use(bodyParser.json());
 app.use(express.json({ limit: "50mb" }));
@@ -39,11 +45,6 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
 
-const allowedOrigins = [
-  "http://localhost:3000", 
-  "https://www.praxiaskill.com",
-  "https://praxiaskill.com"
-];
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -65,9 +66,6 @@ app.use(fileUpload({
   abortOnLimit: true,
   safeFileNames: true,
 }));
-
-
-import swaggerDocument from "./app/swagger/swagger";
 
 
 const initApp = async (): Promise<void> => {
@@ -95,8 +93,6 @@ const initApp = async (): Promise<void> => {
     console.log("Server is runnuing on port", port);
     console.log(`Swagger docs available at http://localhost:${port}/api-docs`);
   });
-
-
 };
 
 void initApp();

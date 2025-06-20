@@ -36,7 +36,6 @@ const CreateCourse = () => {
     isLoading: isCourseLoading,
     isError,
   } = useGetFullCourseDetailsQuery(course?.course?._id, { skip: !editMode });
-  console.log("course: ", loadCourse);
 
   useEffect(() => {
     if (isError) {
@@ -67,10 +66,6 @@ const CreateCourse = () => {
       return {
         ...loadCourse.data,
         category: loadCourse?.data?.category?._id || "",
-        // category: {
-        //   label: loadCourse?.data?.category?.name || "",
-        //   value: loadCourse?.data?.category?._id || "",
-        // },
         tags:
           loadCourse.data.tags?.map((tag) => ({ label: tag, value: tag })) ||
           [],
@@ -129,10 +124,6 @@ const CreateCourse = () => {
     if (loadCourse?.data && !isCourseLoading) {
       const courseData = {
         ...loadCourse.data,
-        // category: {
-        //   label: loadCourse?.data?.category?.name || "",
-        //   value: loadCourse?.data?.category?._id || "",
-        // },
         category: loadCourse?.data?.category?._id || "",
         instructor: loadCourse.data.instructor?._id || "",
         tags:

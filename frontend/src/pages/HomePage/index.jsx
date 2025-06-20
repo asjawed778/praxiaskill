@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography, Button, Grid, Container } from "@mui/material";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import backgroundVideo from "/video/background_video.mp4";
+import backgroundVideo from "@/assets/videos/background_video.mp4";
 import BookDemoClass from "../../components/BookDemo/BookDemoClass";
 import Courses from "./Carousal";
 import Benefits from "./Benefits";
@@ -11,7 +11,7 @@ import Collaboration from "./Collaboration";
 import SEOHelmet from "../../SEO/SEOHelmet";
 import { generateOrganizationSchema } from "../../SEO/SEOHelper";
 import CustomButton from "@/components/CustomButton";
-import MentorCarousal from "./MentorCarousal"
+import MentorCarousal from "./MentorCarousal";
 import SkillsCardSection from "./SkillsCardSection";
 
 const containerVariants = {
@@ -41,22 +41,14 @@ function HomePage() {
 
   return (
     <>
-      <SEOHelmet
-        title={"Praxia Skill"}
-        description={"Join Praxia Skill for the best Data Analytics program"}
-        keywords={"Data Analytics, Praxia Skill"}
-        image={backgroundVideo}
-        url={"https://praxiaskill.com"}
-        robots="index, follow"
-        schema={generateOrganizationSchema()}
-      />
+      <SEOHelmet />
 
       <motion.div
         initial="hidden"
         animate="visible"
         variants={containerVariants}
       >
-        <Box sx={{ position: "relative", width: "100%", overflow: "hidden", }}>
+        <Box sx={{ position: "relative", width: "100%", overflow: "hidden" }}>
           <video
             autoPlay
             loop
@@ -79,8 +71,8 @@ function HomePage() {
           <Container
             maxWidth="lg"
             sx={{
-              my: {xs: 1, sm: 2},
-              pb: 1
+              my: { xs: 1, sm: 2 },
+              pb: 1,
             }}
           >
             <Grid
@@ -98,6 +90,7 @@ function HomePage() {
               <Grid item xs={12} sm={6}>
                 <motion.div variants={itemVariants}>
                   <Typography
+                    component="h1"
                     sx={{
                       color: "white",
                       fontWeight: 600,
@@ -110,25 +103,10 @@ function HomePage() {
                       },
                     }}
                   >
-                    Ready For the Future
+                    Ready For the Future <br /> At Praxia Skill
                   </Typography>
                   <Typography
-                    sx={{
-                      fontSize: {
-                        xs: "32px",
-                        sm: "36px",
-                        md: "40px",
-                        lg: "44px",
-                        xl: "48px",
-                      },
-                      fontWeight: 600,
-                      color: "white",
-                    }}
-                  >
-                    At Praxia Skill
-                  </Typography>
-
-                  <Typography
+                    component="h2"
                     sx={{
                       fontSize: {
                         xs: "14px",
@@ -138,50 +116,23 @@ function HomePage() {
                         xl: "22px",
                       },
                       color: "white",
-                      mt: 2,
+                      mt: {xs: 1, md: 2},
                       fontWeight: 100,
                     }}
                   >
-                    Join this 20 weeks, Job-ready Program to master
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: {
-                        xs: "14px",
-                        sm: "16px",
-                        md: "18px",
-                        lg: "20px",
-                        xl: "22px",
-                      },
-                      color: "white",
-                      fontWeight: 100,
-                    }}
-                  >
-                    Data Analytics from scratch with Top Data Analysts
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: {
-                        xs: "14px",
-                        sm: "16px",
-                        md: "18px",
-                        lg: "20px",
-                        xl: "22px",
-                      },
-                      color: "white",
-                      mb: 2,
-                      fontWeight: 100,
-                    }}
-                  >
+                    Join this 20 weeks, Job-ready Program to master <br />
+                    Data Analytics from scratch with Top Data Analysts <br />
                     from Microsoft, KPMG, Amazon, and Rapido.
                   </Typography>
-
                   <CustomButton
                     label="Explore Program"
                     component={Link}
                     to="/courses"
                     variant="contained"
                     color="primary"
+                    sx={{
+                      mt: {xs: 1, md: 2},
+                    }}
                   />
                 </motion.div>
               </Grid>
@@ -193,19 +144,19 @@ function HomePage() {
           </Container>
         </Box>
 
-        <Container maxWidth="lg" >
+        <Container maxWidth="lg">
           <SkillsCardSection />
         </Container>
 
-        <Container maxWidth="lg" >
+        <Container maxWidth="lg">
           <Courses />
         </Container>
 
-        <Container maxWidth="lg">
-          <Benefits />
-          <MentorCarousal />
-          <Collaboration />
-        </Container>
+        {/* <Container maxWidth="lg"> */}
+        <Benefits />
+        <MentorCarousal />
+        <Collaboration />
+        {/* </Container> */}
 
         {/* <Membership /> */}
       </motion.div>

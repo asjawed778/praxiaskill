@@ -1,7 +1,7 @@
 // import logo from "/logopng.png";
-import logo from "../assets/logo-red-transparent-bg.png";
-import google from "/imgs/google.svg";
-import apple from "/imgs/apple.svg";
+import logo from "@/assets/logo/logo-red-transparent-bg.png";
+// import google from "/imgs/google.svg";
+// import apple from "/imgs/apple.svg";
 
 import { toast } from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";

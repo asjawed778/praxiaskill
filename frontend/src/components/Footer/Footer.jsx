@@ -7,7 +7,7 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import logo from "../../assets/logo-white-transparent-bg.png";
+import logo from "@/assets/logo/logo-white-transparent-bg.png";
 import {
   Facebook,
   Instagram,
