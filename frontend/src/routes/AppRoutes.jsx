@@ -151,21 +151,22 @@ const AppRoutes = () => {
                         </LazyComponent>
                     }
                 />
-                <Route path="/course-lecture" element={
-                    <RoleAuthRoute>
-                        <CourseLecturesLayout />
-                    </RoleAuthRoute>
-                }>
-                    <Route
-                        path=":courseId"
-                        element={
-                            <LazyComponent>
-                                <CourseLectures />
-                            </LazyComponent>
-                        }
-                    />
-                </Route>
+
                 <Route path="*" element={<PageNotFound />} />
+            </Route>
+            <Route path="/course-lecture" element={
+                <RoleAuthRoute>
+                    <CourseLecturesLayout />
+                </RoleAuthRoute>
+            }>
+                <Route
+                    path=":courseId"
+                    element={
+                        <LazyComponent>
+                            <CourseLectures />
+                        </LazyComponent>
+                    }
+                />
             </Route>
             <Route path="/dashboard" element={
                 <RoleAuthRoute allowedRoles={[UserRole.SUPER_ADMIN]} >
