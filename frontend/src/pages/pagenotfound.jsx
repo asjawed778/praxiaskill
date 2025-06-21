@@ -10,7 +10,13 @@ function PageNotFound() {
 
   return (
     <div className="flex flex-col gap-5 items-center justify-center h-screen">
-      <img src={pageNotFoundImage} alt="Page Not Found" className="w-[350px]" />
+      <img 
+        src={pageNotFoundImage} 
+        alt="Page Not Found" 
+        loading="lazy"
+        decoding="async"
+        className="w-[350px]" 
+      />
 
       <div className="flex flex-col items-center gap-3">
         <h1 className="text-4xl text-orange-400">

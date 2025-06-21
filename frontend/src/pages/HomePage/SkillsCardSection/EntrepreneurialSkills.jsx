@@ -17,6 +17,8 @@ import Taskbro from "@/assets/images/taskbro.png";
 import skillset from "@/assets/images/skillset.png";
 import VerifiedOutlined from "@mui/icons-material/VerifiedOutlined";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
+import SEOHelmet from "../../../SEO/SEOHelmet";
+import { entrepreneurialSkills } from "../../../SEO/meta-data";
 
 const sections = [
   {
@@ -78,6 +80,13 @@ const EntrepreneurialSkills = () => {
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   return (
     <Box>
+      <SEOHelmet
+        title={entrepreneurialSkills.title}
+        description={entrepreneurialSkills.description}
+        keywords={entrepreneurialSkills.keywords}
+        url={entrepreneurialSkills.url}
+        image={entrepreneurialSkills.image}
+      />
       <Box sx={{ bgcolor: "#FFF8F8", py: { xs: 1, sm: 2, md: 4 } }}>
         <Container maxWidth="lg">
           <Grid
@@ -294,7 +303,9 @@ const EntrepreneurialSkills = () => {
                 <Box
                   component="img"
                   src={section.img}
-                  alt={section.title}
+                  alt={section.title || "Entrepreneurial Skills"}
+                  loading="lazy"
+                  decoding="async"
                   sx={{ width: "100%", maxHeight: 240, objectFit: "contain" }}
                 />
               </Grid>
@@ -351,7 +362,7 @@ const EntrepreneurialSkills = () => {
             Entrepreneurship Skill Set Development Courses
           </Typography>
 
-          <Grid container spacing={{xs: 2, sm: 4, lg: 6}} alignItems="center">
+          <Grid container spacing={{ xs: 2, sm: 4, lg: 6 }} alignItems="center">
             {/* Left Image */}
             <Grid
               size={{ xs: 12, sm: 6 }}
@@ -363,6 +374,8 @@ const EntrepreneurialSkills = () => {
                 component="img"
                 src={skillset}
                 alt="Entrepreneurship Courses"
+                loading="lazy"
+                decoding="async"
                 sx={{
                   width: "100%",
                   maxHeight: 400,
@@ -381,8 +394,8 @@ const EntrepreneurialSkills = () => {
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      gap: {xs: 1, sm: 2},
-                      mt: { xs: 1, md: 2, },
+                      gap: { xs: 1, sm: 2 },
+                      mt: { xs: 1, md: 2 },
                     }}
                   >
                     <TaskAltOutlinedIcon

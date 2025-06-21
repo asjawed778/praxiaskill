@@ -82,7 +82,9 @@ const CourseCard = ({
         }}>
         <img
           src={thumbnail}
-          alt={title}
+          alt={title || "Course thumbnail"}
+          loading="lazy"
+          decoding="async"
           style={{
             width: "100%",
             height: "100%",

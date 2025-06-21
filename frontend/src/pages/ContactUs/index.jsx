@@ -3,11 +3,20 @@ import { Box, Container, Paper, Grid, Typography, colors } from "@mui/material";
 import ContactForm from "./ContactForm";
 import ContactInfo from "./ContactInfo";
 import { useAppTheme } from "../../context/ThemeContext";
+import SEOHelmet from "../../SEO/SEOHelmet";
+import { contactUsMeta } from "../../SEO/meta-data";
 
 function ContactPage() {
   const { colors } = useAppTheme();
   return (
     <Box sx={{ minHeight: "100vh" }}>
+      <SEOHelmet
+        title={contactUsMeta.title}
+        description={contactUsMeta.description}
+        keywords={contactUsMeta.keywords}
+        url={contactUsMeta.url}
+        image={contactUsMeta.image}
+      />
       <Container maxWidth="lg" sx={{ py: 2 }}>
         <PageHeader />
         <Paper
@@ -72,7 +81,7 @@ const PageHeader = () => (
           sm: "16px",
           md: "18px",
           lg: "20px",
-          xl: "22px"
+          xl: "22px",
         },
         maxWidth: 700,
         mx: "auto",

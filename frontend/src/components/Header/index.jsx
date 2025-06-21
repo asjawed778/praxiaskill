@@ -89,6 +89,8 @@ const Header = () => {
                   component="img"
                   src={logo}
                   alt="Logo"
+                  loading="lazy"
+                  decoding="async"
                   sx={{ height: 40, cursor: "pointer" }}
                 />
               </NavLink>

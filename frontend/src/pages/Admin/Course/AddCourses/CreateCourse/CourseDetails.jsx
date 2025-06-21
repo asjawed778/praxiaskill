@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Stack } from "@mui/material";
 import CustomInputField from "@/components/CustomInputField";
 import { CourseMode, Language } from "@/utils/enum";
 import CustomDropdownField from "@/components/CustomDropdownField";
@@ -7,7 +7,7 @@ import CustomButton from "@/components/CustomButton";
 import ImageUploader from "@/components/ImageUploader";
 import FileUploader from "@/components/FileUploader";
 
-const CourseDetails = ({ handleNext }) => {
+const CourseDetails = ({ handleNext, editMode, onSubmit, isCourseUpdate }) => {
   const languageOptions = [
     { label: "English", value: Language.ENGLISH },
     { label: "Hindi", value: Language.HINDI },
@@ -49,13 +49,6 @@ const CourseDetails = ({ handleNext }) => {
             endpoint="course/category"
           />
         </Grid>
-        {/* <Grid size={{ xs: 12, sm: 6 }}>
-          <CustomDropdownField
-            name="instructor"
-            label="Seclect Instructor"
-            endpoint="course/instructors"
-          />
-        </Grid> */}
         <Grid size={{ xs: 12, sm: 6 }}>
           <CustomRadioButton
             name="courseMode"
@@ -89,7 +82,12 @@ const CourseDetails = ({ handleNext }) => {
           mt: 4,
         }}
       >
-        <CustomButton label="Next" onClick={handleNext} />
+        <Stack spacing={2} direction="row">
+          {editMode && (
+             <CustomButton type="submit" label="Update" onClick={onSubmit} loading={isCourseUpdate}/>
+          )}
+          <CustomButton label="Next" onClick={handleNext} />
+        </Stack>
       </Box>
     </Box>
   );

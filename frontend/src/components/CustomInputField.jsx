@@ -55,7 +55,7 @@ const CustomInputField = ({
           ? "date"
           : isPassword && !showPassword
           ? "password"
-          : type
+          : "text"
       }
       fullWidth={fullWidth}
       variant="outlined"
