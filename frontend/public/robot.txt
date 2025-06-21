@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /dashboard
+Disallow: /course-lecture
+Disallow: /my-courses
+Disallow: /auth
+Sitemap: https://praxiaskill.com/sitemap.xml

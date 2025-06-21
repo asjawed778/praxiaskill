@@ -76,3 +76,12 @@ export const allCoursesMeta = {
     url: "https://praxiaskill.com/courses",
     robots: "index, follow",
 };
+
+export const contactUsMeta = {
+    title: "Praxiaskill - Contact Us",
+    description: "Explore all courses offered by Praxiaskill. Find the right course to enhance your skills in programming, design, marketing, and more.",
+    keywords: "all courses, online courses, programming courses, design courses, marketing courses, data science courses",
+    image: "https://praxiaskill.com/images/og-image.png",
+    url: "https://praxiaskill.com/courses",
+    robots: "index, follow",
+};
