@@ -8,12 +8,12 @@ import {
   useTheme,
 } from "@mui/material";
 import growth from "@/assets/images/growth.png";
-import Companyamico from "@/assets/images/Companyamico.png";
-import Moneymotivationbro from "@/assets/images/Moneymotivationbro.png";
-import Marketingamico from "@/assets/images/Marketingamico.png";
-import Lawfirmbro from "@/assets/images/Lawfirmbro.png";
-import Teamworkrafiki from "@/assets/images/Teamworkrafiki.png";
-import Taskbro from "@/assets/images/Taskbro.png";
+import Companyamico from "@/assets/images/companyamico.png";
+import Moneymotivationbro from "@/assets/images/moneymotivationbro.png";
+import Marketingamico from "@/assets/images/marketingamico.png";
+import Lawfirmbro from "@/assets/images/lawfirmbro.png";
+import Teamworkrafiki from "@/assets/images/teamworkrafiki.png";
+import Taskbro from "@/assets/images/taskbro.png";
 import skillset from "@/assets/images/skillset.png";
 import VerifiedOutlined from "@mui/icons-material/VerifiedOutlined";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
