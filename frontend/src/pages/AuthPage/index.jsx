@@ -26,6 +26,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { loginSchema, signupSchema } from "../../../yup";
 import SignupOtp from "./SignupOtp";
+import { MdArrowBack } from 'react-icons/md';
 
 const AuthPage = () => {
   const [authType, setAuthType] = useState("login");
@@ -60,7 +61,7 @@ const AuthPage = () => {
       email: "",
       password: "",
     },
-    mode: "onTouch"
+    mode: "onTouch",
   });
 
   const toggleAuthType = () => {
@@ -105,9 +106,10 @@ const AuthPage = () => {
   return (
     <>
       <CustomButton
-        label="<- Go to Home"
+        label="Go to Home"
         variant="text"
         onClick={() => navigate("/")}
+        startIcon={<MdArrowBack />}
         sx={{
           fontSize: {
             xs: "14px",
@@ -122,7 +124,7 @@ const AuthPage = () => {
         <Box
           sx={{
             minHeight: "100vh",
-            py: {xs: 2, sm: 4, lg: 6},
+            py: { xs: 2, sm: 4, lg: 6 },
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -131,7 +133,7 @@ const AuthPage = () => {
           <Grid
             container
             spacing={4}
-            direction={isSmallScreen ? "column-reverse" : "row"}
+            direction={isSmallScreen ? "column" : "row"}
             alignItems="center"
             justifyContent="center"
           >
@@ -148,7 +150,12 @@ const AuthPage = () => {
                   textAlign: "center",
                 }}
               >
-                <Typography variant="h5" component="h1" fontWeight="bold" gutterBottom>
+                <Typography
+                  variant="h5"
+                  component="h1"
+                  fontWeight="bold"
+                  gutterBottom
+                >
                   Welcome to Praxia Skill
                 </Typography>
                 <Typography component="h2" sx={{ maxWidth: 400, mx: "auto" }}>
@@ -174,7 +181,8 @@ const AuthPage = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <Fade in timeout={400} key={authType}>
                 <Box sx={{ maxWidth: 400, mx: "auto" }}>
-                  <Typography component="h2"
+                  <Typography
+                    component="h2"
                     sx={{
                       fontSize: { xs: "16px", md: "18px" },
                       mb: 2,

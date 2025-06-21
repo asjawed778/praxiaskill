@@ -18,7 +18,7 @@ const UpdatePassword = ({ open, onClose, token }) => {
       newPassword: "",
       confirmPassword: "",
     },
-    mode: "onChange"
+    mode: "onChange",
   });
 
   const onSubmit = async (data) => {
@@ -42,7 +42,7 @@ const UpdatePassword = ({ open, onClose, token }) => {
       allowOutsideClick={false}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={2}>
+        <Stack spacing={2} sx={{ paddingBottom: "18px" }}>
           <CustomInputField
             name="newPassword"
             label="New Password"
@@ -57,12 +57,12 @@ const UpdatePassword = ({ open, onClose, token }) => {
             type="password"
             control={control}
           />
-        <CustomButton 
-          label="Submit" 
-          type="submit" 
-          loading={isLoading} 
-          fullWidth
-        />
+          <CustomButton
+            label="Submit"
+            type="submit"
+            loading={isLoading}
+            fullWidth
+          />
         </Stack>
       </form>
     </ModalWrapper>

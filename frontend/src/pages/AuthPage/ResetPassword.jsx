@@ -10,13 +10,13 @@ import toast from "react-hot-toast";
 import { resetPasswordSchema } from "../../../yup";
 
 const ResetPassword = ({ open, onClose }) => {
-  const [sendResetLink, {isLoading} ] = useSendForgotPasswordOtpMutation();
+  const [sendResetLink, { isLoading }] = useSendForgotPasswordOtpMutation();
   const { handleSubmit, control, reset } = useForm({
     resolver: yupResolver(resetPasswordSchema),
     defaultValues: {
       email: "",
     },
-    mode: "onChange"
+    mode: "onChange",
   });
 
   const onSubmit = async (data) => {
@@ -25,7 +25,8 @@ const ResetPassword = ({ open, onClose }) => {
       toast.success("Reset link send to your register email");
       reset();
     } catch (error) {
-      const errorMsg = error?.data?.message ||  "Something went wrong. Please try again!"
+      const errorMsg =
+        error?.data?.message || "Something went wrong. Please try again!";
       toast.error(errorMsg);
     }
   };
@@ -33,21 +34,21 @@ const ResetPassword = ({ open, onClose }) => {
   return (
     <ModalWrapper open={open} onClose={onClose} title="Reset Password">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={2}>
+        <Stack spacing={2} sx={{ paddingBottom: "18px" }}>
           <CustomInputField
-          name="email"
-          label="Email"
-          placeholder="Enter your email"
-          type="email"
-          control={control}
-        />
+            name="email"
+            label="Email"
+            placeholder="Enter your email"
+            type="email"
+            control={control}
+          />
 
-        <CustomButton
-          type="submit"
-          label="Send Reset Link"
-          fullWidth
-          loading={isLoading}
-        />
+          <CustomButton
+            type="submit"
+            label="Send Reset Link"
+            fullWidth
+            loading={isLoading}
+          />
         </Stack>
       </form>
     </ModalWrapper>
