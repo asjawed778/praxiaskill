@@ -68,7 +68,9 @@ const index = () => {
               <img
                 className="w-full h-52 object-fit"
                 src={course.thumbnail}
-                alt={course.title}
+                alt={course.title || "Course Thumbnail"}
+                loading="lazy"
+                decoding="async"
               />
               <div className="relative p-4 flex-grow flex flex-col">
                 <h3 className="text-xl mb-4 font-semibold flex-grow">

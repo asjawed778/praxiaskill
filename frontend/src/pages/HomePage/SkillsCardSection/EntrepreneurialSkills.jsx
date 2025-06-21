@@ -294,7 +294,9 @@ const EntrepreneurialSkills = () => {
                 <Box
                   component="img"
                   src={section.img}
-                  alt={section.title}
+                  alt={section.title || "Entrepreneurial Skills"}
+                  loading="lazy"
+                  decoding="async"
                   sx={{ width: "100%", maxHeight: 240, objectFit: "contain" }}
                 />
               </Grid>
@@ -363,6 +365,8 @@ const EntrepreneurialSkills = () => {
                 component="img"
                 src={skillset}
                 alt="Entrepreneurship Courses"
+                loading="lazy"
+                decoding="async"
                 sx={{
                   width: "100%",
                   maxHeight: 400,

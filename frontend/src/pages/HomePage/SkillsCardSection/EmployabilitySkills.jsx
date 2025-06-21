@@ -450,7 +450,9 @@ const EmployabilitySkills = () => {
                 <Box
                   component="img"
                   src={item.image}
-                  alt={item.title}
+                  alt={item.title || "Employability skills"}
+                  loading="lazy"
+                  decoding="async"
                   sx={{
                     height: "100%",
                     width: "100%",

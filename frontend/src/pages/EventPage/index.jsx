@@ -13,6 +13,8 @@ const EventPage = () => {
   <img 
     src={ccfs} 
     alt="ccfs_image" 
+    loading="lazy"
+    decoding="async"
     className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[150px] md:w-[200px]" 
   />
 

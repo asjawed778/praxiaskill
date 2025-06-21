@@ -87,7 +87,9 @@ const FoundationalSkills = () => {
           >
             <img
               src={herosection}
-              alt="Hero section"
+              alt="Foundationalm Skills"
+              loading="lazy"
+              decoding="async"
               style={{
                 height: "95%",
                 width: "95%",
@@ -256,7 +258,9 @@ const FoundationalSkills = () => {
           >
             <img
               src={programframework}
-              alt="Program"
+              alt="Program FrameWork"
+              loading="lazy"
+              decoding="async"
               style={{
                 width: "100%",
                 height: "100%",
@@ -307,7 +311,9 @@ const FoundationalSkills = () => {
             >
               <img
                 src={careerguidance}
-                alt="Framework Illustration"
+                alt="Career Guidance"
+                loading="lazy"
+                decoding="async"
                 style={{
                   width: "100%",
                   height: "100%",

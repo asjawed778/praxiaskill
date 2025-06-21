@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { useFormContext, Controller } from "react-hook-form";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Stack } from "@mui/material";
 import JoditEditor from "jodit-react";
 
 import TagsInput from "./TagsInput";
@@ -11,7 +11,7 @@ import WhatYouWillLearn from "./WhatYouWillLearn";
 import CustomInputField from "@/components/CustomInputField";
 import CustomButton from "@/components/CustomButton";
 
-const AdditionalDetails = ({ handleNext, handlePrev }) => {
+const AdditionalDetails = ({ handleNext, handlePrev, editMode, onSubmit, isCourseUpdate }) => {
   const {
     control,
     formState: { errors },
@@ -39,6 +39,8 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
             component="img"
             src="/imgs/required.svg"
             alt="required"
+            loading="lazy"
+            decoding="async"
             sx={{ width: 7, position: "absolute", top: 6, right: -15 }}
           />
         </Typography>
@@ -84,7 +86,12 @@ const AdditionalDetails = ({ handleNext, handlePrev }) => {
       <FAQSections />
       <Box display="flex" justifyContent="space-between" mt={3}>
         <CustomButton label="Back" onClick={handlePrev} />
+        <Stack spacing={2} direction="row">
+          {editMode && (
+          <CustomButton label="Update" type="submit" onClick={onSubmit} loading={isCourseUpdate}/>
+          )}
         <CustomButton label="Next" onClick={handleNext} />
+        </Stack>
       </Box>
     </Box>
   );
