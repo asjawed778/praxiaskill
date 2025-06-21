@@ -7,7 +7,6 @@ import BookDemoClass from "../../components/BookDemo/BookDemoClass";
 import Courses from "./Carousal";
 import Benefits from "./Benefits";
 import Collaboration from "./Collaboration";
-// import Membership from "../../components/Membership";
 import SEOHelmet from "../../SEO/SEOHelmet";
 import { generateOrganizationSchema } from "../../SEO/SEOHelper";
 import CustomButton from "@/components/CustomButton";
@@ -42,7 +41,6 @@ function HomePage() {
   return (
     <>
       <SEOHelmet />
-
       <motion.div
         initial="hidden"
         animate="visible"
