@@ -209,22 +209,38 @@ export const getIntructorList = asyncHandler(async (req: Request, res: Response)
 export const courseEnquiry = asyncHandler(async (req: Request, res: Response) => {
     const data = req.body;
     const result = await courseService.courseEnquiry(data);
-
     const emailContent = courseEnquiryEmailTemplate(result.ticketNo, data.name, data.email, data.phone, data.education, data.interestedCourse);
 
-    await emailQueue.add('sendEmail', {
-        from: process.env.MAIL_USER,
-        to: data.email,
-        subject: `Course Enquiry Ticket No: ${result.ticketNo}`,
-        html: emailContent,
-    });
-    await emailQueue.add('sendEmail', {
-        from: process.env.MAIL_USER,
-        to: process.env.MAIL_USER,
-        subject: `Course Enquiry Ticket No: ${result.ticketNo}`,
-        html: emailContent,
-    });
+    const allMails = [
+        {
+            from: process.env.MAIL_USER,
+            to: data.email,
+            subject: `Course Enquiry Ticket No: ${result.ticketNo}`,
+            html: emailContent,
+        },
+        {
+            from: process.env.MAIL_USER,
+            to: process.env.MAIL_USER,
+            subject: `Course Enquiry Ticket No: ${result.ticketNo}`,
+            html: emailContent,
+        },
+        {
+            from: process.env.MAIL_USER,
+            to: process.env.HR_MAIL,
+            subject: `Course Enquiry Ticket No: ${result.ticketNo}`,
+            html: emailContent,
+        },
+        {
+            from: process.env.MAIL_USER,
+            to: process.env.SHEKHAR_MAIL,
+            subject: `Course Enquiry Ticket No: ${result.ticketNo}`,
+            html: emailContent,
+        }
+    ]
 
+    await Promise.all(
+        allMails.map((data) => emailQueue.add('send-email', data))
+    )
     res.send(createResponse({}, "Course enquiry submitted successfully"));
 });
 
@@ -627,7 +643,7 @@ export const getCourseNotes = asyncHandler(async (req: Request, res: Response) =
     if (search) {
         query.search = search as string;
     }
-    if(sort) {
+    if (sort) {
         query.sort = sort as string
     }
 
