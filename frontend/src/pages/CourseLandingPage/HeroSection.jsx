@@ -174,7 +174,9 @@ const HeroSection = ({ syllabusRef, course }) => {
               >
                 <img
                   src={course.thumbnail}
-                  alt={course.title}
+                  alt={course.title || "Course Thumbnail"}
+                  loading="lazy"
+                  decoding="async"
                   style={{
                     width: "100%",
                     height: "auto",
@@ -182,7 +184,6 @@ const HeroSection = ({ syllabusRef, course }) => {
                     display: "block",
                     borderRadius: "8px",
                   }}
-                  loading="lazy"
                 />
               </Box>
             </Box>

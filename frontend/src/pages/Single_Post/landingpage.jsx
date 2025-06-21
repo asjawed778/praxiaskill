@@ -46,7 +46,9 @@ const landingpage = () => {
                 <img
                   className="h-full w-full absolute rounded-full object-cover"
                   src={user.imgURL}
-                  alt={user.name}
+                  alt={user.name || "User Name"}
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="flex flex-col">
@@ -61,6 +63,8 @@ const landingpage = () => {
               className="h-full w-full absolute object-cover rounded-lg"
               src={img1}
               alt="blog img"
+              loading="lazy"
+              decoding="async"
             />
           </div>
 
