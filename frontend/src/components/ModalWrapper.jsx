@@ -86,7 +86,7 @@ const ModalWrapper = ({
         </IconButton>
       )}
 
-      {title && <DialogTitle sx={{ py: 2, display: "flex",
+      {title && <DialogTitle sx={{ py: 1, display: "flex",
       justifyContent: "center",  
       alignItems: "center",}}>{title}</DialogTitle>}
 

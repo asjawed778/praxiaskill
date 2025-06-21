@@ -34,6 +34,8 @@ const CourseStructure = ({ handleNext, handlePrev }) => {
           component="img"
           src={required}
           alt="required"
+          loading="lazy"
+          decoding="async"
           sx={{
             width: 8,
             height: 8,

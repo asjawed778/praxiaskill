@@ -3,6 +3,9 @@ import lessionamico from "@/assets/images/lessionamico.png";
 import researcherscuate from "@/assets/images/researcherscuate.png";
 import libraryrafiki from "@/assets/images/libraryrafiki.png";
 import CoursesSection from "./CoursesSection";
+import SEOHelmet from "../../../SEO/SEOHelmet";
+import { employabilitySkills } from "../../../SEO/meta-data";
+
 const courses = [
   { title: "Certification <br /> Courses" },
   { title: "Summer & Winter <br /> Training for colleges" },
@@ -35,6 +38,13 @@ const facilities = [
 const EmployabilitySkills = () => {
   return (
     <Box>
+      <SEOHelmet
+        title={employabilitySkills.title}
+        description={employabilitySkills.description}
+        keywords={employabilitySkills.keywords}
+        url={employabilitySkills.url}
+        image={employabilitySkills.image}
+      />
       <Box sx={{ bgcolor: "#FFF8F8", py: { xs: 1, sm: 2, lg: 3 } }}>
         <Container
           maxWidth="md"
@@ -80,7 +90,7 @@ const EmployabilitySkills = () => {
       </Box>
       <Box
         sx={{
-          py: { xs: 1, md: 2, },
+          py: { xs: 1, md: 2 },
           textAlign: "center",
           bgcolor: "#fff",
         }}
@@ -102,7 +112,13 @@ const EmployabilitySkills = () => {
           UG/PG Segment
         </Typography>
 
-        <Grid container spacing={{xs: 2, md: 3}} justifyContent="center" alignItems="center" mt={{xs: 1, md: 2}}>
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          justifyContent="center"
+          alignItems="center"
+          mt={{ xs: 1, md: 2 }}
+        >
           {courses.map((item, index) => (
             <Grid item xs={10} sm={6} md={3} key={index}>
               <Box
@@ -127,8 +143,8 @@ const EmployabilitySkills = () => {
                     fontSize: {
                       xs: "16px",
                       sm: "17px",
-                      lg: "18px"
-                    }, 
+                      lg: "18px",
+                    },
                   }}
                 />
               </Box>
@@ -140,21 +156,21 @@ const EmployabilitySkills = () => {
         sx={{
           py: { xs: 4, sm: 2, lg: 3 },
           textAlign: "center",
-          backgroundColor: '#fff7f5'
+          backgroundColor: "#fff7f5",
         }}
       >
         <Container maxWidth="lg">
           <Typography
             component="h2"
-            sx={{ 
+            sx={{
               fontSize: {
-              xs: "28px",
-              sm: "32px",
-              md: "36px",
-              lg: "40px",
-              xl: "44px",
-            }, 
-              fontWeight: 600,  
+                xs: "28px",
+                sm: "32px",
+                md: "36px",
+                lg: "40px",
+                xl: "44px",
+              },
+              fontWeight: 600,
             }}
           >
             Hybrid Skill Training Course type
@@ -162,10 +178,10 @@ const EmployabilitySkills = () => {
 
           <Grid
             container
-            spacing={{xs: 2, md: 3}}
+            spacing={{ xs: 2, md: 3 }}
             justifyContent="center"
             alignItems="center"
-            mt={{xs: 1, md: 2}}
+            mt={{ xs: 1, md: 2 }}
           >
             {hybridCourses.map((course, index) => (
               <Grid item xs={10} sm={6} md={2.4} key={index}>
@@ -184,25 +200,27 @@ const EmployabilitySkills = () => {
                     borderRadius: 2,
                   }}
                 >
-                  <Typography 
+                  <Typography
                     sx={{
                       fontSize: {
                         xs: "15px",
                         sm: "16px",
-                        lg: "18"
-                      }
+                        lg: "18",
+                      },
                     }}
-                  >{course.title}</Typography>
+                  >
+                    {course.title}
+                  </Typography>
                   <Typography
                     // variant="body2"
                     // fontWeight="medium"
-                    sx={{ 
-                      mt: 0.5, 
+                    sx={{
+                      mt: 0.5,
                       fontSize: {
                         xs: "15px",
                         sm: "16px",
-                        lg: "18"
-                      }
+                        lg: "18",
+                      },
                     }}
                   >
                     (Duration: {course.duration})
@@ -218,16 +236,16 @@ const EmployabilitySkills = () => {
         <Container maxWidth="md">
           <Typography
             component="h2"
-            sx={{ 
+            sx={{
               fontSize: {
-              xs: "28px",
-              sm: "32px",
-              md: "36px",
-              lg: "40px",
-              xl: "44px",
-            }, 
-              fontWeight: 600, 
-              textAlign: "center" 
+                xs: "28px",
+                sm: "32px",
+                md: "36px",
+                lg: "40px",
+                xl: "44px",
+              },
+              fontWeight: 600,
+              textAlign: "center",
             }}
           >
             Corporate Training
@@ -392,7 +410,7 @@ const EmployabilitySkills = () => {
               md: "36px",
               lg: "40px",
               xl: "44px",
-            }, 
+            },
             fontWeight: 600,
             textAlign: "center",
           }}
@@ -450,7 +468,9 @@ const EmployabilitySkills = () => {
                 <Box
                   component="img"
                   src={item.image}
-                  alt={item.title}
+                  alt={item.title || "Employability skills"}
+                  loading="lazy"
+                  decoding="async"
                   sx={{
                     height: "100%",
                     width: "100%",

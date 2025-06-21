@@ -24,7 +24,9 @@ const Socials = () => {
               <img
                 className="h-full w-full rounded-full object-cover"
                 src={fb}
-                alt="facebook"
+                alt="Facebook"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div className="flex flex-col gap-0.5">
@@ -46,7 +48,9 @@ const Socials = () => {
               <img
                 className="h-full w-full rounded-full object-cover"
                 src={x}
-                alt="facebook"
+                alt="X"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div className="flex flex-col gap-0.5">
@@ -68,7 +72,9 @@ const Socials = () => {
               <img
                 className="h-full w-full rounded-full object-cover"
                 src={threads}
-                alt="facebook"
+                alt="Threads"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div className="flex flex-col gap-0.5">
@@ -90,7 +96,9 @@ const Socials = () => {
               <img
                 className="h-full w-full rounded-full object-cover"
                 src={tiktok}
-                alt="facebook"
+                alt="Tik Tok"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div className="flex flex-col gap-0.5">

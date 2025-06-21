@@ -52,6 +52,8 @@ const Footer = () => {
               component="img"
               src={logo}
               alt="logo"
+              loading="lazy"
+              decoding="async"
               sx={{ width: "200px", height: "54px", mb: 2 }}
             />
             <Typography

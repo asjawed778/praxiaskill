@@ -121,15 +121,6 @@ export const apiCourse = createApi({
         credentials: "include",
       }),
     }),
-
-    // implement terminate course api here
-    terminateCourse: builder.mutation({
-      query: ({ courseId }) => ({
-        url: `course/terminate/${courseId}`,
-        method: "PATCH",
-      }),
-    }),
-
     updateCourseDetails: builder.mutation({
       query: ({ courseId, data }) => ({
         url: `course/details/${courseId}`,
@@ -220,6 +211,12 @@ export const apiCourse = createApi({
         })}`,
         method: "GET",
       })
+    }),
+    updateCourseStatus: builder.mutation({
+      query: ({ courseId, status}) => ({
+        url: `/course/status/${courseId}?status=${status}`,
+        method: "PATCH"
+      })
     })
   }),
 });
@@ -249,4 +246,5 @@ export const {
   useDeleteNotesMutation,
   useUpdateNotesMutation,
   useGetCoursesQuery,
+  useUpdateCourseStatusMutation,
 } = apiCourse;

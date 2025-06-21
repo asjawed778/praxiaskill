@@ -47,7 +47,12 @@ export default function CourseHeadline({ specificCourse }) {
         </div>
 
         {/* Course Image */}
-        <img src={specificCourse?.thumbnail} className="md:h-[196px] h-[220px] md:w-[346px] w-[500px] object-cover rounded-md mx-auto" />
+        <img 
+        src={specificCourse?.thumbnail} 
+        alt={specificCourse?.title || "Course Thumbnail"}
+        loading="lazy"
+        decoding="async"
+        className="md:h-[196px] h-[220px] md:w-[346px] w-[500px] object-cover rounded-md mx-auto" />
       </div>
     </div>
   );

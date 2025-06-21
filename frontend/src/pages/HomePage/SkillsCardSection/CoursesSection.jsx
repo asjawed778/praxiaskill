@@ -81,7 +81,9 @@ const CoursesSection = () => {
         >
           <img
             src={seminarpana}
-            alt="Hero section"
+            alt="Seminar Pana"
+            loading="lazy"
+            decoding="async"
             style={{
               objectFit: "cover",
             }}
@@ -128,7 +130,13 @@ const CoursesSection = () => {
                 {leftColumnCourses.map((course, index) => (
                   <ListItem key={index} sx={{ p: 0, mb: 1 }}>
                     <ListItemIcon sx={{ minWidth: '30px' }}>
-                      <img src={checkIcon} alt="check" style={{ width: '16px', height: '16px' }} />
+                      <img 
+                        src={checkIcon} 
+                        alt="check" 
+                        loading="lazy"
+                        decoding="async"
+                        style={{ width: '16px', height: '16px' }} 
+                      />
                     </ListItemIcon>
                     <ListItemText
                       primary={course}
@@ -151,7 +159,13 @@ const CoursesSection = () => {
                 {rightColumnCourses.map((course, index) => (
                   <ListItem key={index} sx={{ p: 0, mb: 1 }}>
                     <ListItemIcon sx={{ minWidth: '30px' }}>
-                      <img src={checkIcon} alt="check" style={{ width: '16px', height: '16px' }} />
+                      <img 
+                        src={checkIcon} 
+                        alt="check" 
+                        loading="lazy"
+                        decoding="async"
+                        style={{ width: '16px', height: '16px' }} 
+                      />
                     </ListItemIcon>
                     <ListItemText
                       primary={course}

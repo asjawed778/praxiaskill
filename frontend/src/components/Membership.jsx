@@ -28,6 +28,8 @@ export default function Membership() {
       <img
         src={girl1}
         alt="girl"
+        loading="lazy"
+        decoding="async"
         className="absolute md:-right-28 -right-20 bottom-0 md:w-96 w-72 max-h-96"
       />
     </div>
