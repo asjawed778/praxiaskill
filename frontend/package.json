@@ -24,7 +24,7 @@
     "@tailwindcss/vite": "^4.0.3",
     "clsx": "^2.1.1",
     "country-state-city": "^3.2.1",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "framer-motion": "^12.9.4",
     "install": "^0.13.0",
     "jodit-react": "^5.2.15",

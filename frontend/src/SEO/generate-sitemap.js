@@ -1,10 +1,11 @@
 import axios from 'axios';
+import 'dotenv/config';
 import { SitemapStream, streamToPromise } from 'sitemap';
 import { createWriteStream } from 'fs';
 import { Readable } from 'stream';
 import path from 'path';
 
-const apiBaseUrl = 'http://localhost:4000';
+const apiBaseUrl = process.env.VITE_BE_API_URL;
 const hostname = 'https://www.praxiaskill.com'
 
 const staticRoutes = [
