@@ -24,7 +24,7 @@ export const defaultMeta = {
         "online tech bootcamp"
     ].join(", "),
     image: "https://Praxiaskill.com/images/og-image.png",
-    url: "https://praxiaskill.com",
+    url: "https://www.praxiaskill.com",
     robots: "index, follow",
     author: "Praxiaskill",
     siteName: "Praxiaskill",
@@ -34,10 +34,10 @@ export const defaultMeta = {
     // Open Graph Metadata
     og: {
         type: "website",
-        title: "Praxiaskill | Build Skills with World-Class Online Courses",
-        description: "Advance your career with Praxiaskill’s expert-led online courses. From beginner to advanced — master programming, design, marketing, AI, and more.",
+        title: "Praxia Skill | Learn Digital Skills & Tech Courses",
+        description: "Advance your career with Praxiaskill's expert-led online courses. From beginner to advanced — master programming, design, marketing, AI, and more.",
         image: "https://Praxiaskill.com/images/og-image.png",
-        url: "https://Praxiaskill.com",
+        url: "https://www.praxiaskill.com",
         site_name: "Praxiaskill",
     },
 
@@ -46,8 +46,7 @@ export const defaultMeta = {
         card: "summary_large_image",
         site: "@Praxiaskill",
         creator: "@Praxiaskill",
-        title: "Praxiaskill | Online Courses to Advance Your Career",
-        description: "Join thousands of learners mastering real-world tech skills with Praxiaskill's flexible online courses.",
+        title: "Praxia Skill | Learn Digital Skills & Tech Courses",        description: "Join thousands of learners mastering real-world tech skills with Praxiaskill's flexible online courses.",
         image: "https://Praxiaskill.com/images/og-image.png",
     },
 
@@ -56,12 +55,12 @@ export const defaultMeta = {
         "@context": "https://schema.org",
         "@type": "Organization",
         name: "Praxiaskill",
-        url: "https://Praxiaskill.com",
+        url: "https://www.praxiaskill.com",
         logo: "https://Praxiaskill.com/images/logo.png",
         sameAs: [
-            "https://www.facebook.com/Praxiaskill",
-            "https://twitter.com/Praxiaskill",
-            "https://www.linkedin.com/company/Praxiaskill",
+            "https://www.facebook.com/praxiaskill",
+            "https://twitter.com/praxiaskill",
+            "https://www.linkedin.com/company/praxiaskill",
         ],
         description:
             "Praxiaskill is an e-learning platform offering high-quality online courses in programming, design, marketing, and data science.",
@@ -73,15 +72,15 @@ export const allCoursesMeta = {
     description: "Explore all courses offered by Praxiaskill. Find the right course to enhance your skills in programming, design, marketing, and more.",
     keywords: "all courses, online courses, programming courses, design courses, marketing courses, data science courses",
     image: "https://praxiaskill.com/images/og-image.png",
-    url: "https://praxiaskill.com/courses",
+    url: "https://www.praxiaskill.com/courses",
     robots: "index, follow",
 };
 
 export const contactUsMeta = {
     title: "Praxiaskill - Contact Us",
-    description: "Explore all courses offered by Praxiaskill. Find the right course to enhance your skills in programming, design, marketing, and more.",
+    description: "Talk with a Praxia Skill advisor to get personalized support in choosing the right course for your goals. Discover how our industry-relevant programs, hands-on learning, and expert mentorship can help you upskill faster and build a future-ready career",
     keywords: "all courses, online courses, programming courses, design courses, marketing courses, data science courses",
     image: "https://praxiaskill.com/images/og-image.png",
-    url: "https://praxiaskill.com/courses",
+    url: "https://www.praxiaskill.com/contact-us",
     robots: "index, follow",
 };

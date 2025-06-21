@@ -15,6 +15,8 @@ import CoursePagination from "./CoursePagination";
 import { useGetCoursesQuery } from "@/services/course.api";
 import CustomSearchField from "@/components/CustomSearchField";
 import CustomDropdownField from "@/components/CustomDropdownField";
+import SEOHelmet from "../../SEO/SEOHelmet";
+import { allCoursesMeta } from "@/SEO/meta-data";
 
 const LearningPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,6 +56,12 @@ const LearningPage = () => {
 
   return (
     <Container maxWidth="lg">
+    <SEOHelmet
+    title={allCoursesMeta.title}
+    description={allCoursesMeta.description}
+    keywords={allCoursesMeta.keywords}
+    url={allCoursesMeta.url}
+     />
       <Box py={2}>
         <Typography
           component="h1"
