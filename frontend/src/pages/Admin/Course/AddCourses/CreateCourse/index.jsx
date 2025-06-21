@@ -256,11 +256,19 @@ const CreateCourse = () => {
         {/* Step Content */}
         {/* <div className="bg-[#F5F5F5] rounded-lg p-2 w-full"> */}
         <div className="brounded-lg p-2 w-full">
-          {currentStep === 0 && <CourseDetails handleNext={handleNext} />}
+          {currentStep === 0 && <CourseDetails 
+            handleNext={handleNext} 
+            editMode={editMode}
+            onSubmit={onSubmit}
+            isCourseUpdate={isCourseUpdate}
+          />}
           {currentStep === 1 && (
             <AdditionalDetails
               handleNext={handleNext}
               handlePrev={handlePrev}
+              editMode={editMode}
+              onSubmit={onSubmit}
+              isCourseUpdate={isCourseUpdate}
             />
           )}
           {currentStep === 2 && (

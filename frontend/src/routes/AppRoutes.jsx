@@ -22,7 +22,7 @@ const CoursePayment = lazy(() => import("../pages/CoursePayment"));
 const MyEnrollment = lazy(() => import("../pages/Admin/My Enrollment"));
 const CourseLectures = lazy(() => import("../pages/Course Lectures"));
 const AddCategory = lazy(() => import("../pages/Admin/Category/AddCategory"));
-const AuthPage = lazy(() => import("../pages/authpage"));
+const AuthPage = lazy(() => import("../pages/AuthPage"));
 const AdminDashboard = lazy(() => import("../pages/Admin/AdminDashboard"));
 const AddCourses = lazy(() => import("../pages/Admin/Course/AddCourses/CreateCourse"));
 const ManageCourses = lazy(() => import("../pages/Admin/Course/ManageCourses"));
@@ -44,6 +44,13 @@ const AppRoutes = () => {
     return (
         <Routes>
             <Route path="/auth" element={
+                <LazyComponent>
+                    <PublicRoute>
+                        <AuthPage />
+                    </PublicRoute>
+                </LazyComponent>
+            } />
+            <Route path="/reset-password/:token" element={
                 <LazyComponent>
                     <PublicRoute>
                         <AuthPage />

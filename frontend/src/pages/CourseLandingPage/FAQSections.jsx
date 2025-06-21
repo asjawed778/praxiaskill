@@ -106,7 +106,9 @@ export default function FAQSections({ course }) {
           >
             <img
               src={currentItem?.resourceUrl}
-              alt={currentItem?.question}
+              alt={currentItem?.question || "Question's Answer"}
+              loading="lazy"
+              decoding="async"
               style={{
                 width: "100%",
                 height: "auto",

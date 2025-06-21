@@ -1,6 +1,75 @@
 import * as yup from "yup";
-// import { CourseValidity } from "./src/utils/enum";
-import * as Enum from "../frontend/src/utils/enum"
+import * as Enum from "../frontend/src/utils/enum";
+
+// Auth.........................
+export const loginSchema = yup.object({
+  email: yup
+  .string()
+  .required("Email is required")
+    .email("Invalid email format")
+    .matches(
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      "Email must include domain (e.g. gmail.com)"
+    ),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters")
+    .max(100, "Password must not exceed 100 characters")
+    .matches(/[A-Z]/, "Password must have at least one uppercase letter")
+    .matches(/[a-z]/, "Password must have at least one lowercase letter")
+    .matches(/[0-9]/, "Password must contain at least one number")
+    .matches(/[\W_]/, "Password must contain at least one special character")
+    .matches(/^\S*$/, "Password must not contain spaces"),
+});
+
+export const signupSchema = yup.object({
+  name: yup.string().required("Full name is required"),
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .matches(
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      "Email must include domain (e.g. gmail.com)"
+    )
+    .required("Email is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters")
+    .max(100, "Password must not exceed 100 characters")
+    .matches(/[A-Z]/, "Password must have at least one uppercase letter")
+    .matches(/[a-z]/, "Password must have at least one lowercase letter")
+    .matches(/[0-9]/, "Password must contain at least one number")
+    .matches(/[\W_]/, "Password must contain at least one special character")
+    .matches(/^\S*$/, "Password must not contain spaces"),
+});
+export const resetPasswordSchema = yup.object({
+  email: yup
+    .string()
+    .required("Email is required")
+    .email("Invalid email format")
+    .matches(
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      "Email must include domain (e.g. gmail.com)"
+    ),
+});
+export const updatePasswordSchema = yup.object().shape({
+  newPassword: yup
+    .string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters")
+    .max(100, "Password must not exceed 100 characters")
+    .matches(/[A-Z]/, "Password must have at least one uppercase letter")
+    .matches(/[a-z]/, "Password must have at least one lowercase letter")
+    .matches(/[0-9]/, "Password must contain at least one number")
+    .matches(/[\W_]/, "Password must contain at least one special character")
+    .matches(/^\S*$/, "Password must not contain spaces"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("newPassword")], "Passwords must match")
+    .required("Please confirm your password"),
+});
 
 export const assignCourseSchema = yup.object().shape({
   courseId: yup.string().required("Please select a course"),
@@ -52,20 +121,25 @@ export const EnquirySchema = yup.object().shape({
 
 // Add course structure schema
 export const courseDetailsSchema = yup.object().shape({
-   title: yup.string()
-   .required("Course title is required")
+  title: yup
+    .string()
+    .required("Course title is required")
     .min(10, "Title must be at least 10 characters")
     .max(100, "Title must not exceed 100 characters"),
-  subtitle: yup.string()
-  .required("Subtitle is required")
-   .min(10, "Title must be at least 10 characters")
+  subtitle: yup
+    .string()
+    .required("Subtitle is required")
+    .min(10, "Title must be at least 10 characters")
     .max(200, "Title must not exceed 200 characters"),
   language: yup.string().required("Language selection is required"),
   category: yup.string().required("Category selection is required"),
   courseMode: yup.string().required("Please select a mode"),
   courseLevel: yup.string().required("Course level is required"),
   thumbnail: yup.string().url("Invalid URL").required("Thumbnail is required"),
-  brouchure: yup.string().url("Invalid URL").required("Brochure PDF is required"),
+  brouchure: yup
+    .string()
+    .url("Invalid URL")
+    .required("Brochure PDF is required"),
 });
 export const additionalDetailsSchema = yup.object().shape({
   keypoints: yup
@@ -127,13 +201,13 @@ export const pricingPublishSchema = yup.object().shape({
       .required("Final price is required"),
   }),
   validity: yup
-      .string()
-      .required("Course validity is required")
-      .oneOf(Object.values(Enum.CourseValidity), "Invalid course validity"),
-    courseStatus: yup
-      .string()
-      .required("Course status is required")
-      .oneOf(Object.values(Enum.CourseStatus), "Invalid course status")
+    .string()
+    .required("Course validity is required")
+    .oneOf(Object.values(Enum.CourseValidity), "Invalid course validity"),
+  courseStatus: yup
+    .string()
+    .required("Course status is required")
+    .oneOf(Object.values(Enum.CourseStatus), "Invalid course status"),
 });
 
 // Notes Create Schemae

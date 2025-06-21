@@ -81,7 +81,14 @@ const ToolsGrid = ({ course }) => {
                 elevation={4}
               >
                 {item.url ? (
-                  <img src={item.url} alt={item.name} width={50} height={50} />
+                  <img 
+                    src={item.url} 
+                    alt={item.name || "Tools"} 
+                    loading="lazy"
+                    decoding="async"
+                    width={50} 
+                    height={50} 
+                  />
                 ) : getIconComponent(item.iconName) ? (
                   createElement(getIconComponent(item.iconName), {
                     size: 35,

@@ -37,10 +37,10 @@ const LearningPage = () => {
     search: searchQuery,
     category: selectedCourseCategory,
   });
-  
+
   const totalCourses = courses?.data?.totalCourses || 0;
   const totalPages = Math.ceil(totalCourses / limit);
-  
+
   const handleClearFilter = () => {
     setSearchQuery("");
     setSelectedCourseCategory(null);
@@ -56,12 +56,13 @@ const LearningPage = () => {
 
   return (
     <Container maxWidth="lg">
-    <SEOHelmet
-    title={allCoursesMeta.title}
-    description={allCoursesMeta.description}
-    keywords={allCoursesMeta.keywords}
-    url={allCoursesMeta.url}
-     />
+      <SEOHelmet
+        title={allCoursesMeta.title}
+        description={allCoursesMeta.description}
+        keywords={allCoursesMeta.keywords}
+        url={allCoursesMeta.url}
+        image={allCoursesMeta.image}
+      />
       <Box py={2}>
         <Typography
           component="h1"
@@ -153,7 +154,7 @@ const LearningPage = () => {
               Somethings worngs. Please try again!
             </Typography>
           </Box>
-        ): courses?.data?.courses.length === 0 ? (
+        ) : courses?.data?.courses.length === 0 ? (
           <Typography align="center" color="red">
             No courses found.
           </Typography>
@@ -173,7 +174,7 @@ const LearningPage = () => {
           >
             {courses?.data?.courses?.map((course) => (
               <CourseCard
-                width={{xs: 320, md: 280}}
+                width={{ xs: 320, md: 280 }}
                 key={course?._id}
                 course={course}
                 onClick={() => handleNavigate(course.slug)}
@@ -194,8 +195,7 @@ const LearningPage = () => {
                 },
               }}
               gap={2}
-            >
-            </Box>
+            ></Box>
 
             <Box display="flex" justifyContent="center" mt={5}>
               <CoursePagination
