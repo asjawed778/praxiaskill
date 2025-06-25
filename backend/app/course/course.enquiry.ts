@@ -21,17 +21,23 @@ const CourseEnquirySchema = new mongoose.Schema<ICourseEnquiry>({
     },
     education: {
         type: String,
-        required: true,
+        required: false,
     },
     interestedCourse: {
         type: String,
-        required: true,
+        required: false,
     },
-    status: {
-        type: String,
-        enum: Object.values(EnquiryStatus),
-        default: EnquiryStatus.PENDING,
-    },
+    statusLogs: [{
+        _id: false,
+        status: {
+            type: String,
+            enum: Object.values(EnquiryStatus),
+        },
+        timeStamp: {
+            type: Date,
+            default: Date.now()
+        }
+    }],
     whatsAppOptIn: {
         type: Boolean,
         default: false,
