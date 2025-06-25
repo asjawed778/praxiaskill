@@ -244,17 +244,30 @@ export const courseEnquiry = asyncHandler(async (req: Request, res: Response) =>
     res.send(createResponse({}, "Course enquiry submitted successfully"));
 });
 
+// export const getCourseEnquiry = asyncHandler(async (req: Request, res: Response) => {
+//     const pageNo = parseInt(req.query.pageNo as string) || 1;
+//     const result = await courseService.getCourseEnquiry(pageNo);
+//     res.send(createResponse(result, "Course enquiry fetched successfully"));
+// });
+
 export const getCourseEnquiry = asyncHandler(async (req: Request, res: Response) => {
-    const pageNo = parseInt(req.query.pageNo as string) || 1;
-    const result = await courseService.getCourseEnquiry(pageNo);
+    const pageNo = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const status = req.query.status as CourseEnum.EnquiryStatus | undefined;
+    const search = req.query.search as string | undefined;
+    const sortBy = req.query.sortBy as 'newest' | 'oldest' | undefined;
+
+    const result = await courseService.getCourseEnquiry(pageNo, limit, status, search, sortBy);
     res.send(createResponse(result, "Course enquiry fetched successfully"));
 });
+
+
 
 export const changeEnquiryStatus = asyncHandler(async (req: Request, res: Response) => {
     const enquiryId = req.params.enquiryId;
     const status = req.body.status;
     const result = await courseService.changeEnquiryStatus(enquiryId, status);
-    res.send(createResponse({}, "Enquiry status changed successfully"));
+    res.send(createResponse(result, "Enquiry status changed successfully"));
 });
 
 // this controller will stay and all redudnat code removes

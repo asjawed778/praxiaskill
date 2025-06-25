@@ -32,8 +32,8 @@ const ProgramHighlights = ({ course }) => {
     },
     {
       icon: <SchoolIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
-      value: course?.totalLectures * 4,
-      title: `${formatValue(course?.totalLectures * 4)} Hours of`,
+      value: course?.totalLectures ,
+      title: `${formatValue(course?.totalLectures )} Hours of`,
       subtitle: "Recorded Content",
     },
     {
