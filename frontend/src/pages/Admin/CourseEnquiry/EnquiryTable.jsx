@@ -26,6 +26,7 @@ import { useSetEnquiryStatusMutation } from "../../../services/course.api";
 
 const EnquiryTable = ({
   enquiries,
+  setEnquiries,
   isLoading,
   isError,
   totalCount = 0,
@@ -38,17 +39,24 @@ const EnquiryTable = ({
   const [showDetails, setShowDetails] = useState(false);
   const [updateEnquiryStatus] = useSetEnquiryStatusMutation();
 
+  
   const handleStatusChange = async (enquiryId, newStatus) => {
-    console.log("enquiry, newStatus: ",enquiryId, newStatus)
     try {
-      await updateEnquiryStatus({
+      const res = await updateEnquiryStatus({
         data: { status: newStatus },
         enquiryId,
       }).unwrap();
+
       toast.success(`Status updated to ${newStatus}`);
+      setEnquiries((prev) =>
+        prev.map((e) =>
+          e._id === enquiryId
+            ? { ...e, status: newStatus, updatedAt: new Date().toISOString() }
+            : e
+        )
+      );
     } catch (error) {
       toast.error(error?.data?.message || "Failed to update status");
-      console.error("Update failed:", error);
     }
   };
 
@@ -58,15 +66,23 @@ const EnquiryTable = ({
         <Table size="small">
           <TableHead>
             <TableRow sx={{ backgroundColor: "#f0f0f0" }}>
-              <TableCell sx={{ fontWeight: 600, width: 80, whiteSpace: "nowrap" }}>
+              <TableCell
+                sx={{ fontWeight: 600, width: 80, whiteSpace: "nowrap" }}
+              >
                 S. No.
               </TableCell>
-              <TableCell sx={{ fontWeight: 600, minWidth: 150 }}>Name</TableCell>
-              <TableCell sx={{ fontWeight: 600, minWidth: 140 }}>Phone</TableCell>
+              <TableCell sx={{ fontWeight: 600, minWidth: 150 }}>
+                Name
+              </TableCell>
+              <TableCell sx={{ fontWeight: 600, minWidth: 140 }}>
+                Phone
+              </TableCell>
               <TableCell align="center" sx={{ fontWeight: 600, minWidth: 80 }}>
                 View
               </TableCell>
-              <TableCell sx={{ fontWeight: 600, minWidth: 120 }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: 600, minWidth: 120 }}>
+                Status
+              </TableCell>
             </TableRow>
           </TableHead>
 
@@ -80,7 +96,9 @@ const EnquiryTable = ({
             ) : isError ? (
               <TableRow>
                 <TableCell colSpan={5} align="center">
-                  <Typography color="error">Failed to load enquiries.</Typography>
+                  <Typography color="error">
+                    Failed to load enquiries.
+                  </Typography>
                 </TableCell>
               </TableRow>
             ) : enquiries?.length === 0 ? (
@@ -104,9 +122,18 @@ const EnquiryTable = ({
                           setSelectedEnquiry({
                             ...enquiry,
                             statusLogs: [
-                              { status: "PENDING", date: "2024-06-21T10:12:34.123Z" },
-                              { status: "FIRST_CALL_ATTEMPTED", date: "2024-06-22T09:15:22.456Z" },
-                              { status: "INTERESTED", date: "2024-06-23T14:05:02.111Z" },
+                              {
+                                status: "PENDING",
+                                date: "2024-06-21T10:12:34.123Z",
+                              },
+                              {
+                                status: "FIRST_CALL_ATTEMPTED",
+                                date: "2024-06-22T09:15:22.456Z",
+                              },
+                              {
+                                status: "INTERESTED",
+                                date: "2024-06-23T14:05:02.111Z",
+                              },
                             ],
                           });
                           setShowDetails(true);
@@ -121,11 +148,13 @@ const EnquiryTable = ({
                     <Select
                       size="small"
                       value={enquiry.status}
-                      onChange={(e) => handleStatusChange(enquiry._id, e.target.value)}
+                      onChange={(e) =>
+                        handleStatusChange(enquiry._id, e.target.value)
+                      }
                       fullWidth
                     >
                       {Object.entries(EnquiryStatus).map(([key, label]) => (
-                        <MenuItem key={key} value={key}>
+                        <MenuItem key={key} value={label}>
                           {label}
                         </MenuItem>
                       ))}
@@ -135,19 +164,19 @@ const EnquiryTable = ({
               ))
             )}
           </TableBody>
-          </Table>
-              <TablePagination
-                component="div"
-                count={totalCount}
-                page={page}
-                onPageChange={(_, newPage) => onPageChange?.(newPage)}
-                rowsPerPage={rowsPerPage}
-                onRowsPerPageChange={(e) =>
-                  onRowsPerPageChange?.(parseInt(e.target.value, 10))
-                }
-                rowsPerPageOptions={[10, 25, 50]}
-                colSpan={5}
-              />
+        </Table>
+        <TablePagination
+          component="div"
+          count={totalCount}
+          page={page}
+          onPageChange={(_, newPage) => onPageChange?.(newPage)}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={(e) =>
+            onRowsPerPageChange?.(parseInt(e.target.value, 10))
+          }
+          rowsPerPageOptions={[10, 25, 50]}
+          colSpan={5}
+        />
       </TableContainer>
       <Dialog open={showDetails} onClose={() => setShowDetails(false)}>
         <Box p={3} minWidth={400}>
@@ -160,7 +189,9 @@ const EnquiryTable = ({
               <Typography>Name: {selectedEnquiry.name}</Typography>
               <Typography>Phone: {selectedEnquiry.phone}</Typography>
               <Typography>Email: {selectedEnquiry.email}</Typography>
-              <Typography>Course: {selectedEnquiry.interestedCourse}</Typography>
+              <Typography>
+                Course: {selectedEnquiry.interestedCourse}
+              </Typography>
               <Typography>Status: {selectedEnquiry.status}</Typography>
               <Typography>
                 Date: {new Date(selectedEnquiry.updatedAt).toLocaleDateString()}
@@ -219,7 +250,11 @@ const EnquiryTable = ({
               )}
 
               <Box mt={3} display="flex" justifyContent="flex-end">
-                <CustomButton onClick={() => setShowDetails(false)} label="Close" variant="outlined" />
+                <CustomButton
+                  onClick={() => setShowDetails(false)}
+                  label="Close"
+                  variant="outlined"
+                />
               </Box>
             </>
           )}

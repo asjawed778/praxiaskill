@@ -1,21 +1,21 @@
-import { useState } from "react";
-import { Box, } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box } from "@mui/material";
 
-import {
-  useGetAllEnquiryQuery,
-} from "@/services/course.api";
+import { useGetAllEnquiryQuery } from "@/services/course.api";
 import CustomDropdownField from "@/components/CustomDropdownField";
 import CustomSearchField from "@/components/CustomSearchField";
 
 import { EnquiryStatus } from "../../../utils/enum";
 import EnquiryTable from "./EnquiryTable";
+import CustomButton from "../../../components/CustomButton";
 
 const CourseEnquiry = () => {
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
-  const [searchQuery, setSearchQuery] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [sortOrder, setSortOrder] = useState("");
+  const [enquiries, setEnquiries] = useState([]);
 
   const { data, isLoading, isFetching, refetch, isError } =
     useGetAllEnquiryQuery({
@@ -25,8 +25,12 @@ const CourseEnquiry = () => {
       search: searchQuery,
       sortBy: sortOrder,
     });
-  console.log("Enquiry: ", data);
-
+  useEffect(() => {
+    if (data?.data?.enquiries) {
+      setEnquiries(data.data.enquiries);
+    }
+  }, [data]);
+  console.log("Enquiry: ", enquiries);
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
@@ -35,6 +39,11 @@ const CourseEnquiry = () => {
     setLimit(newLimit);
     setPage(0);
   };
+  const handleClearFilter = () => {
+    setSearchQuery("");
+    setStatusFilter("");
+    setSortOrder("");
+  }
 
   return (
     <Box sx={{ p: 2 }}>
@@ -47,7 +56,12 @@ const CourseEnquiry = () => {
           mb: 2,
         }}
       >
-        <CustomSearchField label="Search" onSearch={setSearchQuery} />
+        {/* <Box > */}
+          <CustomSearchField
+          value={searchQuery} 
+            label="Search" 
+            onSearch={setSearchQuery} 
+          />
         <CustomDropdownField
           label="Status"
           value={statusFilter}
@@ -59,12 +73,14 @@ const CourseEnquiry = () => {
           options={[
             ...Object.entries(EnquiryStatus).map(([key, label]) => ({
               label,
-              value: key,
+              value: label,
             })),
           ]}
         />
+        {/* </Box> */}
 
-        <CustomDropdownField
+        {/* <Box> */}
+          <CustomDropdownField
           label="Sort by"
           value={sortOrder}
           onChange={(val) => setSortOrder(val)}
@@ -75,9 +91,17 @@ const CourseEnquiry = () => {
             { label: "Oldest", value: "oldest" },
           ]}
         />
+        <CustomButton 
+          label="Clear Filter"
+          variant="outlined"
+          onClick={handleClearFilter}
+        />
+        {/* </Box> */}
       </Box>
+
       <EnquiryTable
-        enquiries={data?.data?.enquiries}
+        enquiries={enquiries}
+        setEnquiries={setEnquiries}
         // refetch={refetch}
         isLoading={isLoading || isFetching}
         isError={isError}
