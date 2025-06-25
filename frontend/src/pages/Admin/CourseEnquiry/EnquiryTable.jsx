@@ -14,7 +14,6 @@ import {
   Select,
   MenuItem,
   TablePagination,
-  TableFooter,
   CircularProgress,
   Tooltip,
 } from "@mui/material";
@@ -38,8 +37,6 @@ const EnquiryTable = ({
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
   const [updateEnquiryStatus] = useSetEnquiryStatusMutation();
-
-  
   const handleStatusChange = async (enquiryId, newStatus) => {
     try {
       const res = await updateEnquiryStatus({
@@ -47,11 +44,15 @@ const EnquiryTable = ({
         enquiryId,
       }).unwrap();
 
-      toast.success(`Status updated to ${newStatus}`);
       setEnquiries((prev) =>
         prev.map((e) =>
           e._id === enquiryId
-            ? { ...e, status: newStatus, updatedAt: new Date().toISOString() }
+            ? {
+                ...e,
+                currentStatus: newStatus,
+                updatedAt: new Date().toISOString(),
+                statusLogs: res.data.statusLogs,
+              }
             : e
         )
       );
@@ -66,22 +67,18 @@ const EnquiryTable = ({
         <Table size="small">
           <TableHead>
             <TableRow sx={{ backgroundColor: "#f0f0f0" }}>
-              <TableCell
-                sx={{ fontWeight: 600, width: 80, whiteSpace: "nowrap" }}
-              >
-                S. No.
-              </TableCell>
+              <TableCell sx={{ fontWeight: 600, width: 80 }}>S. No.</TableCell>
               <TableCell sx={{ fontWeight: 600, minWidth: 150 }}>
                 Name
               </TableCell>
               <TableCell sx={{ fontWeight: 600, minWidth: 140 }}>
                 Phone
               </TableCell>
-              <TableCell align="center" sx={{ fontWeight: 600, minWidth: 80 }}>
-                View
-              </TableCell>
               <TableCell sx={{ fontWeight: 600, minWidth: 120 }}>
                 Status
+              </TableCell>
+              <TableCell align="center" sx={{ fontWeight: 600, minWidth: 80 }}>
+                View
               </TableCell>
             </TableRow>
           </TableHead>
@@ -110,32 +107,38 @@ const EnquiryTable = ({
             ) : (
               enquiries.map((enquiry, index) => (
                 <TableRow key={enquiry._id}>
-                  <TableCell sx={{ whiteSpace: "nowrap" }}>
-                    {page * rowsPerPage + index + 1}
-                  </TableCell>
+                  <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                   <TableCell>{enquiry.name}</TableCell>
                   <TableCell>{enquiry.phone}</TableCell>
+                  <TableCell sx={{ width: 100 }}>
+                    <Select
+                      size="small"
+                      value={enquiry.currentStatus}
+                      onChange={(e) => {
+                        const selectedStatus = e.target.value;
+                        if (selectedStatus !== enquiry.currentStatus) {
+                          handleStatusChange(enquiry._id, selectedStatus);
+                        }
+                      }}
+                      fullWidth
+                    >
+                      <MenuItem value={enquiry.currentStatus} disabled>
+                        {enquiry.currentStatus}
+                      </MenuItem>
+                      {Object.entries(EnquiryStatus)
+                        .filter(([_, label]) => label !== enquiry.currentStatus)
+                        .map(([key, label]) => (
+                          <MenuItem key={key} value={label}>
+                            {label}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </TableCell>
                   <TableCell align="center">
                     <Tooltip title="Show Details">
                       <IconButton
                         onClick={() => {
-                          setSelectedEnquiry({
-                            ...enquiry,
-                            statusLogs: [
-                              {
-                                status: "PENDING",
-                                date: "2024-06-21T10:12:34.123Z",
-                              },
-                              {
-                                status: "FIRST_CALL_ATTEMPTED",
-                                date: "2024-06-22T09:15:22.456Z",
-                              },
-                              {
-                                status: "INTERESTED",
-                                date: "2024-06-23T14:05:02.111Z",
-                              },
-                            ],
-                          });
+                          setSelectedEnquiry(enquiry);
                           setShowDetails(true);
                         }}
                         color="primary"
@@ -144,27 +147,12 @@ const EnquiryTable = ({
                       </IconButton>
                     </Tooltip>
                   </TableCell>
-                  <TableCell>
-                    <Select
-                      size="small"
-                      value={enquiry.status}
-                      onChange={(e) =>
-                        handleStatusChange(enquiry._id, e.target.value)
-                      }
-                      fullWidth
-                    >
-                      {Object.entries(EnquiryStatus).map(([key, label]) => (
-                        <MenuItem key={key} value={label}>
-                          {label}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </TableCell>
                 </TableRow>
               ))
             )}
           </TableBody>
         </Table>
+
         <TablePagination
           component="div"
           count={totalCount}
@@ -178,6 +166,7 @@ const EnquiryTable = ({
           colSpan={5}
         />
       </TableContainer>
+
       <Dialog open={showDetails} onClose={() => setShowDetails(false)}>
         <Box p={3} minWidth={400}>
           <Typography variant="h6" gutterBottom>
@@ -202,6 +191,7 @@ const EnquiryTable = ({
                   <Typography fontWeight="bold" gutterBottom>
                     Status Change Logs:
                   </Typography>
+
                   <Box
                     sx={{
                       borderLeft: "2px solid #ccc",
@@ -212,32 +202,42 @@ const EnquiryTable = ({
                   >
                     {selectedEnquiry.statusLogs.map((log, index) => (
                       <Box key={index} sx={{ position: "relative", mb: 3 }}>
+                        {/* Timeline dot */}
                         <Box
                           sx={{
                             width: 12,
                             height: 12,
                             borderRadius: "50%",
                             backgroundColor:
-                              log.status === "PENDING"
+                              log.status === "Pending"
                                 ? "#2196f3"
-                                : log.status === "INTERESTED"
+                                : log.status === "First Call Attempted"
                                 ? "#ff9800"
+                                : log.status === "Closed"
+                                ? "#d32f2f"
                                 : "#4caf50",
                             position: "absolute",
                             left: -22,
                             top: 5,
                           }}
                         />
+
+                        {/* Timestamp */}
                         <Typography variant="caption" color="textSecondary">
-                          {new Date(log.date).toLocaleTimeString([], {
+                          {new Date(log.timeStamp).toLocaleTimeString([], {
                             hour: "2-digit",
                             minute: "2-digit",
                           })}{" "}
-                          - {new Date(log.date).toLocaleDateString()}
+                          - {new Date(log.timeStamp).toLocaleDateString()}
                         </Typography>
+
+                        {/* Status label */}
                         <Typography variant="body2" fontWeight="bold">
-                          {EnquiryStatus[log.status] || log.status}
+                          {EnquiryStatus[log.status.toUpperCase()] ||
+                            log.status}
                         </Typography>
+
+                        {/* Optional: updatedBy */}
                         {log.updatedBy && (
                           <Typography variant="caption" color="textSecondary">
                             Updated by: {log.updatedBy}

@@ -14,7 +14,7 @@ const CourseEnquiry = () => {
   const [limit, setLimit] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [sortOrder, setSortOrder] = useState("");
+  const [sortOrder, setSortOrder] = useState("latest");
   const [enquiries, setEnquiries] = useState([]);
 
   const { data, isLoading, isFetching, refetch, isError } =
@@ -23,14 +23,13 @@ const CourseEnquiry = () => {
       limit,
       status: statusFilter,
       search: searchQuery,
-      sortBy: sortOrder,
+      sort: sortOrder,
     });
   useEffect(() => {
     if (data?.data?.enquiries) {
       setEnquiries(data.data.enquiries);
     }
   }, [data]);
-  console.log("Enquiry: ", enquiries);
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
@@ -42,8 +41,7 @@ const CourseEnquiry = () => {
   const handleClearFilter = () => {
     setSearchQuery("");
     setStatusFilter("");
-    setSortOrder("");
-  }
+  };
 
   return (
     <Box sx={{ p: 2 }}>
@@ -57,13 +55,17 @@ const CourseEnquiry = () => {
         }}
       >
         {/* <Box > */}
-          <CustomSearchField
-          value={searchQuery} 
-            label="Search" 
-            onSearch={setSearchQuery} 
-          />
+        <CustomSearchField
+          value={searchQuery}
+          label="Search"
+          onSearch={(val) => {
+            setSearchQuery(val);
+            setPage(0); 
+          }}
+        />
         <CustomDropdownField
-          label="Status"
+          label="Filter By Status"
+          placeholder="Select"
           value={statusFilter}
           onChange={(val) => {
             setStatusFilter(val);
@@ -80,18 +82,17 @@ const CourseEnquiry = () => {
         {/* </Box> */}
 
         {/* <Box> */}
-          <CustomDropdownField
+        <CustomDropdownField
           label="Sort by"
           value={sortOrder}
           onChange={(val) => setSortOrder(val)}
           required={false}
           options={[
-            { label: "None", value: "" },
-            { label: "Newest", value: "newest" },
+            { label: "Latest", value: "latest" },
             { label: "Oldest", value: "oldest" },
           ]}
         />
-        <CustomButton 
+        <CustomButton
           label="Clear Filter"
           variant="outlined"
           onClick={handleClearFilter}

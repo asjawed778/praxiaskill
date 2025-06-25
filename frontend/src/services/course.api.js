@@ -53,14 +53,14 @@ export const apiCourse = createApi({
       }),
     }),
     getAllEnquiry: builder.query({
-      query: ({ page = 1, limit = 10, search = "",status="", sortBy="" }) => {
+      query: ({ page = 1, limit = 10, search = "",status="", sort="latest" }) => {
         const params = {
           ...(status && { status }),
           ...(search && { search }),
-          ...(sortBy && {sortBy}),
           page,
           limit,
-        };
+          sort,
+        }; 
         return {
           url: "course/enquiry",
           params,
