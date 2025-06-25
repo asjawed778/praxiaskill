@@ -238,24 +238,19 @@ export const courseEnquiry = asyncHandler(async (req: Request, res: Response) =>
         }
     ]
 
-    await Promise.all(
-        allMails.map((data) => emailQueue.add('send-email', data))
-    )
+    // await Promise.all(
+    //     allMails.map((data) => emailQueue.add('send-email', data))
+    // )
     res.send(createResponse({}, "Course enquiry submitted successfully"));
 });
 
-// export const getCourseEnquiry = asyncHandler(async (req: Request, res: Response) => {
-//     const pageNo = parseInt(req.query.pageNo as string) || 1;
-//     const result = await courseService.getCourseEnquiry(pageNo);
-//     res.send(createResponse(result, "Course enquiry fetched successfully"));
-// });
 
 export const getCourseEnquiry = asyncHandler(async (req: Request, res: Response) => {
     const pageNo = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
     const status = req.query.status as CourseEnum.EnquiryStatus | undefined;
     const search = req.query.search as string | undefined;
-    const sortBy = req.query.sortBy as 'newest' | 'oldest' | undefined;
+    const sortBy = req.query.sortBy as 'latest' | 'oldest' | undefined;
 
     const result = await courseService.getCourseEnquiry(pageNo, limit, status, search, sortBy);
     res.send(createResponse(result, "Course enquiry fetched successfully"));

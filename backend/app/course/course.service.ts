@@ -206,46 +206,28 @@ export const getCourseDetails = async (identifier: string): Promise<any> => {
 
 
 export const courseEnquiry = async (data: CourseDTO.ICourseEnquiry): Promise<any> => {
-    const enquiry = new CourseEnquirySchema(data);
+    const statusLogs = [{
+        status: courseEnum.EnquiryStatus.PENDING,
+        timeStamp: Date.now()
+    }];
+    const enquiryData = { ...data, statusLogs }
+    const enquiry = new CourseEnquirySchema(enquiryData);
     await enquiry.save();
     return enquiry;
 };
-
-// export const getCourseEnquiry = async (pageNo: number = 1): Promise<any> => {
-//     const pageSize = 10;
-//     const skip = (pageNo - 1) * pageSize;
-
-//     const totalResults = await CourseEnquirySchema.countDocuments();
-
-//     const enquiries = await CourseEnquirySchema.find()
-//         .sort({ createdAt: -1 })
-//         .skip(skip)
-//         .limit(pageSize);
-
-//     const startEntry = skip + 1;
-//     const endEntry = Math.min(skip + pageSize, totalResults);
-
-//     return {
-//         enquiries,
-//         startEntry,
-//         endEntry,
-//         currentPage: pageNo,
-//         totalResults,
-//     };
-// };
 
 export const getCourseEnquiry = async (
     pageNo: number = 1,
     limit: number = 10,
     status?: courseEnum.EnquiryStatus,
     search?: string,
-    sortBy: 'newest' | 'oldest' = 'newest'
+    sortBy: 'latest' | 'oldest' = 'latest'
 ): Promise<any> => {
     const skip = (pageNo - 1) * limit;
 
     const query: any = {};
     if (status) {
-        query.status = status;
+        query['statusLogs.status'] = status;
     }
 
     if (search) {
@@ -260,14 +242,45 @@ export const getCourseEnquiry = async (
 
     const sortOrder = sortBy === 'oldest' ? 1 : -1;
 
-    const [data, total] = await Promise.all([
-        mongoose.model("CourseEnquiry").find(query)
-            .sort({ createdAt: sortOrder }) // <- sorting here
-            .skip(skip)
-            .limit(limit)
-            .lean(),
+    const total = await CourseEnquirySchema.countDocuments(query);
 
-        mongoose.model("CourseEnquiry").countDocuments(query)
+    const data = await CourseEnquirySchema.aggregate([
+        { $match: query },
+        { $sort: { createdAt: sortOrder } },
+        { $skip: skip },
+        { $limit: limit },
+        {
+            $addFields: {
+                currentStatus: {
+                    $let: {
+                        vars: {
+                            sortedStatusLogs: {
+                                $sortArray: {
+                                    input: "$statusLogs",
+                                    sortBy: { timeStamp: -1 }
+                                }
+                            }
+                        },
+                        in: { $arrayElemAt: ["$$sortedStatusLogs.status", 0] }
+                    }
+                }
+            }
+        },
+        {
+            $project: {
+                ticketNo: 1,
+                name: 1,
+                email: 1,
+                phone: 1,
+                education: 1,
+                interestedCourse: 1,
+                whatsAppOptIn: 1,
+                statusLogs: 1,
+                currentStatus: 1,
+                createdAt: 1,
+                updatedAt: 1
+            }
+        }
     ]);
 
     return {
@@ -279,10 +292,15 @@ export const getCourseEnquiry = async (
     };
 };
 
-
-
 export const changeEnquiryStatus = async (enquiryId: string, status: string): Promise<CourseDTO.ICourseEnquiry> => {
-    const enquiry = await CourseEnquirySchema.findByIdAndUpdate(enquiryId, { status }, { new: true });
+    const enquiry = await CourseEnquirySchema.findByIdAndUpdate(enquiryId, {
+        $push: {
+            statusLogs: {
+                status: status,
+                timeStamp: Date.now()
+            }
+        }
+    }, { new: true });
     return enquiry as CourseDTO.ICourseEnquiry;
 };
 
