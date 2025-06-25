@@ -211,28 +211,75 @@ export const courseEnquiry = async (data: CourseDTO.ICourseEnquiry): Promise<any
     return enquiry;
 };
 
-export const getCourseEnquiry = async (pageNo: number = 1): Promise<any> => {
-    const pageSize = 10;
-    const skip = (pageNo - 1) * pageSize;
+// export const getCourseEnquiry = async (pageNo: number = 1): Promise<any> => {
+//     const pageSize = 10;
+//     const skip = (pageNo - 1) * pageSize;
 
-    const totalResults = await CourseEnquirySchema.countDocuments();
+//     const totalResults = await CourseEnquirySchema.countDocuments();
 
-    const enquiries = await CourseEnquirySchema.find()
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(pageSize);
+//     const enquiries = await CourseEnquirySchema.find()
+//         .sort({ createdAt: -1 })
+//         .skip(skip)
+//         .limit(pageSize);
 
-    const startEntry = skip + 1;
-    const endEntry = Math.min(skip + pageSize, totalResults);
+//     const startEntry = skip + 1;
+//     const endEntry = Math.min(skip + pageSize, totalResults);
+
+//     return {
+//         enquiries,
+//         startEntry,
+//         endEntry,
+//         currentPage: pageNo,
+//         totalResults,
+//     };
+// };
+
+export const getCourseEnquiry = async (
+    pageNo: number = 1,
+    limit: number = 10,
+    status?: courseEnum.EnquiryStatus,
+    search?: string,
+    sortBy: 'newest' | 'oldest' = 'newest'
+): Promise<any> => {
+    const skip = (pageNo - 1) * limit;
+
+    const query: any = {};
+    if (status) {
+        query.status = status;
+    }
+
+    if (search) {
+        const searchRegex = new RegExp(search, 'i');
+        query.$or = [
+            { name: searchRegex },
+            { email: searchRegex },
+            { phone: searchRegex },
+            { ticketNo: searchRegex }
+        ];
+    }
+
+    const sortOrder = sortBy === 'oldest' ? 1 : -1;
+
+    const [data, total] = await Promise.all([
+        mongoose.model("CourseEnquiry").find(query)
+            .sort({ createdAt: sortOrder }) // <- sorting here
+            .skip(skip)
+            .limit(limit)
+            .lean(),
+
+        mongoose.model("CourseEnquiry").countDocuments(query)
+    ]);
 
     return {
-        enquiries,
-        startEntry,
-        endEntry,
-        currentPage: pageNo,
-        totalResults,
+        success: true,
+        totalEnquiries: total,
+        page: pageNo,
+        pageSize: limit,
+        enquiries: data
     };
 };
+
+
 
 export const changeEnquiryStatus = async (enquiryId: string, status: string): Promise<CourseDTO.ICourseEnquiry> => {
     const enquiry = await CourseEnquirySchema.findByIdAndUpdate(enquiryId, { status }, { new: true });
