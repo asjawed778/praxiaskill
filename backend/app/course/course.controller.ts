@@ -238,9 +238,9 @@ export const courseEnquiry = asyncHandler(async (req: Request, res: Response) =>
         }
     ]
 
-    // await Promise.all(
-    //     allMails.map((data) => emailQueue.add('send-email', data))
-    // )
+    await Promise.all(
+        allMails.map((data) => emailQueue.add('send-email', data))
+    )
     res.send(createResponse({}, "Course enquiry submitted successfully"));
 });
 

@@ -216,6 +216,82 @@ export const courseEnquiry = async (data: CourseDTO.ICourseEnquiry): Promise<any
     return enquiry;
 };
 
+// export const getCourseEnquiry = async (
+//     pageNo: number = 1,
+//     limit: number = 10,
+//     status?: courseEnum.EnquiryStatus,
+//     search?: string,
+//     sortBy: 'latest' | 'oldest' = 'latest'
+// ): Promise<any> => {
+//     const skip = (pageNo - 1) * limit;
+
+//     const query: any = {};
+//     if (status) {
+//         query['statusLogs.status'] = status;
+//     }
+
+//     if (search) {
+//         const searchRegex = new RegExp(search, 'i');
+//         query.$or = [
+//             { name: searchRegex },
+//             { email: searchRegex },
+//             { phone: searchRegex },
+//             { ticketNo: searchRegex }
+//         ];
+//     }
+
+//     const sortOrder = sortBy === 'oldest' ? 1 : -1;
+
+//     const total = await CourseEnquirySchema.countDocuments(query);
+
+//     const data = await CourseEnquirySchema.aggregate([
+//         { $match: query },
+//         { $sort: { createdAt: sortOrder } },
+//         { $skip: skip },
+//         { $limit: limit },
+//         {
+//             $addFields: {
+//                 currentStatus: {
+//                     $let: {
+//                         vars: {
+//                             sortedStatusLogs: {
+//                                 $sortArray: {
+//                                     input: "$statusLogs",
+//                                     sortBy: { timeStamp: -1 }
+//                                 }
+//                             }
+//                         },
+//                         in: { $arrayElemAt: ["$$sortedStatusLogs.status", 0] }
+//                     }
+//                 }
+//             }
+//         },
+//         {
+//             $project: {
+//                 ticketNo: 1,
+//                 name: 1,
+//                 email: 1,
+//                 phone: 1,
+//                 education: 1,
+//                 interestedCourse: 1,
+//                 whatsAppOptIn: 1,
+//                 statusLogs: 1,
+//                 currentStatus: 1,
+//                 createdAt: 1,
+//                 updatedAt: 1
+//             }
+//         }
+//     ]);
+
+//     return {
+//         success: true,
+//         totalEnquiries: total,
+//         page: pageNo,
+//         pageSize: limit,
+//         enquiries: data
+//     };
+// };
+
 export const getCourseEnquiry = async (
     pageNo: number = 1,
     limit: number = 10,
@@ -224,48 +300,58 @@ export const getCourseEnquiry = async (
     sortBy: 'latest' | 'oldest' = 'latest'
 ): Promise<any> => {
     const skip = (pageNo - 1) * limit;
+    const sortOrder = sortBy === 'oldest' ? 1 : -1;
 
-    const query: any = {};
-    if (status) {
-        query['statusLogs.status'] = status;
-    }
+    const pipeline: any[] = [];
 
     if (search) {
         const searchRegex = new RegExp(search, 'i');
-        query.$or = [
-            { name: searchRegex },
-            { email: searchRegex },
-            { phone: searchRegex },
-            { ticketNo: searchRegex }
-        ];
+        pipeline.push({
+            $match: {
+                $or: [
+                    { name: searchRegex },
+                    { email: searchRegex },
+                    { phone: searchRegex },
+                    { ticketNo: searchRegex }
+                ]
+            }
+        });
     }
 
-    const sortOrder = sortBy === 'oldest' ? 1 : -1;
+    pipeline.push({
+        $addFields: {
+            currentStatus: {
+                $let: {
+                    vars: {
+                        sortedStatusLogs: {
+                            $sortArray: {
+                                input: "$statusLogs",
+                                sortBy: { timeStamp: -1 }
+                            }
+                        }
+                    },
+                    in: { $arrayElemAt: ["$$sortedStatusLogs.status", 0] }
+                }
+            }
+        }
+    });
 
-    const total = await CourseEnquirySchema.countDocuments(query);
+    if (status) {
+        pipeline.push({
+            $match: {
+                currentStatus: status
+            }
+        });
+    }
 
-    const data = await CourseEnquirySchema.aggregate([
-        { $match: query },
+    const totalPipeline = [...pipeline, { $count: "total" }];
+    const totalResult = await CourseEnquirySchema.aggregate(totalPipeline);
+    const total = totalResult[0]?.total || 0;
+
+    pipeline.push(
         { $sort: { createdAt: sortOrder } },
         { $skip: skip },
         { $limit: limit },
-        {
-            $addFields: {
-                currentStatus: {
-                    $let: {
-                        vars: {
-                            sortedStatusLogs: {
-                                $sortArray: {
-                                    input: "$statusLogs",
-                                    sortBy: { timeStamp: -1 }
-                                }
-                            }
-                        },
-                        in: { $arrayElemAt: ["$$sortedStatusLogs.status", 0] }
-                    }
-                }
-            }
-        },
         {
             $project: {
                 ticketNo: 1,
@@ -281,7 +367,9 @@ export const getCourseEnquiry = async (
                 updatedAt: 1
             }
         }
-    ]);
+    );
+
+    const data = await CourseEnquirySchema.aggregate(pipeline);
 
     return {
         success: true,

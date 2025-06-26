@@ -69,10 +69,10 @@ const EnquiryTable = ({
             <TableRow sx={{ backgroundColor: "#f0f0f0" }}>
               <TableCell sx={{ fontWeight: 600, width: 80 }}>S. No.</TableCell>
               <TableCell sx={{ fontWeight: 600, minWidth: 150 }}>
-                Name
+                Ticket No
               </TableCell>
               <TableCell sx={{ fontWeight: 600, minWidth: 140 }}>
-                Phone
+                Name
               </TableCell>
               <TableCell sx={{ fontWeight: 600, minWidth: 120 }}>
                 Status
@@ -108,8 +108,8 @@ const EnquiryTable = ({
               enquiries.map((enquiry, index) => (
                 <TableRow key={enquiry._id}>
                   <TableCell>{page * rowsPerPage + index + 1}</TableCell>
+                  <TableCell>{enquiry.ticketNo}</TableCell>
                   <TableCell>{enquiry.name}</TableCell>
-                  <TableCell>{enquiry.phone}</TableCell>
                   <TableCell sx={{ width: 100 }}>
                     <Select
                       size="small"
@@ -179,12 +179,16 @@ const EnquiryTable = ({
               <Typography>Phone: {selectedEnquiry.phone}</Typography>
               <Typography>Email: {selectedEnquiry.email}</Typography>
               <Typography>
-                Course: {selectedEnquiry.interestedCourse}
+                Interested Course: {selectedEnquiry.interestedCourse}
               </Typography>
-              <Typography>Status: {selectedEnquiry.status}</Typography>
               <Typography>
-                Date: {new Date(selectedEnquiry.updatedAt).toLocaleDateString()}
+                Current Status: {selectedEnquiry.currentStatus}
               </Typography>
+              <Typography>
+                Created At:{" "}
+                {new Date(selectedEnquiry.createdAt).toLocaleDateString()}
+              </Typography>
+              <Typography>Ticket No: {selectedEnquiry.ticketNo}</Typography>
 
               {selectedEnquiry.statusLogs?.length > 0 && (
                 <Box mt={4}>

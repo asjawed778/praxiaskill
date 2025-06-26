@@ -79,13 +79,11 @@ const CourseEnquiry = () => {
             })),
           ]}
         />
-        {/* </Box> */}
 
-        {/* <Box> */}
         <CustomDropdownField
           label="Sort by"
           value={sortOrder}
-          onChange={(val) => setSortOrder(val)}
+          onChange={(val) => setSortOrder(val ? val : 'latest')}
           required={false}
           options={[
             { label: "Latest", value: "latest" },
@@ -97,7 +95,6 @@ const CourseEnquiry = () => {
           variant="outlined"
           onClick={handleClearFilter}
         />
-        {/* </Box> */}
       </Box>
 
       <EnquiryTable
