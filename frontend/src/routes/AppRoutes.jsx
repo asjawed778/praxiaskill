@@ -31,9 +31,8 @@ const Users = lazy(() => import("../pages/Users"));
 const ViewCategories = lazy(() =>
     import("../pages/Admin/Category/ViewCategories")
 );
-const CourseEnquiryManagement = lazy(() =>
-    import("../pages/Admin/Category/CourseEnquiryManagement")
-);
+// const CourseEnquiryManagement = lazy(() => import("../pages/Admin/Category/CourseEnquiryManagement"));
+const CourseEnquiryManagement = lazy(() => import("../pages/Admin/CourseEnquiry"));
 import CategoryManagement from "../pages/Admin/Category/CategoryManagement";
 import { UserRole } from "../utils/enum";
 import useScrollToTop from "../hooks/useScrollToTop";

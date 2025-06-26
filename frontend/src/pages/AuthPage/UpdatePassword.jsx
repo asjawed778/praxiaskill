@@ -39,7 +39,8 @@ const UpdatePassword = ({ open, onClose, token }) => {
       open={open}
       onClose={onClose}
       title="Update Password"
-      allowOutsideClick={false}
+      allowOutsideClickDesktop={false}
+      allowOutsideClickMobile={false}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2} sx={{ paddingBottom: "18px" }}>

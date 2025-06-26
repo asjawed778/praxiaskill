@@ -206,36 +206,189 @@ export const getCourseDetails = async (identifier: string): Promise<any> => {
 
 
 export const courseEnquiry = async (data: CourseDTO.ICourseEnquiry): Promise<any> => {
-    const enquiry = new CourseEnquirySchema(data);
+    const statusLogs = [{
+        status: courseEnum.EnquiryStatus.PENDING,
+        timeStamp: Date.now()
+    }];
+    const enquiryData = { ...data, statusLogs }
+    const enquiry = new CourseEnquirySchema(enquiryData);
     await enquiry.save();
     return enquiry;
 };
 
-export const getCourseEnquiry = async (pageNo: number = 1): Promise<any> => {
-    const pageSize = 10;
-    const skip = (pageNo - 1) * pageSize;
+// export const getCourseEnquiry = async (
+//     pageNo: number = 1,
+//     limit: number = 10,
+//     status?: courseEnum.EnquiryStatus,
+//     search?: string,
+//     sortBy: 'latest' | 'oldest' = 'latest'
+// ): Promise<any> => {
+//     const skip = (pageNo - 1) * limit;
 
-    const totalResults = await CourseEnquirySchema.countDocuments();
+//     const query: any = {};
+//     if (status) {
+//         query['statusLogs.status'] = status;
+//     }
 
-    const enquiries = await CourseEnquirySchema.find()
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(pageSize);
+//     if (search) {
+//         const searchRegex = new RegExp(search, 'i');
+//         query.$or = [
+//             { name: searchRegex },
+//             { email: searchRegex },
+//             { phone: searchRegex },
+//             { ticketNo: searchRegex }
+//         ];
+//     }
 
-    const startEntry = skip + 1;
-    const endEntry = Math.min(skip + pageSize, totalResults);
+//     const sortOrder = sortBy === 'oldest' ? 1 : -1;
+
+//     const total = await CourseEnquirySchema.countDocuments(query);
+
+//     const data = await CourseEnquirySchema.aggregate([
+//         { $match: query },
+//         { $sort: { createdAt: sortOrder } },
+//         { $skip: skip },
+//         { $limit: limit },
+//         {
+//             $addFields: {
+//                 currentStatus: {
+//                     $let: {
+//                         vars: {
+//                             sortedStatusLogs: {
+//                                 $sortArray: {
+//                                     input: "$statusLogs",
+//                                     sortBy: { timeStamp: -1 }
+//                                 }
+//                             }
+//                         },
+//                         in: { $arrayElemAt: ["$$sortedStatusLogs.status", 0] }
+//                     }
+//                 }
+//             }
+//         },
+//         {
+//             $project: {
+//                 ticketNo: 1,
+//                 name: 1,
+//                 email: 1,
+//                 phone: 1,
+//                 education: 1,
+//                 interestedCourse: 1,
+//                 whatsAppOptIn: 1,
+//                 statusLogs: 1,
+//                 currentStatus: 1,
+//                 createdAt: 1,
+//                 updatedAt: 1
+//             }
+//         }
+//     ]);
+
+//     return {
+//         success: true,
+//         totalEnquiries: total,
+//         page: pageNo,
+//         pageSize: limit,
+//         enquiries: data
+//     };
+// };
+
+export const getCourseEnquiry = async (
+    pageNo: number = 1,
+    limit: number = 10,
+    status?: courseEnum.EnquiryStatus,
+    search?: string,
+    sortBy: 'latest' | 'oldest' = 'latest'
+): Promise<any> => {
+    const skip = (pageNo - 1) * limit;
+    const sortOrder = sortBy === 'oldest' ? 1 : -1;
+
+    const pipeline: any[] = [];
+
+    if (search) {
+        const searchRegex = new RegExp(search, 'i');
+        pipeline.push({
+            $match: {
+                $or: [
+                    { name: searchRegex },
+                    { email: searchRegex },
+                    { phone: searchRegex },
+                    { ticketNo: searchRegex }
+                ]
+            }
+        });
+    }
+
+    pipeline.push({
+        $addFields: {
+            currentStatus: {
+                $let: {
+                    vars: {
+                        sortedStatusLogs: {
+                            $sortArray: {
+                                input: "$statusLogs",
+                                sortBy: { timeStamp: -1 }
+                            }
+                        }
+                    },
+                    in: { $arrayElemAt: ["$$sortedStatusLogs.status", 0] }
+                }
+            }
+        }
+    });
+
+    if (status) {
+        pipeline.push({
+            $match: {
+                currentStatus: status
+            }
+        });
+    }
+
+    const totalPipeline = [...pipeline, { $count: "total" }];
+    const totalResult = await CourseEnquirySchema.aggregate(totalPipeline);
+    const total = totalResult[0]?.total || 0;
+
+    pipeline.push(
+        { $sort: { createdAt: sortOrder } },
+        { $skip: skip },
+        { $limit: limit },
+        {
+            $project: {
+                ticketNo: 1,
+                name: 1,
+                email: 1,
+                phone: 1,
+                education: 1,
+                interestedCourse: 1,
+                whatsAppOptIn: 1,
+                statusLogs: 1,
+                currentStatus: 1,
+                createdAt: 1,
+                updatedAt: 1
+            }
+        }
+    );
+
+    const data = await CourseEnquirySchema.aggregate(pipeline);
 
     return {
-        enquiries,
-        startEntry,
-        endEntry,
-        currentPage: pageNo,
-        totalResults,
+        success: true,
+        totalEnquiries: total,
+        page: pageNo,
+        pageSize: limit,
+        enquiries: data
     };
 };
 
 export const changeEnquiryStatus = async (enquiryId: string, status: string): Promise<CourseDTO.ICourseEnquiry> => {
-    const enquiry = await CourseEnquirySchema.findByIdAndUpdate(enquiryId, { status }, { new: true });
+    const enquiry = await CourseEnquirySchema.findByIdAndUpdate(enquiryId, {
+        $push: {
+            statusLogs: {
+                status: status,
+                timeStamp: Date.now()
+            }
+        }
+    }, { new: true });
     return enquiry as CourseDTO.ICourseEnquiry;
 };
 

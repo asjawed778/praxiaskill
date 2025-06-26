@@ -31,9 +31,13 @@ router
     .get("/presigned/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, courseValidation.courseContentPresignedUrl, catchError, courseController.getCourseVideoAccessUrl)
 
     .get("/content/:courseId", authMiddlerware.auth, courseController.getCourseContent)
+    
+    // enquiry routes
     .post("/enquiry", courseValidation.courseEnquiry, catchError, courseController.courseEnquiry)
-    .get("/enquiry", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseController.getCourseEnquiry)
+    .get("/enquiry", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.getCourseEnquiry, catchError, courseController.getCourseEnquiry)
     .patch("/enquiry-status/:enquiryId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.changeEnquiryStatus, catchError, courseController.changeEnquiryStatus)
+
+
     .get("/:identifier", courseValidation.getCourseDetails, courseController.getCourseDetails)
 
     // course qna routes

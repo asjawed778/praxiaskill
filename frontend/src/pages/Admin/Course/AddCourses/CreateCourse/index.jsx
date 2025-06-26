@@ -160,7 +160,6 @@ const CreateCourse = () => {
       setCurrentStep((prev) => prev + 1);
     }
   };
-
   const handlePrev = () => {
     setCurrentStep((prev) => prev - 1);
   };
