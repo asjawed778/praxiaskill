@@ -309,7 +309,10 @@ const ManageCourses = () => {
         <Grid size={{ xs: 12, sm: 6 }}>
           <CustomSearchField
             placeholder="Search Courses..."
-            onSearch={setSearchQuery}
+            onSearch={(val) => {
+            setSearchQuery(val);
+            setPage(0); 
+          }}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>

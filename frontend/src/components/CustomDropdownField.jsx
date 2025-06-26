@@ -60,7 +60,6 @@ const CustomDropdownField = ({
   const { data: fetchedData, isFetching } = useGetDropdownOptionsQuery(endpoint, {
     skip: !endpoint || !fetchEnabled,
   });
-  console.log("fetch: ", isFetching);
   const combinedOptions = useMemo(() => {
     let rawOptions = [];
 

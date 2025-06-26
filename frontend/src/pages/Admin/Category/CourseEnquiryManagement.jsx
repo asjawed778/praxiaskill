@@ -25,7 +25,7 @@ const CourseEnqueryManagement = () => {
   const [enquiries, setEnquiries] = useState([]);
 
   const buttonRefs = useRef([]);
-  const pageRef = useRef(null)
+  const pageRef = useRef(null);
 
   const [openMenu, setOpenMenu] = useState(null);
   const [menuStyles, setMenuStyles] = useState({});
@@ -117,7 +117,7 @@ const CourseEnqueryManagement = () => {
         enquiry.id === enquiryId
           ? {
               ...enquiry,
-              status: newStatus
+              status: newStatus,
             }
           : enquiry
       )
@@ -148,7 +148,7 @@ const CourseEnqueryManagement = () => {
         throw new Error(result?.error?.data?.message);
       }
       changeStatus(enquiryId, newStatus);
-      setOpenMenu(null)
+      setOpenMenu(null);
     } catch (err) {
       console.log(err);
     }
@@ -302,7 +302,9 @@ const CourseEnqueryManagement = () => {
                             enquiry.status === "PENDING"
                               ? "text-primary"
                               : "text-green-500"
-                          } ${index === openMenu? "bg-primary text-white" : ""}`}
+                          } ${
+                            index === openMenu ? "bg-primary text-white" : ""
+                          }`}
                         >
                           {enquiry.status} <ChevronDown size={20} />
                         </button>
@@ -404,28 +406,31 @@ const CourseEnqueryManagement = () => {
             style={menuStyles}
             className="absolute bg-white border border-gray-300 shadow-lg rounded-lg w-40"
           >
-            {enquiries[openMenu].status === "CLOSED" ?<div
-              className={`px-4 py-2 flex items-center gap-2 hover:bg-gray-100 rounded-lg text-red-600 cursor-pointer`}
-              onClick={() => {
-                handleChangeStatus(enquiries[openMenu].id, "PENDING");
-              }}
-            >
-              <MdPendingActions />
-              PENDING
-            </div>:
-            <div
-              className={`px-4 py-2 flex items-center gap-2 hover:bg-gray-100 rounded-lg text-green-600 cursor-pointer`}
-              onClick={() => {
-                handleChangeStatus(enquiries[openMenu].id, "CLOSED");
-              }}
-            >
-              <FaCheckSquare />
-              CLOSED
-            </div>}
+            {enquiries[openMenu].status === "CLOSED" ? (
+              <div
+                className={`px-4 py-2 flex items-center gap-2 hover:bg-gray-100 rounded-lg text-red-600 cursor-pointer`}
+                onClick={() => {
+                  handleChangeStatus(enquiries[openMenu].id, "PENDING");
+                }}
+              >
+                <MdPendingActions />
+                PENDING
+              </div>
+            ) : (
+              <div
+                className={`px-4 py-2 flex items-center gap-2 hover:bg-gray-100 rounded-lg text-green-600 cursor-pointer`}
+                onClick={() => {
+                  handleChangeStatus(enquiries[openMenu].id, "CLOSED");
+                }}
+              >
+                <FaCheckSquare />
+                CLOSED
+              </div>
+            )}
           </div>,
           pageRef.current
         )}
-    </ div>
+    </div>
   );
 };
 
