@@ -100,7 +100,7 @@ export const askQnaSchema = yup.object().shape({
 
 export const EnquirySchema = yup.object().shape({
   name: yup.string().required("Full Name is required"),
-  education: yup.string().required("Education is required"),
+  education: yup.string().optional(),
   phone: yup
     .string()
     .required("Phone number is required")
@@ -115,7 +115,7 @@ export const EnquirySchema = yup.object().shape({
       "Email must include domain (e.g. gmail.com)"
     )
     .email("Enter a valid email address (e.g., name@example.com)"),
-  interestedCourse: yup.string().required("Course selection is required"),
+  interestedCourse: yup.string().optional(),
   whatsAppOptIn: yup.boolean().default(true),
 });
 
