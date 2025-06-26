@@ -54,13 +54,12 @@ const CourseEnquiry = () => {
           mb: 2,
         }}
       >
-        {/* <Box > */}
         <CustomSearchField
           value={searchQuery}
           label="Search"
           onSearch={(val) => {
             setSearchQuery(val);
-            setPage(0); 
+            setPage(0);
           }}
         />
         <CustomDropdownField
@@ -79,7 +78,6 @@ const CourseEnquiry = () => {
             })),
           ]}
         />
-
         <CustomDropdownField
           label="Sort by"
           value={sortOrder}

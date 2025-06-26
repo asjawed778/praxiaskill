@@ -206,7 +206,6 @@ const EnquiryTable = ({
                   >
                     {selectedEnquiry.statusLogs.map((log, index) => (
                       <Box key={index} sx={{ position: "relative", mb: 3 }}>
-                        {/* Timeline dot */}
                         <Box
                           sx={{
                             width: 12,
