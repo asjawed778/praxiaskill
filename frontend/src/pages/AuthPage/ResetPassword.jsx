@@ -23,6 +23,7 @@ const ResetPassword = ({ open, onClose }) => {
     try {
       await sendResetLink(data).unwrap();
       toast.success("Reset link send to your register email");
+      onClose();
       reset();
     } catch (error) {
       const errorMsg =

@@ -16,13 +16,9 @@ const CustomSearchField = ({
   sx,
 }) => {
   const [searchTerm, setSearchTerm] = useState(value || "");
-
-  // Sync internal state with external value
   useEffect(() => {
     setSearchTerm(value || "");
   }, [value]);
-
-  // Debounced search
   useEffect(() => {
     const handler = setTimeout(() => {
       onSearch(searchTerm.trim());
@@ -33,7 +29,7 @@ const CustomSearchField = ({
 
   const handleClear = () => {
     setSearchTerm("");
-    onSearch(""); // immediately clear from parent as well
+    onSearch(""); 
   };
 
   return (
@@ -46,6 +42,7 @@ const CustomSearchField = ({
       value={searchTerm}
       onChange={(e) => setSearchTerm(e.target.value)}
       aria-label={label || placeholder}
+      sx={{ borderRadius: "6px", ...sx }}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
@@ -64,10 +61,6 @@ const CustomSearchField = ({
             </IconButton>
           </InputAdornment>
         ),
-        sx: {
-          borderRadius: "6px",
-        },
-        ...sx,
       }}
     />
   );

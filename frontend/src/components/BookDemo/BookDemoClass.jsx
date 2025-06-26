@@ -47,7 +47,7 @@ const BookDemoClass = () => {
       }
     } catch (err) {
       const error = JSON.parse(err?.message);
-      console.error("Error sending enquiry message", error);
+      console.error("Error sending  message", error);
       toast.error("Failed to send enquiry");
     }
   };

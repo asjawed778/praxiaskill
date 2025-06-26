@@ -92,9 +92,12 @@ export interface ICourseEnquiry extends BaseSchema {
     name: string;
     email: string;
     phone: string;
-    education: string;
-    interestedCourse: string;
-    status: CourseEnum.EnquiryStatus;
+    education?: string;
+    interestedCourse?: string;
+    statusLogs: {
+        status: CourseEnum.EnquiryStatus;
+        timeStamp: Date;
+    };
     whatsAppOptIn: boolean;
 }
 

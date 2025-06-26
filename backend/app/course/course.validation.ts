@@ -516,8 +516,8 @@ export const courseEnquiry = [
     body("name").notEmpty().withMessage("Name is required"),
     body("email").isEmail().withMessage("Invalid email format"),
     body("phone").isMobilePhone("any").withMessage("Invalid phone number"),
-    body("education").notEmpty().withMessage("Education is required"),
-    body("interestedCourse").notEmpty().withMessage("Interested course is required"),
+    body("education").optional(),
+    body("interestedCourse").optional(),
     body("whatsAppOptIn").isBoolean().withMessage("WhatsApp Opt-in must be a boolean"),
 ];
 
@@ -561,6 +561,36 @@ export const changeEnquiryStatus = [
         .isIn(Object.values(CourseEnum.EnquiryStatus))
         .withMessage(`Status must be one of: ${Object.values(CourseEnum.EnquiryStatus).join(', ')}`)
 ];
+
+
+export const getCourseEnquiry = [
+    query("limit")
+        .optional()
+        .isInt({ min: 1 })
+        .withMessage("Limit must be a positive integer"),
+
+    query("page")
+        .optional()
+        .isInt({ min: 1 })
+        .withMessage("Page must be a positive integer"),
+
+    query("search")
+        .optional()
+        .isString()
+        .withMessage("Search must be a string"),
+
+    query("status")
+        .optional()
+        .isString()
+        .isIn(Object.values(CourseEnum.EnquiryStatus))
+        .withMessage(`Status must be one of: ${Object.values(CourseEnum.EnquiryStatus).join(', ')}`),
+
+    query("sort")
+        .optional()
+        .isIn(["latest", "oldest"])
+        .withMessage("Sort must be either 'latest' or 'oldest'")
+];
+
 
 export const getCourses = [
     query('page')
