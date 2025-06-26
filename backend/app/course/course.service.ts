@@ -39,7 +39,7 @@ export const courseSlug = async (title: string, excludeId?: string | mongoose.Ty
     }
 
     return slug;
-}
+};
 
 export const isCourseExist = async (identifier: string): Promise<boolean> => {
     if (mongoose.Types.ObjectId.isValid(identifier)) {
@@ -215,82 +215,6 @@ export const courseEnquiry = async (data: CourseDTO.ICourseEnquiry): Promise<any
     await enquiry.save();
     return enquiry;
 };
-
-// export const getCourseEnquiry = async (
-//     pageNo: number = 1,
-//     limit: number = 10,
-//     status?: courseEnum.EnquiryStatus,
-//     search?: string,
-//     sortBy: 'latest' | 'oldest' = 'latest'
-// ): Promise<any> => {
-//     const skip = (pageNo - 1) * limit;
-
-//     const query: any = {};
-//     if (status) {
-//         query['statusLogs.status'] = status;
-//     }
-
-//     if (search) {
-//         const searchRegex = new RegExp(search, 'i');
-//         query.$or = [
-//             { name: searchRegex },
-//             { email: searchRegex },
-//             { phone: searchRegex },
-//             { ticketNo: searchRegex }
-//         ];
-//     }
-
-//     const sortOrder = sortBy === 'oldest' ? 1 : -1;
-
-//     const total = await CourseEnquirySchema.countDocuments(query);
-
-//     const data = await CourseEnquirySchema.aggregate([
-//         { $match: query },
-//         { $sort: { createdAt: sortOrder } },
-//         { $skip: skip },
-//         { $limit: limit },
-//         {
-//             $addFields: {
-//                 currentStatus: {
-//                     $let: {
-//                         vars: {
-//                             sortedStatusLogs: {
-//                                 $sortArray: {
-//                                     input: "$statusLogs",
-//                                     sortBy: { timeStamp: -1 }
-//                                 }
-//                             }
-//                         },
-//                         in: { $arrayElemAt: ["$$sortedStatusLogs.status", 0] }
-//                     }
-//                 }
-//             }
-//         },
-//         {
-//             $project: {
-//                 ticketNo: 1,
-//                 name: 1,
-//                 email: 1,
-//                 phone: 1,
-//                 education: 1,
-//                 interestedCourse: 1,
-//                 whatsAppOptIn: 1,
-//                 statusLogs: 1,
-//                 currentStatus: 1,
-//                 createdAt: 1,
-//                 updatedAt: 1
-//             }
-//         }
-//     ]);
-
-//     return {
-//         success: true,
-//         totalEnquiries: total,
-//         page: pageNo,
-//         pageSize: limit,
-//         enquiries: data
-//     };
-// };
 
 export const getCourseEnquiry = async (
     pageNo: number = 1,
@@ -698,12 +622,12 @@ export const getSubSectionFileKey = async (subSectionId: string) => {
         link: subsection.video.link,
         duration: subsection.video.duration,
     };
-}
+};
 
 export const enrollStudentIntoCourse = async (userId: string, courseId: string) => {
     const result = await enrollmentSchema.create({ userId, courseId });
     return result;
-}
+};
 
 export const isAlreadyEnrolledInCourse = async (userId: string, courseId: string) => {
     return await enrollmentSchema.exists({

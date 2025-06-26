@@ -22,11 +22,13 @@ export interface ICourse extends BaseSchema {
         finalPrice: number;
     };
     language: CourseEnum.Language;
-    duration: string;
-    totalLectures: number;
+    duration?: string;
+    totalLiveSession?: string;
+    recordedContent?: string;
+    totalLectures?: number;
     validity: CourseEnum.CourseValidity;
     courseMode: CourseEnum.CourseMode;
-    prerequisites?: string[];
+    prerequisites?: string;
     courseLevel?: string;
     tools?: {
         name: string;

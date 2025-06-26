@@ -207,9 +207,7 @@ export const createCourse = [
 
     body("prerequisites")
         .optional()
-        .isArray().withMessage("Prerequisites must be an array")
-        .custom((value: string[]) => value.every((item) => typeof item === "string"))
-        .withMessage("Each prerequisite must be a string"),
+        .isString().withMessage("prerequisite must be a string"),
 
     body("courseLevel")
         .optional()
@@ -290,6 +288,16 @@ export const createCourse = [
     body("duration")
         .optional()
         .isString().withMessage("Duration must be a string")
+        .trim(),
+
+    body("totalLiveSession")
+        .optional()
+        .isString().withMessage("totalLiveSession must be a string")
+        .trim(),
+
+    body("recordedContent")
+        .optional()
+        .isString().withMessage("recordedContent must be a string")
         .trim(),
 
     body("courseMode")
@@ -481,6 +489,20 @@ export const updateCourse = [
     body("duration")
         .notEmpty().withMessage("Duration is required")
         .isString().withMessage("Duration must be a string"),
+
+    body("prerequisites")
+        .optional()
+        .isString().withMessage("prerequisite must be a string"),
+
+    body("totalLiveSession")
+        .optional()
+        .isString().withMessage("totalLiveSession must be a string")
+        .trim(),
+
+    body("recordedContent")
+        .optional()
+        .isString().withMessage("recordedContent must be a string")
+        .trim(),
 
     body("totalLectures")
         .notEmpty().withMessage("Total lectures count is required")

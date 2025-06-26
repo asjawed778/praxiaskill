@@ -186,8 +186,6 @@ export const updateStatus = asyncHandler(async (req: Request, res: Response) => 
     res.send(createResponse({}, "Course published successfully"));
 });
 
-
-
 export const getCourseDetails = asyncHandler(async (req: Request, res: Response) => {
     const { identifier } = req.params;
     const isCourseExist = await courseService.isCourseExist(identifier);
