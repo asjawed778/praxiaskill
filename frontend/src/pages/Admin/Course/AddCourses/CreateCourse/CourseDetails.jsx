@@ -72,7 +72,7 @@ const CourseDetails = ({ handleNext, editMode, onSubmit, isCourseUpdate }) => {
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
-          <FileUploader name="brouchure" label="Upload Brouchure" />
+          <FileUploader name="brouchure" label="Upload Brouchure" required={false}/>
         </Grid>
       </Grid>
       <Box

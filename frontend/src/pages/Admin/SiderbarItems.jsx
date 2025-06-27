@@ -24,13 +24,18 @@ const sidebarItems = [
         label: "Category",
         icon: "PersonAddAlt",
       },
-      {
+      // {
+      //   path: "/dashboard/course-enquiry",
+      //   label: "Enquiry",
+      //   icon: "HelpOutline",
+      // },
+    ],
+  },
+  {
         path: "/dashboard/course-enquiry",
         label: "Enquiry",
         icon: "HelpOutline",
       },
-    ],
-  },
   {
     path: "/dashboard/users",
     label: "Users",

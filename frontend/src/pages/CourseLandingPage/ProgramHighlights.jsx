@@ -12,8 +12,8 @@ const ProgramHighlights = ({ course }) => {
   const rawHighlights = [
     {
       icon: <AutoStoriesIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
-      value: course?.totalLectures,
-      title: `${formatValue(course?.totalLectures)} Live`,
+      value: course?.totalLiveSession,
+      title: `${formatValue(course?.totalLiveSession || 0)} Live`,
       subtitle: "Mentorship Sessions",
     },
     {
@@ -27,13 +27,13 @@ const ProgramHighlights = ({ course }) => {
     {
       icon: <WorkIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
       value: course?.totalProjects,
-      title: `${formatValue(course?.totalProjects)} Major+Minor`,
+      title: `${formatValue(course?.totalProjects )} Major+Minor`,
       subtitle: "Capstone Projects",
     },
     {
       icon: <SchoolIcon fontSize="large" sx={{ color: "#9c6dff" }} />,
-      value: course?.totalLectures ,
-      title: `${formatValue(course?.totalLectures )} Hours of`,
+      value: course?.recordedContent ,
+      title: `${formatValue(course?.recordedContent || 0 )} Hours of`,
       subtitle: "Recorded Content",
     },
     {
@@ -44,6 +44,7 @@ const ProgramHighlights = ({ course }) => {
     },
   ];
   const highlights = rawHighlights.filter((item) => item.value > 0);
+  if(highlights?.length === 0) return;
 
   return (
     <Box
@@ -74,7 +75,7 @@ const ProgramHighlights = ({ course }) => {
         </Typography>
 
         <Grid container spacing={2} justifyContent="center" sx={{ mb: 6 }}>
-          {highlights.map((item, index) => (
+          {highlights?.map((item, index) => (
             <Grid
               item
               xs={6}

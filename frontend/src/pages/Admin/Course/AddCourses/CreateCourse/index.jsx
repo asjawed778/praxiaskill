@@ -81,7 +81,7 @@ const CreateCourse = () => {
             ],
         price: {
           actualPrice: loadCourse.data.price?.actualPrice || "",
-          discountPercentage: loadCourse.data.price?.discountPercentage || 0,
+          discountPercentage: loadCourse.data.price?.discountPercentage || null,
           finalPrice: loadCourse.data.price?.finalPrice || 0,
         },
       };
@@ -109,7 +109,7 @@ const CreateCourse = () => {
       ],
       price: {
         actualPrice: "",
-        discountPercentage: 0,
+        discountPercentage: null,
         finalPrice: 0,
       },
     };
@@ -141,7 +141,7 @@ const CreateCourse = () => {
             ],
         price: {
           actualPrice: loadCourse.data.price?.actualPrice || "",
-          discountPercentage: loadCourse.data.price?.discountPercentage || 0,
+          discountPercentage: loadCourse.data.price?.discountPercentage || null,
           finalPrice: loadCourse.data.price?.finalPrice || 0,
         },
       };
