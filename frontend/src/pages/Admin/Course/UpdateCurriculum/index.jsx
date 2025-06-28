@@ -232,6 +232,14 @@ const UpdateCurriculum = () => {
   }, [courseDetails]);
 
   const onSubmit = async (data) => {
+    data?.sections?.forEach((section) => {
+        section.assignments = section.assignments?.map(
+          (item) => item.assignment
+        );
+      });
+      data?.sections?.forEach((section) => {
+        section.projects = section.projects?.map((item) => item.project);
+      });
     const freshData = cleanData(data);
     console.log("Validated Data:", freshData);
     try {

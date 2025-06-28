@@ -90,7 +90,7 @@ const LearningPage = () => {
               onSearch={setSearchQuery}
             />
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }} noWrap>
+          <Grid size={{ xs: 12, md: 6 }} >
             <Box
               sx={{
                 // width: "100%",
