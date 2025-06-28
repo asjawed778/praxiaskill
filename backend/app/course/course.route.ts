@@ -61,11 +61,17 @@ router
     .delete("/notes/:noteId", authMiddlerware.auth, courseValidation.deleteCourseNotes, catchError, courseController.deleteNotes)
     .put("/notes/:noteId", authMiddlerware.auth, courseValidation.updateCourseNotes, catchError, courseController.updateCourseNotes)
 
-    // course overview rotes
+    // course overview routes
     .post("/overview/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.createCourseOverview, catchError, courseController.createCourseOverview)
     .put("/overview/:overviewId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.editCourseOverview, catchError, courseController.editCourseOverview)
     .delete("/overview/:overviewId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.deleteCourseOverview, catchError, courseController.deleteCourseOverview)
     .get("/overview/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.getCourseOverview, catchError, courseController.getCourseOverview)
+
+    // course announcements routes
+    .post("/announcement/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.createCourseAnnouncement, catchError, courseController.createCourseAnnouncement)
+    .put("/announcement/:announcementId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.updateCourseAnnouncement, catchError, courseController.updateCourseAnnouncement)
+    .delete("/announcement/:announcementId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.deleteCourseAnnouncement, catchError, courseController.deleteCourseAnnouncement)
+    .get("/announcement/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.getCourseAnnouncement, catchError, courseController.getCourseAnnouncement)
 
 
 export default router;

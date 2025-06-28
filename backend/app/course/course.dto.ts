@@ -166,6 +166,9 @@ export interface ICourseAnnouncement extends BaseSchema {
     message: string;
 }
 
+export interface ICourseAnnouncementCreate extends Omit<ICourseAnnouncement, "createdAt" | "updatedAt" | "_id"> { }
+
+
 
 
 export interface EnquiryStatusCount {

@@ -945,3 +945,49 @@ export const getCourseOverview = [
         .notEmpty().withMessage("subSectionId is required")
         .isMongoId().withMessage("subSectionId must be a valid MongoDB ObjectId"),
 ];
+
+// announcements
+
+export const createCourseAnnouncement = [
+    param('courseId')
+        .isMongoId()
+        .withMessage('Invalid courseId. Must be a valid Mongo ID'),
+
+    body('title')
+        .trim()
+        .notEmpty()
+        .withMessage('Title is required'),
+
+    body('message')
+        .trim()
+        .notEmpty()
+        .withMessage('Message is required')
+];
+
+export const updateCourseAnnouncement = [
+    param('announcementId')
+        .isMongoId()
+        .withMessage('Invalid courseId. Must be a valid Mongo ID'),
+
+    body('title')
+        .trim()
+        .notEmpty()
+        .withMessage('Title is required'),
+
+    body('message')
+        .trim()
+        .notEmpty()
+        .withMessage('Message is required')
+];
+
+export const deleteCourseAnnouncement = [
+    param('announcementId')
+        .isMongoId()
+        .withMessage('Invalid courseId. Must be a valid Mongo ID'),
+];
+
+export const getCourseAnnouncement = [
+    param('courseId')
+        .isMongoId()
+        .withMessage('Invalid courseId. Must be a valid Mongo ID'),
+];

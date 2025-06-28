@@ -153,7 +153,6 @@ export const updateCourseDetails = asyncHandler(async (req: Request, res: Respon
     res.send(createResponse(result, "Course details updated successfully"));
 });
 
-
 export const updateCourseCurriculum = asyncHandler(async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
     const isCourseExist = await courseService.isCourseExist(courseId);
@@ -162,7 +161,7 @@ export const updateCourseCurriculum = asyncHandler(async (req: Request, res: Res
     }
     const data: CourseDTO.IUpdateCourseCurriculum = req.body;
     const result = await courseService.updateCourseCurriculum(courseId, data);
-    res.send(createResponse(result, "Course Curriculum Updated Successfully"));  
+    res.send(createResponse(result, "Course Curriculum Updated Successfully"));
 });
 
 export const getCourseContent = asyncHandler(async (req: Request, res: Response) => {
@@ -254,7 +253,6 @@ export const courseEnquiry = asyncHandler(async (req: Request, res: Response) =>
     res.send(createResponse({}, "Course enquiry submitted successfully"));
 });
 
-
 export const getCourseEnquiry = asyncHandler(async (req: Request, res: Response) => {
     const pageNo = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
@@ -265,8 +263,6 @@ export const getCourseEnquiry = asyncHandler(async (req: Request, res: Response)
     const result = await courseService.getCourseEnquiry(pageNo, limit, status, search, sortBy);
     res.send(createResponse(result, "Course enquiry fetched successfully"));
 });
-
-
 
 export const changeEnquiryStatus = asyncHandler(async (req: Request, res: Response) => {
     const enquiryId = req.params.enquiryId;
@@ -286,7 +282,6 @@ export const getCourses = asyncHandler(async (req: Request, res: Response) => {
     const result = await courseService.getCourses(pageNo, limit, category, status, search);
     res.send(createResponse(result, "courses fetched successfully"));
 });
-
 
 export const rateCourse = asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) {
@@ -349,7 +344,6 @@ export const deleteCourseContent = asyncHandler(async (req: Request, res: Respon
     res.send(createResponse(result, "Subsection deleted successfully"));
 });
 
-
 export const getMyCourses = asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) {
         throw createHttpError(401, "Unauthorized user, login again");
@@ -361,7 +355,6 @@ export const getMyCourses = asyncHandler(async (req: Request, res: Response) => 
 
     res.send(createResponse(result, "My Course fetched successfull"));
 });
-
 
 // QNA related controllers
 export const createQna = asyncHandler(async (req: Request, res: Response) => {
@@ -582,7 +575,7 @@ export const getQnas = asyncHandler(async (req: Request, res: Response) => {
     res.send(createResponse(result, "QnAs fetched successfully"));
 });
 
-// Notes related controllers
+// course Notes controllers
 export const createCourseNotes = asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) {
         throw createHttpError(401, "Unauthorized user, login again");
@@ -697,4 +690,36 @@ export const getCourseOverview = asyncHandler(async (req: Request, res: Response
 
     const result = await courseService.getCourseOverview(courseId, sectionId, subSectionId);
     res.send(createResponse(result, "Course overview fetched successfully"));
+});
+
+// course announcements
+export const createCourseAnnouncement = asyncHandler(async (req: Request, res: Response) => {
+    const { courseId } = req.params;
+    const { title, message } = req.body;
+    const data: CourseDTO.ICourseAnnouncementCreate = {
+        courseId: new mongoose.Types.ObjectId(courseId),
+        title,
+        message
+    }
+    const result = await courseService.createCourseAnnouncement(data);
+    res.send(createResponse(result, "Announcement created successfully"))
+});
+
+export const updateCourseAnnouncement = asyncHandler(async (req: Request, res: Response) => {
+    const { announcementId } = req.params;
+    const { title, message } = req.body;
+    const result = await courseService.updateCourseAnnouncement(announcementId, title, message);
+    res.send(createResponse(result, "Announcement Updated successfully"))
+});
+
+export const deleteCourseAnnouncement = asyncHandler(async (req: Request, res: Response) => {
+    const { announcementId } = req.params;
+    await courseService.deleteCourseAnnouncement(announcementId);
+    res.send(createResponse({}, "Announcement Deleted successfully"));
+});
+
+export const getCourseAnnouncement = asyncHandler(async (req: Request, res: Response) => {
+    const { courseId } = req.params;
+    const result = await courseService.getCourseAnnouncement(courseId);
+    res.send(createResponse(result, "Announcement fetched successfully"));
 });

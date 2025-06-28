@@ -13,6 +13,7 @@ import { SortOrder } from 'mongoose';
 import slugify from "slugify";
 import courseNotesSchema from "./course.notes.schema";
 import CourseOverviewSchema from "./overview.schema";
+import CourseAnnouncementSchema from "./announcement.schema";
 
 export const courseSlug = async (title: string, excludeId?: string | mongoose.Types.ObjectId): Promise<string> => {
     const baseSlug = slugify(title, {
@@ -204,7 +205,6 @@ export const getCourseDetails = async (identifier: string): Promise<any> => {
         testimonials: topRatings
     };
 };
-
 
 export const courseEnquiry = async (data: CourseDTO.ICourseEnquiry): Promise<any> => {
     const statusLogs = [{
@@ -612,7 +612,6 @@ export const deleteSubSection = async (courseId: string, sectionId: string, subS
 export const updateCourseCurriculum = async (courseId: string, data: CourseDTO.IUpdateCourseCurriculum) => {
     const session = await mongoose.startSession();
     session.startTransaction();
-    console.log('####### data: ', data);
 
     try {
         const course = await courseSchema.findById(courseId).session(session);
@@ -1257,14 +1256,16 @@ export const getCourseNotes = async (queryParam: Record<string, any>): Promise<a
 };
 
 //  course overview seriveces
-
 export const createCourseOverview = async (data: CourseDTO.ICourseOverviewCreate) => {
     const result = await CourseOverviewSchema.create(data);
     return result;
 };
 
 export const editCourseOverview = async (overviewId: string, overview: string) => {
-    const result = await CourseOverviewSchema.findByIdAndUpdate(overviewId, { overview }, { new: true });
+    const result = await CourseOverviewSchema.findByIdAndUpdate(overviewId,
+        { overview },
+        { new: true }
+    );
     return result;
 };
 
@@ -1277,6 +1278,32 @@ export const getCourseOverview = async (courseId: string, sectionId: string, sub
     return result;
 };
 
+// announcements 
+export const createCourseAnnouncement = async (data: CourseDTO.ICourseAnnouncementCreate) => {
+    const result = await CourseAnnouncementSchema.create(data);
+    return result;
+};
+
+export const updateCourseAnnouncement = async (announcementId: string, title: string, message: string) => {
+    const result = await CourseAnnouncementSchema.findByIdAndUpdate(announcementId,
+        {
+            title, message
+        },
+        { new: true }
+    );
+    return result;
+};
+
+export const deleteCourseAnnouncement = async (announcementId: string) => {
+    await CourseAnnouncementSchema.findByIdAndDelete(announcementId);
+};
+
+export const getCourseAnnouncement = async (courseId: string) => {
+    const result = await CourseAnnouncementSchema.find({ courseId });
+    return result;
+};
+
+// analytics
 export const getCourseAnalytics = async () => {
     const results = await Promise.all([
         courseSchema.aggregate([
