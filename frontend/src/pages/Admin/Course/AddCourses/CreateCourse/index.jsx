@@ -179,6 +179,7 @@ const CreateCourse = () => {
         section.projects = section.projects?.map((item) => item.project);
       });
       const payload = cleanData(data);
+      console.log("###### payload", payload);
 
       const result = editMode
         ? await updateCourse({
@@ -188,6 +189,7 @@ const CreateCourse = () => {
         : await uploadCourse(payload);
       if (result.error) {
         if (result.error.status === 400) {
+          console.log("#### result::",  result)
           toast.error("Please fill all steps before submitting!");
         }
         throw new Error(result.error.data.message);

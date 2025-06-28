@@ -153,6 +153,18 @@ export const updateCourseDetails = asyncHandler(async (req: Request, res: Respon
     res.send(createResponse(result, "Course details updated successfully"));
 });
 
+
+export const updateCourseCurriculum = asyncHandler(async (req: Request, res: Response) => {
+    const courseId = req.params.courseId;
+    const isCourseExist = await courseService.isCourseExist(courseId);
+    if (!isCourseExist) {
+        throw createHttpError(404, "Course id is invalid, Not found");
+    }
+    const data: CourseDTO.IUpdateCourseCurriculum = req.body;
+    const result = await courseService.updateCourseCurriculum(courseId, data);
+    res.send(createResponse(result, "Course Curriculum Updated Successfully"));  
+});
+
 export const getCourseContent = asyncHandler(async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
     const isCourseExist = await courseService.isCourseExist(courseId);
@@ -321,28 +333,22 @@ export const getRatings = asyncHandler(async (req: Request, res: Response) => {
     res.send(createResponse(result, "Ratings fetched successfully"));
 });
 
-export const deleteSection = asyncHandler(async (req: Request, res: Response) => {
+export const deleteCourseContent = asyncHandler(async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
-    const sectionId = req.params.sectionId;
+    const { sectionId, subSectionId } = req.query;
     const isCourseExist = await courseService.isCourseExist(courseId);
     if (!isCourseExist) {
         throw createHttpError(404, "Course id is invalid, Not found");
     }
-    const result = await courseService.deleteSection(courseId, sectionId);
-    res.send(createResponse(result, "Section deleted successfully"));
-});
-
-export const deleteSubSection = asyncHandler(async (req: Request, res: Response) => {
-    const courseId = req.params.courseId;
-    const sectionId = req.params.sectionId;
-    const subSectionId = req.params.subSectionId;
-    const isCourseExist = await courseService.isCourseExist(courseId);
-    if (!isCourseExist) {
-        throw createHttpError(404, "Course id is invalid, Not found");
+    let result;
+    if (subSectionId) {
+        result = await courseService.deleteSection(courseId, sectionId as string);
+    } else {
+        result = await courseService.deleteSubSection(courseId, sectionId as string, subSectionId as string);
     }
-    const result = await courseService.deleteSubSection(courseId, sectionId, subSectionId);
     res.send(createResponse(result, "Subsection deleted successfully"));
 });
+
 
 export const getMyCourses = asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) {
