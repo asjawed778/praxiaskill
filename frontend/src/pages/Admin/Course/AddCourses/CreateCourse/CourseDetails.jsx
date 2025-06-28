@@ -84,7 +84,7 @@ const CourseDetails = ({ handleNext, editMode, onSubmit, isCourseUpdate }) => {
       >
         <Stack spacing={2} direction="row">
           {editMode && (
-             <CustomButton type="submit" label="Update" onClick={onSubmit} loading={isCourseUpdate}/>
+             <CustomButton type="submit" label="Submit" onClick={onSubmit} loading={isCourseUpdate}/>
           )}
           <CustomButton label="Next" onClick={handleNext} />
         </Stack>

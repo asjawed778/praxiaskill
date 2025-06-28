@@ -118,7 +118,7 @@ const AdditionalDetails = ({
         <Stack spacing={2} direction="row">
           {editMode && (
             <CustomButton
-              label="Update"
+              label="Submit"
               type="submit"
               onClick={onSubmit}
               loading={isCourseUpdate}

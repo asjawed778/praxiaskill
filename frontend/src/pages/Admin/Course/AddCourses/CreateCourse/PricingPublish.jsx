@@ -133,7 +133,7 @@ const PricingPublish = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => 
               isLoading || isCourseUpdate ? (
                 <ButtonLoading />
               ) : editMode ? (
-                "Update"
+                "Submit"
               ) : (
                 "Submit"
               )

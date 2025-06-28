@@ -28,25 +28,31 @@ const actionsList = (row) => {
       action: "addContent",
       label: "Add Content",
       icon: <AddIcon />,
-      color: "primary",
+      color: "primary.main",
+    },
+    {
+      action: "updateCurriculum",
+      label: "Update Curriculum",
+      icon: <EditIcon />,
+      color: "#00e676"
     },
     {
       action: "lectures",
       label: "Lectures",
       icon: <MenuBookIcon />,
-      color: "secondary",
+      color: "secondary.main",
     },
     {
       action: "updateCourse",
       label: "Update Course",
       icon: <EditIcon />,
-      color: "info",
+      color: "info.main",
     },
     {
       action: "terminateCourse",
       label: isPublishable ? "Publish Course" : "Terminate Course",
       icon: isPublishable ? <PublishIcon /> : <CancelIcon />,
-      color: isPublishable ? "success" : "error",
+      color: isPublishable ? "success.main" : "error.main",
     },
   ];
 };
@@ -115,10 +121,21 @@ const ManageCourses = () => {
   // }, [location]);
 
   const handleActionClick = (action, row) => {
+    console.log("row: ",row);
+    
     setSelectedCourse(row);
     switch (action) {
       case "addContent":
         navigate(`/dashboard/course/content/${row?._id}`);
+        break;
+      case "updateCurriculum":
+        navigate("/dashboard/update-curriculum", {
+          state: {
+            course: row,
+            update: true
+          },
+          replace: false,
+        });
         break;
       case "lectures":
         navigate(`/course-lecture/${row?._id}`);

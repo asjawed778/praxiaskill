@@ -27,6 +27,7 @@ const AdminDashboard = lazy(() => import("../pages/Admin/AdminDashboard"));
 const AddCourses = lazy(() => import("../pages/Admin/Course/AddCourses/CreateCourse"));
 const ManageCourses = lazy(() => import("../pages/Admin/Course/ManageCourses"));
 const AddCourseContent = lazy(() => import("../pages/Admin/Course/AddCourses/AddCourseContent"));
+const UpdateCurriculum = lazy(() => import("../pages/Admin/Course/UpdateCurriculum"));
 const Users = lazy(() => import("../pages/Users"));
 const ViewCategories = lazy(() =>
     import("../pages/Admin/Category/ViewCategories")
@@ -224,6 +225,14 @@ const AppRoutes = () => {
                     element={
                         <LazyComponent>
                             <AddCourses />
+                        </LazyComponent>
+                    }
+                />
+                <Route
+                    path="update-curriculum"
+                    element={
+                        <LazyComponent>
+                            <UpdateCurriculum />
                         </LazyComponent>
                     }
                 />
