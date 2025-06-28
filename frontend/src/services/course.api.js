@@ -242,6 +242,17 @@ export const apiCourse = createApi({
         credentials: "include",
       })
     }),
+    deleteCurriculum: builder.mutation({
+      query: ({ courseId, sectionId, subSectionId }) => ({
+        url: `/course/${courseId}`,
+        method: "DELETE",
+        params: {
+          ...(sectionId && { sectionId }),
+          ...(subSectionId && { subSectionId } )
+        },
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -272,4 +283,5 @@ export const {
   useGetCoursesQuery,
   useUpdateCourseStatusMutation,
   useUpdateCurriculumMutation,
+  useDeleteCurriculumMutation,
 } = apiCourse;
