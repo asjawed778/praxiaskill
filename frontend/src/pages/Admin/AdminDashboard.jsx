@@ -149,11 +149,11 @@ const AdminDashboard = () => {
   const enquiryStatus = [
     {
       name: "Closed",
-      value: dashboardData?.data?.enquiryAnalytics?.byStatus?.CLOSED,
+      value: dashboardData?.data?.enquiryAnalytics?.byStatus?.Closed,
     },
     {
-      name: "Pending",
-      value: dashboardData?.data?.enquiryAnalytics?.byStatus?.PENDING,
+      name: "Open",
+      value: dashboardData?.data?.enquiryAnalytics?.byStatus?.Open,
     },
   ];
   const userTrends = dashboardData?.data?.userAnalytics?.trends?.monthly?.map(
@@ -198,10 +198,9 @@ const AdminDashboard = () => {
         <Grid size={{ xs: 6, md: 3 }}>
           <GenericCard
             value={
-              dashboardData?.data?.courseAnalytics?.enrollmentMetrics
-                ?.totalEnrollments
+              dashboardData?.data?.enquiryAnalytics?.totalEnquiries
             }
-            title="Total Enrollments"
+            title="Total Enquiries"
           />
         </Grid>
       </Grid>

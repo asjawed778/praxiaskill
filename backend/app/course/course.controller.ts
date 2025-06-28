@@ -663,3 +663,38 @@ export const getCourseNotes = asyncHandler(async (req: Request, res: Response) =
     const result = await courseService.getCourseNotes(query);
     res.send(createResponse(result, "Course notes fetched successfully"));
 });
+
+// Overview related controllers
+export const createCourseOverview = asyncHandler(async (req: Request, res: Response) => {
+    const { courseId, sectionId, subSectionId } = req.params;
+    const data: CourseDTO.ICourseOverviewCreate = {
+        courseId: new mongoose.Types.ObjectId(courseId as string),
+        sectionId: new mongoose.Types.ObjectId(sectionId as string),
+        subSectionId: new mongoose.Types.ObjectId(subSectionId as string),
+        overview: req.body.overview
+    };
+
+    const result = await courseService.createCourseOverview(data);
+    res.send(createResponse(result, "Course overview created successfully"));
+});
+
+export const editCourseOverview = asyncHandler(async (req: Request, res: Response) => {
+    const { overviewId } = req.params;
+
+    const result = await courseService.editCourseOverview(overviewId, req.body.overview);
+    res.send(createResponse(result, "Course overview edited successfully"));
+});
+
+export const deleteCourseOverview = asyncHandler(async (req: Request, res: Response) => {
+    const { overviewId } = req.params;
+
+    await courseService.deleteCourseOverview(overviewId);
+    res.send(createResponse({}, "Course overview deleted successfully"));
+});
+
+export const getCourseOverview = asyncHandler(async (req: Request, res: Response) => {
+    const { courseId, sectionId, subSectionId } = req.params;
+
+    const result = await courseService.getCourseOverview(courseId, sectionId, subSectionId);
+    res.send(createResponse(result, "Course overview fetched successfully"));
+});

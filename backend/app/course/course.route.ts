@@ -9,7 +9,7 @@ const router = Router();
 router
     // user course routes
     .get("/my-courses", authMiddlerware.auth, courseController.getMyCourses)
-    
+
     // public api for courses
     .get("/all", courseValidation.getCourses, courseController.getCourses)
 
@@ -19,7 +19,7 @@ router
     .post("/", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.createCourse, catchError, courseController.createCourse)
     .put("/details/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.updateCourse, catchError, courseController.updateCourseDetails)
     .put("/curriculum/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.updateCourseCurriculum, catchError, courseController.updateCourseCurriculum)
-    
+
     // route to delete section and subsection
     .delete("/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.deleteContent, catchError, courseController.deleteCourseContent)
 
@@ -33,7 +33,7 @@ router
     .get("/presigned/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, courseValidation.courseContentPresignedUrl, catchError, courseController.getCourseVideoAccessUrl)
 
     .get("/content/:courseId", authMiddlerware.auth, courseController.getCourseContent)
-    
+
     // enquiry routes
     .post("/enquiry", courseValidation.courseEnquiry, catchError, courseController.courseEnquiry)
     .get("/enquiry", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.getCourseEnquiry, catchError, courseController.getCourseEnquiry)
@@ -60,6 +60,12 @@ router
     .get("/notes/my", authMiddlerware.auth, courseValidation.getCourseNotes, catchError, courseController.getCourseNotes)
     .delete("/notes/:noteId", authMiddlerware.auth, courseValidation.deleteCourseNotes, catchError, courseController.deleteNotes)
     .put("/notes/:noteId", authMiddlerware.auth, courseValidation.updateCourseNotes, catchError, courseController.updateCourseNotes)
+
+    // course overview rotes
+    .post("/overview/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.createCourseOverview, catchError, courseController.createCourseOverview)
+    .put("/overview/:overviewId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.editCourseOverview, catchError, courseController.editCourseOverview)
+    .delete("/overview/:overviewId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.deleteCourseOverview, catchError, courseController.deleteCourseOverview)
+    .get("/overview/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.getCourseOverview, catchError, courseController.getCourseOverview)
 
 
 export default router;
