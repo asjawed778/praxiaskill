@@ -167,7 +167,8 @@ const TableWrapper = ({
               key={idx}
               onClick={() => handleAction(item.action)}
               sx={{
-                color: (theme) => theme.palette[item.color || "text"].main,
+                // color: (theme) => theme.palette[item.color || "text"].main,
+                color: item.color,
                 display: "flex",
                 alignItems: "center",
                 gap: 1,

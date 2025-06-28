@@ -179,7 +179,6 @@ const CreateCourse = () => {
         section.projects = section.projects?.map((item) => item.project);
       });
       const payload = cleanData(data);
-      console.log("###### payload", payload);
 
       const result = editMode
         ? await updateCourse({

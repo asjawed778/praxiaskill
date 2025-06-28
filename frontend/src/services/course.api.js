@@ -229,7 +229,19 @@ export const apiCourse = createApi({
         url: `/course/status/${courseId}?status=${status}`,
         method: "PATCH"
       })
-    })
+    }),
+    updateCurriculum: builder.mutation({
+      query: ({ courseId, sectionId, subSectionId, body }) => ({
+        url: `/course/curriculum/${courseId}`,
+        method: "PUT",
+        params: {
+          ...(sectionId && { sectionId }),
+          ...(subSectionId && { subSectionId } )
+        },
+        body,
+        credentials: "include",
+      })
+    }),
   }),
 });
 
@@ -259,4 +271,5 @@ export const {
   useUpdateNotesMutation,
   useGetCoursesQuery,
   useUpdateCourseStatusMutation,
+  useUpdateCurriculumMutation,
 } = apiCourse;
