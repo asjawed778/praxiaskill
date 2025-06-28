@@ -12,6 +12,7 @@ import qnaSchema from "./qna.schema";
 import { SortOrder } from 'mongoose';
 import slugify from "slugify";
 import courseNotesSchema from "./course.notes.schema";
+import CourseOverviewSchema from "./overview.schema";
 
 export const courseSlug = async (title: string, excludeId?: string | mongoose.Types.ObjectId): Promise<string> => {
     const baseSlug = slugify(title, {
@@ -1254,6 +1255,36 @@ export const getCourseNotes = async (queryParam: Record<string, any>): Promise<a
     };
 };
 
+//  course overview seriveces
+
+export const createCourseOverview = async (data: CourseDTO.ICourseOverviewCreate) => {
+    const result = await CourseOverviewSchema.create(data);
+    return result;
+};
+
+export const editCourseOverview = async (overviewId: string, overview: string) => {
+    const result = await CourseOverviewSchema.findByIdAndUpdate(overviewId, { overview }, { new: true });
+    return result;
+};
+
+export const deleteCourseOverview = async (overviewId: string) => {
+    await CourseOverviewSchema.findByIdAndDelete(overviewId);
+};
+
+export const getCourseOverview = async (courseId: string, sectionId: string, subSectionId: string) => {
+    const result = await CourseOverviewSchema.find({ courseId, sectionId, subSectionId });
+    return result;
+};
+
+
+
+
+
+
+
+
+
+
 export const getCourseAnalytics = async () => {
     const results = await Promise.all([
         courseSchema.aggregate([
@@ -1324,8 +1355,25 @@ export const getEnquiryAnalytics = async () => {
                     { $match: { createdAt: { $gte: periods.year } } },
                     { $count: "count" }
                 ],
-                byStatus: [
-                    { $group: { _id: "$status", count: { $sum: 1 } } }
+                allStatuses: [
+                    {
+                        $addFields: {
+                            currentStatus: {
+                                $let: {
+                                    vars: {
+                                        sortedLogs: {
+                                            $slice: [
+                                                { $sortArray: { input: "$statusLogs", sortBy: { timeStamp: -1 } } },
+                                                1
+                                            ]
+                                        }
+                                    },
+                                    in: { $arrayElemAt: ["$$sortedLogs.status", 0] }
+                                }
+                            }
+                        }
+                    },
+                    { $group: { _id: "$currentStatus", count: { $sum: 1 } } }
                 ]
             }
         }
@@ -1333,18 +1381,25 @@ export const getEnquiryAnalytics = async () => {
 
     const getCount = (field: string) => results[0][field][0]?.count || 0;
 
+    const statusCounts = (results[0].allStatuses as CourseDTO.EnquiryStatusCount[]).reduce((acc, curr) => {
+        if (curr._id === 'Closed') {
+            acc.Closed = curr.count;
+        } else {
+            acc.Open = (acc.Open || 0) + curr.count;
+            acc[curr._id] = curr.count;
+        }
+        return acc;
+    }, {} as Record<string, number>);
 
-
-    return {
+    const result = {
         totalEnquiries: getCount("total"),
         today: getCount("today"),
         thisWeek: getCount("thisWeek"),
         thisMonth: getCount("thisMonth"),
         lastSixMonths: getCount("lastSixMonths"),
         thisYear: getCount("thisYear"),
-        byStatus: (results[0].byStatus as CourseDTO.EnquiryStatusCount[]).reduce((acc: Record<string, number>, curr: CourseDTO.EnquiryStatusCount) => {
-            acc[curr._id] = curr.count;
-            return acc;
-        }, {})
+        byStatus: statusCounts
     } as CourseDTO.EnquiryAnalyticsResult;
+    console.log(result);
+    return result;
 };

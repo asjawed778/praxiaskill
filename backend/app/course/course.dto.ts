@@ -150,6 +150,24 @@ export interface ICourseNotes extends BaseSchema {
 }
 export interface ICourseNotesCreate extends Omit<ICourseNotes, "createdAt" | "updatedAt" | "_id"> { }
 
+export interface ICourseOverview extends BaseSchema {
+    courseId: mongoose.Types.ObjectId;
+    sectionId: mongoose.Types.ObjectId;
+    subSectionId: mongoose.Types.ObjectId;
+    overview: string;
+}
+
+export interface ICourseOverviewCreate extends Omit<ICourseOverview, "createdAt" | "updatedAt" | "_id"> { }
+
+
+export interface ICourseAnnouncement extends BaseSchema {
+    courseId: mongoose.Types.ObjectId;
+    title: string;
+    message: string;
+}
+
+
+
 export interface EnquiryStatusCount {
     _id: string;
     count: number;

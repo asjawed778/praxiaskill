@@ -1030,3 +1030,53 @@ export const getCourseNotes = [
         .isIn(['latest', 'oldest']).withMessage('Sort must be either "latest" or "oldest"')
 
 ];
+
+// overview
+
+export const createCourseOverview = [
+    param("courseId")
+        .notEmpty().withMessage("courseId is required")
+        .isMongoId().withMessage("courseId must be a valid MongoDB ObjectId"),
+
+    param("sectionId")
+        .notEmpty().withMessage("sectionId is required")
+        .isMongoId().withMessage("sectionId must be a valid MongoDB ObjectId"),
+
+    param("subSectionId")
+        .notEmpty().withMessage("subSectionId is required")
+        .isMongoId().withMessage("subSectionId must be a valid MongoDB ObjectId"),
+
+    body("overview")
+        .notEmpty().withMessage("Overview is required")
+        .isString().withMessage("Overview must be a string")
+];
+
+export const editCourseOverview = [
+    param("overviewId")
+        .notEmpty().withMessage("overviewId is required")
+        .isMongoId().withMessage("overviewId must be a valid MongoDB ObjectId"),
+
+    body("overview")
+        .notEmpty().withMessage("Overview is required")
+        .isString().withMessage("Overview must be a string")
+];
+
+export const deleteCourseOverview = [
+    param("overviewId")
+        .notEmpty().withMessage("overviewId is required")
+        .isMongoId().withMessage("overviewId must be a valid MongoDB ObjectId"),
+];
+
+export const getCourseOverview = [
+    param("courseId")
+        .notEmpty().withMessage("courseId is required")
+        .isMongoId().withMessage("courseId must be a valid MongoDB ObjectId"),
+
+    param("sectionId")
+        .notEmpty().withMessage("sectionId is required")
+        .isMongoId().withMessage("sectionId must be a valid MongoDB ObjectId"),
+
+    param("subSectionId")
+        .notEmpty().withMessage("subSectionId is required")
+        .isMongoId().withMessage("subSectionId must be a valid MongoDB ObjectId"),
+];
