@@ -1,141 +1,133 @@
-// import { Box, Typography, Stack } from "@mui/material";
-// import { useFormContext, useFieldArray } from "react-hook-form";
-// import { FaPlus } from "react-icons/fa";
-// import required from "@/assets/icons/required.svg";
-// import CustomButton from "@/components/CustomButton";
-// import SubSectionFields from "./SubSectionFields";
-// import ProjectFields from "./ProjectFields";
-// import AssignmentFields from "./AssignmentsFields";
-// import CustomInputField from "@/components/CustomInputField";
-
-// const CourseStructure = ({ handleNext, handlePrev }) => {
-//   const {
-//     control,
-//     register,
-//     formState: { errors },
-//   } = useFormContext();
-
-//   const {
-//     fields: sectionFields,
-//     append: appendSection,
-//     remove: removeSection,
-//   } = useFieldArray({
-//     control,
-//     name: "sections",
-//   });
-
-//   return (
-//     <Box display="flex" flexDirection="column" gap={2}>
-//       <Box position="relative" width="fit-content">
-//         <Typography variant="h6" fontWeight={600}>
-//           Section
-//         </Typography>
-//         <Box
-//           component="img"
-//           src={required}
-//           alt="required"
-//           loading="lazy"
-//           decoding="async"
-//           sx={{
-//             width: 8,
-//             height: 8,
-//             position: "absolute",
-//             top: 6,
-//             right: -12,
-//           }}
-//         />
-//       </Box>
-
-//       <Box display="flex" flexDirection="column" gap={4}>
-//         {sectionFields.map((_, sectionIndex) => (
-//           <Box
-//             key={sectionIndex}
-//             p={3}
-//             border="1px solid #ccc"
-//             borderRadius={2}
-//             position="relative"
-//           >
-//             <Typography
-//               variant="body2"
-//               sx={{ position: "absolute", top: 8, right: 12 }}
-//             >
-//               {sectionIndex + 1}
-//             </Typography>
-//             <Stack spacing={2}>
-//               <CustomInputField
-//                 name={`sections.${sectionIndex}.title`}
-//                 label="Title"
-//                 placeholder="Enter section title"
-//               />
-//               <CustomInputField
-//                 name={`sections.${sectionIndex}.description`}
-//                 label="Description"
-//                 placeholder="Enter section description"
-//                 multiline
-//                 row={3}
-//                 required={false}
-//               />
-//             </Stack>
-//             <SubSectionFields
-//               control={control}
-//               sectionIndex={sectionIndex}
-//               errors={errors}
-//             />
-//             <AssignmentFields
-//               control={control}
-//               sectionIndex={sectionIndex}
-//               errors={errors}
-//             />
-//             <ProjectFields
-//               register={register}
-//               control={control}
-//               sectionIndex={sectionIndex}
-//               errors={errors}
-//             />
-//             {sectionFields.length > 1 && (
-//               <CustomButton
-//                 label="Remove Section"
-//                 color="error"
-//                 variant="outlined"
-//                 onClick={() => removeSection(sectionIndex)}
-//                 sx={{ mt: 2, ml: "auto", display: "block" }}
-//               />
-//             )}
-//           </Box>
-//         ))}
-//         <CustomButton
-//           label="Add More Section"
-//           onClick={() =>
-//             appendSection({
-//               title: "",
-//               description: "",
-//               subSections: [{ title: "", description: "" }],
-//             })
-//           }
-//           startIcon={<FaPlus />}
-//         />
-//         <Stack direction="row" justifyContent="space-between" mt={2}>
-//           <CustomButton label="Back" onClick={handlePrev} />
-//           <CustomButton label="Next" onClick={handleNext} />
-//         </Stack>
-//       </Box>
-//     </Box>
-//   );
-// };
-
-// export default CourseStructure;
-
-import { Box, Typography, Stack } from "@mui/material";
-import { useFormContext, useFieldArray } from "react-hook-form";
-import { useState } from "react";
+import {
+  Box,
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Chip,
+  Stack,
+  Divider,
+} from "@mui/material";
+import { useFormContext, useFieldArray, useWatch } from "react-hook-form";
+import { useEffect, useState } from "react";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { FaPlus } from "react-icons/fa";
 import required from "@/assets/icons/required.svg";
 import CustomButton from "@/components/CustomButton";
+import CustomInputField from "@/components/CustomInputField";
 import SubSectionFields from "./SubSectionFields";
 import ProjectFields from "./ProjectFields";
 import AssignmentFields from "./AssignmentsFields";
-import CustomInputField from "@/components/CustomInputField";
-import { Close, KeyboardArrowDown, KeyboardArrowRight } from "@mui/icons-material";
+import { Tooltip, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
+const SectionAccordion = ({
+  field,
+  sectionIndex,
+  control,
+  register,
+  errors,
+  expanded,
+  onExpand,
+  removeSection,
+  totalSections,
+}) => {
+  const sectionTitle = useWatch({
+    control,
+    name: `sections.${sectionIndex}.title`,
+    defaultValue: "",
+  });
+
+  return (
+    <Accordion
+      expanded={expanded === field.id}
+      onChange={onExpand(field.id)}
+      sx={{
+        color: "black",
+        mb: 1,
+        borderLeft: "6px solid #00e676",
+        borderRadius: 2,
+        boxShadow: "0 0 10px rgba(0, 230, 118, 0.2)",
+        "&:before": { display: "none" },
+      }}
+    >
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon sx={{ color: "#00e676" }} />}
+        sx={{ px: 1, position: "relative", pr: 5 }}
+      >
+        {totalSections > 1 && (
+          <Tooltip title="Remove Section">
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation(); 
+                removeSection(sectionIndex);
+              }}
+              size="small"
+              sx={{
+                position: "absolute",
+                top: -1,
+                right: -1,
+                zIndex: 2,
+                color: "error.main",
+                bgcolor: "white",
+                "&:hover": {
+                  bgcolor: "#ffe6e6",
+                },
+              }}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        )}
+
+        <Box display="flex" alignItems="center" gap={2}>
+          <Chip
+            label={`Module ${sectionIndex + 1}`}
+            sx={{ bgcolor: "#00e676", fontWeight: "bold" }}
+          />
+          <Typography sx={{ fontWeight: 500 }}>
+            {sectionTitle || "You have not created this module yet."}
+          </Typography>
+        </Box>
+      </AccordionSummary>
+
+      <AccordionDetails sx={{ px: 2 }}>
+        <Stack spacing={1}>
+          <CustomInputField
+            name={`sections.${sectionIndex}.title`}
+            label="Title"
+            placeholder="Enter section title"
+          />
+          <CustomInputField
+            name={`sections.${sectionIndex}.description`}
+            label="Description"
+            placeholder="Enter section description"
+            multiline
+            row={2}
+            required={false}
+          />
+
+          <SubSectionFields
+            control={control}
+            sectionIndex={sectionIndex}
+            errors={errors}
+          />
+          <AssignmentFields
+            control={control}
+            sectionIndex={sectionIndex}
+            errors={errors}
+          />
+          <ProjectFields
+            register={register}
+            control={control}
+            sectionIndex={sectionIndex}
+            errors={errors}
+          />
+        </Stack>
+      </AccordionDetails>
+    </Accordion>
+  );
+};
 
 const CourseStructure = ({ handleNext, handlePrev }) => {
   const {
@@ -154,20 +146,26 @@ const CourseStructure = ({ handleNext, handlePrev }) => {
     name: "sections",
   });
 
-  const [activeSectionIndex, setActiveSectionIndex] = useState(0);
+  const [expanded, setExpanded] = useState(() =>
+    sectionFields.length > 0 ? sectionFields[0].id : null
+  );
+
+  const handleExpand = (panelId) => (_, isExpanded) => {
+    setExpanded(isExpanded ? panelId : null);
+  };
+  useEffect(() => {
+    if (sectionFields.length > 0) {
+      setExpanded(sectionFields[sectionFields.length - 1].id);
+    }
+  }, [sectionFields]);
 
   return (
-    <Box display="flex" flexDirection="column" gap={1}>
-      <Box position="relative" width="fit-content">
-        <Typography variant="h6" fontWeight={600}>
-          Module
-        </Typography>
+    <Box sx={{ borderRadius: 2 }}>
+      <Box position="relative" width="fit-content" mb={1}>
         <Box
           component="img"
           src={required}
           alt="required"
-          loading="lazy"
-          decoding="async"
           sx={{
             width: 8,
             height: 8,
@@ -178,121 +176,41 @@ const CourseStructure = ({ handleNext, handlePrev }) => {
         />
       </Box>
 
-      <Box display="flex" flexDirection="column" gap={4}>
-        {sectionFields.map((field, sectionIndex) => (
-          <Box
-            key={field.id}
-            p={3}
-            border="1px solid #ccc"
-            borderRadius={2}
-            position="relative"
-          >
-            {/* Clickable Header to Toggle Active Section */}
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-              onClick={() => setActiveSectionIndex(sectionIndex)}
-              sx={{ cursor: "pointer", mb: 2 }}
-            >
-              <Typography variant="h6" fontWeight={600}>
-                Module {sectionIndex + 1}
-              </Typography>
-              {activeSectionIndex === sectionIndex ? (
-                <KeyboardArrowDown fontSize="medium" />
-              ) : (
-                <KeyboardArrowRight fontSize="medium" />
-              )}
-            </Box>
-
-            {/* Show Only Active Section */}
-            {activeSectionIndex === sectionIndex && (
-              <>
-                <Stack spacing={2} mt={2}>
-                  <CustomInputField
-                    name={`sections.${sectionIndex}.title`}
-                    label="Title"
-                    placeholder="Enter section title"
-                  />
-                  <CustomInputField
-                    name={`sections.${sectionIndex}.description`}
-                    label="Description"
-                    placeholder="Enter section description"
-                    multiline
-                    row={3}
-                    required={false}
-                  />
-                </Stack>
-
-                <SubSectionFields
-                  control={control}
-                  sectionIndex={sectionIndex}
-                  errors={errors}
-                />
-                <AssignmentFields
-                  control={control}
-                  sectionIndex={sectionIndex}
-                  errors={errors}
-                />
-                <ProjectFields
-                  register={register}
-                  control={control}
-                  sectionIndex={sectionIndex}
-                  errors={errors}
-                />
-
-                {sectionFields.length > 1 && (
-                  <Box sx={{
-                    display: "flex",
-                    justifyContent: "flex-end"
-                  }}>
-                    <CustomButton
-                    label="Remove Section"
-                    color="error"
-                    variant="outlined"
-                    onClick={() => removeSection(sectionIndex)}
-                    sx={{ mt: 2, ml: "auto", display: "block" }}
-                  />
-                  </Box>
-                )}
-              </>
-            )}
-          </Box>
-        ))}
-
-        {/* <CustomButton
-          label="Add More Section"
-          onClick={() => {
-            appendSection({
-              title: "",
-              description: "",
-              subSections: [{ title: "", description: "" }],
-            });
-            setActiveSectionIndex(sectionFields.length); // open the newly added section
-          }}
-          startIcon={<FaPlus />}
-        /> */}
-        <CustomButton
-          label="Add More Section"
-          onClick={async () => {
-            const isValid = await trigger(); 
-            if (!isValid) return;
-
-            appendSection({
-              title: "",
-              description: "",
-              subSections: [{ title: "", description: "" }],
-            });
-            setActiveSectionIndex(sectionFields.length); 
-          }}
-          startIcon={<FaPlus />}
+      {sectionFields.map((field, index) => (
+        <SectionAccordion
+          key={field.id}
+          field={field}
+          sectionIndex={index}
+          control={control}
+          register={register}
+          errors={errors}
+          expanded={expanded}
+          onExpand={handleExpand}
+          removeSection={removeSection}
+          totalSections={sectionFields.length}
         />
+      ))}
 
-        <Stack direction="row" justifyContent="space-between" mt={2}>
-          <CustomButton label="Back" onClick={handlePrev} />
-          <CustomButton label="Next" onClick={handleNext} />
-        </Stack>
-      </Box>
+      <CustomButton
+        label="Add More Module"
+        onClick={async () => {
+          const isValid = await trigger();
+          if (!isValid) return;
+
+          appendSection({
+            title: "",
+            description: "",
+            subSections: [{ title: "", description: "" }],
+          });
+        }}
+        startIcon={<FaPlus />}
+        sx={{ mt: 2 }}
+      />
+
+      <Stack direction="row" justifyContent="space-between" mt={3}>
+        <CustomButton label="Back" onClick={handlePrev} />
+        <CustomButton label="Next" onClick={handleNext} />
+      </Stack>
     </Box>
   );
 };

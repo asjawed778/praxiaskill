@@ -238,7 +238,7 @@ const CreateCourse = () => {
                 "bg-[var(--color-primary)] text-white rounded-lg"
               }`}
             >
-              Course Structure
+              Course Curriculum
             </div>
           )}
           <div

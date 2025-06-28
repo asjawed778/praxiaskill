@@ -30,8 +30,8 @@ export default function ProjectFields({ control, sectionIndex, errors }) {
   };
 
   return (
-    <Grid item xs={12} mt={2}>
-      <Typography variant="h6" sx={{ mb: 1, fontSize: "18px" }}>
+    <Grid item xs={12} mt={1}>
+      <Typography variant="h6" sx={{ fontSize: "16px" }}>
         Projects
       </Typography>
 
