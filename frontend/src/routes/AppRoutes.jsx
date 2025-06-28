@@ -229,7 +229,7 @@ const AppRoutes = () => {
                     }
                 />
                 <Route
-                    path="update-curriculum"
+                    path="update-curriculum/:courseId"
                     element={
                         <LazyComponent>
                             <UpdateCurriculum />

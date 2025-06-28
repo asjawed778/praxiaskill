@@ -9,7 +9,13 @@ import {
   Divider,
   CircularProgress,
 } from "@mui/material";
-import { useFormContext, useFieldArray, useWatch, FormProvider, useForm } from "react-hook-form";
+import {
+  useFormContext,
+  useFieldArray,
+  useWatch,
+  FormProvider,
+  useForm,
+} from "react-hook-form";
 import { useEffect, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { FaPlus } from "react-icons/fa";
@@ -20,16 +26,21 @@ import SubSectionFields from "./SubSectionFields";
 import ProjectFields from "./ProjectFields";
 import AssignmentFields from "./AssignmentsFields";
 import { Tooltip, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { useLocation } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import { courseStructureSchema } from "../../../../../yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useGetFullCourseDetailsQuery, useUpdateCurriculumMutation } from "../../../../services/course.api";
+import {
+  useDeleteCurriculumMutation,
+  useGetFullCourseContentQuery,
+  useUpdateCurriculumMutation,
+} from "../../../../services/course.api";
 import { Delete } from "@mui/icons-material";
 import toast from "react-hot-toast";
 import { cleanData } from "../../../../utils/helper";
+import DialogBoxWrapper from "@/components/DialogBoxWrapper";
 
 const SectionAccordion = ({
+  courseId,
   field,
   sectionIndex,
   control,
@@ -40,11 +51,29 @@ const SectionAccordion = ({
   removeSection,
   totalSections,
 }) => {
+  const [openDeleteModule, setOpenDeleteModule] = useState(false);
+  const [deleteModule] = useDeleteCurriculumMutation();
   const sectionTitle = useWatch({
     control,
     name: `sections.${sectionIndex}.title`,
     defaultValue: "",
   });
+
+  const handleDeleteSection = async (sectionIndex, sectionId) => {
+    const removedSection = control._formValues.sections[sectionIndex];
+    removeSection(sectionIndex); 
+    try {
+      await deleteModule({ courseId, sectionId }).unwrap();
+    } catch (error) {
+      const currentSections = control._formValues.sections || [];
+      const updated = [...currentSections];
+      updated.splice(sectionIndex, 0, removedSection);
+      control._updateFieldArray("sections", updated); 
+      toast.error(
+        error?.data?.message || "Failed to delete section. Try Agian!"
+      );
+    }
+  };
 
   return (
     <Accordion
@@ -64,11 +93,11 @@ const SectionAccordion = ({
         sx={{ px: 1, position: "relative", pr: 5 }}
       >
         {totalSections > 1 && (
-          <Tooltip title="Remove Section">
+          <Tooltip title="Remove Module">
             <IconButton
               onClick={(e) => {
                 e.stopPropagation();
-                removeSection(sectionIndex);
+                setOpenDeleteModule(true);
               }}
               size="small"
               sx={{
@@ -118,7 +147,8 @@ const SectionAccordion = ({
           <SubSectionFields
             control={control}
             sectionIndex={sectionIndex}
-            errors={errors}
+            courseId={courseId}
+            sectionId={field._id}
           />
           <AssignmentFields
             control={control}
@@ -133,20 +163,30 @@ const SectionAccordion = ({
           />
         </Stack>
       </AccordionDetails>
+      {openDeleteModule && (
+        <DialogBoxWrapper
+          open={openDeleteModule}
+          onClose={() => setOpenDeleteModule(false)}
+          onConfirm={() => handleDeleteSection(sectionIndex, field._id)}
+          title="Delete Module"
+          message={
+            <>
+              Are you sure want to delete <strong>"{field.title}"</strong>{" "}
+              module?
+            </>
+          }
+        />
+      )}
     </Accordion>
   );
 };
 
 const UpdateCurriculum = () => {
-  const location = useLocation();
-  const course = location.state || null;
-  const update = Boolean(course);
-  const {
-      data: courseDetails,
-      isLoading: isCourseLoading,
-      isError,
-    } = useGetFullCourseDetailsQuery(course?.course?._id, { skip: !update });
-  const [updateCurriculum] = useUpdateCurriculumMutation();
+  const { courseId } = useParams();
+  const { data: courseDetails, isLoading: isCourseLoading } =
+    useGetFullCourseContentQuery(courseId);
+  const [updateCurriculum, { isLoading: isUpdating }] =
+    useUpdateCurriculumMutation();
   const methods = useForm({
     resolver: yupResolver(courseStructureSchema),
     defaultValues: {
@@ -158,14 +198,14 @@ const UpdateCurriculum = () => {
         },
       ],
     },
-    mode: "onBlur", 
+    mode: "onBlur",
   });
   const {
-  control,
-  register,
-  trigger,
-  formState: { errors },
-} = methods;
+    control,
+    register,
+    trigger,
+    formState: { errors },
+  } = methods;
   const {
     fields: sectionFields,
     append: appendSection,
@@ -186,32 +226,41 @@ const UpdateCurriculum = () => {
     setExpanded(null);
   }, [sectionFields]);
   useEffect(() => {
-  if (courseDetails?.data?.sections?.length) {
-    methods.reset({ sections: courseDetails?.data?.sections });
-  }
-}, [courseDetails]);
+    if (courseDetails?.data?.sections?.length) {
+      methods.reset({ sections: courseDetails?.data?.sections });
+    }
+  }, [courseDetails]);
 
-
-  const onSubmit = async(data) => {
+  const onSubmit = async (data) => {
     const freshData = cleanData(data);
     console.log("Validated Data:", freshData);
     try {
       const res = await updateCurriculum({
-        courseId: courseDetails?.data?._id,
-        body: freshData
+        courseId,
+        body: freshData,
       }).unwrap();
       // console.log("response: ", res);
-      toast.success("Curriculum update successfully!")
+      toast.success("Curriculum update successfully!");
     } catch (error) {
-      const errorMsg = error?.data?.message || "Failed to update curriculum. Try again!"
+      const errorMsg =
+        error?.data?.message || "Failed to update curriculum. Try again!";
       toast.error(errorMsg);
-      console.log("Error: ",error);
+      console.log("Error: ", error);
     }
   };
-  if(isCourseLoading){
-    return(
-      <CircularProgress />
-    )
+  if (isCourseLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "200px",
+        }}
+      >
+        <CircularProgress size={30} />
+      </Box>
+    );
   }
   return (
     <FormProvider {...methods}>
@@ -221,9 +270,11 @@ const UpdateCurriculum = () => {
             sx={{
               fontSize: "20px",
               fontWeight: 600,
-              mb: 1
+              mb: 1,
             }}
-          >Update Curriculum</Typography>
+          >
+            Update Curriculum
+          </Typography>
           <Box position="relative" width="fit-content" mb={1}>
             <Box
               component="img"
@@ -242,6 +293,7 @@ const UpdateCurriculum = () => {
           {sectionFields.map((field, index) => (
             <SectionAccordion
               key={field.id}
+              courseId={courseId}
               field={field}
               sectionIndex={index}
               control={control}
@@ -272,7 +324,7 @@ const UpdateCurriculum = () => {
 
           <Stack direction="row" justifyContent="space-between" mt={3}>
             {/* <CustomButton label="Back" onClick={handlePrev} /> */}
-            <CustomButton label="Submit" type="submit" />
+            <CustomButton label="Submit" type="submit" loading={isUpdating} />
           </Stack>
         </Box>
       </form>

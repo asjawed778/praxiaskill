@@ -342,9 +342,9 @@ export const deleteCourseContent = asyncHandler(async (req: Request, res: Respon
     }
     let result;
     if (subSectionId) {
-        result = await courseService.deleteSection(courseId, sectionId as string);
-    } else {
         result = await courseService.deleteSubSection(courseId, sectionId as string, subSectionId as string);
+    } else {
+        result = await courseService.deleteSection(courseId, sectionId as string);
     }
     res.send(createResponse(result, "Subsection deleted successfully"));
 });

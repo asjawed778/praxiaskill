@@ -129,13 +129,7 @@ const ManageCourses = () => {
         navigate(`/dashboard/course/content/${row?._id}`);
         break;
       case "updateCurriculum":
-        navigate("/dashboard/update-curriculum", {
-          state: {
-            course: row,
-            update: true
-          },
-          replace: false,
-        });
+        navigate(`/dashboard/update-curriculum/${row?._id}`);
         break;
       case "lectures":
         navigate(`/course-lecture/${row?._id}`);
