@@ -612,6 +612,7 @@ export const deleteSubSection = async (courseId: string, sectionId: string, subS
 export const updateCourseCurriculum = async (courseId: string, data: CourseDTO.IUpdateCourseCurriculum) => {
     const session = await mongoose.startSession();
     session.startTransaction();
+    console.log('####### data: ', data);
 
     try {
         const course = await courseSchema.findById(courseId).session(session);
@@ -1275,15 +1276,6 @@ export const getCourseOverview = async (courseId: string, sectionId: string, sub
     const result = await CourseOverviewSchema.find({ courseId, sectionId, subSectionId });
     return result;
 };
-
-
-
-
-
-
-
-
-
 
 export const getCourseAnalytics = async () => {
     const results = await Promise.all([

@@ -134,12 +134,12 @@ export const updateCourseDetails = asyncHandler(async (req: Request, res: Respon
     }
     const data: CourseDTO.IUpdateCourseDetails = req.body;
     const { category, instructor } = data;
-    if (instructor) {
-        const isInstrucotrExist = await UserService.getInstructorById(instructor?.toString());
-        if (!isInstrucotrExist) {
-            throw createHttpError(404, "Instructor id is invalid, Not found");
-        }
-    }
+    // if (instructor) {
+    //     const isInstrucotrExist = await UserService.getInstructorById(instructor?.toString());
+    //     if (!isInstrucotrExist) {
+    //         throw createHttpError(404, "Instructor id is invalid, Not found");
+    //     }
+    // }
     const isCategoryExist = await CourseCategoryService.getCourseCategoryById(category?.toString());
     if (!isCategoryExist) {
         throw createHttpError(404, "Category id is invalid, Not found");
