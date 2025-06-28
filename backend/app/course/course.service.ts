@@ -608,6 +608,110 @@ export const deleteSubSection = async (courseId: string, sectionId: string, subS
     await subSectionSchema.findByIdAndDelete(subSectionId);
 };
 
+export const updateCourseCurriculum = async (courseId: string, data: CourseDTO.IUpdateCourseCurriculum) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const course = await courseSchema.findById(courseId).session(session);
+        if (!course) {
+            throw createHttpError(404, "Course Note Found");
+        }
+
+        const existingSections = await sectionSchema.find({ _id: { $in: course.sections } }).session(session);
+
+        const updatedSectionIds = await Promise.all(
+            data.sections.map(async (sectionData) => {
+                let section: any;
+
+                if (sectionData._id) {
+                    section = await sectionSchema.findByIdAndUpdate(
+                        sectionData._id,
+                        {
+                            title: sectionData.title,
+                            description: sectionData.description,
+                            assignments: sectionData.assignments,
+                            projects: sectionData.projects,
+                            duration: sectionData.duration
+                        },
+                        { new: true, session }
+                    );
+                } else {
+                    section = new sectionSchema({
+                        title: sectionData.title,
+                        description: sectionData.description,
+                        assignments: sectionData.assignments,
+                        projects: sectionData.projects,
+                        duration: sectionData.duration
+                    });
+                    await section.save({ session });
+                }
+
+                if (sectionData.subSections && sectionData.subSections.length > 0) {
+                    const updatedSubSectionIds = await Promise.all(
+                        sectionData.subSections.map(async (subSectionData) => {
+                            let subSection: any;
+
+                            if (subSectionData._id) {
+                                subSection = await subSectionSchema.findByIdAndUpdate(
+                                    subSectionData._id,
+                                    {
+                                        title: subSectionData.title,
+                                        description: subSectionData.description
+                                    },
+                                    { new: true, session }
+                                );
+                            } else {
+                                subSection = new subSectionSchema({
+                                    title: subSectionData.title,
+                                    description: subSectionData.description
+                                });
+                                await subSection.save({ session });
+                            }
+                            return subSection._id;
+                        })
+                    );
+
+                    section.subSections = updatedSubSectionIds;
+                    await section.save({ session });
+                }
+                return section._id;
+            })
+        );
+
+        course.sections = updatedSectionIds;
+        await course.save({ session });
+
+        const sectionsToRemove = existingSections.filter(
+            sec => !updatedSectionIds.includes(sec._id.toString())
+        );
+
+        if (sectionsToRemove.length > 0) {
+            const subSectionIdsToRemove = sectionsToRemove.flatMap(sec => sec.subSections);
+            await subSectionSchema.deleteMany({ _id: { $in: subSectionIdsToRemove } }).session(session);
+
+            await sectionSchema.deleteMany({ _id: { $in: sectionsToRemove.map(sec => sec._id) } }).session(session);
+        }
+
+        await session.commitTransaction();
+        await session.endSession();
+
+        return await courseSchema.findById(courseId)
+            .populate({
+                path: 'sections',
+                populate: {
+                    path: 'subSections'
+                }
+            })
+            .exec();
+    } catch (error) {
+        console.log("error: ", error)
+        await session.abortTransaction();
+        await session.endSession();
+        throw createHttpError(500, "Something went wrong");
+    }
+};
+
 export const addContentLink = async (subSectionId: string, fileKey: string) => {
     await subSectionSchema.findByIdAndUpdate(subSectionId, {
         "video.link": fileKey

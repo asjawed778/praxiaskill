@@ -642,28 +642,72 @@ export const getCourseDetails = [
         .notEmpty().withMessage('courseId or slug is required')
 ];
 
-export const deleteSection = [
+export const deleteContent = [
     param('courseId')
         .notEmpty().withMessage('courseId is required')
         .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
 
-    param('sectionId')
+    query('sectionId')
         .notEmpty().withMessage('sectionId is required')
         .isMongoId().withMessage('Invalid sectionId. Must be a valid MongoDB ObjectId'),
+
+    query('subSectionId')
+        .optional()
+        .isMongoId().withMessage('Invalid subSectionId. Must be a valid MongoDB ObjectId'),
 ];
 
-export const deleteSubSection = [
-    param('courseId')
-        .notEmpty().withMessage('courseId is required')
-        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+export const updateCourseCurriculum = [
+    // Validate section array
+    body("sections").isArray({ min: 1 }).withMessage("Sections must be a non-empty array"),
 
-    param('sectionId')
-        .notEmpty().withMessage('sectionId is required')
-        .isMongoId().withMessage('Invalid sectionId. Must be a valid MongoDB ObjectId'),
+    // Validate each section
+    body("sections.*._id")
+        .optional()
+        .isMongoId().withMessage("Section _id must be a valid MongoDB ObjectId"),
 
-    param('subSectionId')
-        .notEmpty().withMessage('subSectionId is required')
-        .isMongoId().withMessage('Invalid subSectionId. Must be a valid MongoDB ObjectId'),
+    body("sections.*.title")
+        .isString().withMessage("Section title must be a string")
+        .notEmpty().withMessage("Section title is required"),
+
+    body("sections.*.description")
+        .optional()
+        .isString().withMessage("Section description must be a string"),
+
+    body("sections.*.assignments")
+        .optional()
+        .isArray().withMessage("Assignments must be an array"),
+
+    body("sections.*.assignments.*")
+        .optional()
+        .isString().withMessage("Each assignment must be a string"),
+
+    body("sections.*.projects")
+        .optional()
+        .isArray().withMessage("Projects must be an array"),
+
+    body("sections.*.projects.*")
+        .optional()
+        .isString().withMessage("Each project must be a string"),
+
+    body("sections.*.duration")
+        .optional()
+        .isString().withMessage("Duration must be a string"),
+
+    // Validate subSections
+    body("sections.*.subSections")
+        .isArray({ min: 1 }).withMessage("SubSections must be a non-empty array"),
+
+    body("sections.*.subSections.*._id")
+        .optional()
+        .isMongoId().withMessage("SubSection _id must be a valid MongoDB ObjectId"),
+
+    body("sections.*.subSections.*.title")
+        .isString().withMessage("SubSection title must be a string")
+        .notEmpty().withMessage("SubSection title is required"),
+
+    body("sections.*.subSections.*.description")
+        .optional()
+        .isString().withMessage("SubSection description must be a string")
 ];
 
 export const courseUpload = [

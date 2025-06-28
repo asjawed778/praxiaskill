@@ -48,6 +48,22 @@ export interface ICourse extends BaseSchema {
 
 export interface IUpdateCourseDetails extends Omit<ICourse, "_id" | "createdAt" | "updatedAt" | "sections" | "ratingAndReviews"> { }
 
+export interface IUpdateCourseCurriculum {
+    sections: {
+        _id?: string;
+        title: string;
+        description?: string;
+        assignments?: string[];
+        projects?: string[];
+        subSections: {
+            _id?: string;
+            title: string;
+            description?: string;
+        }[];
+        duration?: string;
+    }[];
+}
+
 export interface ISection extends BaseSchema {
     title: string;
     description?: string;
