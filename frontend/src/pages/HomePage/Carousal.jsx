@@ -100,7 +100,6 @@ const Carousel = () => {
   const handleCourseClick = (slug) => {
     navigate(`/course/${slug}`);
   };
-  console.log("Courses: ", courses);
 
   return (
     <Box ref={containerRef} mt={{ xs: 4, md: 6, xl: 8 }}>
