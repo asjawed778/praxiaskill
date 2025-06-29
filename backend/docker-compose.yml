@@ -36,22 +36,6 @@ services:
     networks:
       - praxiaskill-net
 
-  praxiaskill-worker:
-    build:
-      context: .
-      dockerfile: Dockerfile.worker
-    container_name: praxiaskill-worker
-    env_file:
-      - env.production
-    depends_on:
-      - praxiaskill-mongo
-      - redis
-    networks:
-      - praxiaskill-net
-    volumes:
-      - .:/app
-      - /app/node_modules
-
 volumes:
   mongo-data:
   redis-data:

@@ -118,7 +118,6 @@ const ManageCourses = () => {
   };
 
   const handleActionClick = (action, row) => {
-    console.log("row: ", row);
 
     setSelectedCourse(row);
     switch (action) {

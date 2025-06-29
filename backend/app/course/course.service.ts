@@ -119,6 +119,23 @@ export const updateCourseDetails = async (courseId: string, data: CourseDTO.IUpd
     return course as CourseDTO.ICourse;
 };
 
+export const updateSubSectionVideo = async (subSectionId: string, variants: { resolution: string; link: string }[], hlsPlaylist: string): Promise<void> => {
+    const updatedSubSection = await subSectionSchema.findByIdAndUpdate(
+        subSectionId,
+        {
+            $set: {
+                'video.variants': variants,
+                'video.hlsPlaylist': hlsPlaylist
+            }
+        },
+        { new: true, runValidators: true }
+    );
+
+    if (!updatedSubSection) {
+        throw createHttpError(404, 'SubSection not found');
+    }
+};
+
 export const getCourseContent = async (courseId: string): Promise<any> => {
     const coursesContent = await courseSchema.findById(courseId)
         .select("_id title sections")
