@@ -7,7 +7,7 @@ import {
   useUploadCourseMutation,
 } from "../../../../../services/course.api";
 import { toast } from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CourseDetails from "./CourseDetails";
 import AdditionalDetails from "./AdditionalDetails";
 import CourseStructure from "./CourseStructure";
@@ -19,14 +19,15 @@ import {
   pricingPublishSchema,
 } from "../../../../../../yup";
 import { cleanData } from "../../../../../utils/helper";
+import { Box, CircularProgress } from "@mui/material";
 
 const CreateCourse = () => {
+  const {courseId} = useParams();
   const [uploadCourse, { isLoading, errors }] = useUploadCourseMutation();
   const [currentStep, setCurrentStep] = useState(0);
 
   const location = useLocation();
-  const course = location.state || null;
-  const editMode = Boolean(course);
+  const { editMode } = location.state || {};
   const [updateCourse, { isLoading: isCourseUpdate, errors: isUpdateError }] =
     useUpdateCourseDetailsMutation();
   const navigate = useNavigate();
@@ -35,17 +36,7 @@ const CreateCourse = () => {
     data: loadCourse,
     isLoading: isCourseLoading,
     isError,
-  } = useGetFullCourseDetailsQuery(course?.course?._id, { skip: !editMode });
-
-  // useEffect(() => {
-  //   if (isError) {
-  //     console.error("Error fetching course details:", loadCourse?.data.data);
-  //   }
-  //   if (!isError && loadCourse) {
-  //     console.log("Update course all: ", loadCourse);
-  //     console.log("Need value: ", loadCourse.data?.category?.name);
-  //   }
-  // }, [loadCourse, isError]);
+  } = useGetFullCourseDetailsQuery(courseId, { skip: !editMode });
   const resolver = useMemo(() => {
     switch (currentStep) {
       case 0:
@@ -204,6 +195,20 @@ const CreateCourse = () => {
       console.log("Error", err);
     }
   };
+  if(isCourseLoading){
+    return(
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress size={30}/>
+      </Box>
+    )
+  }
   return (
     <FormProvider {...methods}>
       <form

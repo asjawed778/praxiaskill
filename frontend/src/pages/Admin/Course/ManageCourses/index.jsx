@@ -80,12 +80,10 @@ const ManageCourses = () => {
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
   const [searchQuery, setSearchQuery] = useState(null);
-  const [editMode, setEditMode] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(false);
   const [openTerminateCourseModal, setOpenTerminateCourseModal] =
     useState(false);
   const [selectedCourseCategory, setSelectedCourseCategory] = useState(null);
-
   const navigate = useNavigate();
   const theme = useTheme();
   const { colors } = useAppTheme();
@@ -128,17 +126,15 @@ const ManageCourses = () => {
         navigate(`/dashboard/course/content/${row?._id}`);
         break;
       case "updateCurriculum":
-        navigate(`/dashboard/update-curriculum/${row?._id}`);
+        navigate(`/dashboard/course/update-curriculum/${row?._id}`);
         break;
       case "lectures":
-        navigate(`/course-lecture/${row?._id}`);
+        navigate(`/course/${row?.slug}/learn/${row?._id}`);
         break;
       case "updateCourse":
-        setEditMode(true);
-        navigate("/dashboard/create", {
+        navigate(`/dashboard/course/update-details/${row?._id}`, {
           state: {
-            course: row,
-            editMode,
+            editMode: true,
           },
           replace: false,
         });
@@ -350,7 +346,7 @@ const ManageCourses = () => {
             <CustomButton
               startIcon={<Add />}
               label="Create Course"
-              onClick={() => navigate("/dashboard/create")}
+              onClick={() => navigate("/dashboard/create-course")}
             />
           </Box>
         </Grid>

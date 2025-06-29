@@ -160,7 +160,7 @@ const AppRoutes = () => {
 
                 <Route path="*" element={<PageNotFound />} />
             </Route>
-            <Route path="/course-lecture" element={
+            <Route path="/course/:slug/learn" element={
                 <RoleAuthRoute>
                     <CourseLecturesLayout />
                 </RoleAuthRoute>
@@ -220,7 +220,7 @@ const AppRoutes = () => {
                     }
                 />
                 <Route
-                    path="create"
+                    path="create-course"
                     element={
                         <LazyComponent>
                             <AddCourses />
@@ -228,7 +228,15 @@ const AppRoutes = () => {
                     }
                 />
                 <Route
-                    path="update-curriculum/:courseId"
+                    path="course/update-details/:courseId"
+                    element={
+                        <LazyComponent>
+                            <AddCourses />
+                        </LazyComponent>
+                    }
+                />
+                <Route
+                    path="course/update-curriculum/:courseId"
                     element={
                         <LazyComponent>
                             <UpdateCurriculum />

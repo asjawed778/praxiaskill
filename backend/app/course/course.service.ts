@@ -844,6 +844,7 @@ export const getMyCourses = async (userId: string, pageNo: number = 1, pageSize:
                 _id: "$course._id",
                 title: "$course.title",
                 subtitle: "$course.subtitle",
+                slug: "$course.slug",
                 tags: "$course.tags",
                 thumbnail: "$course.thumbnail",
                 language: "$course.language",
@@ -862,7 +863,6 @@ export const getMyCourses = async (userId: string, pageNo: number = 1, pageSize:
         { $skip: skip },
         { $limit: pageSize }
     ]);
-
     return {
         success: true,
         totalCourses: result.length,
