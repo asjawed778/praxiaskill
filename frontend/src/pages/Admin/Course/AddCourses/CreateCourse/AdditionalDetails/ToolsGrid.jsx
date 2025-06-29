@@ -149,6 +149,7 @@ const ToolsGrid = () => {
                     minHeight={100}
                     width={110}
                     height={100}
+                    required={false}
                   />
                 )}
               </Grid>

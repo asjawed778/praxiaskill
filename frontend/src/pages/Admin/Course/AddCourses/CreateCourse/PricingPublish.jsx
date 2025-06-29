@@ -91,9 +91,8 @@ const PricingPublish = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => 
             }}
           />
         </Grid>
-      </Grid>
-      <Box mb={3}>
-        <CustomInputField
+        <Grid size={{xs: 12, sm: 6}}>
+          <CustomInputField
           name="price.actualPrice"
           label="Actual Price"
           placeholder="Enter actual price"
@@ -102,33 +101,27 @@ const PricingPublish = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => 
             borderRadius: 2,
           }}
         />
-      </Box>
-      <Box mb={3}>
-        <Typography gutterBottom>Discount: {discount}%</Typography>
-        <Controller
+        </Grid>
+        <Grid size={{xs: 12, sm: 6}}>
+          <CustomInputField
           name="price.discountPercentage"
-          control={control}
-          render={({ field }) => (
-            <Slider
-              {...field}
-              min={0}
-              color="secondary"
-              max={100}
-              step={1}
-              value={field.value || 0}
-              onChange={(_, value) => field.onChange(value)}
-            />
-          )}
+          type="number"
+          disabled={actualPrice < 1}
+          label="Discount in %"
+          placeholder="Enter discount in %"
+          sx={{
+            backgroundColor: "white",
+            borderRadius: 2,
+          }}
+          required={false}
         />
-        {errors.price?.discountPercentage && (
-          <Typography variant="body2" color="error">
-            {errors.price.discountPercentage.message}
-          </Typography>
-        )}
-      </Box>
-      <Box mb={3}>
+        </Grid>
+      </Grid>
+      <Box mb={3} mt={2}>
         <Typography variant="subtitle1">Final Price:</Typography>
-        <Typography variant="h6">₹ {finalPrice}</Typography>
+        {finalPrice && (
+          <Typography variant="h6">₹ {finalPrice}</Typography>
+        )}
       </Box>
       <Grid container spacing={2} justifyContent="space-between">
         <Grid item>
@@ -140,7 +133,7 @@ const PricingPublish = ({ handlePrev, isLoading, editMode, isCourseUpdate }) => 
               isLoading || isCourseUpdate ? (
                 <ButtonLoading />
               ) : editMode ? (
-                "Update"
+                "Submit"
               ) : (
                 "Submit"
               )

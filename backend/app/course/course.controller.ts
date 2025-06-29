@@ -13,6 +13,7 @@ import { courseEnquiryEmailTemplate } from '../common/template/courseEnquiry.tem
 import { emailQueue } from '../common/queue/queues/email.queue';
 import { UserRole } from '../user/user.schema';
 import mongoose from 'mongoose';
+import { videoQueue } from '../common/queue/queues/video.queue';
 
 // This controller handles the upload of public files related to courses, such as thumbnails, brochures, trailers, and videos.
 export const uploadPublicFile = asyncHandler(async (req: Request, res: Response) => {
@@ -65,7 +66,8 @@ export const completeUpload = asyncHandler(async (req: Request, res: Response) =
     await courseService.isValidSectionSubsectionId(courseId, sectionId, subSectionId);
 
     await courseService.addContentLink(subSectionId, fileKey);
-
+    // const courseName = `${courseId}/${sectionId}`;
+    // await videoQueue.add('transcode', { fileKey, subSectionId, courseName });
     res.send(createResponse(completedUpload, "Upload completed successfully"));
 });
 
@@ -134,12 +136,12 @@ export const updateCourseDetails = asyncHandler(async (req: Request, res: Respon
     }
     const data: CourseDTO.IUpdateCourseDetails = req.body;
     const { category, instructor } = data;
-    if (instructor) {
-        const isInstrucotrExist = await UserService.getInstructorById(instructor?.toString());
-        if (!isInstrucotrExist) {
-            throw createHttpError(404, "Instructor id is invalid, Not found");
-        }
-    }
+    // if (instructor) {
+    //     const isInstrucotrExist = await UserService.getInstructorById(instructor?.toString());
+    //     if (!isInstrucotrExist) {
+    //         throw createHttpError(404, "Instructor id is invalid, Not found");
+    //     }
+    // }
     const isCategoryExist = await CourseCategoryService.getCourseCategoryById(category?.toString());
     if (!isCategoryExist) {
         throw createHttpError(404, "Category id is invalid, Not found");
@@ -151,6 +153,18 @@ export const updateCourseDetails = asyncHandler(async (req: Request, res: Respon
     }
     await CourseCategoryService.moveCourseToCategory(courseId, category.toString());
     res.send(createResponse(result, "Course details updated successfully"));
+});
+
+export const updateCourseCurriculum = asyncHandler(async (req: Request, res: Response) => {
+    const courseId = req.params.courseId;
+    const isCourseExist = await courseService.isCourseExist(courseId);
+    if (!isCourseExist) {
+        throw createHttpError(404, "Course id is invalid, Not found");
+    }
+    const data: CourseDTO.IUpdateCourseCurriculum = req.body;
+
+    const result = await courseService.updateCourseCurriculum(courseId, data);
+    res.send(createResponse(result, "Course Curriculum Updated Successfully"));
 });
 
 export const getCourseContent = asyncHandler(async (req: Request, res: Response) => {
@@ -185,8 +199,6 @@ export const updateStatus = asyncHandler(async (req: Request, res: Response) => 
     await courseService.updateStatus(courseId, status);
     res.send(createResponse({}, "Course published successfully"));
 });
-
-
 
 export const getCourseDetails = asyncHandler(async (req: Request, res: Response) => {
     const { identifier } = req.params;
@@ -244,7 +256,6 @@ export const courseEnquiry = asyncHandler(async (req: Request, res: Response) =>
     res.send(createResponse({}, "Course enquiry submitted successfully"));
 });
 
-
 export const getCourseEnquiry = asyncHandler(async (req: Request, res: Response) => {
     const pageNo = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
@@ -255,8 +266,6 @@ export const getCourseEnquiry = asyncHandler(async (req: Request, res: Response)
     const result = await courseService.getCourseEnquiry(pageNo, limit, status, search, sortBy);
     res.send(createResponse(result, "Course enquiry fetched successfully"));
 });
-
-
 
 export const changeEnquiryStatus = asyncHandler(async (req: Request, res: Response) => {
     const enquiryId = req.params.enquiryId;
@@ -276,7 +285,6 @@ export const getCourses = asyncHandler(async (req: Request, res: Response) => {
     const result = await courseService.getCourses(pageNo, limit, category, status, search);
     res.send(createResponse(result, "courses fetched successfully"));
 });
-
 
 export const rateCourse = asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) {
@@ -323,26 +331,19 @@ export const getRatings = asyncHandler(async (req: Request, res: Response) => {
     res.send(createResponse(result, "Ratings fetched successfully"));
 });
 
-export const deleteSection = asyncHandler(async (req: Request, res: Response) => {
+export const deleteCourseContent = asyncHandler(async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
-    const sectionId = req.params.sectionId;
+    const { sectionId, subSectionId } = req.query;
     const isCourseExist = await courseService.isCourseExist(courseId);
     if (!isCourseExist) {
         throw createHttpError(404, "Course id is invalid, Not found");
     }
-    const result = await courseService.deleteSection(courseId, sectionId);
-    res.send(createResponse(result, "Section deleted successfully"));
-});
-
-export const deleteSubSection = asyncHandler(async (req: Request, res: Response) => {
-    const courseId = req.params.courseId;
-    const sectionId = req.params.sectionId;
-    const subSectionId = req.params.subSectionId;
-    const isCourseExist = await courseService.isCourseExist(courseId);
-    if (!isCourseExist) {
-        throw createHttpError(404, "Course id is invalid, Not found");
+    let result;
+    if (subSectionId) {
+        result = await courseService.deleteSubSection(courseId, sectionId as string, subSectionId as string);
+    } else {
+        result = await courseService.deleteSection(courseId, sectionId as string);
     }
-    const result = await courseService.deleteSubSection(courseId, sectionId, subSectionId);
     res.send(createResponse(result, "Subsection deleted successfully"));
 });
 
@@ -357,7 +358,6 @@ export const getMyCourses = asyncHandler(async (req: Request, res: Response) => 
 
     res.send(createResponse(result, "My Course fetched successfull"));
 });
-
 
 // QNA related controllers
 export const createQna = asyncHandler(async (req: Request, res: Response) => {
@@ -578,7 +578,7 @@ export const getQnas = asyncHandler(async (req: Request, res: Response) => {
     res.send(createResponse(result, "QnAs fetched successfully"));
 });
 
-// Notes related controllers
+// course Notes controllers
 export const createCourseNotes = asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) {
         throw createHttpError(401, "Unauthorized user, login again");
@@ -658,4 +658,71 @@ export const getCourseNotes = asyncHandler(async (req: Request, res: Response) =
 
     const result = await courseService.getCourseNotes(query);
     res.send(createResponse(result, "Course notes fetched successfully"));
+});
+
+// Overview related controllers
+export const createCourseOverview = asyncHandler(async (req: Request, res: Response) => {
+    const { courseId, sectionId, subSectionId } = req.params;
+    const data: CourseDTO.ICourseOverviewCreate = {
+        courseId: new mongoose.Types.ObjectId(courseId as string),
+        sectionId: new mongoose.Types.ObjectId(sectionId as string),
+        subSectionId: new mongoose.Types.ObjectId(subSectionId as string),
+        overview: req.body.overview
+    };
+
+    const result = await courseService.createCourseOverview(data);
+    res.send(createResponse(result, "Course overview created successfully"));
+});
+
+export const editCourseOverview = asyncHandler(async (req: Request, res: Response) => {
+    const { overviewId } = req.params;
+
+    const result = await courseService.editCourseOverview(overviewId, req.body.overview);
+    res.send(createResponse(result, "Course overview edited successfully"));
+});
+
+export const deleteCourseOverview = asyncHandler(async (req: Request, res: Response) => {
+    const { overviewId } = req.params;
+
+    await courseService.deleteCourseOverview(overviewId);
+    res.send(createResponse({}, "Course overview deleted successfully"));
+});
+
+export const getCourseOverview = asyncHandler(async (req: Request, res: Response) => {
+    const { courseId, sectionId, subSectionId } = req.params;
+
+    const result = await courseService.getCourseOverview(courseId, sectionId, subSectionId);
+    res.send(createResponse(result, "Course overview fetched successfully"));
+});
+
+// course announcements
+export const createCourseAnnouncement = asyncHandler(async (req: Request, res: Response) => {
+    const { courseId } = req.params;
+    const { title, message } = req.body;
+    const data: CourseDTO.ICourseAnnouncementCreate = {
+        courseId: new mongoose.Types.ObjectId(courseId),
+        title,
+        message
+    }
+    const result = await courseService.createCourseAnnouncement(data);
+    res.send(createResponse(result, "Announcement created successfully"))
+});
+
+export const updateCourseAnnouncement = asyncHandler(async (req: Request, res: Response) => {
+    const { announcementId } = req.params;
+    const { title, message } = req.body;
+    const result = await courseService.updateCourseAnnouncement(announcementId, title, message);
+    res.send(createResponse(result, "Announcement Updated successfully"))
+});
+
+export const deleteCourseAnnouncement = asyncHandler(async (req: Request, res: Response) => {
+    const { announcementId } = req.params;
+    await courseService.deleteCourseAnnouncement(announcementId);
+    res.send(createResponse({}, "Announcement Deleted successfully"));
+});
+
+export const getCourseAnnouncement = asyncHandler(async (req: Request, res: Response) => {
+    const { courseId } = req.params;
+    const result = await courseService.getCourseAnnouncement(courseId);
+    res.send(createResponse(result, "Announcement fetched successfully"));
 });

@@ -72,7 +72,7 @@ const CourseDetails = ({ handleNext, editMode, onSubmit, isCourseUpdate }) => {
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
-          <FileUploader name="brouchure" label="Upload Brouchure" />
+          <FileUploader name="brouchure" label="Upload Brouchure" required={false}/>
         </Grid>
       </Grid>
       <Box
@@ -84,7 +84,7 @@ const CourseDetails = ({ handleNext, editMode, onSubmit, isCourseUpdate }) => {
       >
         <Stack spacing={2} direction="row">
           {editMode && (
-             <CustomButton type="submit" label="Update" onClick={onSubmit} loading={isCourseUpdate}/>
+             <CustomButton type="submit" label="Submit" onClick={onSubmit} loading={isCourseUpdate}/>
           )}
           <CustomButton label="Next" onClick={handleNext} />
         </Stack>

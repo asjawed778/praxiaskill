@@ -31,12 +31,12 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
 
   return (
     <Box mt={1}>
-      <Typography variant="h6" fontWeight={500} gutterBottom>
+      <Typography fontSize={"18px"} fontWeight={500} gutterBottom>
         Subsections
       </Typography>
 
       {subSectionFields?.map((field, subIndex) => (
-        <Box key={field.id} mb={3} position="relative" border={1} borderColor="grey.300" borderRadius={2} p={3}>
+        <Box key={field.id} mb={1} position="relative" border={1} borderColor="grey.300" borderRadius={2} px={3} py={1}>
           {subSectionFields.length > 1 && (
             <IconButton
               onClick={() => removeSubsection(subIndex)}
@@ -59,21 +59,23 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
               label="Subsection Description"
               placeholder="Enter subsection description"
               multiline
-              row={3}
+              row={2}
               required={false}
             />
 
-            {subIndex === subSectionFields.length - 1 && (
+            
+          </Stack>
+          {subIndex === subSectionFields.length - 1 && (
               <CustomButton
                 label="Add More Subsection"
                 variant="outlined"
                 startIcon={<FaPlus />}
                 onClick={handleAddSubsection}
-                sx={{ alignSelf: "flex-start" }}
+                sx={{ mt: 1 }}
               />
             )}
-          </Stack>
         </Box>
+        
       ))}
     </Box>
   );

@@ -105,11 +105,10 @@ export default function EnquiryForm({ onClose }) {
         </Typography>
         <Stack spacing={2}>
           <CustomInputField label="Full Name" name="name" />
-
-          <CustomInputField label="Education" name="education" />
           <CustomInputField label="Phone No" name="phone" />
           <CustomInputField label="Email Id" name="email" type="email" />
-          <CustomInputField label="Interested Course" name="interestedCourse" />
+          <CustomInputField label="Education" name="education" required={false}/>
+          <CustomInputField label="Interested Course" name="interestedCourse"  required={false}/>
           <WhatsAppCheckbox />
           <CustomButton
             fullWidth

@@ -62,26 +62,26 @@ const BookDemoClass = () => {
       <Paper
         elevation={2}
         sx={{
-          width: {xs: 320},
+          width: { xs: 320 },
           py: 1,
           px: 2,
           borderRadius: 2,
           backgroundColor: "#fff",
         }}
       >
-        <Typography 
+        <Typography
           sx={{
             fontSize: {
               xs: "18px",
               sm: "18px",
               md: "20px",
               lg: "22px",
-              xl: "24px"
+              xl: "24px",
             },
             fontWeight: 600,
             textAlign: "center",
             color: "primary.main",
-            mb: 1
+            mb: 1,
           }}
         >
           Book a Live Class, For Free!
@@ -94,17 +94,14 @@ const BookDemoClass = () => {
           sx={{ display: "flex", flexDirection: "column", gap: 1.2 }}
         >
           <CustomInputField label="Full Name" name="name" control={control} />
-          <CustomInputField
-            label="Education"
-            name="education"
-            control={control}
-          />
+
           <CustomInputField
             label="Phone No"
             name="phone"
             type="number"
             control={control}
           />
+
           <CustomInputField
             label="Email ID"
             name="email"
@@ -112,9 +109,16 @@ const BookDemoClass = () => {
             control={control}
           />
           <CustomInputField
+            label="Education"
+            name="education"
+            control={control}
+            required={false}
+          />
+          <CustomInputField
             label="Interested Course"
             name="interestedCourse"
             control={control}
+            required={false}
           />
 
           <FormControlLabel
@@ -124,7 +128,7 @@ const BookDemoClass = () => {
                 onChange={handleCheckboxChange}
                 color="primary"
                 sx={{
-                  p: 0.5, 
+                  p: 0.5,
                 }}
               />
             }
@@ -133,11 +137,11 @@ const BookDemoClass = () => {
                 sx={{
                   color: "text.secondary",
                   fontSize: {
-                    xs: "0.75rem", 
-                    sm: "0.875rem", 
-                    md: "1rem", 
+                    xs: "0.75rem",
+                    sm: "0.875rem",
+                    md: "1rem",
                   },
-                  lineHeight: 1, 
+                  lineHeight: 1,
                 }}
               >
                 Send me an update on WhatsApp

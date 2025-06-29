@@ -11,6 +11,9 @@ import * as fs from "fs";
 import { loadConfig } from "../helper/config.hepler";
 import createHttpError from "http-errors";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import ffmpeg from 'fluent-ffmpeg';
+import * as path from 'path';
+import * as fsPromise from 'fs/promises';
 
 loadConfig();
 
@@ -165,7 +168,6 @@ export const completeMultipartUpload = async (
 
     try {
         const response = await s3Client.send(command);
-        console.log("Upload completed successfully:", response);
         return { success: true, data: response };
     } catch (error) {
         console.error("Error completing multipart upload:", error);
@@ -182,3 +184,96 @@ export const getPresignedUrl = async (fileKey: string) => {
     const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
     return signedUrl;
 };
+
+
+export const transcodeVideo = async (fileKey: string, subSectionId: string, courseName: string) => {
+    let tempDir = '';
+    let tempOutputDir = '';
+    
+    try {
+        tempDir = path.join(__dirname, '..', '..', 'tmp');
+        tempOutputDir = path.join(tempDir, `output-${Date.now()}`);
+        await fsPromise.mkdir(tempOutputDir, { recursive: true });
+
+        const signedUrl = await getPresignedUrl(fileKey);
+        
+        const resolutions = [
+            { name: '360p', width: 640, height: 360, bitrate: '800k' },
+            { name: '480p', width: 854, height: 480, bitrate: '1400k' },
+            { name: '720p', width: 1280, height: 720, bitrate: '2800k' },
+            { name: '1080p', width: 1920, height: 1080, bitrate: '5000k' }
+        ];
+
+        const variantLinks = [];
+
+        for (const res of resolutions) {
+            const outputPlaylist = path.join(tempOutputDir, `output-${res.name}.m3u8`);
+            const segmentPattern = path.join(tempOutputDir, `output-${res.name}-%03d.ts`);
+
+            await new Promise((resolve, reject) => {
+                ffmpeg(signedUrl)
+                    .inputOptions([
+                        '-re', 
+                        '-timeout 30000000' 
+                    ])
+                    .outputOptions([
+                        `-vf scale=${res.width}:${res.height}`,
+                        `-c:v libx264`,
+                        `-b:v ${res.bitrate}`,
+                        `-c:a aac`,
+                        `-b:a 128k`,
+                        `-hls_time 10`,
+                        `-hls_list_size 0`,
+                        `-hls_segment_filename ${segmentPattern}`,
+                        `-f hls`
+                    ])
+                    .output(outputPlaylist)
+                    .on('start', (cmd) => console.log(`Processing ${res.name}: ${cmd}`))
+                    .on('progress', (progress) => console.log(`${res.name}: ${progress.percent}%`))
+                    .on('end', resolve)
+                    .on('error', reject)
+                    .run();
+            });
+
+            const playlistResult = await putObject({
+                tempFilePath: outputPlaylist,
+                name: `output-${res.name}.m3u8`,
+                mimetype: 'application/x-mpegURL'
+            }, `private/course/${courseName}`);
+            
+            if (!playlistResult) throw new Error(`Failed to upload ${res.name} playlist`);
+            
+            variantLinks.push({
+                resolution: res.name,
+                link: playlistResult.url
+            });
+        }
+
+        const masterPlaylist = `#EXTM3U\n#EXT-X-VERSION:3\n` +
+            resolutions.map(res => 
+                `#EXT-X-STREAM-INF:BANDWIDTH=${parseInt(res.bitrate) * 1000},RESOLUTION=${res.width}x${res.height}\noutput-${res.name}.m3u8`
+            ).join('\n');
+        
+        const masterPlaylistPath = path.join(tempOutputDir, 'master.m3u8');
+        await fsPromise.writeFile(masterPlaylistPath, masterPlaylist);
+        
+        const masterPlaylistResult = await putObject({
+            tempFilePath: masterPlaylistPath,
+            name: 'master.m3u8',
+            mimetype: 'application/x-mpegURL'
+        }, `private/course/${courseName}`);
+
+        if (!masterPlaylistResult) throw new Error('Failed to upload master playlist');
+        console.log("variantLinks: ", variantLinks);
+        return {
+            variants: variantLinks,
+            hlsPlaylist: masterPlaylistResult.url
+        };
+
+    } finally {
+        if (tempOutputDir) {
+            await fsPromise.rm(tempOutputDir, { recursive: true, force: true }).catch(() => {});
+        }
+    }
+};
+

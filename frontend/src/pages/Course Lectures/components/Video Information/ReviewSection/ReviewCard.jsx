@@ -19,10 +19,10 @@ export default function ReviewCard({ review, onDelete, onEdit }) {
   const user = useSelector((state) => state.auth.user);
   const [isExpanded, setIsExpanded] = useState(false);
   
-  useEffect(() => {
-    console.log("User in ReviewCard:", user._id);
-    ("ReviewCard mounted with review:", review);
-  }, []);
+  // useEffect(() => {
+  //   console.log("User in ReviewCard:", user._id);
+  //   ("ReviewCard mounted with review:", review);
+  // }, []);
 
   const isOwner = user && review.userId && (user._id === review.userId._id);
   

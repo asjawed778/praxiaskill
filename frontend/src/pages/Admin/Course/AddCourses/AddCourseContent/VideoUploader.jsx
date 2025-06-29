@@ -42,7 +42,6 @@ const VideoUploader = ({
   const [uploadProgress, setUploadProgress] = useState(0);
   const [videoName, setVideoName] = useState(null);
   const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
-
   const uniqueInputId = `videoUploader-${sectionId}-${subSectionId}`;
 
   const [startUpload] = useStartUploadMutation();
@@ -112,7 +111,7 @@ const VideoUploader = ({
 
       if (completeResponse.success) {
         toast.success("Upload complete!");
-        setVideoName(extractVideoName(completeResponse.data.data.Key));
+        setVideoName(extractVideoName(completeResponse?.data?.data?.Key));
       } else {
         toast.error(completeResponse.message);
       }
@@ -158,10 +157,10 @@ const VideoUploader = ({
         type="file"
         accept="video/*"
         onChange={handleFileChange}
-        disabled={videoName || video}
+        disabled={videoName || video?.link}
       />
 
-      {videoName || video ? (
+      {videoName || video?.link ? (
         <Box
           display="flex"
           justifyContent="space-between"
@@ -170,7 +169,7 @@ const VideoUploader = ({
         >
           <Box display="flex" alignItems="center" gap={1}>
             <CheckCircle sx={{ color: "success.main", fontSize: 18 }} />
-            <Typography noWrap variant="body2">
+            <Typography variant="body2">
               {videoName || extractVideoName(video?.link)}
             </Typography>
           </Box>
@@ -188,7 +187,7 @@ const VideoUploader = ({
             color="primary"
             component="label"
             sx={{
-              border: "1px dashed #ccc",
+              border: "1px dashed #00e676",
               width: 48,
               height: 48,
             }}
