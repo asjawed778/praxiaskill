@@ -79,6 +79,11 @@ export interface ISubSection extends BaseSchema {
     video?: {
         link: string;
         duration?: string;
+        variants?: {
+            resolution: "360p" | "480p" | "720p" | "1080p";
+            link: string;
+        }[];
+        hlsPlaylist?: string;
     };
     pdf?: string;
     image?: string;
