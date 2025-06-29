@@ -17,6 +17,10 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import EditIcon from "@mui/icons-material/Edit";
 import CancelIcon from "@mui/icons-material/Cancel";
 import PublishIcon from "@mui/icons-material/Publish";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
+import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
+import { Add } from "@mui/icons-material";
 
 const actionsList = (row) => {
   const isPublishable =
@@ -25,28 +29,34 @@ const actionsList = (row) => {
 
   return [
     {
+      action: "lectures",
+      label: "Lectures",
+      icon: <VideoLibraryIcon />,
+      color: "secondary.main",
+    },
+    {
       action: "addContent",
       label: "Add Content",
       icon: <AddIcon />,
-      color: "primary",
-    },
-    {
-      action: "lectures",
-      label: "Lectures",
-      icon: <MenuBookIcon />,
-      color: "secondary",
+      color: "primary.main",
     },
     {
       action: "updateCourse",
-      label: "Update Course",
-      icon: <EditIcon />,
-      color: "info",
+      label: "Update Details",
+      icon: <FactCheckIcon />,
+      color: "info.main",
+    },
+    {
+      action: "updateCurriculum",
+      label: "Update Curriculum",
+      icon: <EditNoteIcon />,
+      color: "#00e676",
     },
     {
       action: "terminateCourse",
-      label: isPublishable ? "Publish Course" : "Terminate Course",
+      label: isPublishable ? "Publish" : "Terminate",
       icon: isPublishable ? <PublishIcon /> : <CancelIcon />,
-      color: isPublishable ? "success" : "error",
+      color: isPublishable ? "success.main" : "error.main",
     },
   ];
 };
@@ -70,12 +80,10 @@ const ManageCourses = () => {
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
   const [searchQuery, setSearchQuery] = useState(null);
-  const [editMode, setEditMode] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(false);
   const [openTerminateCourseModal, setOpenTerminateCourseModal] =
     useState(false);
   const [selectedCourseCategory, setSelectedCourseCategory] = useState(null);
-
   const navigate = useNavigate();
   const theme = useTheme();
   const { colors } = useAppTheme();
@@ -110,9 +118,6 @@ const ManageCourses = () => {
     setLimit(newLimit);
     setPage(0);
   };
-  //   useEffect(() => {
-  //   refetch();
-  // }, [location]);
 
   const handleActionClick = (action, row) => {
     setSelectedCourse(row);
@@ -120,15 +125,16 @@ const ManageCourses = () => {
       case "addContent":
         navigate(`/dashboard/course/content/${row?._id}`);
         break;
+      case "updateCurriculum":
+        navigate(`/dashboard/course/update-curriculum/${row?._id}`);
+        break;
       case "lectures":
-        navigate(`/course-lecture/${row?._id}`);
+        navigate(`/course/${row?.slug}/learn/${row?._id}`);
         break;
       case "updateCourse":
-        setEditMode(true);
-        navigate("/dashboard/add-course", {
+        navigate(`/dashboard/course/update-details/${row?._id}`, {
           state: {
-            course: row,
-            editMode,
+            editMode: true,
           },
           replace: false,
         });
@@ -159,7 +165,7 @@ const ManageCourses = () => {
           ? "Course Terminated Successfully."
           : "Course Published Successfully.";
       toast.success(message);
-      navigate("/dashboard/manage-course");
+      navigate("/dashboard/courses");
       refetch();
       setOpenTerminateCourseModal(false);
     } catch (error) {
@@ -174,7 +180,7 @@ const ManageCourses = () => {
   };
 
   return (
-    <Box ref={courseManagePageRef} sx={{ width: "100%", px: 2, mt: 4, mb: 2 }}>
+    <Box ref={courseManagePageRef} sx={{ width: "100%", px: 2, mt: 1, mb: 2 }}>
       <Paper
         elevation={0}
         sx={{
@@ -310,9 +316,9 @@ const ManageCourses = () => {
           <CustomSearchField
             placeholder="Search Courses..."
             onSearch={(val) => {
-            setSearchQuery(val);
-            setPage(0); 
-          }}
+              setSearchQuery(val);
+              setPage(0);
+            }}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
@@ -336,6 +342,11 @@ const ManageCourses = () => {
               label="Clear Filter"
               variant="outlined"
               onClick={() => setSelectedCourseCategory(null)}
+            />
+            <CustomButton
+              startIcon={<Add />}
+              label="Create Course"
+              onClick={() => navigate("/dashboard/create-course")}
             />
           </Box>
         </Grid>

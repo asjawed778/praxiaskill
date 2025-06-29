@@ -24,8 +24,8 @@ const index = () => {
     ? courses?.length
     : Math.min(startItem + itemsPerPage - 1, totalItems);
   const navigate = useNavigate();
-  const handleClick = (courseId) => {
-    navigate(`/course-lecture/${courseId}`);
+  const handleClick = (slug, courseId) => {
+    navigate(`/course/${slug}/learn/${courseId}`);
   };
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const index = () => {
           {courses?.map((course, index) => (
             <div
               key={index}
-              onClick={() => handleClick(course._id)}
+              onClick={() => handleClick(course.slug, course._id)}
               className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden hover:shadow-gray-400 cursor-pointer 
               transition-transform duration-500 ease-in-out"
             >

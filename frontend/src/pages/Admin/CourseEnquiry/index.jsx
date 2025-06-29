@@ -12,8 +12,8 @@ import CustomButton from "../../../components/CustomButton";
 const CourseEnquiry = () => {
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+  const [searchQuery, setSearchQuery] = useState(null);
+  const [statusFilter, setStatusFilter] = useState(null);
   const [sortOrder, setSortOrder] = useState("latest");
   const [enquiries, setEnquiries] = useState([]);
 
@@ -81,7 +81,7 @@ const CourseEnquiry = () => {
         <CustomDropdownField
           label="Sort by"
           value={sortOrder}
-          onChange={(val) => setSortOrder(val ? val : 'latest')}
+          onChange={(val) => setSortOrder(val )}
           required={false}
           options={[
             { label: "Latest", value: "latest" },

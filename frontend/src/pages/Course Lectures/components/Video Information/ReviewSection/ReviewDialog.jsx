@@ -30,7 +30,6 @@ export default function ReviewDialog({ open, onClose, onSave, initialData, cours
     };
     try {
       const result = await rateCourse({ courseId, data: { rating, comment } }).unwrap();
-      console.log("Review submitted:", result);
       onClose();
       onSave(result.data);
       setRating(0);

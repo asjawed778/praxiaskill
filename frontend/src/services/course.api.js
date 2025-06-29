@@ -228,7 +228,30 @@ export const apiCourse = createApi({
         url: `/course/status/${courseId}?status=${status}`,
         method: "PATCH"
       })
-    })
+    }),
+    updateCurriculum: builder.mutation({
+      query: ({ courseId, sectionId, subSectionId, body }) => ({
+        url: `/course/curriculum/${courseId}`,
+        method: "PUT",
+        params: {
+          ...(sectionId && { sectionId }),
+          ...(subSectionId && { subSectionId } )
+        },
+        body,
+        credentials: "include",
+      })
+    }),
+    deleteCurriculum: builder.mutation({
+      query: ({ courseId, sectionId, subSectionId }) => ({
+        url: `/course/${courseId}`,
+        method: "DELETE",
+        params: {
+          ...(sectionId && { sectionId }),
+          ...(subSectionId && { subSectionId } )
+        },
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -258,4 +281,6 @@ export const {
   useUpdateNotesMutation,
   useGetCoursesQuery,
   useUpdateCourseStatusMutation,
+  useUpdateCurriculumMutation,
+  useDeleteCurriculumMutation,
 } = apiCourse;
