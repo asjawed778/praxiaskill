@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import { Box, Typography, Stack, Grid } from "@mui/material";
 import JoditEditor from "jodit-react";
-
 import TagsInput from "./TagsInput";
 import FAQSections from "./FAQSections";
 import ToolsGrid from "./ToolsGrid";

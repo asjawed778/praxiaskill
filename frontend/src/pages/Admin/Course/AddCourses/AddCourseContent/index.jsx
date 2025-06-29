@@ -17,7 +17,6 @@ const AddCourseContent = () => {
   const data = courseContent?.data;
   const courseTitle = data?.title;
   const [deletePopUpIds, setDeletePopIds] = useState(null);
-
   if (isFetching) {
     return (
       <Box p={2}>
@@ -37,7 +36,7 @@ const AddCourseContent = () => {
         Course Content
       </Typography>
 
-      <Stack spacing={4} mb={4}>
+      <Stack spacing={1} mb={2}>
         {data?.sections?.map((section, index) => (
           <Section
             key={index}
