@@ -34,7 +34,7 @@ const actionsList = (row) => {
       action: "updateCurriculum",
       label: "Update Curriculum",
       icon: <EditIcon />,
-      color: "#00e676"
+      color: "#00e676",
     },
     {
       action: "lectures",
@@ -116,13 +116,10 @@ const ManageCourses = () => {
     setLimit(newLimit);
     setPage(0);
   };
-  //   useEffect(() => {
-  //   refetch();
-  // }, [location]);
 
   const handleActionClick = (action, row) => {
-    console.log("row: ",row);
-    
+    console.log("row: ", row);
+
     setSelectedCourse(row);
     switch (action) {
       case "addContent":
@@ -185,7 +182,25 @@ const ManageCourses = () => {
   };
 
   return (
-    <Box ref={courseManagePageRef} sx={{ width: "100%", px: 2, mt: 4, mb: 2 }}>
+    <Box ref={courseManagePageRef} sx={{ width: "100%", px: 2, mt: 2, mb: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          width: "100%",
+          px: 2,
+          mt: 3,
+          mb: 2
+        }}
+      >
+        <CustomButton
+          label="Add More Course"
+          variant="outlined"
+          onClick={() => navigate("/dashboard/add-course")}
+        />
+      </Box>
+
       <Paper
         elevation={0}
         sx={{
@@ -321,9 +336,9 @@ const ManageCourses = () => {
           <CustomSearchField
             placeholder="Search Courses..."
             onSearch={(val) => {
-            setSearchQuery(val);
-            setPage(0); 
-          }}
+              setSearchQuery(val);
+              setPage(0);
+            }}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
