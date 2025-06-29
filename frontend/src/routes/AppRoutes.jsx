@@ -27,11 +27,11 @@ const AdminDashboard = lazy(() => import("../pages/Admin/AdminDashboard"));
 const AddCourses = lazy(() => import("../pages/Admin/Course/AddCourses/CreateCourse"));
 const ManageCourses = lazy(() => import("../pages/Admin/Course/ManageCourses"));
 const AddCourseContent = lazy(() => import("../pages/Admin/Course/AddCourses/AddCourseContent"));
+const UpdateCurriculum = lazy(() => import("../pages/Admin/Course/UpdateCurriculum"));
 const Users = lazy(() => import("../pages/Users"));
 const ViewCategories = lazy(() =>
     import("../pages/Admin/Category/ViewCategories")
 );
-// const CourseEnquiryManagement = lazy(() => import("../pages/Admin/Category/CourseEnquiryManagement"));
 const CourseEnquiryManagement = lazy(() => import("../pages/Admin/CourseEnquiry"));
 import CategoryManagement from "../pages/Admin/Category/CategoryManagement";
 import { UserRole } from "../utils/enum";
@@ -160,7 +160,7 @@ const AppRoutes = () => {
 
                 <Route path="*" element={<PageNotFound />} />
             </Route>
-            <Route path="/course-lecture" element={
+            <Route path="/course/:slug/learn" element={
                 <RoleAuthRoute>
                     <CourseLecturesLayout />
                 </RoleAuthRoute>
@@ -196,7 +196,7 @@ const AppRoutes = () => {
                     }
                 />
                 <Route
-                    path="manage-category"
+                    path="category"
                     element={
                         <LazyComponent>
                             <CategoryManagement />
@@ -212,7 +212,7 @@ const AppRoutes = () => {
                     }
                 />
                 <Route
-                    path="course-enquiry"
+                    path="enquiry"
                     element={
                         <LazyComponent>
                             <CourseEnquiryManagement />
@@ -220,10 +220,26 @@ const AppRoutes = () => {
                     }
                 />
                 <Route
-                    path="add-course"
+                    path="create-course"
                     element={
                         <LazyComponent>
                             <AddCourses />
+                        </LazyComponent>
+                    }
+                />
+                <Route
+                    path="course/update-details/:courseId"
+                    element={
+                        <LazyComponent>
+                            <AddCourses />
+                        </LazyComponent>
+                    }
+                />
+                <Route
+                    path="course/update-curriculum/:courseId"
+                    element={
+                        <LazyComponent>
+                            <UpdateCurriculum />
                         </LazyComponent>
                     }
                 />
@@ -235,7 +251,7 @@ const AppRoutes = () => {
                         </LazyComponent>
                     }
                 />
-                <Route path="manage-course"
+                <Route path="courses"
                     element={
                         <LazyComponent>
                             <ManageCourses />

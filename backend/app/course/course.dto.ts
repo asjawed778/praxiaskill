@@ -14,19 +14,21 @@ export interface ICourse extends BaseSchema {
     brouchure?: string;
     thumbnail: string;
 
-    instructor?: mongoose.Schema.Types.ObjectId;
-    category: mongoose.Schema.Types.ObjectId;
+    instructor?: mongoose.Types.ObjectId;
+    category: mongoose.Types.ObjectId;
     price: {
         actualPrice: number;
         discountPercentage?: number;
         finalPrice: number;
     };
     language: CourseEnum.Language;
-    duration: string;
-    totalLectures: number;
+    duration?: string;
+    totalLiveSession?: string;
+    recordedContent?: string;
+    totalLectures?: number;
     validity: CourseEnum.CourseValidity;
     courseMode: CourseEnum.CourseMode;
-    prerequisites?: string[];
+    prerequisites?: string;
     courseLevel?: string;
     tools?: {
         name: string;
@@ -40,11 +42,27 @@ export interface ICourse extends BaseSchema {
     }[];
 
     trailerVideo?: string;
-    sections: mongoose.Schema.Types.ObjectId[];
+    sections: mongoose.Types.ObjectId[];
     courseStatus: CourseEnum.CourseStatus;
 }
 
 export interface IUpdateCourseDetails extends Omit<ICourse, "_id" | "createdAt" | "updatedAt" | "sections" | "ratingAndReviews"> { }
+
+export interface IUpdateCourseCurriculum {
+    sections: {
+        _id?: string;
+        title: string;
+        description?: string;
+        assignments?: string[];
+        projects?: string[];
+        subSections: {
+            _id?: string;
+            title: string;
+            description?: string;
+        }[];
+        duration?: string;
+    }[];
+}
 
 export interface ISection extends BaseSchema {
     title: string;
@@ -61,6 +79,11 @@ export interface ISubSection extends BaseSchema {
     video?: {
         link: string;
         duration?: string;
+        variants?: {
+            resolution: "360p" | "480p" | "720p" | "1080p";
+            link: string;
+        }[];
+        hlsPlaylist?: string;
     };
     pdf?: string;
     image?: string;
@@ -131,6 +154,27 @@ export interface ICourseNotes extends BaseSchema {
     notes: string;
 }
 export interface ICourseNotesCreate extends Omit<ICourseNotes, "createdAt" | "updatedAt" | "_id"> { }
+
+export interface ICourseOverview extends BaseSchema {
+    courseId: mongoose.Types.ObjectId;
+    sectionId: mongoose.Types.ObjectId;
+    subSectionId: mongoose.Types.ObjectId;
+    overview: string;
+}
+
+export interface ICourseOverviewCreate extends Omit<ICourseOverview, "createdAt" | "updatedAt" | "_id"> { }
+
+
+export interface ICourseAnnouncement extends BaseSchema {
+    courseId: mongoose.Types.ObjectId;
+    title: string;
+    message: string;
+}
+
+export interface ICourseAnnouncementCreate extends Omit<ICourseAnnouncement, "createdAt" | "updatedAt" | "_id"> { }
+
+
+
 
 export interface EnquiryStatusCount {
     _id: string;

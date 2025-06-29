@@ -100,7 +100,7 @@ export const askQnaSchema = yup.object().shape({
 
 export const EnquirySchema = yup.object().shape({
   name: yup.string().required("Full Name is required"),
-  education: yup.string().required("Education is required"),
+  education: yup.string().optional(),
   phone: yup
     .string()
     .required("Phone number is required")
@@ -115,7 +115,7 @@ export const EnquirySchema = yup.object().shape({
       "Email must include domain (e.g. gmail.com)"
     )
     .email("Enter a valid email address (e.g., name@example.com)"),
-  interestedCourse: yup.string().required("Course selection is required"),
+  interestedCourse: yup.string().optional(),
   whatsAppOptIn: yup.boolean().default(true),
 });
 
@@ -136,10 +136,7 @@ export const courseDetailsSchema = yup.object().shape({
   courseMode: yup.string().required("Please select a mode"),
   courseLevel: yup.string().required("Course level is required"),
   thumbnail: yup.string().url("Invalid URL").required("Thumbnail is required"),
-  brouchure: yup
-    .string()
-    .url("Invalid URL")
-    .required("Brochure PDF is required"),
+  brouchure:  yup.string().nullable().notRequired(),
 });
 export const additionalDetailsSchema = yup.object().shape({
   keypoints: yup
@@ -190,11 +187,15 @@ export const pricingPublishSchema = yup.object().shape({
       .required("Actual price is required")
       .typeError("Actual price must be a number")
       .positive("Price must be greater than zero"),
-    discountPercentage: yup
-      .number()
-      .min(0, "Discount can't be less than 0%")
-      .max(100, "Discount can't be more than 100%")
-      .required("Discount is required"),
+      discountPercentage: yup
+    .number()
+    .transform((value, originalValue) =>
+      originalValue === "" ? undefined : value
+  )
+  .min(0, "Discount can't be less than 0%")
+  .max(100, "Discount can't be more than 100%")
+  .nullable()
+  .notRequired(),
     finalPrice: yup
       .number()
       .typeError("Final price must be a number")

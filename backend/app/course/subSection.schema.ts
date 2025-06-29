@@ -18,6 +18,21 @@ const subSectionSchema = new mongoose.Schema<ISubSection>({
         duration: {
             type: String,
             required: false
+        },
+        variants: [{
+            resolution: {
+                type: String,
+                enum: ["360p", "480p", "720p", "1080p"],
+                required: true
+            },
+            link: {
+                type: String,
+                required: true
+            }
+        }],
+        hlsPlaylist: {
+            type: String,
+            required: false
         }
     },
     pdf: {

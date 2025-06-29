@@ -21,7 +21,7 @@ const CustomSearchField = ({
   }, [value]);
   useEffect(() => {
     const handler = setTimeout(() => {
-      onSearch(searchTerm.trim());
+      if(searchTerm.trim()!=="" && searchTerm.trim()!==null) onSearch(searchTerm.trim());
     }, delay);
 
     return () => clearTimeout(handler);

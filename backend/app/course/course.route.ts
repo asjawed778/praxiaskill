@@ -9,7 +9,7 @@ const router = Router();
 router
     // user course routes
     .get("/my-courses", authMiddlerware.auth, courseController.getMyCourses)
-    
+
     // public api for courses
     .get("/all", courseValidation.getCourses, courseController.getCourses)
 
@@ -18,8 +18,10 @@ router
     .get("/instructors", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseController.getIntructorList)
     .post("/", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.createCourse, catchError, courseController.createCourse)
     .put("/details/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.updateCourse, catchError, courseController.updateCourseDetails)
-    .delete("/:courseId/:sectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.deleteSection, catchError, courseController.deleteSection)
-    .delete("/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.deleteSubSection, catchError, courseController.deleteSubSection)
+    .put("/curriculum/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.updateCourseCurriculum, catchError, courseController.updateCourseCurriculum)
+
+    // route to delete section and subsection
+    .delete("/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.deleteContent, catchError, courseController.deleteCourseContent)
 
     .patch("/status/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.updateStatus, catchError, courseController.updateStatus)
 
@@ -31,7 +33,7 @@ router
     .get("/presigned/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, courseValidation.courseContentPresignedUrl, catchError, courseController.getCourseVideoAccessUrl)
 
     .get("/content/:courseId", authMiddlerware.auth, courseController.getCourseContent)
-    
+
     // enquiry routes
     .post("/enquiry", courseValidation.courseEnquiry, catchError, courseController.courseEnquiry)
     .get("/enquiry", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.getCourseEnquiry, catchError, courseController.getCourseEnquiry)
@@ -58,6 +60,18 @@ router
     .get("/notes/my", authMiddlerware.auth, courseValidation.getCourseNotes, catchError, courseController.getCourseNotes)
     .delete("/notes/:noteId", authMiddlerware.auth, courseValidation.deleteCourseNotes, catchError, courseController.deleteNotes)
     .put("/notes/:noteId", authMiddlerware.auth, courseValidation.updateCourseNotes, catchError, courseController.updateCourseNotes)
+
+    // course overview routes
+    .post("/overview/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.createCourseOverview, catchError, courseController.createCourseOverview)
+    .put("/overview/:overviewId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.editCourseOverview, catchError, courseController.editCourseOverview)
+    .delete("/overview/:overviewId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.deleteCourseOverview, catchError, courseController.deleteCourseOverview)
+    .get("/overview/:courseId/:sectionId/:subSectionId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.getCourseOverview, catchError, courseController.getCourseOverview)
+
+    // course announcements routes
+    .post("/announcement/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.createCourseAnnouncement, catchError, courseController.createCourseAnnouncement)
+    .put("/announcement/:announcementId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.updateCourseAnnouncement, catchError, courseController.updateCourseAnnouncement)
+    .delete("/announcement/:announcementId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.deleteCourseAnnouncement, catchError, courseController.deleteCourseAnnouncement)
+    .get("/announcement/:courseId", authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.getCourseAnnouncement, catchError, courseController.getCourseAnnouncement)
 
 
 export default router;

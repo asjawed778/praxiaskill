@@ -21,6 +21,7 @@ const FileUploader = ({
   dropzoneLabel = "Drag & drop PDF here, or click to select", 
   maxSizeMB = 5,
   control,
+  required = true
 }) => {
   const { control: formControl } = useFormContext();
   const activeControl = control || formControl;
@@ -37,6 +38,7 @@ const FileUploader = ({
       name={name}
       control={activeControl}
       defaultValue={null}
+      // rules={required ? { required: "This field is required." } : {}}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
         const onDrop = useCallback(
           async (acceptedFiles, fileRejections) => {
@@ -87,7 +89,7 @@ const FileUploader = ({
             {/* Top label */}
             <Typography mb={1}>
               {label}
-              <span style={{ color: "red" }}>{" *"}</span>
+              {required && <span style={{ color: "red" }}>{" *"}</span>}
             </Typography>
 
             {!value ? (
@@ -184,9 +186,19 @@ const FileUploader = ({
               </Paper>
             )}
 
-            {(localError || error?.message) && (
+            {/* {(localError || error?.message) && (
               <Alert severity="error" sx={{ mt: 2 }}>
                 {localError || error?.message}
+              </Alert>
+            )} */}
+            {error?.message && (
+              <Alert severity="error" sx={{ mt: 2 }}>
+                {error?.message}
+              </Alert>
+            )}
+            {localError && (
+              <Alert severity="error" sx={{ mt: 2 }}>
+                {localError }
               </Alert>
             )}
           </Box>

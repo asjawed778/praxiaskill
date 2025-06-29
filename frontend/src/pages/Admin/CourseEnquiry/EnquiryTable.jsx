@@ -22,6 +22,10 @@ import { toast } from "react-hot-toast";
 import { EnquiryStatus } from "@/utils/enum";
 import CustomButton from "@/components/CustomButton";
 import { useSetEnquiryStatusMutation } from "../../../services/course.api";
+import ShowStatusLogs from "./ShowStatusLogs";
+
+
+
 
 const EnquiryTable = ({
   enquiries,
@@ -60,7 +64,6 @@ const EnquiryTable = ({
       toast.error(error?.data?.message || "Failed to update status");
     }
   };
-
   return (
     <>
       <TableContainer component={Paper}>
@@ -68,16 +71,10 @@ const EnquiryTable = ({
           <TableHead>
             <TableRow sx={{ backgroundColor: "#f0f0f0" }}>
               <TableCell sx={{ fontWeight: 600, width: 80 }}>S. No.</TableCell>
-              <TableCell sx={{ fontWeight: 600, minWidth: 150 }}>
-                Ticket No
-              </TableCell>
-              <TableCell sx={{ fontWeight: 600, minWidth: 140 }}>
-                Name
-              </TableCell>
-              <TableCell sx={{ fontWeight: 600, minWidth: 120 }}>
-                Status
-              </TableCell>
-              <TableCell align="center" sx={{ fontWeight: 600, minWidth: 80 }}>
+              <TableCell sx={{ fontWeight: 600, width: 120 }}>Ticket No</TableCell>
+              <TableCell sx={{ fontWeight: 600, width: 180 }}>Name</TableCell>
+              <TableCell sx={{ fontWeight: 600, width: 180 }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: 600, width: 80 }} align="center">
                 View
               </TableCell>
             </TableRow>
@@ -110,7 +107,7 @@ const EnquiryTable = ({
                   <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                   <TableCell>{enquiry.ticketNo}</TableCell>
                   <TableCell>{enquiry.name}</TableCell>
-                  <TableCell sx={{ width: 100 }}>
+                  <TableCell sx={{ width: 150 }}>
                     <Select
                       size="small"
                       value={enquiry.currentStatus}
@@ -121,6 +118,9 @@ const EnquiryTable = ({
                         }
                       }}
                       fullWidth
+                      sx={{
+                        width: 200,
+                      }}
                     >
                       <MenuItem value={enquiry.currentStatus} disabled>
                         {enquiry.currentStatus}
@@ -167,7 +167,14 @@ const EnquiryTable = ({
         />
       </TableContainer>
 
-      <Dialog open={showDetails} onClose={() => setShowDetails(false)}>
+        {(selectedEnquiry && showDetails) && (
+          <ShowStatusLogs 
+            open={showDetails}
+            onClose={() => setShowDetails(false)}
+            selectedEnquiry={selectedEnquiry}
+          />
+        )}
+      {/* <Dialog open={showDetails} onClose={() => setShowDetails(false)}>
         <Box p={3} minWidth={400}>
           <Typography variant="h6" gutterBottom>
             Enquiry Details
@@ -206,27 +213,17 @@ const EnquiryTable = ({
                   >
                     {selectedEnquiry.statusLogs.map((log, index) => (
                       <Box key={index} sx={{ position: "relative", mb: 3 }}>
-                        {/* Timeline dot */}
                         <Box
                           sx={{
                             width: 12,
                             height: 12,
                             borderRadius: "50%",
-                            backgroundColor:
-                              log.status === "Pending"
-                                ? "#2196f3"
-                                : log.status === "First Call Attempted"
-                                ? "#ff9800"
-                                : log.status === "Closed"
-                                ? "#d32f2f"
-                                : "#4caf50",
+                            backgroundColor: statusColorMap[log.status] || "#4caf50",
                             position: "absolute",
                             left: -22,
                             top: 5,
                           }}
                         />
-
-                        {/* Timestamp */}
                         <Typography variant="caption" color="textSecondary">
                           {new Date(log.timeStamp).toLocaleTimeString([], {
                             hour: "2-digit",
@@ -234,14 +231,10 @@ const EnquiryTable = ({
                           })}{" "}
                           - {new Date(log.timeStamp).toLocaleDateString()}
                         </Typography>
-
-                        {/* Status label */}
                         <Typography variant="body2" fontWeight="bold">
                           {EnquiryStatus[log.status.toUpperCase()] ||
                             log.status}
                         </Typography>
-
-                        {/* Optional: updatedBy */}
                         {log.updatedBy && (
                           <Typography variant="caption" color="textSecondary">
                             Updated by: {log.updatedBy}
@@ -263,7 +256,7 @@ const EnquiryTable = ({
             </>
           )}
         </Box>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 };

@@ -16,8 +16,7 @@ import Landing from "./Landing";
 const CourseLandingPage = () => {
   const dispatch = useDispatch()
   const { slug } = useParams();
-  const { data: courseDetails, isLoading, isError } = useGetFullCourseDetailsQuery(slug);
-  
+  const { data: courseDetails, isLoading, isError } = useGetFullCourseDetailsQuery(slug);  
   
   useEffect(() => {
     window.scrollTo(0, 0)

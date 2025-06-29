@@ -47,10 +47,10 @@ const courseSchema = new mongoose.Schema<ICourse>({
         type: String,
         required: false
     }],
-    prerequisites: [{
+    prerequisites: {
         type: String,
         required: false
-    }],
+    },
     courseLevel: {
         type: String,
         required: false,
@@ -107,6 +107,14 @@ const courseSchema = new mongoose.Schema<ICourse>({
         required: true
     },
     duration: {
+        type: String,
+        required: false
+    },
+    totalLiveSession: {
+        type: String,
+        required: false
+    },
+    recordedContent: {
         type: String,
         required: false
     },

@@ -1,8 +1,7 @@
 import React, { useRef } from "react";
 import { useFormContext, Controller } from "react-hook-form";
-import { Box, Typography, Stack } from "@mui/material";
+import { Box, Typography, Stack, Grid } from "@mui/material";
 import JoditEditor from "jodit-react";
-
 import TagsInput from "./TagsInput";
 import FAQSections from "./FAQSections";
 import ToolsGrid from "./ToolsGrid";
@@ -11,7 +10,13 @@ import WhatYouWillLearn from "./WhatYouWillLearn";
 import CustomInputField from "@/components/CustomInputField";
 import CustomButton from "@/components/CustomButton";
 
-const AdditionalDetails = ({ handleNext, handlePrev, editMode, onSubmit, isCourseUpdate }) => {
+const AdditionalDetails = ({
+  handleNext,
+  handlePrev,
+  editMode,
+  onSubmit,
+  isCourseUpdate,
+}) => {
   const {
     control,
     formState: { errors },
@@ -32,18 +37,20 @@ const AdditionalDetails = ({ handleNext, handlePrev, editMode, onSubmit, isCours
       <Box>
         <Typography
           variant="subtitle1"
-          sx={{ mb: 1, position: "relative", display: "inline-block" }}
+          sx={{
+            mb: 1,
+            position: "relative",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "2px",
+          }}
         >
           Description
-          <Box
-            component="img"
-            src="/imgs/required.svg"
-            alt="required"
-            loading="lazy"
-            decoding="async"
-            sx={{ width: 7, position: "absolute", top: 6, right: -15 }}
-          />
+          <Typography component="span" sx={{ color: "red" }}>
+            *
+          </Typography>
         </Typography>
+
         <Controller
           name="description"
           control={control}
@@ -61,36 +68,62 @@ const AdditionalDetails = ({ handleNext, handlePrev, editMode, onSubmit, isCours
             />
           )}
         />
+
         {errors?.description && (
           <Typography variant="caption" color="error" mt={1}>
             {errors.description.message}
           </Typography>
         )}
       </Box>
-      <Box display="flex" flexWrap="wrap" gap={5} justifyContent="center">
-        <Box
-          flex={1}
-          minWidth={250}
-          display="flex"
-          flexDirection="column"
-          gap={3}
-        >
-          <CustomInputField
+      <Grid container spacing={2}>
+        <Grid size={{xs: 12, sm: 6}}>
+          <CustomInputField 
             name="duration"
-            label="Duration"
+            label="Course Duration"
             placeholder="Enter course duration (e.g: 6 Months)"
           />
-        </Box>
-      </Box>
+        </Grid>
+        <Grid size={{xs: 12, sm: 6}}>
+          <CustomInputField 
+            type="number"
+            name="totalLiveSession"
+            label="Total Live Session"
+            placeholder="Enter total live mentorship session(in hours)"
+            required={false}
+          />
+        </Grid>
+        <Grid size={{xs: 12, sm: 6}}>
+          <CustomInputField 
+            name="recordedContent"
+            label="Total Recorded Content"
+            placeholder="Enter total recorded content(in hours)"
+            required={false}
+          />
+        </Grid>
+        <Grid size={{xs: 12, sm: 6}}>
+          <CustomInputField 
+            name="prerequisites"
+            label="Prerequisite"
+            placeholder="Enter prerequisite for course"
+            required={false}
+          />
+        </Grid>
+
+      </Grid>
       <ToolsGrid />
       <FAQSections />
       <Box display="flex" justifyContent="space-between" mt={3}>
         <CustomButton label="Back" onClick={handlePrev} />
         <Stack spacing={2} direction="row">
           {editMode && (
-          <CustomButton label="Update" type="submit" onClick={onSubmit} loading={isCourseUpdate}/>
+            <CustomButton
+              label="Submit"
+              type="submit"
+              onClick={onSubmit}
+              loading={isCourseUpdate}
+            />
           )}
-        <CustomButton label="Next" onClick={handleNext} />
+          <CustomButton label="Next" onClick={handleNext} />
         </Stack>
       </Box>
     </Box>

@@ -7,7 +7,7 @@ import {
   useUploadCourseMutation,
 } from "../../../../../services/course.api";
 import { toast } from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CourseDetails from "./CourseDetails";
 import AdditionalDetails from "./AdditionalDetails";
 import CourseStructure from "./CourseStructure";
@@ -19,14 +19,15 @@ import {
   pricingPublishSchema,
 } from "../../../../../../yup";
 import { cleanData } from "../../../../../utils/helper";
+import { Box, CircularProgress } from "@mui/material";
 
 const CreateCourse = () => {
+  const {courseId} = useParams();
   const [uploadCourse, { isLoading, errors }] = useUploadCourseMutation();
   const [currentStep, setCurrentStep] = useState(0);
 
   const location = useLocation();
-  const course = location.state || null;
-  const editMode = Boolean(course);
+  const { editMode } = location.state || {};
   const [updateCourse, { isLoading: isCourseUpdate, errors: isUpdateError }] =
     useUpdateCourseDetailsMutation();
   const navigate = useNavigate();
@@ -35,17 +36,7 @@ const CreateCourse = () => {
     data: loadCourse,
     isLoading: isCourseLoading,
     isError,
-  } = useGetFullCourseDetailsQuery(course?.course?._id, { skip: !editMode });
-
-  useEffect(() => {
-    if (isError) {
-      console.error("Error fetching course details:", loadCourse?.data.data);
-    }
-    if (!isError && loadCourse) {
-      console.log("Update course all: ", loadCourse);
-      console.log("Need value: ", loadCourse.data?.category?.name);
-    }
-  }, [loadCourse, isError]);
+  } = useGetFullCourseDetailsQuery(courseId, { skip: !editMode });
   const resolver = useMemo(() => {
     switch (currentStep) {
       case 0:
@@ -81,7 +72,7 @@ const CreateCourse = () => {
             ],
         price: {
           actualPrice: loadCourse.data.price?.actualPrice || "",
-          discountPercentage: loadCourse.data.price?.discountPercentage || 0,
+          discountPercentage: loadCourse.data.price?.discountPercentage || null,
           finalPrice: loadCourse.data.price?.finalPrice || 0,
         },
       };
@@ -109,7 +100,7 @@ const CreateCourse = () => {
       ],
       price: {
         actualPrice: "",
-        discountPercentage: 0,
+        discountPercentage: null,
         finalPrice: 0,
       },
     };
@@ -141,7 +132,7 @@ const CreateCourse = () => {
             ],
         price: {
           actualPrice: loadCourse.data.price?.actualPrice || "",
-          discountPercentage: loadCourse.data.price?.discountPercentage || 0,
+          discountPercentage: loadCourse.data.price?.discountPercentage || null,
           finalPrice: loadCourse.data.price?.finalPrice || 0,
         },
       };
@@ -188,6 +179,7 @@ const CreateCourse = () => {
         : await uploadCourse(payload);
       if (result.error) {
         if (result.error.status === 400) {
+          console.log("#### result::",  result)
           toast.error("Please fill all steps before submitting!");
         }
         throw new Error(result.error.data.message);
@@ -198,11 +190,25 @@ const CreateCourse = () => {
           ? "Course updated successfully"
           : "Course published successfully!"
       );
-      navigate("/dashboard/manage-course", { replace: true });
+      navigate("/dashboard/courses", { replace: true });
     } catch (err) {
       console.log("Error", err);
     }
   };
+  if(isCourseLoading){
+    return(
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress size={30}/>
+      </Box>
+    )
+  }
   return (
     <FormProvider {...methods}>
       <form
@@ -238,7 +244,7 @@ const CreateCourse = () => {
                 "bg-[var(--color-primary)] text-white rounded-lg"
               }`}
             >
-              Course Structure
+              Course Curriculum
             </div>
           )}
           <div

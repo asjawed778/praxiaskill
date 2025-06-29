@@ -2,25 +2,21 @@ version: "3.8"
 
 services:
   praxiaskill-backend:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: praxiaskill-backend
     ports:
-      - "4000:4000"
-    environment:
-      - NODE_ENV=production
-      - PORT=4000
-      - MONGO_URI=mongodb://praxiaskill-mongo:27017 
-      - DATABASE_NAME=praxiaskill-db
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - REDIS_PASSWORD=
+      - "${PORT}:${PORT}"
+    env_file:
+      - env.production
     depends_on:
       - praxiaskill-mongo
       - redis
     networks:
       - praxiaskill-net
 
-  praxiaskill-mongo: 
+  praxiaskill-mongo:
     image: mongo:7.0.0
     container_name: praxiaskill-mongo
     ports:
@@ -30,7 +26,7 @@ services:
     networks:
       - praxiaskill-net
 
-  redis: 
+  redis:
     image: redis:7-alpine
     container_name: redis
     ports:

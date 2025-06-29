@@ -12,6 +12,8 @@ import qnaSchema from "./qna.schema";
 import { SortOrder } from 'mongoose';
 import slugify from "slugify";
 import courseNotesSchema from "./course.notes.schema";
+import CourseOverviewSchema from "./overview.schema";
+import CourseAnnouncementSchema from "./announcement.schema";
 
 export const courseSlug = async (title: string, excludeId?: string | mongoose.Types.ObjectId): Promise<string> => {
     const baseSlug = slugify(title, {
@@ -39,7 +41,7 @@ export const courseSlug = async (title: string, excludeId?: string | mongoose.Ty
     }
 
     return slug;
-}
+};
 
 export const isCourseExist = async (identifier: string): Promise<boolean> => {
     if (mongoose.Types.ObjectId.isValid(identifier)) {
@@ -55,7 +57,7 @@ export const isValidSectionSubsectionId = async (courseId: string, sectionId: st
     if (!course) {
         throw createHttpError(404, "Course not found, Invalid courseId");
     }
-    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Schema.Types.ObjectId)) {
+    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Types.ObjectId)) {
         throw createHttpError(404, "Section does not belong to the course");
     }
     if (!subSectionId) {
@@ -115,6 +117,23 @@ export const updateCourseDetails = async (courseId: string, data: CourseDTO.IUpd
     const slug = await courseSlug(data.title);
     const course = await courseSchema.findByIdAndUpdate(courseId, { ...data, slug }, { new: true });
     return course as CourseDTO.ICourse;
+};
+
+export const updateSubSectionVideo = async (subSectionId: string, variants: { resolution: string; link: string }[], hlsPlaylist: string): Promise<void> => {
+    const updatedSubSection = await subSectionSchema.findByIdAndUpdate(
+        subSectionId,
+        {
+            $set: {
+                'video.variants': variants,
+                'video.hlsPlaylist': hlsPlaylist
+            }
+        },
+        { new: true, runValidators: true }
+    );
+
+    if (!updatedSubSection) {
+        throw createHttpError(404, 'SubSection not found');
+    }
 };
 
 export const getCourseContent = async (courseId: string): Promise<any> => {
@@ -204,7 +223,6 @@ export const getCourseDetails = async (identifier: string): Promise<any> => {
     };
 };
 
-
 export const courseEnquiry = async (data: CourseDTO.ICourseEnquiry): Promise<any> => {
     const statusLogs = [{
         status: courseEnum.EnquiryStatus.PENDING,
@@ -215,82 +233,6 @@ export const courseEnquiry = async (data: CourseDTO.ICourseEnquiry): Promise<any
     await enquiry.save();
     return enquiry;
 };
-
-// export const getCourseEnquiry = async (
-//     pageNo: number = 1,
-//     limit: number = 10,
-//     status?: courseEnum.EnquiryStatus,
-//     search?: string,
-//     sortBy: 'latest' | 'oldest' = 'latest'
-// ): Promise<any> => {
-//     const skip = (pageNo - 1) * limit;
-
-//     const query: any = {};
-//     if (status) {
-//         query['statusLogs.status'] = status;
-//     }
-
-//     if (search) {
-//         const searchRegex = new RegExp(search, 'i');
-//         query.$or = [
-//             { name: searchRegex },
-//             { email: searchRegex },
-//             { phone: searchRegex },
-//             { ticketNo: searchRegex }
-//         ];
-//     }
-
-//     const sortOrder = sortBy === 'oldest' ? 1 : -1;
-
-//     const total = await CourseEnquirySchema.countDocuments(query);
-
-//     const data = await CourseEnquirySchema.aggregate([
-//         { $match: query },
-//         { $sort: { createdAt: sortOrder } },
-//         { $skip: skip },
-//         { $limit: limit },
-//         {
-//             $addFields: {
-//                 currentStatus: {
-//                     $let: {
-//                         vars: {
-//                             sortedStatusLogs: {
-//                                 $sortArray: {
-//                                     input: "$statusLogs",
-//                                     sortBy: { timeStamp: -1 }
-//                                 }
-//                             }
-//                         },
-//                         in: { $arrayElemAt: ["$$sortedStatusLogs.status", 0] }
-//                     }
-//                 }
-//             }
-//         },
-//         {
-//             $project: {
-//                 ticketNo: 1,
-//                 name: 1,
-//                 email: 1,
-//                 phone: 1,
-//                 education: 1,
-//                 interestedCourse: 1,
-//                 whatsAppOptIn: 1,
-//                 statusLogs: 1,
-//                 currentStatus: 1,
-//                 createdAt: 1,
-//                 updatedAt: 1
-//             }
-//         }
-//     ]);
-
-//     return {
-//         success: true,
-//         totalEnquiries: total,
-//         page: pageNo,
-//         pageSize: limit,
-//         enquiries: data
-//     };
-// };
 
 export const getCourseEnquiry = async (
     pageNo: number = 1,
@@ -650,7 +592,7 @@ export const deleteSection = async (courseId: string, sectionId: string): Promis
     if (!course) {
         throw createHttpError(404, "Course not found");
     }
-    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Schema.Types.ObjectId)) {
+    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Types.ObjectId)) {
         throw createHttpError(404, "Section does not belong to the course");
     }
 
@@ -668,7 +610,7 @@ export const deleteSubSection = async (courseId: string, sectionId: string, subS
     if (!course) {
         throw createHttpError(404, "Course not found");
     }
-    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Schema.Types.ObjectId)) {
+    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Types.ObjectId)) {
         throw createHttpError(404, "Section does not belong to the course");
     }
 
@@ -682,6 +624,117 @@ export const deleteSubSection = async (courseId: string, sectionId: string, subS
 
     await sectionSchema.findByIdAndUpdate(sectionId, { $pull: { subSections: subSectionId } });
     await subSectionSchema.findByIdAndDelete(subSectionId);
+};
+
+export const updateCourseCurriculum = async (courseId: string, data: CourseDTO.IUpdateCourseCurriculum) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const course = await courseSchema.findById(courseId).session(session);
+        if (!course) {
+            throw createHttpError(404, "Course not found");
+        }
+        const currentSectionIds = course.sections.map((id) => id.toString());
+
+        const newSectionIds: mongoose.Types.ObjectId[] = [];
+
+        for (const sectionData of data.sections) {
+            const subSectionIds: mongoose.Types.ObjectId[] = [];
+
+            for (const subSectionData of sectionData.subSections) {
+                let subSection;
+
+                if (subSectionData._id) {
+                    subSection = await subSectionSchema.findByIdAndUpdate(
+                        subSectionData._id,
+                        {
+                            title: subSectionData.title,
+                            description: subSectionData.description,
+                        },
+                        { new: true, session }
+                    );
+
+                    if (!subSection) {
+                        throw createHttpError(404, `SubSection ${subSectionData._id} not found`);
+                    }
+                } else {
+                    subSection = await new subSectionSchema({
+                        title: subSectionData.title,
+                        description: subSectionData.description,
+                    }).save({ session });
+                }
+
+                subSectionIds.push(new mongoose.Types.ObjectId(subSection._id));
+            }
+
+            let section;
+            if (sectionData._id) {
+                const newAssignment = sectionData.assignments ? sectionData.assignments : [];
+                const newProjects = sectionData.projects ? sectionData.projects : [];
+                section = await sectionSchema.findByIdAndUpdate(
+                    sectionData._id,
+                    {
+                        title: sectionData.title,
+                        description: sectionData.description,
+                        assignments: newAssignment,
+                        projects: newProjects,
+                        subSections: subSectionIds,
+                        duration: sectionData.duration,
+                    },
+                    { new: true, session }
+                );
+
+                if (!section) {
+                    throw createHttpError(404, `Section ${sectionData._id} not found`);
+                }
+            } else {
+                section = await new sectionSchema({
+                    title: sectionData.title,
+                    description: sectionData.description,
+                    assignments: sectionData.assignments,
+                    projects: sectionData.projects,
+                    subSections: subSectionIds,
+                    duration: sectionData.duration,
+                }).save({ session });
+            }
+
+            newSectionIds.push(new mongoose.Types.ObjectId(section._id));
+        }
+
+        const sectionsToDelete = currentSectionIds.filter(
+            (id) => !data.sections.some((s) => s._id === id)
+        );
+
+        for (const sectionId of sectionsToDelete) {
+            const section = await sectionSchema.findById(sectionId).session(session);
+            if (section) {
+                await subSectionSchema.deleteMany({ _id: { $in: section.subSections } }).session(session);
+                await sectionSchema.findByIdAndDelete(sectionId).session(session);
+            }
+        }
+
+        course.sections = newSectionIds;
+        await course.save({ session });
+
+        await session.commitTransaction();
+
+        const updatedCourse = await courseSchema.findById(courseId)
+            .populate({
+                path: "sections",
+                populate: {
+                    path: "subSections",
+                },
+            })
+            .lean();
+
+        return updatedCourse;
+    } catch (error) {
+        await session.abortTransaction();
+        throw error;
+    } finally {
+        session.endSession();
+    }
 };
 
 export const addContentLink = async (subSectionId: string, fileKey: string) => {
@@ -698,12 +751,12 @@ export const getSubSectionFileKey = async (subSectionId: string) => {
         link: subsection.video.link,
         duration: subsection.video.duration,
     };
-}
+};
 
 export const enrollStudentIntoCourse = async (userId: string, courseId: string) => {
     const result = await enrollmentSchema.create({ userId, courseId });
     return result;
-}
+};
 
 export const isAlreadyEnrolledInCourse = async (userId: string, courseId: string) => {
     return await enrollmentSchema.exists({
@@ -793,6 +846,7 @@ export const getMyCourses = async (userId: string, pageNo: number = 1, pageSize:
                 _id: "$course._id",
                 title: "$course.title",
                 subtitle: "$course.subtitle",
+                slug: "$course.slug",
                 tags: "$course.tags",
                 thumbnail: "$course.thumbnail",
                 language: "$course.language",
@@ -811,7 +865,6 @@ export const getMyCourses = async (userId: string, pageNo: number = 1, pageSize:
         { $skip: skip },
         { $limit: pageSize }
     ]);
-
     return {
         success: true,
         totalCourses: result.length,
@@ -1226,6 +1279,55 @@ export const getCourseNotes = async (queryParam: Record<string, any>): Promise<a
     };
 };
 
+//  course overview seriveces
+export const createCourseOverview = async (data: CourseDTO.ICourseOverviewCreate) => {
+    const result = await CourseOverviewSchema.create(data);
+    return result;
+};
+
+export const editCourseOverview = async (overviewId: string, overview: string) => {
+    const result = await CourseOverviewSchema.findByIdAndUpdate(overviewId,
+        { overview },
+        { new: true }
+    );
+    return result;
+};
+
+export const deleteCourseOverview = async (overviewId: string) => {
+    await CourseOverviewSchema.findByIdAndDelete(overviewId);
+};
+
+export const getCourseOverview = async (courseId: string, sectionId: string, subSectionId: string) => {
+    const result = await CourseOverviewSchema.find({ courseId, sectionId, subSectionId });
+    return result;
+};
+
+// announcements 
+export const createCourseAnnouncement = async (data: CourseDTO.ICourseAnnouncementCreate) => {
+    const result = await CourseAnnouncementSchema.create(data);
+    return result;
+};
+
+export const updateCourseAnnouncement = async (announcementId: string, title: string, message: string) => {
+    const result = await CourseAnnouncementSchema.findByIdAndUpdate(announcementId,
+        {
+            title, message
+        },
+        { new: true }
+    );
+    return result;
+};
+
+export const deleteCourseAnnouncement = async (announcementId: string) => {
+    await CourseAnnouncementSchema.findByIdAndDelete(announcementId);
+};
+
+export const getCourseAnnouncement = async (courseId: string) => {
+    const result = await CourseAnnouncementSchema.find({ courseId });
+    return result;
+};
+
+// analytics
 export const getCourseAnalytics = async () => {
     const results = await Promise.all([
         courseSchema.aggregate([
@@ -1296,8 +1398,25 @@ export const getEnquiryAnalytics = async () => {
                     { $match: { createdAt: { $gte: periods.year } } },
                     { $count: "count" }
                 ],
-                byStatus: [
-                    { $group: { _id: "$status", count: { $sum: 1 } } }
+                allStatuses: [
+                    {
+                        $addFields: {
+                            currentStatus: {
+                                $let: {
+                                    vars: {
+                                        sortedLogs: {
+                                            $slice: [
+                                                { $sortArray: { input: "$statusLogs", sortBy: { timeStamp: -1 } } },
+                                                1
+                                            ]
+                                        }
+                                    },
+                                    in: { $arrayElemAt: ["$$sortedLogs.status", 0] }
+                                }
+                            }
+                        }
+                    },
+                    { $group: { _id: "$currentStatus", count: { $sum: 1 } } }
                 ]
             }
         }
@@ -1305,18 +1424,24 @@ export const getEnquiryAnalytics = async () => {
 
     const getCount = (field: string) => results[0][field][0]?.count || 0;
 
+    const statusCounts = (results[0].allStatuses as CourseDTO.EnquiryStatusCount[]).reduce((acc, curr) => {
+        if (curr._id === 'Closed') {
+            acc.Closed = curr.count;
+        } else {
+            acc.Open = (acc.Open || 0) + curr.count;
+            acc[curr._id] = curr.count;
+        }
+        return acc;
+    }, {} as Record<string, number>);
 
-
-    return {
+    const result = {
         totalEnquiries: getCount("total"),
         today: getCount("today"),
         thisWeek: getCount("thisWeek"),
         thisMonth: getCount("thisMonth"),
         lastSixMonths: getCount("lastSixMonths"),
         thisYear: getCount("thisYear"),
-        byStatus: (results[0].byStatus as CourseDTO.EnquiryStatusCount[]).reduce((acc: Record<string, number>, curr: CourseDTO.EnquiryStatusCount) => {
-            acc[curr._id] = curr.count;
-            return acc;
-        }, {})
+        byStatus: statusCounts
     } as CourseDTO.EnquiryAnalyticsResult;
+    return result;
 };
