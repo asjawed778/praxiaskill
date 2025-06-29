@@ -157,7 +157,7 @@ const VideoUploader = ({
         type="file"
         accept="video/*"
         onChange={handleFileChange}
-        disabled={videoName || video}
+        disabled={videoName || video?.link}
       />
 
       {videoName || video?.link ? (
