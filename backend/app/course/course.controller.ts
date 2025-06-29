@@ -160,6 +160,7 @@ export const updateCourseCurriculum = asyncHandler(async (req: Request, res: Res
         throw createHttpError(404, "Course id is invalid, Not found");
     }
     const data: CourseDTO.IUpdateCourseCurriculum = req.body;
+    
     const result = await courseService.updateCourseCurriculum(courseId, data);
     res.send(createResponse(result, "Course Curriculum Updated Successfully"));
 });

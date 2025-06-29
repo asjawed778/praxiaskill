@@ -57,7 +57,7 @@ export const isValidSectionSubsectionId = async (courseId: string, sectionId: st
     if (!course) {
         throw createHttpError(404, "Course not found, Invalid courseId");
     }
-    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Schema.Types.ObjectId)) {
+    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Types.ObjectId)) {
         throw createHttpError(404, "Section does not belong to the course");
     }
     if (!subSectionId) {
@@ -575,7 +575,7 @@ export const deleteSection = async (courseId: string, sectionId: string): Promis
     if (!course) {
         throw createHttpError(404, "Course not found");
     }
-    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Schema.Types.ObjectId)) {
+    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Types.ObjectId)) {
         throw createHttpError(404, "Section does not belong to the course");
     }
 
@@ -593,7 +593,7 @@ export const deleteSubSection = async (courseId: string, sectionId: string, subS
     if (!course) {
         throw createHttpError(404, "Course not found");
     }
-    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Schema.Types.ObjectId)) {
+    if (!course.sections.includes(new mongoose.Types.ObjectId(sectionId) as unknown as mongoose.Types.ObjectId)) {
         throw createHttpError(404, "Section does not belong to the course");
     }
 
@@ -616,100 +616,105 @@ export const updateCourseCurriculum = async (courseId: string, data: CourseDTO.I
     try {
         const course = await courseSchema.findById(courseId).session(session);
         if (!course) {
-            throw createHttpError(404, "Course Note Found");
+            throw createHttpError(404, "Course not found");
         }
+        const currentSectionIds = course.sections.map((id) => id.toString());
 
-        const existingSections = await sectionSchema.find({ _id: { $in: course.sections } }).session(session);
+        const newSectionIds: mongoose.Types.ObjectId[] = [];
 
-        const updatedSectionIds = await Promise.all(
-            data.sections.map(async (sectionData) => {
-                let section: any;
+        for (const sectionData of data.sections) {
+            const subSectionIds: mongoose.Types.ObjectId[] = [];
 
-                if (sectionData._id) {
-                    section = await sectionSchema.findByIdAndUpdate(
-                        sectionData._id,
+            for (const subSectionData of sectionData.subSections) {
+                let subSection;
+
+                if (subSectionData._id) {
+                    subSection = await subSectionSchema.findByIdAndUpdate(
+                        subSectionData._id,
                         {
-                            title: sectionData.title,
-                            description: sectionData.description,
-                            assignments: sectionData.assignments,
-                            projects: sectionData.projects,
-                            duration: sectionData.duration
+                            title: subSectionData.title,
+                            description: subSectionData.description,
                         },
                         { new: true, session }
                     );
+
+                    if (!subSection) {
+                        throw createHttpError(404, `SubSection ${subSectionData._id} not found`);
+                    }
                 } else {
-                    section = new sectionSchema({
+                    subSection = await new subSectionSchema({
+                        title: subSectionData.title,
+                        description: subSectionData.description,
+                    }).save({ session });
+                }
+
+                subSectionIds.push(new mongoose.Types.ObjectId(subSection._id));
+            }
+
+            let section;
+            if (sectionData._id) {
+                section = await sectionSchema.findByIdAndUpdate(
+                    sectionData._id,
+                    {
                         title: sectionData.title,
                         description: sectionData.description,
                         assignments: sectionData.assignments,
                         projects: sectionData.projects,
-                        duration: sectionData.duration
-                    });
-                    await section.save({ session });
+                        subSections: subSectionIds,
+                        duration: sectionData.duration,
+                    },
+                    { new: true, session }
+                );
+
+                if (!section) {
+                    throw createHttpError(404, `Section ${sectionData._id} not found`);
                 }
+            } else {
+                section = await new sectionSchema({
+                    title: sectionData.title,
+                    description: sectionData.description,
+                    assignments: sectionData.assignments,
+                    projects: sectionData.projects,
+                    subSections: subSectionIds,
+                    duration: sectionData.duration,
+                }).save({ session });
+            }
 
-                if (sectionData.subSections && sectionData.subSections.length > 0) {
-                    const updatedSubSectionIds = await Promise.all(
-                        sectionData.subSections.map(async (subSectionData) => {
-                            let subSection: any;
-
-                            if (subSectionData._id) {
-                                subSection = await subSectionSchema.findByIdAndUpdate(
-                                    subSectionData._id,
-                                    {
-                                        title: subSectionData.title,
-                                        description: subSectionData.description
-                                    },
-                                    { new: true, session }
-                                );
-                            } else {
-                                subSection = new subSectionSchema({
-                                    title: subSectionData.title,
-                                    description: subSectionData.description
-                                });
-                                await subSection.save({ session });
-                            }
-                            return subSection._id;
-                        })
-                    );
-
-                    section.subSections = updatedSubSectionIds;
-                    await section.save({ session });
-                }
-                return section._id;
-            })
-        );
-
-        course.sections = updatedSectionIds;
-        await course.save({ session });
-
-        const sectionsToRemove = existingSections.filter(
-            sec => !updatedSectionIds.includes(sec._id.toString())
-        );
-
-        if (sectionsToRemove.length > 0) {
-            const subSectionIdsToRemove = sectionsToRemove.flatMap(sec => sec.subSections);
-            await subSectionSchema.deleteMany({ _id: { $in: subSectionIdsToRemove } }).session(session);
-
-            await sectionSchema.deleteMany({ _id: { $in: sectionsToRemove.map(sec => sec._id) } }).session(session);
+            newSectionIds.push(new mongoose.Types.ObjectId(section._id));
         }
 
-        await session.commitTransaction();
-        await session.endSession();
+        const sectionsToDelete = currentSectionIds.filter(
+            (id) => !data.sections.some((s) => s._id === id)
+        );
 
-        return await courseSchema.findById(courseId)
+        for (const sectionId of sectionsToDelete) {
+            const section = await sectionSchema.findById(sectionId).session(session);
+            if (section) {
+                await subSectionSchema.deleteMany({ _id: { $in: section.subSections } }).session(session);
+                await sectionSchema.findByIdAndDelete(sectionId).session(session);
+            }
+        }
+
+        course.sections = newSectionIds;
+        await course.save({ session });
+
+        await session.commitTransaction();
+
+        const updatedCourse = await courseSchema.findById(courseId)
             .populate({
-                path: 'sections',
+                path: "sections",
                 populate: {
-                    path: 'subSections'
-                }
+                    path: "subSections",
+                },
             })
-            .exec();
+            .lean();
+
+        return updatedCourse;
     } catch (error) {
-        console.log("error: ", error)
         await session.abortTransaction();
-        await session.endSession();
-        throw createHttpError(500, "Something went wrong");
+        throw error;
+    } finally {
+        session.endSession();
     }
 };
 

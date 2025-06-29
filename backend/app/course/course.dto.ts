@@ -14,8 +14,8 @@ export interface ICourse extends BaseSchema {
     brouchure?: string;
     thumbnail: string;
 
-    instructor?: mongoose.Schema.Types.ObjectId;
-    category: mongoose.Schema.Types.ObjectId;
+    instructor?: mongoose.Types.ObjectId;
+    category: mongoose.Types.ObjectId;
     price: {
         actualPrice: number;
         discountPercentage?: number;
@@ -42,7 +42,7 @@ export interface ICourse extends BaseSchema {
     }[];
 
     trailerVideo?: string;
-    sections: mongoose.Schema.Types.ObjectId[];
+    sections: mongoose.Types.ObjectId[];
     courseStatus: CourseEnum.CourseStatus;
 }
 
