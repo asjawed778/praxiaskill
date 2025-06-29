@@ -250,6 +250,7 @@ const UpdateCurriculum = () => {
   }, [courseDetails]);
 
   const onSubmit = async (data) => {
+    console.log("data: ", data);
     data?.sections?.forEach((section) => {
       section.assignments = section.assignments?.map((item) => item.assignment);
     });
@@ -257,6 +258,8 @@ const UpdateCurriculum = () => {
       section.projects = section.projects?.map((item) => item.project);
     });
     const freshData = cleanData(data);
+        console.log("freshData: ", freshData);
+
     try {
       const res = await updateCurriculum({
         courseId,

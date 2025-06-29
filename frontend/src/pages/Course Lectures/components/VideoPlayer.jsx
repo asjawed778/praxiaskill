@@ -13,6 +13,7 @@ import { BsArrowClockwise } from "react-icons/bs";
 import { BsArrowCounterclockwise } from "react-icons/bs";
 
 const VideoPlayer = ({ src, lectureDataFetching, lectureData, sectionIds }) => {
+
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -211,18 +212,19 @@ const VideoPlayer = ({ src, lectureDataFetching, lectureData, sectionIds }) => {
       </div>
 
       {/* if no video */}
-      {!lectureDataFetching && !lectureData?.success && (
-        <div className="absolute inset-0 flex items-center justify-center z-50 text-white">
+      {!lectureDataFetching && !lectureData?.success ? (
+        <div className="absolute inset-0 flex items-center justify-center z-50 text-white text-lg font-semibold bg-black bg-opacity-80">
           No lecture selected
         </div>
-      )}
-
-      {/* loader */}
-      {sectionIds?.sectionId && (lectureDataFetching || isBuffering) && (
+      ) : sectionIds?.sectionId && (lectureDataFetching || isBuffering) ? (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-12 h-12 border-4 border-t-4 border-primary border-t-white rounded-full animate-spin" />
         </div>
-      )}
+      ) : !src || src.trim() === "" ? (
+        <div className="absolute inset-0 flex items-center justify-center z-50 text-white text-lg font-semibold bg-black bg-opacity-80">
+          Video content is on the way! Please check back soon.
+        </div>
+      ) : null}
 
       {/* play pause button popup */}
       {showPlayPauseIcon !== null && (
