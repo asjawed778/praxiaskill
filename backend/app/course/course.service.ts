@@ -1441,6 +1441,5 @@ export const getEnquiryAnalytics = async () => {
         thisYear: getCount("thisYear"),
         byStatus: statusCounts
     } as CourseDTO.EnquiryAnalyticsResult;
-    console.log(result);
     return result;
 };
