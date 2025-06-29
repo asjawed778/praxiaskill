@@ -66,8 +66,8 @@ export const completeUpload = asyncHandler(async (req: Request, res: Response) =
     await courseService.isValidSectionSubsectionId(courseId, sectionId, subSectionId);
 
     await courseService.addContentLink(subSectionId, fileKey);
-    const courseName = `${courseId}/${sectionId}`;
-    await videoQueue.add('transcode', { fileKey, subSectionId, courseName });
+    // const courseName = `${courseId}/${sectionId}`;
+    // await videoQueue.add('transcode', { fileKey, subSectionId, courseName });
     res.send(createResponse(completedUpload, "Upload completed successfully"));
 });
 
