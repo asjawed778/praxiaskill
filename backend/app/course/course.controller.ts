@@ -13,6 +13,7 @@ import { courseEnquiryEmailTemplate } from '../common/template/courseEnquiry.tem
 import { emailQueue } from '../common/queue/queues/email.queue';
 import { UserRole } from '../user/user.schema';
 import mongoose from 'mongoose';
+import { videoQueue } from '../common/queue/queues/video.queue';
 
 // This controller handles the upload of public files related to courses, such as thumbnails, brochures, trailers, and videos.
 export const uploadPublicFile = asyncHandler(async (req: Request, res: Response) => {
@@ -65,7 +66,8 @@ export const completeUpload = asyncHandler(async (req: Request, res: Response) =
     await courseService.isValidSectionSubsectionId(courseId, sectionId, subSectionId);
 
     await courseService.addContentLink(subSectionId, fileKey);
-
+    const courseName = `${courseId}/${sectionId}`;
+    await videoQueue.add('transcode', { fileKey, subSectionId, courseName });
     res.send(createResponse(completedUpload, "Upload completed successfully"));
 });
 
@@ -160,7 +162,7 @@ export const updateCourseCurriculum = asyncHandler(async (req: Request, res: Res
         throw createHttpError(404, "Course id is invalid, Not found");
     }
     const data: CourseDTO.IUpdateCourseCurriculum = req.body;
-    
+
     const result = await courseService.updateCourseCurriculum(courseId, data);
     res.send(createResponse(result, "Course Curriculum Updated Successfully"));
 });
