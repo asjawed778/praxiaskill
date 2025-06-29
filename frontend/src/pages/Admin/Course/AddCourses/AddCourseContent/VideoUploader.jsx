@@ -170,7 +170,7 @@ const VideoUploader = ({
         >
           <Box display="flex" alignItems="center" gap={1}>
             <CheckCircle sx={{ color: "success.main", fontSize: 18 }} />
-            <Typography noWrap variant="body2">
+            <Typography variant="body2">
               {videoName || extractVideoName(video?.link)}
             </Typography>
           </Box>
