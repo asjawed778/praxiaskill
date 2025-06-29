@@ -257,6 +257,7 @@ const UpdateCurriculum = () => {
       section.projects = section.projects?.map((item) => item.project);
     });
     const freshData = cleanData(data);
+    console.log("###### fesh data: ", freshData);
 
     try {
       const res = await updateCurriculum({
