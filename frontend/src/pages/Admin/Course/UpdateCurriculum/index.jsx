@@ -26,7 +26,7 @@ import SubSectionFields from "./SubSectionFields";
 import ProjectFields from "./ProjectFields";
 import AssignmentFields from "./AssignmentsFields";
 import { Tooltip, IconButton } from "@mui/material";
-import {  useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { courseStructureSchema } from "../../../../../yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -61,14 +61,14 @@ const SectionAccordion = ({
 
   const handleDeleteSection = async (sectionIndex, sectionId) => {
     const removedSection = control._formValues.sections[sectionIndex];
-    removeSection(sectionIndex); 
+    removeSection(sectionIndex);
     try {
       await deleteModule({ courseId, sectionId }).unwrap();
     } catch (error) {
       const currentSections = control._formValues.sections || [];
       const updated = [...currentSections];
       updated.splice(sectionIndex, 0, removedSection);
-      control._updateFieldArray("sections", updated); 
+      control._updateFieldArray("sections", updated);
       toast.error(
         error?.data?.message || "Failed to delete section. Try Agian!"
       );
@@ -182,9 +182,14 @@ const SectionAccordion = ({
 };
 
 const UpdateCurriculum = () => {
+  const [expandOnNextUpdate, setExpandOnNextUpdate] = useState(null);
   const { courseId } = useParams();
-  const { data: courseDetails, isLoading: isCourseLoading } =
-    useGetFullCourseContentQuery(courseId);
+  const navigate = useNavigate();
+  const {
+    data: courseDetails,
+    isLoading: isCourseLoading,
+    isFetching,
+  } = useGetFullCourseContentQuery(courseId);
   const [updateCurriculum, { isLoading: isUpdating }] =
     useUpdateCurriculumMutation();
   const methods = useForm({
@@ -213,6 +218,7 @@ const UpdateCurriculum = () => {
   } = useFieldArray({
     control,
     name: "sections",
+    keyName: "id",
   });
 
   const [expanded, setExpanded] = useState(() =>
@@ -223,32 +229,41 @@ const UpdateCurriculum = () => {
     setExpanded(isExpanded ? panelId : null);
   };
   useEffect(() => {
-    setExpanded(null);
-  }, [sectionFields]);
+    if (expandOnNextUpdate !== null && sectionFields[expandOnNextUpdate]?.id) {
+      setExpanded(sectionFields[expandOnNextUpdate].id);
+      setExpandOnNextUpdate(null); 
+    }
+  }, [sectionFields, expandOnNextUpdate]);
+
   useEffect(() => {
     if (courseDetails?.data?.sections?.length) {
-      methods.reset({ sections: courseDetails?.data?.sections });
+      const transformedSections = courseDetails.data.sections.map(
+        (section) => ({
+          ...section,
+          assignments:
+            section.assignments?.map((a) => ({ assignment: a })) || [],
+          projects: section.projects?.map((p) => ({ project: p })) || [],
+        })
+      );
+      methods.reset({ sections: transformedSections });
     }
   }, [courseDetails]);
 
   const onSubmit = async (data) => {
     data?.sections?.forEach((section) => {
-        section.assignments = section.assignments?.map(
-          (item) => item.assignment
-        );
-      });
-      data?.sections?.forEach((section) => {
-        section.projects = section.projects?.map((item) => item.project);
-      });
+      section.assignments = section.assignments?.map((item) => item.assignment);
+    });
+    data?.sections?.forEach((section) => {
+      section.projects = section.projects?.map((item) => item.project);
+    });
     const freshData = cleanData(data);
-    console.log("Validated Data:", freshData);
     try {
       const res = await updateCurriculum({
         courseId,
         body: freshData,
       }).unwrap();
-      // console.log("response: ", res);
       toast.success("Curriculum update successfully!");
+      navigate("/dashboard/manage-course");
     } catch (error) {
       const errorMsg =
         error?.data?.message || "Failed to update curriculum. Try again!";
@@ -256,7 +271,7 @@ const UpdateCurriculum = () => {
       console.log("Error: ", error);
     }
   };
-  if (isCourseLoading) {
+  if (isCourseLoading || isFetching) {
     return (
       <Box
         sx={{
@@ -320,19 +335,33 @@ const UpdateCurriculum = () => {
               const isValid = await trigger();
               if (!isValid) return;
 
-              appendSection({
+              const newSection = {
                 title: "",
                 description: "",
                 subSections: [{ title: "", description: "" }],
-              });
+              };
+              const nextIndex = sectionFields.length;
+              appendSection(newSection);
+              setExpandOnNextUpdate(nextIndex);
             }}
             startIcon={<FaPlus />}
             sx={{ mt: 2 }}
           />
 
-          <Stack direction="row" justifyContent="space-between" mt={3}>
-            {/* <CustomButton label="Back" onClick={handlePrev} /> */}
-            <CustomButton label="Submit" type="submit" loading={isUpdating} />
+          <Stack direction="row" justifyContent="flex-end" spacing={2} mt={3}>
+            <CustomButton
+              label="Cancel"
+              variant="outlined"
+              onClick={() => navigate("/dashboard/manage-course")}
+            />
+            <CustomButton
+              label="Submit"
+              type="submit"
+              loading={isUpdating}
+              sx={{
+                width: 80,
+              }}
+            />
           </Stack>
         </Box>
       </form>

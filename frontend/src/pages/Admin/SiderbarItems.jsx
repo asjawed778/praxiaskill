@@ -5,15 +5,15 @@ const sidebarItems = [
     icon: "Dashboard",
   },
 
-  {
-    label: "Courses",
-    icon: "MenuBookOutlined",
-    children: [
-      {
-        path: "/dashboard/add-course",
-        label: "Add Course",
-        icon: "FileUploadOutlined",
-      },
+  // {
+  //   label: "Courses",
+  //   icon: "MenuBookOutlined",
+  //   children: [
+      // {
+      //   path: "/dashboard/add-course",
+      //   label: "Add Course",
+      //   icon: "FileUploadOutlined",
+      // },
       {
         path: "/dashboard/manage-course",
         label: "Courses",
@@ -29,8 +29,8 @@ const sidebarItems = [
       //   label: "Enquiry",
       //   icon: "HelpOutline",
       // },
-    ],
-  },
+  //   ],
+  // },
   {
         path: "/dashboard/course-enquiry",
         label: "Enquiry",
