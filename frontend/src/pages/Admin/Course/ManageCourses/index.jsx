@@ -17,6 +17,10 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import EditIcon from "@mui/icons-material/Edit";
 import CancelIcon from "@mui/icons-material/Cancel";
 import PublishIcon from "@mui/icons-material/Publish";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
+import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
+import { Add } from "@mui/icons-material";
 
 const actionsList = (row) => {
   const isPublishable =
@@ -25,32 +29,32 @@ const actionsList = (row) => {
 
   return [
     {
+      action: "lectures",
+      label: "Lectures",
+      icon: <VideoLibraryIcon />,
+      color: "secondary.main",
+    },
+    {
       action: "addContent",
       label: "Add Content",
       icon: <AddIcon />,
       color: "primary.main",
     },
     {
-      action: "updateCurriculum",
-      label: "Update Curriculum",
-      icon: <EditIcon />,
-      color: "#00e676",
-    },
-    {
-      action: "lectures",
-      label: "Lectures",
-      icon: <MenuBookIcon />,
-      color: "secondary.main",
-    },
-    {
       action: "updateCourse",
-      label: "Update Course",
-      icon: <EditIcon />,
+      label: "Update Details",
+      icon: <FactCheckIcon />,
       color: "info.main",
     },
     {
+      action: "updateCurriculum",
+      label: "Update Curriculum",
+      icon: <EditNoteIcon />,
+      color: "#00e676",
+    },
+    {
       action: "terminateCourse",
-      label: isPublishable ? "Publish Course" : "Terminate Course",
+      label: isPublishable ? "Publish" : "Terminate",
       icon: isPublishable ? <PublishIcon /> : <CancelIcon />,
       color: isPublishable ? "success.main" : "error.main",
     },
@@ -118,8 +122,6 @@ const ManageCourses = () => {
   };
 
   const handleActionClick = (action, row) => {
-    console.log("row: ", row);
-
     setSelectedCourse(row);
     switch (action) {
       case "addContent":
@@ -133,7 +135,7 @@ const ManageCourses = () => {
         break;
       case "updateCourse":
         setEditMode(true);
-        navigate("/dashboard/add-course", {
+        navigate("/dashboard/create", {
           state: {
             course: row,
             editMode,
@@ -167,7 +169,7 @@ const ManageCourses = () => {
           ? "Course Terminated Successfully."
           : "Course Published Successfully.";
       toast.success(message);
-      navigate("/dashboard/manage-course");
+      navigate("/dashboard/courses");
       refetch();
       setOpenTerminateCourseModal(false);
     } catch (error) {
@@ -182,25 +184,7 @@ const ManageCourses = () => {
   };
 
   return (
-    <Box ref={courseManagePageRef} sx={{ width: "100%", px: 2, mt: 2, mb: 2 }}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          width: "100%",
-          px: 2,
-          mt: 3,
-          mb: 2
-        }}
-      >
-        <CustomButton
-          label="Add More Course"
-          variant="outlined"
-          onClick={() => navigate("/dashboard/add-course")}
-        />
-      </Box>
-
+    <Box ref={courseManagePageRef} sx={{ width: "100%", px: 2, mt: 1, mb: 2 }}>
       <Paper
         elevation={0}
         sx={{
@@ -362,6 +346,11 @@ const ManageCourses = () => {
               label="Clear Filter"
               variant="outlined"
               onClick={() => setSelectedCourseCategory(null)}
+            />
+            <CustomButton
+              startIcon={<Add />}
+              label="Create Course"
+              onClick={() => navigate("/dashboard/create")}
             />
           </Box>
         </Grid>

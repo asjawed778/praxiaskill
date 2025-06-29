@@ -206,7 +206,8 @@ const Sidebar = () => {
                           ...(isRouteActive(path) ? activeStyles : {}),
                         }}
                       >
-                        {renderIcon(icon)}
+                        {/* {renderIcon(icon)} */}
+                        {icon}
                       </ListItemIcon>
                       {open && (
                         <>
@@ -256,7 +257,8 @@ const Sidebar = () => {
                               <ListItemIcon
                                 sx={{ minWidth: 40, color: colors.sidebarText }}
                               >
-                                {renderIcon(subIcon)}
+                                {/* {renderIcon(subIcon)} */}
+                                {subIcon}
                               </ListItemIcon>
                               {open && (
                                 <ListItemText
@@ -293,7 +295,8 @@ const Sidebar = () => {
                   }}
                 >
                   <ListItemIcon sx={{ minWidth: 40 }}>
-                    {renderIcon(icon)}
+                    {/* {renderIcon(icon)} */}
+                    {icon}
                   </ListItemIcon>
                   {open && (
                     <Box sx={{ pl: 1 }}>

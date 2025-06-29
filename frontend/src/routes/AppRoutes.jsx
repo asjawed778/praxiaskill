@@ -196,7 +196,7 @@ const AppRoutes = () => {
                     }
                 />
                 <Route
-                    path="manage-category"
+                    path="category"
                     element={
                         <LazyComponent>
                             <CategoryManagement />
@@ -212,7 +212,7 @@ const AppRoutes = () => {
                     }
                 />
                 <Route
-                    path="course-enquiry"
+                    path="enquiry"
                     element={
                         <LazyComponent>
                             <CourseEnquiryManagement />
@@ -220,7 +220,7 @@ const AppRoutes = () => {
                     }
                 />
                 <Route
-                    path="add-course"
+                    path="create"
                     element={
                         <LazyComponent>
                             <AddCourses />
@@ -243,7 +243,7 @@ const AppRoutes = () => {
                         </LazyComponent>
                     }
                 />
-                <Route path="manage-course"
+                <Route path="courses"
                     element={
                         <LazyComponent>
                             <ManageCourses />

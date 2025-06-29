@@ -263,7 +263,7 @@ const UpdateCurriculum = () => {
         body: freshData,
       }).unwrap();
       toast.success("Curriculum update successfully!");
-      navigate("/dashboard/manage-course");
+      navigate("/dashboard/courses");
     } catch (error) {
       const errorMsg =
         error?.data?.message || "Failed to update curriculum. Try again!";
@@ -352,7 +352,7 @@ const UpdateCurriculum = () => {
             <CustomButton
               label="Cancel"
               variant="outlined"
-              onClick={() => navigate("/dashboard/manage-course")}
+              onClick={() => navigate("/dashboard/courses")}
             />
             <CustomButton
               label="Submit"

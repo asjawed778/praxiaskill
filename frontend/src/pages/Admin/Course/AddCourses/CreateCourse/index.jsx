@@ -37,15 +37,15 @@ const CreateCourse = () => {
     isError,
   } = useGetFullCourseDetailsQuery(course?.course?._id, { skip: !editMode });
 
-  useEffect(() => {
-    if (isError) {
-      console.error("Error fetching course details:", loadCourse?.data.data);
-    }
-    if (!isError && loadCourse) {
-      console.log("Update course all: ", loadCourse);
-      console.log("Need value: ", loadCourse.data?.category?.name);
-    }
-  }, [loadCourse, isError]);
+  // useEffect(() => {
+  //   if (isError) {
+  //     console.error("Error fetching course details:", loadCourse?.data.data);
+  //   }
+  //   if (!isError && loadCourse) {
+  //     console.log("Update course all: ", loadCourse);
+  //     console.log("Need value: ", loadCourse.data?.category?.name);
+  //   }
+  // }, [loadCourse, isError]);
   const resolver = useMemo(() => {
     switch (currentStep) {
       case 0:
@@ -199,7 +199,7 @@ const CreateCourse = () => {
           ? "Course updated successfully"
           : "Course published successfully!"
       );
-      navigate("/dashboard/manage-course", { replace: true });
+      navigate("/dashboard/courses", { replace: true });
     } catch (err) {
       console.log("Error", err);
     }

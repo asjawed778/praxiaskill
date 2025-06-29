@@ -61,7 +61,6 @@ export const apiCourse = createApi({
           limit,
           sort,
         }; 
-        console.log("sort: ", sort);
         return {
           url: "course/enquiry",
           params,

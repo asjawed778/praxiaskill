@@ -64,7 +64,6 @@ const EnquiryTable = ({
       toast.error(error?.data?.message || "Failed to update status");
     }
   };
-  console.log("Enquiry: ", enquiries);
   return (
     <>
       <TableContainer component={Paper}>
