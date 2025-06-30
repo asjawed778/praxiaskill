@@ -95,6 +95,7 @@ const SectionAccordion = ({
         {totalSections > 1 && (
           <Tooltip title="Remove Module">
             <IconButton
+              component="span"
               onClick={(e) => {
                 e.stopPropagation();
                 setOpenDeleteModule(true);
