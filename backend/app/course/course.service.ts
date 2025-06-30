@@ -670,13 +670,15 @@ export const updateCourseCurriculum = async (courseId: string, data: CourseDTO.I
 
             let section;
             if (sectionData._id) {
+                const newAssignment = sectionData.assignments ? sectionData.assignments : [];
+                const newProjects = sectionData.projects ? sectionData.projects : [];
                 section = await sectionSchema.findByIdAndUpdate(
                     sectionData._id,
                     {
                         title: sectionData.title,
                         description: sectionData.description,
-                        assignments: sectionData.assignments,
-                        projects: sectionData.projects,
+                        assignments: newAssignment,
+                        projects: newProjects,
                         subSections: subSectionIds,
                         duration: sectionData.duration,
                     },
@@ -1441,6 +1443,5 @@ export const getEnquiryAnalytics = async () => {
         thisYear: getCount("thisYear"),
         byStatus: statusCounts
     } as CourseDTO.EnquiryAnalyticsResult;
-    console.log(result);
     return result;
 };
